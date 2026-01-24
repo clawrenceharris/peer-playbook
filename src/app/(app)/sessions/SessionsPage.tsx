@@ -1,66 +1,34 @@
 "use client";
 
-import { CreateSessionForm, SessionCard } from "@/components/features/sessions";
-import { FormLayout } from "@/components/layouts";
+import { CreateSessionForm, SessionCard } from "@/features/sessions/components";
+import { Form } from "@/components/form";
 import { EmptyState, ErrorState, LoadingState } from "@/components/states";
 import {
   CreateSessionInput,
   createSessionSchema,
 } from "@/features/sessions/domain";
-import { useSessions } from "@/features/sessions/hooks";
-import { useModal } from "@/hooks";
-import { useUser } from "@/providers";
+import { useCreateSession, useSessionActions } from "@/features/sessions/hooks";
+import { useUserSessions } from "@/features/sessions/hooks";
+import { useUser,useModal } from "@/app/providers";
 import {
   getFormattedCurrentDateTime,
   getFormattedCurrentTime,
 } from "@/utils/date-time";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui";
 
 export default function SessionsPage() {
   const { user } = useUser();
-  const { sessions, addSession, refetch, isLoading, error } = useSessions(
-    user.id
-  );
+  const { data: sessions =[], refetch, isLoading, error } = useUserSessions(user.id);
+  const {  createSession } =
+    useSessionActions();
   const router = useRouter();
-  const {
-    modal: createSessionModal,
-    openModal: openSessionCreationModal,
-    closeModal: closeSessionCreationModal,
-  } = useModal({
-    title: "New Session",
-    description: "Create a new session",
-    hidesDescription: true,
-    children: (
-      <FormLayout<CreateSessionInput>
-        defaultValues={{
-          topic: "",
-          course_name: "",
-          description: "",
-          start_date: getFormattedCurrentDateTime(),
-          start_time: getFormattedCurrentTime(),
-        }}
-        isLoading={addSession.isPending}
-        resolver={zodResolver(createSessionSchema)}
-        onCancel={() => closeSessionCreationModal()}
-        onSuccess={() => closeSessionCreationModal()}
-        onSubmit={(data) => {
-          const { start_date, start_time, ...rest } = data; //exclude start date and time
-
-          const startDateTime = `${start_date.split("T")[0]}T${start_time}`;
-          addSession.mutateAsync({ ...rest, scheduled_start: startDateTime });
-          refetch();
-        }}
-      >
-        <CreateSessionForm />
-      </FormLayout>
-    ),
-  });
-
+  
   if (isLoading) {
     return <LoadingState />;
   }
-  if (error || !sessions) {
+  if (error) {
     return (
       <ErrorState
         variant="card"
@@ -69,34 +37,34 @@ export default function SessionsPage() {
       />
     );
   }
-  if (!sessions.length) {
-    return (
-      <>
-        {createSessionModal}
-        <EmptyState
-          variant="card"
-          className="text-white"
-          message="You don't have any sessions at the moment."
-          onAction={openSessionCreationModal}
-          actionLabel="Create Session"
-        />
-      </>
-    );
-  }
-
   return (
-    <main>
-      {createSessionModal}
+    <>
+      <div className="header">
+        <h1>My Sessions</h1>
+        <Button>
+          Create Sessions
+        </Button>
+      </div>
+      <div className="container">
 
-      <div className="container py-30 ">
-        <h1 className="text-white">My Sessions</h1>
-
-        <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
+       {sessions.length > 0 ? <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
           {sessions.map((session) => (
             <SessionCard key={session.id} session={session} />
           ))}
-        </div>
+        </div> 
+          :
+          <div className="w-full h-full flex items-center justify-center">
+
+          <EmptyState
+          variant="card"
+          message="You don't have any sessions at the moment."
+          onAction={createSession}
+          actionLabel="Create Session"
+            />  
+        </div>    
+      
+      }
       </div>
-    </main>
+    </>
   );
 }

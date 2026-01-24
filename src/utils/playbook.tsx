@@ -1,7 +1,18 @@
 import { Brain, Dumbbell, Lightbulb } from "lucide-react";
 
-export const getCardBackgroundColor = (position: number) => {
-  switch (position) {
+type PlaybookPhase = "warmup" | "workout" | "closer";
+
+const phaseToPosition: Record<PlaybookPhase, number> = {
+  warmup: 0,
+  workout: 1,
+  closer: 2,
+};
+
+const normalizePosition = (value: number | PlaybookPhase): number =>
+  typeof value === "number" ? value : phaseToPosition[value];
+
+export const getCardBackgroundColor = (position: number | PlaybookPhase) => {
+  switch (normalizePosition(position)) {
     case 0:
       return "bg-success-500";
     case 1:
@@ -11,8 +22,8 @@ export const getCardBackgroundColor = (position: number) => {
   }
 };
 
-export const getCardIcon = (position: number) => {
-  switch (position) {
+export const getCardIcon = (position: number | PlaybookPhase) => {
+  switch (normalizePosition(position)) {
     case 0:
       return <Brain />;
     case 1:

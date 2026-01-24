@@ -1,7 +1,5 @@
-export type {
-  Database,
-  Tables,
-  TablesInsert,
-  TablesUpdate,
-  Enums,
-} from "./database";
+export type * from "./database";
+export type * from "./pagination"
+export type * from "./form"
+export type * from "./tables"
+export type * from "./errors"

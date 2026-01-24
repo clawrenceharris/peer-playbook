@@ -1,33 +1,31 @@
+import { SupabaseClient } from "@supabase/supabase-js";
 import { SessionsRepository } from "../data";
-import { Sessions, SessionsInsert, SessionsUpdate } from "@/types/tables";
-import { supabase } from "@/lib/supabase/client";
+import { Session, SessionInsert, SessionUpdate } from "./session.types";
 
-export class SessionsService {
-  private repository: SessionsRepository;
+export const createSessionService = (client: SupabaseClient) => {
+  const repository = new SessionsRepository(client);
 
-  constructor() {
-    this.repository = new SessionsRepository(supabase);
-  }
-  async getSessionById(id: string): Promise<Sessions | null> {
-    return await this.repository.getById(id);
-  }
-  async createSession(data: SessionsInsert): Promise<Sessions | null> {
-    return await this.repository.create<SessionsInsert>(data);
-  }
-  async deleteSession(id: string): Promise<void> {
-    await this.repository.delete(id);
-  }
-  async getAllByUser(userId: string): Promise<Sessions[]> {
-    return await this.repository.getAllBy("instructor", userId);
-  }
+  const getAll = () => repository.getAll();
+  const getById = (id: string) => repository.getById(id);
+  const getAllByUser = (userId: string) =>
+    repository.getAllBy("leaderId", userId);
 
-  async addSession(data: SessionsInsert) {
-    return await this.repository.create(data);
-  }
+  const createSession = (data: SessionInsert): Promise<Session> =>
+    repository.create(data);
 
-  async updateSession(id: string, data: SessionsUpdate) {
-    return await this.repository.update(id, data);
-  }
-}
+  const updateSession = (id: string, data: SessionUpdate): Promise<Session> =>
+    repository.update(id, data);
 
-export const sessionsService = new SessionsService();
+  const deleteSession = (id: string): Promise<void> => repository.delete(id);
+
+  return {
+    getAll,
+    getById,
+    getAllByUser,
+    createSession,
+    updateSession,
+    deleteSession,
+  };
+};
+
+export type SessionService = ReturnType<typeof createSessionService>;

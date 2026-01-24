@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 export default function ErrorPage() {
   const router = useRouter();
   return (
-    <main>
-      <ErrorState variant="card" onRetry={router.refresh} />
+    <main className="gradient-background">
+      <ErrorState variant="card" retryLabel="Refresh" onRetry={router.refresh} />
     </main>
   );
 }

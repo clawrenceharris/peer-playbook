@@ -14,116 +14,204 @@ export type Database = {
   }
   public: {
     Tables: {
-      lesson_cards: {
+      bug_reports: {
         Row: {
-          card_slug: string
-          category: string
           created_at: string | null
-          description: string
+          error_code: string
+          error_message: string
           id: string
-          lesson_id: string
-          phase: Database["public"]["Enums"]["lesson_phase"]
-          position: number
-          steps: string[]
-          title: string
-          updated_at: string | null
-          virtualized: boolean | null
+          metadata: Json | null
+          status: string | null
+          steps_to_reproduce: string | null
+          technical_details: Json | null
+          url: string | null
+          user_agent: string | null
+          user_description: string | null
+          user_id: string | null
+          user_message: string | null
         }
         Insert: {
-          card_slug?: string
-          category: string
           created_at?: string | null
-          description?: string
+          error_code: string
+          error_message: string
           id?: string
-          lesson_id: string
-          phase: Database["public"]["Enums"]["lesson_phase"]
-          position: number
-          steps: string[]
-          title: string
-          updated_at?: string | null
-          virtualized?: boolean | null
+          metadata?: Json | null
+          status?: string | null
+          steps_to_reproduce?: string | null
+          technical_details?: Json | null
+          url?: string | null
+          user_agent?: string | null
+          user_description?: string | null
+          user_id?: string | null
+          user_message?: string | null
         }
         Update: {
-          card_slug?: string
-          category?: string
           created_at?: string | null
-          description?: string
+          error_code?: string
+          error_message?: string
           id?: string
-          lesson_id?: string
-          phase?: Database["public"]["Enums"]["lesson_phase"]
-          position?: number
-          steps?: string[]
-          title?: string
-          updated_at?: string | null
-          virtualized?: boolean | null
+          metadata?: Json | null
+          status?: string | null
+          steps_to_reproduce?: string | null
+          technical_details?: Json | null
+          url?: string | null
+          user_agent?: string | null
+          user_description?: string | null
+          user_id?: string | null
+          user_message?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "lesson_cards_lesson_id_fkey"
-            columns: ["lesson_id"]
+            foreignKeyName: "bug_reports_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "lessons"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
       }
-      lessons: {
+      favorite_playbooks: {
         Row: {
-          course_name: string | null
-          created_at: string | null
           id: string
-          owner: string | null
+          playbook_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          playbook_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          playbook_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_favorite_playbooks_playbook_id_fkey"
+            columns: ["playbook_id"]
+            isOneToOne: false
+            referencedRelation: "playbooks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_favorite_playbooks_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      playbook_strategies: {
+        Row: {
+          base_strategy_id: string | null
+          created_at: string | null
+          custom_steps: string[] | null
+          custom_title: string | null
+          description: string
+          id: string
+          phase: Database["public"]["Enums"]["lesson_phase"]
+          playbook_id: string
+          steps: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          base_strategy_id?: string | null
+          created_at?: string | null
+          custom_steps?: string[] | null
+          custom_title?: string | null
+          description?: string
+          id?: string
+          phase: Database["public"]["Enums"]["lesson_phase"]
+          playbook_id: string
+          steps: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          base_strategy_id?: string | null
+          created_at?: string | null
+          custom_steps?: string[] | null
+          custom_title?: string | null
+          description?: string
+          id?: string
+          phase?: Database["public"]["Enums"]["lesson_phase"]
+          playbook_id?: string
+          steps?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_cards_lesson_id_fkey"
+            columns: ["playbook_id"]
+            isOneToOne: false
+            referencedRelation: "playbooks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playbook_strategies_base_strategy_id_fkey"
+            columns: ["base_strategy_id"]
+            isOneToOne: false
+            referencedRelation: "strategies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      playbooks: {
+        Row: {
+          course_name: string
+          created_at: string
+          created_by: string
+          favorite: boolean | null
+          id: string
+          is_published: boolean | null
+          modes: Database["public"]["Enums"]["session_mode"][]
+          subject: Database["public"]["Enums"]["course_subject"]
           topic: string
           updated_at: string | null
-          virtual: boolean | null
         }
         Insert: {
-          course_name?: string | null
-          created_at?: string | null
+          course_name: string
+          created_at?: string
+          created_by?: string
+          favorite?: boolean | null
           id?: string
-          owner?: string | null
+          is_published?: boolean | null
+          modes?: Database["public"]["Enums"]["session_mode"][]
+          subject: Database["public"]["Enums"]["course_subject"]
           topic: string
           updated_at?: string | null
-          virtual?: boolean | null
         }
         Update: {
-          course_name?: string | null
-          created_at?: string | null
+          course_name?: string
+          created_at?: string
+          created_by?: string
+          favorite?: boolean | null
           id?: string
-          owner?: string | null
+          is_published?: boolean | null
+          modes?: Database["public"]["Enums"]["session_mode"][]
+          subject?: Database["public"]["Enums"]["course_subject"]
           topic?: string
           updated_at?: string | null
-          virtual?: boolean | null
         }
-        Relationships: []
-      }
-      playfield_profiles: {
-        Row: {
-          avatar: string | null
-          created_at: string
-          display_name: string | null
-          id: string
-        }
-        Insert: {
-          avatar?: string | null
-          created_at?: string
-          display_name?: string | null
-          id?: string
-        }
-        Update: {
-          avatar?: string | null
-          created_at?: string
-          display_name?: string | null
-          id?: string
-        }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "playbooks_owner_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
           avatar_url: string | null
-          courses: string[] | null
+          courses_instructed: string[] | null
           created_at: string | null
-          email: string | null
           first_name: string
           id: string
           last_name: string | null
@@ -133,9 +221,8 @@ export type Database = {
         }
         Insert: {
           avatar_url?: string | null
-          courses?: string[] | null
+          courses_instructed?: string[] | null
           created_at?: string | null
-          email?: string | null
           first_name: string
           id?: string
           last_name?: string | null
@@ -145,9 +232,8 @@ export type Database = {
         }
         Update: {
           avatar_url?: string | null
-          courses?: string[] | null
+          courses_instructed?: string[] | null
           created_at?: string | null
-          email?: string | null
           first_name?: string
           id?: string
           last_name?: string | null
@@ -157,62 +243,140 @@ export type Database = {
         }
         Relationships: []
       }
-      sessions: {
+      saved_strategies: {
         Row: {
-          call_id: string | null
-          course_name: string | null
-          created_at: string
-          description: string | null
           id: string
-          instructor: string | null
-          lesson_id: string | null
-          scheduled_start: string
-          session_code: string | null
-          status: Database["public"]["Enums"]["session_status"]
-          topic: string | null
-          updated_at: string
-          virtual: boolean
+          strategy_id: string
+          user_id: string
         }
         Insert: {
-          call_id?: string | null
-          course_name?: string | null
-          created_at?: string
-          description?: string | null
           id?: string
-          instructor?: string | null
-          lesson_id?: string | null
-          scheduled_start?: string
-          session_code?: string | null
-          status?: Database["public"]["Enums"]["session_status"]
-          topic?: string | null
-          updated_at?: string
-          virtual?: boolean
+          strategy_id: string
+          user_id: string
         }
         Update: {
-          call_id?: string | null
-          course_name?: string | null
-          created_at?: string
-          description?: string | null
           id?: string
-          instructor?: string | null
-          lesson_id?: string | null
-          scheduled_start?: string
-          session_code?: string | null
-          status?: Database["public"]["Enums"]["session_status"]
-          topic?: string | null
+          strategy_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_strategies_strategy_id_fkey"
+            columns: ["strategy_id"]
+            isOneToOne: false
+            referencedRelation: "strategies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "saved_strategies_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_contexts: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          label: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          label: string
           updated_at?: string
-          virtual?: boolean
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          label?: string
+          updated_at?: string
         }
         Relationships: []
       }
+      sessions: {
+        Row: {
+          call_id: string | null
+          course_name: string
+          created_at: string
+          description: string | null
+          id: string
+          leader_id: string
+          mode: Database["public"]["Enums"]["session_mode"] | null
+          playbook_id: string | null
+          scheduled_start: string
+          session_code: string | null
+          status: Database["public"]["Enums"]["session_status"]
+          subject: Database["public"]["Enums"]["course_subject"]
+          topic: string
+          updated_at: string
+        }
+        Insert: {
+          call_id?: string | null
+          course_name: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          leader_id?: string
+          mode?: Database["public"]["Enums"]["session_mode"] | null
+          playbook_id?: string | null
+          scheduled_start?: string
+          session_code?: string | null
+          status?: Database["public"]["Enums"]["session_status"]
+          subject: Database["public"]["Enums"]["course_subject"]
+          topic?: string
+          updated_at?: string
+        }
+        Update: {
+          call_id?: string | null
+          course_name?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          leader_id?: string
+          mode?: Database["public"]["Enums"]["session_mode"] | null
+          playbook_id?: string | null
+          scheduled_start?: string
+          session_code?: string | null
+          status?: Database["public"]["Enums"]["session_status"]
+          subject?: Database["public"]["Enums"]["course_subject"]
+          topic?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sessions_playbook_id_fkey"
+            columns: ["playbook_id"]
+            isOneToOne: false
+            referencedRelation: "playbooks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sessions_user_id_fkey"
+            columns: ["leader_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       strategies: {
         Row: {
-          category: string | null
           course_tags: string[]
           created_at: string | null
+          created_by: string | null
           description: string
           good_for: string[]
           id: string
+          is_published: boolean | null
+          is_system: boolean | null
+          published_at: string | null
           session_size: Database["public"]["Enums"]["session_size"]
           slug: string
           steps: string[]
@@ -221,12 +385,15 @@ export type Database = {
           virtualized: boolean | null
         }
         Insert: {
-          category?: string | null
           course_tags?: string[]
           created_at?: string | null
+          created_by?: string | null
           description?: string
           good_for?: string[]
           id?: string
+          is_published?: boolean | null
+          is_system?: boolean | null
+          published_at?: string | null
           session_size?: Database["public"]["Enums"]["session_size"]
           slug?: string
           steps: string[]
@@ -235,12 +402,15 @@ export type Database = {
           virtualized?: boolean | null
         }
         Update: {
-          category?: string | null
           course_tags?: string[]
           created_at?: string | null
+          created_by?: string | null
           description?: string
           good_for?: string[]
           id?: string
+          is_published?: boolean | null
+          is_system?: boolean | null
+          published_at?: string | null
           session_size?: Database["public"]["Enums"]["session_size"]
           slug?: string
           steps?: string[]
@@ -248,58 +418,92 @@ export type Database = {
           virtual_friendly?: boolean
           virtualized?: boolean | null
         }
-        Relationships: []
-      }
-      strategy_contexts: {
-        Row: {
-          context: string
-          id: string
-          strategy_slug: string
-        }
-        Insert: {
-          context: string
-          id?: string
-          strategy_slug: string
-        }
-        Update: {
-          context?: string
-          id?: string
-          strategy_slug?: string
-        }
         Relationships: [
           {
-            foreignKeyName: "strategy_contexts_context_fkey"
-            columns: ["context"]
+            foreignKeyName: "strategies_created_by_fkey"
+            columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: "student_contexts"
-            referencedColumns: ["context"]
-          },
-          {
-            foreignKeyName: "strategy_contexts_strategy_slug_fkey"
-            columns: ["strategy_slug"]
-            isOneToOne: false
-            referencedRelation: "strategies"
-            referencedColumns: ["slug"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
         ]
       }
-      student_contexts: {
+      strategy_contexts: {
         Row: {
-          context: string
-          created_at: string
+          context_key: string
           id: string
+          strategy_id: string
         }
         Insert: {
-          context: string
-          created_at?: string
+          context_key: string
           id?: string
+          strategy_id: string
         }
         Update: {
-          context?: string
+          context_key?: string
+          id?: string
+          strategy_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "strategy_contexts_context_key_fkey"
+            columns: ["context_key"]
+            isOneToOne: false
+            referencedRelation: "session_contexts"
+            referencedColumns: ["key"]
+          },
+          {
+            foreignKeyName: "strategy_contexts_strategy_id_fkey"
+            columns: ["strategy_id"]
+            isOneToOne: false
+            referencedRelation: "strategies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_strategies: {
+        Row: {
+          base_strategy_id: string | null
+          created_at: string
+          id: string
+          metadata: Json
+          owner_id: string
+          source_type: string
+          steps: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          base_strategy_id?: string | null
           created_at?: string
           id?: string
+          metadata?: Json
+          owner_id: string
+          source_type: string
+          steps?: string[]
+          title: string
+          updated_at?: string
         }
-        Relationships: []
+        Update: {
+          base_strategy_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          owner_id?: string
+          source_type?: string
+          steps?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_strategies_base_strategy_id_fkey"
+            columns: ["base_strategy_id"]
+            isOneToOne: false
+            referencedRelation: "strategies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -314,18 +518,9 @@ export type Database = {
           session_info: Json
         }[]
       }
-      cleanup_old_data: {
-        Args: { days_old?: number }
-        Returns: number
-      }
-      generate_session_code: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      get_database_stats: {
-        Args: Record<PropertyKey, never>
-        Returns: Json
-      }
+      cleanup_old_data: { Args: { days_old?: number }; Returns: number }
+      generate_session_code: { Args: never; Returns: string }
+      get_database_stats: { Args: never; Returns: Json }
       get_session_by_code: {
         Args: { code: string }
         Returns: {
@@ -341,30 +536,42 @@ export type Database = {
           topic: string
         }[]
       }
-      get_session_summary: {
-        Args: { session_uuid: string }
-        Returns: Json
-      }
-      get_strategies_by_contexts: {
-        Args: { contexts: string[] }
+      get_session_summary: { Args: { session_uuid: string }; Returns: Json }
+      get_strategies_by_context: {
+        Args: { contexts: string[]; max_results?: number; min_results?: number }
         Returns: {
-          category: string
-          good_for: string[]
-          session_size: Database["public"]["Enums"]["session_size"]
+          good_for: Json
+          id: string
+          match_count: number
+          session_size: string
           slug: string
           title: string
           virtual_friendly: boolean
         }[]
       }
-      start_session: {
-        Args: { session_uuid: string }
+      start_session: { Args: { session_uuid: string }; Returns: boolean }
+      validate_activity_definition: {
+        Args: { definition: Json }
         Returns: boolean
       }
     }
     Enums: {
+      course_subject:
+        | "Biology"
+        | "Chemistry"
+        | "Coding"
+        | "Cybersecurity"
+        | "Geography"
+        | "Math"
+        | "Physics"
+        | "Science"
+        | "Other"
       lesson_phase: "warmup" | "workout" | "closer"
+      session_mode: "in-person" | "virtual" | "hybrid"
       session_size: "1+" | "2+" | "4+" | "2-4" | "4-8" | "8+"
       session_status: "scheduled" | "active" | "completed" | "canceled"
+      status: "active" | "scheduled" | "completed" | "canceled"
+      strategy_source_type: "system" | "user" | "playbook"
       user_role: "si_leader" | "student" | "coordinator"
     }
     CompositeTypes: {
@@ -493,9 +700,23 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      course_subject: [
+        "Biology",
+        "Chemistry",
+        "Coding",
+        "Cybersecurity",
+        "Geography",
+        "Math",
+        "Physics",
+        "Science",
+        "Other",
+      ],
       lesson_phase: ["warmup", "workout", "closer"],
+      session_mode: ["in-person", "virtual", "hybrid"],
       session_size: ["1+", "2+", "4+", "2-4", "4-8", "8+"],
       session_status: ["scheduled", "active", "completed", "canceled"],
+      status: ["active", "scheduled", "completed", "canceled"],
+      strategy_source_type: ["system", "user", "playbook"],
       user_role: ["si_leader", "student", "coordinator"],
     },
   },

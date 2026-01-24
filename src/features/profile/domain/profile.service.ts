@@ -1,77 +1,70 @@
 import { normalizeError } from "@/utils/error";
-
-import { Profiles, ProfilesInsert, ProfilesUpdate } from "@/types/tables";
-import { ProfilesRepository } from "../data";
 import { AppErrorCode } from "@/types/errors";
-import { supabase } from "@/lib/supabase/client";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { ProfilesRepository } from "../data";
+import { Profile, ProfileInsert, ProfileUpdate } from "./profile.types";
 
-/**
- * Service layer for profile business logic
- *
- */
-class ProfileService {
-  private repository: ProfilesRepository;
-  constructor() {
-    this.repository = new ProfilesRepository(supabase);
-  }
+export const createProfileService = (client: SupabaseClient) => {
+  const repository = new ProfilesRepository(client);
 
-  /**
-   * Create a new user profile
-   */
-  async createProfile(data: ProfilesInsert): Promise<Profiles> {
+  const createProfile = async (data: ProfileInsert): Promise<Profile> => {
     try {
-      return await this.repository.create(data);
+      return await repository.create(data);
     } catch (error) {
       throw normalizeError(error);
     }
-  }
+  };
 
-  /**
-   * Get user profile by user ID
-   */
-  async getProfile(userId: string): Promise<Profiles | null> {
+  const getProfile = async (userId: string): Promise<Profile | null> => {
     try {
       if (!userId) {
         throw new Error(AppErrorCode.PERMISSION_DENIED);
       }
 
-      return await this.repository.getById(userId);
+      return await repository.getById(userId);
     } catch (error) {
       throw normalizeError(error);
     }
-  }
+  };
 
-  /**
-   * Update user profile
-   */
-  async updateProfile(userId: string, data: ProfilesUpdate): Promise<Profiles> {
+  const updateProfile = async (
+    userId: string,
+    data: ProfileUpdate
+  ): Promise<Profile> => {
     try {
-      const updateResult = await this.repository.update(userId, data);
-
+      const updateResult = await repository.update(userId, data);
       return updateResult;
     } catch (error) {
       throw normalizeError(error);
     }
-  }
+  };
 
-  async profileExists(userId: string): Promise<boolean> {
+  const profileExists = async (userId: string): Promise<boolean> => {
     try {
-      return await this.repository.existsById(userId);
+      return await repository.existsById(userId);
     } catch (error) {
       throw normalizeError(error);
     }
-  }
+  };
 
-  /**
-   * Delete user profile
-   */
-  async deleteProfile(userId: string): Promise<void> {
+  const deleteProfile = async (userId: string): Promise<void> => {
     try {
-      await this.repository.delete(userId);
+      await repository.delete(userId);
     } catch (error) {
       throw normalizeError(error);
     }
-  }
-}
+  };
 
-export const profileService = new ProfileService();
+  return {
+    createProfile,
+    getProfile,
+    updateProfile,
+    profileExists,
+    deleteProfile,
+    getById: getProfile,
+    update: updateProfile,
+    delete: deleteProfile,
+  };
+};
+
+export type ProfileService = ReturnType<typeof createProfileService>;

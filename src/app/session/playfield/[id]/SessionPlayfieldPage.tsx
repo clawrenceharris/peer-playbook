@@ -3,7 +3,7 @@
 import { ErrorState, LoadingState } from "@/components/states";
 import { useSession } from "@/features/sessions/hooks";
 
-import { Sessions } from "@/types/tables";
+import { Session } from "@/features/sessions/domain";
 
 import PlayfieldLayout from "@/components/features/playfield/PlayfieldLayout";
 import {
@@ -16,7 +16,6 @@ import { cn } from "@/lib/utils";
 import { PlayfieldLobbyView } from "@/components/features/video-calls";
 import { PlayfieldProfile } from "@/hooks";
 import { updateUserProfile } from "@/app/actions";
-import { toast } from "sonner";
 import { useState } from "react";
 import { CallingState, useCallStateHooks } from "@stream-io/video-react-sdk";
 
@@ -27,7 +26,7 @@ interface SessionPlayfieldPageProps {
 export default function SessionPlayfieldPage({
   id,
 }: SessionPlayfieldPageProps) {
-  const { session, isLoading: sessionLoading } = useSession(id);
+  const { data: session, isLoading: sessionLoading } = useSession(id);
   if (sessionLoading) {
     return <LoadingState />;
   }
@@ -42,7 +41,7 @@ export default function SessionPlayfieldPage({
     </SessionCallProvider>
   );
 }
-function MeetingScreen({ session }: { session: Sessions }) {
+function MeetingScreen({ session }: { session: Session }) {
   const { strategy } = usePlayfield();
   const { mainCall, client } = useSessionCall();
   const [hasJoined, setHasJoined] = useState(false);
@@ -67,7 +66,7 @@ function MeetingScreen({ session }: { session: Sessions }) {
       console.error(error);
       setHasJoined(false);
 
-      toast("An unexpected error occured while joining");
+      // toast("An unexpected error occured while joining");
     }
   };
 
@@ -76,7 +75,7 @@ function MeetingScreen({ session }: { session: Sessions }) {
       className={cn(
         "relative w-full h-screen overflow-hidden",
         "transition-all duration-200",
-        strategy && hasJoined ? "bg-black/50 backdrop-blur-4xl" : ""
+        strategy && hasJoined ? "bg-black/50 backdrop-blur-4xl" : "",
       )}
     >
       <div className=" flex w-full flex-col h-full mx-auto max-w-4xl overflow-hidden">

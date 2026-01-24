@@ -1,6 +1,10 @@
 import React from "react";
-import LoginPage from "./LoginPage";
+import { AuthLayout, LoginForm } from "@/features/auth/components";
 
 export default function Page() {
-  return <LoginPage />;
+  return (
+    <AuthLayout authType="login">
+        <LoginForm/>
+    </AuthLayout>
+   );
 }

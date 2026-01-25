@@ -3,13 +3,12 @@
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormLayoutProps } from "@/components/form/form";
-import { FieldGroup, FieldSet } from "@/components/ui";
+import { FieldGroup } from "@/components/ui";
 import {
   UpdatePlaybookFormInput,
   updatePlaybookSchema,
 } from "@/features/playbooks/domain";
-import { InputField, SelectField } from "@/components/form";
-import { subjects } from "@/lib/constants";
+import { LessonDetailsSection, NotesSection } from "./sections";
 
 export function UpdatePlaybookForm({
   ...props
@@ -18,8 +17,10 @@ export function UpdatePlaybookForm({
     <Form<UpdatePlaybookFormInput>
       resolver={zodResolver(updatePlaybookSchema)}
       defaultValues={{
+        subject: "",
         courseName: "",
         topic: "",
+        notes: "",
       }}
       enableBeforeUnloadProtection={false}
       submitText="Done"
@@ -27,31 +28,11 @@ export function UpdatePlaybookForm({
       {...props}
     >
       <FieldGroup>
-        <FieldSet>
-          <SelectField<UpdatePlaybookFormInput>
-            name="subject"
-            defaultValue=""
-            items={Object.keys(subjects).map((s) => ({
-              key: s,
-              value: s,
-              icon: subjects[s],
-            }))}
-            label="Course"
-            placeholder="Course"
-          />
-          <InputField<UpdatePlaybookFormInput>
-            name="courseName"
-            label="Course"
-            defaultValue=""
-            placeholder="Course"
-          />
-          <InputField<UpdatePlaybookFormInput>
-            name="topic"
-            label="Topic"
-            defaultValue=""
-            placeholder="Topic"
-          />
-        </FieldSet>
+        <LessonDetailsSection<UpdatePlaybookFormInput>
+          courseIsOptional
+          topicIsOptional
+        />
+        <NotesSection<UpdatePlaybookFormInput> />
       </FieldGroup>
     </Form>
   );

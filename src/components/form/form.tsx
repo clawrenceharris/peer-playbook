@@ -125,6 +125,7 @@ export function Form<T extends FieldValues>({
                     type="submit"
                     className={cn("flex-1",submitButtonClassName)}
                     size={"lg"}
+                    disabled={isLoading}
                   >
                     {isLoading ? (
                       <Loader2 className="animate-spin" />

@@ -9,18 +9,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  FieldLabel,
-  Input
 } from '@/components/ui'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/features/auth/hooks'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Controller } from 'react-hook-form'
-import { InputField } from './input-field'
-import { PasswordField } from './password-field'
-import { Form } from './form'
-import Link from 'next/link'
 import { UpdatePasswordFormInput, updatePasswordSchema } from '@/features/auth/domain'
+import { Form, PasswordField } from '@/components/form'
 
 export function UpdatePasswordForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const {updatePassword, isLoading} = useAuth();

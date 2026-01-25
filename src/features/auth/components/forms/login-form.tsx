@@ -1,20 +1,23 @@
 import { FieldGroup } from "@/components/ui";
 import { LoginFormInput, loginSchema } from "@/features/auth/domain";
-import { Form, FormLayoutProps, InputField, PasswordField } from "@/components/form";
+import { Form, InputField, PasswordField } from "@/components/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useAuth } from "@/features/auth/hooks";
 
-export function LoginForm({...props}: FormLayoutProps<LoginFormInput>) {
- 
+export function LoginForm() {
+  const { login, isLoading } = useAuth();
   return (
     <Form<LoginFormInput>
+      isLoading={isLoading}
       showsCancelButton={false}
-      showsDescription={false}
+      showsDescription={true}
       description="Enter your email below to login to your account"
       submitText="Log In"
-      submitButtonClassName="sticky bottom-0 flex-1"
+      defaultValues={{email: "", password: ""}}
       resolver={zodResolver(loginSchema)}
-      {...props}>
+      onSubmit={login}
+      >
       
         <FieldGroup>
           {/* Email */}
@@ -22,12 +25,11 @@ export function LoginForm({...props}: FormLayoutProps<LoginFormInput>) {
             name="email"
             placeholder="Email"
             label="Email"
-            defaultValue=""
           />
 
           {/* Password */}
           <div className="space-y-2">
-            <PasswordField defaultValue="" label="Password" name="password" />
+            <PasswordField label="Password" name="password" />
             <div className="flex justify-end">
               <Link
                 href="/auth/forgot-password"

@@ -3,7 +3,7 @@ import SessionPlayfieldPage from "./SessionPlayfieldPage";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Session (Virtual) | MySI Playbook",
+  title: "Session (Virtual) | PeerPlaybook",
 };
 interface PageProps {
   params: Promise<{ id: string }>;

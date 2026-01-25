@@ -1,5 +1,6 @@
 import { DefaultError, useQueryClient } from "@tanstack/react-query";
 import {
+  CreatePlaybookFormValues,
   GeneratePlaybookFormValues,
   Playbook,
   PlaybookStrategy,
@@ -102,6 +103,21 @@ export const useGeneratePlaybook = () => {
     mutationKey: ["generate-playbook"],
     mutationFn: (playbookService, data) =>
       playbookService.generatePlaybook(data),
+    invalidateFn: () => playbookKeys.all,
+  });
+};
+
+export const useCreatePlaybook = () => {
+  return useDomainMutation<
+    PlaybookService,
+    Playbook,
+    DefaultError,
+    CreatePlaybookFormValues
+  >(usePlaybookService, {
+    queryKey: playbookKeys.all,
+    mutationKey: ["create-playbook"],
+    mutationFn: (playbookService, data) =>
+      playbookService.createManualPlaybook(data),
     invalidateFn: () => playbookKeys.all,
   });
 };

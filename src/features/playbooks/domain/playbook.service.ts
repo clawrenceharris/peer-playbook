@@ -9,7 +9,7 @@ import {
   PlaybookUpdate,
   PlaybookWithStrategies,
 } from "./playbook.types";
-import { GeneratePlaybookInput } from "./playbook.schema";
+import { CreatePlaybookFormValues, GeneratePlaybookInput } from "./playbook.schema";
 
 export const createPlaybookService = (client: SupabaseClient) => {
   const repository = new PlaybooksRepository(client);
@@ -75,6 +75,35 @@ export const createPlaybookService = (client: SupabaseClient) => {
     return repository.getById(payload.playbookId);
   };
 
+  const createManualPlaybook = async (
+    data: CreatePlaybookFormValues
+  ): Promise<Playbook> => {
+    const response = await fetch("/api/playbooks/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        subject: data.subject,
+        course_name: data.courseName,
+        topic: data.topic,
+        modes: data.modes,
+        contexts: data.contexts,
+        notes: data.notes,
+        strategies: {
+          warmup: data.warmup,
+          workout: data.workout,
+          closer: data.closer,
+        },
+      }),
+    });
+
+    const payload = await response.json();
+    if (!response.ok) {
+      throw new Error(payload?.error || "Failed to create playbook");
+    }
+
+    return repository.getById(payload.playbookId);
+  };
+
   const reorderStrategies = async (
     strategies: PlaybookStrategy[]
   ): Promise<void> => {
@@ -99,6 +128,7 @@ export const createPlaybookService = (client: SupabaseClient) => {
     delete: deletePlaybook,
     deletePlaybookStrategy,
     generatePlaybook,
+    createManualPlaybook,
     reorderStrategies,
   };
 };

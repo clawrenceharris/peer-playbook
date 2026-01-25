@@ -87,7 +87,7 @@ export function AppSidebar() {
           }}
           src="/images/logo.png"
           priority
-          alt="MySI Logo"
+          alt="PeerPlaybook logo"
           width={90}
           height={90}
           className="cursor-pointer"

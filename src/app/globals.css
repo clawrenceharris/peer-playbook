@@ -1,12 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
-@theme {
+
+@theme inline {
   --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-figtree), sans-serif;
-}
-@theme inline {
   --color-primary-50: var(--primary-50);
   --color-primary-100: var(--primary-100);
   --color-primary-200: var(--primary-200);
@@ -137,8 +135,8 @@
   --popover-foreground: oklch(0.145 0 0);
   --radius: 0.625rem;
 
-  --input: rgb(240, 245, 251);
-  --border: #e9eef5;
+  --input: #fafcff;
+  --border: #ebeef3;
   --ring: #93c5fd;
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
@@ -162,7 +160,7 @@
   }
 
   body {
-    @apply h-dvh mx-auto overflow-hidden text-foreground selection:bg-primary-400! selection:text-white;
+    @apply font-sans h-dvh mx-auto overflow-hidden text-foreground selection:bg-primary-400! selection:text-white;
   }
   main {
     @apply relative h-dvh flex flex-col overflow-y-auto w-full;
@@ -187,7 +185,7 @@
     @apply bg-linear-to-br to-primary-300 from-secondary-300;
   }
   .input {
-    @apply text-foreground data-placeholder:text-muted-foreground focus-visible:ring-2 shadow-sm focus-visible:bg-blue-200/20! h-11 focus-visible:ring-primary-400/50 border-2 placeholder:text-muted-foreground selection:bg-primary-500 flex w-full min-w-0 rounded-full bg-input px-4 py-3 text-base transition-[color,box-shadow,border,background] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm autofill:border-ring autofill:bg-primary-100/20  autofill:text-foreground;
+    @apply text-foreground data-placeholder:text-muted-foreground focus-visible:ring-2 shadow-sm focus-visible:bg-blue-200/20 h-11 focus-visible:ring-primary-400/50  placeholder:text-muted-foreground selection:bg-primary-500 border-1 flex w-full min-w-0 rounded-full bg-input px-4 py-3 text-base transition-[color,box-shadow,border,background] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm autofill:border-ring autofill:bg-primary-100/20  autofill:text-foreground;
   }
   .secondary-header {
     @apply sticky bg-primary-foreground flex-wrap flex gap-5 top-0 z-99 px-8 py-4 border-b items-center;

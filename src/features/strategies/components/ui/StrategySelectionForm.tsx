@@ -80,18 +80,17 @@ export const StrategySelectionForm = ({
             <FieldLabel>Add Strategy</FieldLabel>
             <FieldContent>
               <Combobox
+                value={field.value.id}
                 items={strategies.map((item) => ({
                   value: item.id,
                   label: item.title,
                 }))}
                 // placeholder="Select a Strategy"
-                onSelect={(value) => {
+                onValueChange={(value) => {
                   handleStrategyReplace(value, field);
                 }}
               />
-              <div className="min-h-[15px]">
                 <FieldError errors={[fieldState.error]} />
-              </div>
             </FieldContent>
           </Field>
         )}

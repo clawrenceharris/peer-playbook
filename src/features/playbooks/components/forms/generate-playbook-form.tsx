@@ -24,19 +24,20 @@ import {
   SelectValue,
   Toggle,
 } from "@/components/ui";
-import { GeneratePlaybookFormValues } from "@/features/playbooks/domain";
+import { GeneratePlaybookFormValues, generatePlaybookSchema } from "@/features/playbooks/domain";
 import { EmptyState, LoadingState } from "@/components/states";
 import { Plus, X, RefreshCw } from "lucide-react";
 import { usePlaybookContexts } from "../../hooks";
 import { Enums } from "@/types";
 import { Controller, useFormContext } from "react-hook-form";
-import { InputField, TextareaField } from "@/components/form";
+import { Form, FormLayoutProps, InputField, TextareaField } from "@/components/form";
 import { SelectIcon } from "@radix-ui/react-select";
 import { subjects } from "@/lib/constants";
 import { SelectField } from "@/components/form/select-field";
 import { ComboboxField } from "@/components/form/combobox-field";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-export function GeneratePlaybookForm() {
+export function GeneratePlaybookForm({...props} : FormLayoutProps<GeneratePlaybookFormValues>) {
   const { control } = useFormContext<GeneratePlaybookFormValues>();
   const [contextCardOpen, setContextCardOpen] = useState(false);
   const {
@@ -56,7 +57,12 @@ export function GeneratePlaybookForm() {
     [contexts, selectedContextKeys],
   );
   return (
-    <>
+    <Form<GeneratePlaybookFormValues>
+      id="form-generate-playbook"
+      description="Describe your lesson below to build a Playbook composed of SI strategies."
+      resolver={zodResolver(generatePlaybookSchema)}
+      {...props}  
+    >
       <FieldSet className="flex flex-col md:flex-row items-start gap-2 md:gap-4">
         <FieldLegend className="sr-only">Lesson Details</FieldLegend>
         <ComboboxField<GeneratePlaybookFormValues>
@@ -241,6 +247,6 @@ export function GeneratePlaybookForm() {
           </FieldSet>
         )}
       />
-    </>
+    </Form>
   );
 }

@@ -19,7 +19,7 @@ import { PopoverProps } from "@radix-ui/react-popover"
 interface ComboboxProps  extends PopoverProps{
   
     className?: string;
-    items: { label: string; value: string; icon: React.ReactNode}[]
+    items: { label: string; value: string; icon?: React.ReactNode}[]
     disabled?: boolean;
     showTrigger?: boolean;
     value: string;
@@ -40,9 +40,12 @@ export function Combobox({
   return (
     <Popover open={open} onOpenChange={setOpen} {...props}>
       <PopoverTrigger   asChild>
-        <Button  className="rounded-full h-11 text-muted-foreground font-normal justify-between" aria-expanded={open} role="combobox" variant="outline">
-          {selectedItem && selectedItem.icon }
-          {selectedItem ? selectedItem.label : placeholder}
+        <Button className={cn("rounded-full h-11 font-normal justify-between", selectedItem ? "text-foreground" : "text-muted-foreground")} aria-expanded={open} role="combobox" variant="outline">
+          <span className="row gap-2">
+            {selectedItem && selectedItem.icon}
+            {selectedItem ? selectedItem.label : placeholder}
+          </span>
+         
           <ChevronDownIcon/>
         </Button>
       </PopoverTrigger>

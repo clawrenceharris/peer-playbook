@@ -12,9 +12,24 @@ export const generatePlaybookSchema = z.object({
 export const updatePlaybookSchema = z.object({
   courseName: z.string().min(1, "Course name is required").optional(),
   topic: z.string().min(1, "Topic is required").optional(),
-  subject: z.string().optional(),
+  subject: z.string(),
+});
+
+
+export const createPlaybookSchema = z.object({
+  courseName: z.string().min(1, "Course name is required").optional(),
+  topic: z.string().min(1, "Topic is required").optional(),
+  subject: z.string(),
+  contexts: z.array(z.string()),
+  warmup: z.uuid("Missing a warm-up strategy"),
+  workout: z.uuid("Missing a workout strategy"),
+  closer: z.uuid("Missing a closer strategy"),
+  modes: z.array(z.string()),
+
+
 });
 
 export type GeneratePlaybookFormValues = z.infer<typeof generatePlaybookSchema>;
 export type GeneratePlaybookInput = GeneratePlaybookFormValues;
 export type UpdatePlaybookFormInput = z.infer<typeof updatePlaybookSchema>;
+export type CreatePlaybookFormValues = z.infer<typeof createPlaybookSchema>;

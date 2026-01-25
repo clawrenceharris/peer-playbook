@@ -43,19 +43,23 @@ export default function CreatePlaybookPage() {
           
       </header>
       <div className="container max-w-5xl flex-row gap-4">
-        <TabsList  className="rounded-2xl bg-card shadow-md h-auto flex-col px-3 gap-4">
-            <TabsTrigger className="data-[state=active]:bg-primary-400/15 w-full data-[state=active]:border-primary-400/20 border-2 border-border not:[data-[state=active]]:order-border data-[state=active]:text-primary-400 rounded-xl max-h-20" value="upload">
+        <TabsList asChild className="rounded-2xl justify-baseline h-full bg-card shadow-md flex-col px-3 py-5 gap-4">
+          <div className="flex h-full max-h-120 flex-col ">
+
+          
+            <TabsTrigger className="data-[state=active]:bg-primary-400/15 flex-1 w-full data-[state=active]:border-primary-400/20 border-2 border-border not:[data-[state=active]]:order-border data-[state=active]:text-primary-400 rounded-xl max-h-20" value="upload">
             <Image src={assets.paperClip}  alt="Book" width={25} height={25} />
 
               Upload a document</TabsTrigger>
 
-            <TabsTrigger className="data-[state=active]:bg-primary-400/15  w-full data-[state=active]:border-primary-400/20 border-2 border-border data-[state=active]:text-primary-400 rounded-xl max-h-20" value="generate">
+            <TabsTrigger className="data-[state=active]:bg-primary-400/15 flex-1 w-full data-[state=active]:border-primary-400/20 border-2 border-border data-[state=active]:text-primary-400 rounded-xl max-h-20" value="generate">
             <Image src={assets.sparkle}  alt="Sparkles" width={30} height={30} />
 
               Generate with AI</TabsTrigger>
-          <TabsTrigger className="data-[state=active]:bg-primary-400/15  w-full data-[state=active]:border-primary-400/20 border-2  border-border data-[state=active]:text-primary-400 rounded-xl max-h-20" value="create">
+          <TabsTrigger className="data-[state=active]:bg-primary-400/15 flex-1 w-full data-[state=active]:border-primary-400/20 border-2  border-border data-[state=active]:text-primary-400 rounded-xl max-h-20" value="create">
             <Image src={assets.pencil}  alt="Pencil" width={25} height={25} />
               Start from scratch</TabsTrigger>
+              </div>
       </TabsList>
         <TabsContent value={"create"} className="w-full">
             <UpdatePlaybookForm/>

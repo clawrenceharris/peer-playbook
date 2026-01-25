@@ -1,8 +1,8 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React from "react";
 import {
+  useCreatePlaybook,
   useGeneratePlaybook,
-  usePlaybookContexts,
 } from "@/features/playbooks/hooks";
 import { useRouter } from "next/navigation";
 import { AIGeneratingState } from "@/components/states";
@@ -17,22 +17,27 @@ import {
   CardTitle,
 } from "@/components/ui";
 
-import { GeneratePlaybookForm, UpdatePlaybookForm } from "@/features/playbooks/components";
+import {
+  CreatePlaybookForm,
+  GeneratePlaybookForm,
+} from "@/features/playbooks/components";
 import { Form } from "@/components/form";
-import { GeneratePlaybookFormValues, generatePlaybookSchema } from "@/features/playbooks/domain";
+import {
+  CreatePlaybookFormValues,
+  GeneratePlaybookFormValues,
+  createPlaybookSchema,
+  generatePlaybookSchema,
+} from "@/features/playbooks/domain";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, Pencil } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import { assets } from "@/lib/constants";
 export default function CreatePlaybookPage() {
   const { mutateAsync: generatePlaybook, isPending: isGenerating } =
     useGeneratePlaybook();
+  const { mutateAsync: createPlaybook, isPending: isCreating } =
+    useCreatePlaybook();
   const router = useRouter();
-  const [mode, setMode] = useState<"ai-generate" | "user-create" | null>(null);
-
-  if (!mode) {
-    
-  }
   return (
     <Tabs defaultValue="generate" className="gradient-background h-full flex flex-col overflow-hidden flex-1 w-full">
       <header className="header justify-start">
@@ -62,7 +67,61 @@ export default function CreatePlaybookPage() {
               </div>
       </TabsList>
         <TabsContent value={"create"} className="w-full">
-            <UpdatePlaybookForm/>
+          <Card className=" h-full w-full overflow-y-auto">
+            {isCreating ? (
+              <AIGeneratingState />
+            ) : (
+              <>
+                <CardHeader className="border-b py-4 bg-white">
+                  <CardTitle className="text-center">
+                    <h1>Create a Playbook</h1>
+                  </CardTitle>
+                  <CardDescription className="text-muted-foreground text-center">
+                    Start from scratch by adding strategies to each phase.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Form<CreatePlaybookFormValues>
+                    id="form-create-playbook"
+                    resolver={zodResolver(createPlaybookSchema)}
+                    isLoading={isCreating}
+                    defaultValues={{
+                      subject: "",
+                      courseName: "",
+                      topic: "",
+                      contexts: [],
+                      modes: [],
+                      notes: "",
+                      warmup: [],
+                      workout: [],
+                      closer: [],
+                    }}
+                    onSubmit={createPlaybook}
+                    onSuccess={(_, res) => router.push(res.id)}
+                    enableBeforeUnloadProtection={false}
+                    submitText="Create Playbook"
+                    showsCancelButton={false}
+                    showsSubmitButton={false}
+                  >
+                    <CreatePlaybookForm />
+                  </Form>
+                </CardContent>
+              </>
+            )}
+            {!isCreating && (
+              <CardFooter>
+                <CardAction>
+                  <Button
+                    variant="secondary"
+                    form="form-create-playbook"
+                    type="submit"
+                  >
+                    Create Playbook
+                  </Button>
+                </CardAction>
+              </CardFooter>
+            )}
+          </Card>
       </TabsContent>
       <TabsContent value={"generate"} className="w-full ">
         <Card className=" h-full w-full overflow-y-auto">
@@ -86,7 +145,7 @@ export default function CreatePlaybookPage() {
                   resolver={zodResolver(generatePlaybookSchema)}
                   isLoading={isGenerating}
                   onSubmit={generatePlaybook}
-                  onSuccess={(_, res) => router.push(res.playbookId)}
+                  onSuccess={(_, res) => router.push(res.id)}
                   enableBeforeUnloadProtection={false}
                   submitText="Create Playbook"
                   submitButtonClassName="bg-gradient-to-r from-primary-400 to-secondary-500 hover:from-primary-400/90 hover:to-secondary-500/90 text-white border-0 shadow-md hover:-translate-y-2 hover:shadow-lg transition-all duration-200 p-6"

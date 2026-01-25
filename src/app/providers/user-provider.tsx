@@ -33,7 +33,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     return <LoadingState />;
   }
 
-  // ✅ only an error when authenticated user exists but profile doesn't
+  // only an error when authenticated user exists but profile doesn't
   if (!profile) {
     if (pathname.includes("auth")) return <>{children}</>;
 

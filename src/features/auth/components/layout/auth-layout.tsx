@@ -21,7 +21,7 @@ export function AuthLayout({ children, authType }: AuthLayoutProps) {
                         }}
                         src={assets.logo}
                         priority
-                        alt="MySI Logo"
+                        alt="PeerPlaybook logo"
                         width={100}
                         height={100}
                     />
@@ -31,7 +31,7 @@ export function AuthLayout({ children, authType }: AuthLayoutProps) {
             </div>
       
             <Card className="w-full shadow-md overflow-y-auto rounded-t-none md:rounded-t-2xl md:rounded-l-none">
-                <CardHeader className="border-b bg-card">
+                <CardHeader className="border-b p-6 bg-card">
                     <CardTitle className="text-2xl flex items-center font-semibold">
                         Welcome to
              
@@ -41,6 +41,7 @@ export function AuthLayout({ children, authType }: AuthLayoutProps) {
                                 className="inline-block ml-1 align-middle"
                                 src={assets.logoSecondary}
                                 width={170}
+                                priority
                                 height={170}
                                 alt="PeerPlaybook"
                             />
@@ -51,7 +52,7 @@ export function AuthLayout({ children, authType }: AuthLayoutProps) {
                         {"Your SI planning tool."}
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="flex h-full p-0 items-center">
+                <CardContent className="flex h-full items-center">
                     {children}
                 </CardContent>
                 <CardFooter className="text-sm justify-center">

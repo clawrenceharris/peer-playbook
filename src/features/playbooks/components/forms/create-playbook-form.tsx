@@ -8,7 +8,6 @@ import {
   LessonDetailsSection,
   ManualStrategyBuilderSection,
   ModesSection,
-  NotesSection,
 } from "./sections";
 
 export function CreatePlaybookForm() {
@@ -17,7 +16,6 @@ export function CreatePlaybookForm() {
       <LessonDetailsSection<CreatePlaybookFormValues> />
       <ContextsSection<CreatePlaybookFormValues> />
       <ModesSection<CreatePlaybookFormValues> />
-      <NotesSection<CreatePlaybookFormValues> />
       <ManualStrategyBuilderSection />
     </>
   );

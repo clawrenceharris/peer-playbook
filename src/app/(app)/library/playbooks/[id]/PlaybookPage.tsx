@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
-import { Button, useSidebar } from "@/components/ui";
+import React, { useEffect, useMemo, useState } from "react";
+import { AppSkeleton, Button, useSidebar } from "@/components/ui";
 import {
   DndContext,
   closestCenter,
@@ -16,7 +16,7 @@ import {
   rectSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
-import { EmptyState, ErrorState, LoadingState } from "@/components/states";
+import { EmptyState, ErrorState } from "@/components/states";
 import {
   restrictToFirstScrollableAncestor,
   restrictToWindowEdges,
@@ -47,23 +47,27 @@ import { usePendingMutations } from "@/hooks";
 import { useRouter } from "next/navigation";
 
 const phaseOrder = { warmup: 0, workout: 1, closer: 2 };
-
-export default function PlaybookPage({ playbookId }: { playbookId: string }) {
+interface PlaybookPageProps {
+  playbookId: string;
+  onBackClick?: () => void;
+}
+export default function PlaybookPage({
+  playbookId,
+  onBackClick,
+}: PlaybookPageProps) {
   const isMobile = useIsMobile();
   const router = useRouter();
   const { user } = useUser();
   const { createSession } = useSessionActions();
   const { mutateAsync: reorderStrategies } = useReorderStrategies();
   const { data: playbook, error, isLoading } = usePlaybook(playbookId);
-
   const { data: sortedStrategies = [] } =
     usePlaybookSortedStrategies(playbookId);
-
   const { replaceStrategy } = usePlaybookActions();
   const [reorderedStrategies, setReorderedStrategies] = useState<
     PlaybookStrategy[]
   >([]);
-
+  const { setOpen: setSidebarOpen, open: isSidebarOpen } = useSidebar();
   const [activeId, setActiveId] = useState<string | null>(null);
   const { toggleSave } = useStrategyActions();
   const { data: savedStrategies = [] } = useMySavedStrategies(user.id);
@@ -85,9 +89,13 @@ export default function PlaybookPage({ playbookId }: { playbookId: string }) {
       setIsDirty(false);
     } catch {}
   };
-  
+  useEffect(() => {
+    if (!onBackClick) {
+      setSidebarOpen(false);
+    }
+  }, [onBackClick, setSidebarOpen]);
   if (isLoading) {
-    return <LoadingState />;
+    return <AppSkeleton />;
   }
 
   if (error) {
@@ -95,44 +103,39 @@ export default function PlaybookPage({ playbookId }: { playbookId: string }) {
   }
 
   if (!playbook) {
-
     return (
       <>
-       <header className="header">
-        <Button variant="outline" size="icon" onClick={router.back}>
-          <ChevronLeft className="size-6" />
-        </Button>
-       
+        <header className="header">
+          <Button variant="outline" size="icon" onClick={onBackClick}>
+            <ChevronLeft className="size-6" />
+          </Button>
         </header>
         <div className="container items-center justify-center">
-
-        <EmptyState
-          actionLabel="Go to playbooks"
-          onAction={() => {
-
-            router.push("/library/playbooks")
-          }}
-          variant="card"
-          title="Playbook Not Found"
-          message="The playbook you're looking for doesn't exist or may have been deleted."
-        />
-      </div>
+          <EmptyState
+            actionLabel="Go to playbooks"
+            onAction={onBackClick}
+            variant="card"
+            title="Playbook Not Found"
+            message="The playbook you're looking for doesn't exist or may have been deleted."
+          />
+        </div>
       </>
-      
     );
   }
   return (
     <BeforeUnload disabled={!isDirty}>
-      <header className="header">
-        <Button variant="outline" size="icon" onClick={router.back}>
-          <ChevronLeft className="size-6" />
-        </Button>
+      <header className="header justify-start">
+        {onBackClick && (
+          <Button variant="outline" size="icon" onClick={onBackClick}>
+            <ChevronLeft className="size-6" />
+          </Button>
+        )}
         <PlaybookCard
-          canEdit={true}
+          canEdit={false}
+          playbook={playbook}
           hoverDisabled
           titleTextClassName="text-xl"
-          className="bg-secondary-foreground cursor-auto"
-          playbook={playbook}
+          className="shadow-none border-border cursor-auto"
         />
       </header>
       <div className="secondary-header flex justify-between flex-row">
@@ -184,9 +187,7 @@ export default function PlaybookPage({ playbookId }: { playbookId: string }) {
             const next = arrayMove(strategies, oldIndex, newIndex).map(
               (c, i) => ({
                 ...c,
-                phase: Object.keys(phaseOrder)[
-                  i
-                ] as PlaybookStrategy["phase"],
+                phase: Object.keys(phaseOrder)[i] as PlaybookStrategy["phase"],
               })
             );
             setReorderedStrategies(next);

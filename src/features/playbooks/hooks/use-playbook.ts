@@ -6,12 +6,12 @@ import {
 } from "@/features/playbooks/domain";
 
 /**
- * Hook to fetch a single playbook by ID (suspense version - throws errors to error boundary)
+ * Hook to fetch a single playbook by ID
  * @param playbookId - The playbook ID
  */
 export const usePlaybook = <TSelected = PlaybookWithStrategies>(
   playbookId: string,
-  select?: (playbook: PlaybookWithStrategies | null) => TSelected
+  select?: (playbook: PlaybookWithStrategies | null) => TSelected,
 ) => {
   const playbookService = usePlaybookService();
   return useQuery({

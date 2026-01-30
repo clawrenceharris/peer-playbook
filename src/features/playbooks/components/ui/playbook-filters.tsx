@@ -3,7 +3,9 @@ import React from "react";
 import { FilterItem, Toggle } from "@/components/ui";
 import { Book } from "lucide-react";
 import { ValueOf } from "next/dist/shared/lib/constants";
-import { Star } from "@/components/icons";
+import { Playbook, Star } from "@/components/icons";
+import { useMyFavoritePlaybooks } from "@/features/playbooks/hooks";
+import { useUser } from "@/app/providers";
 
 interface PlaybookFiltersProps {
   onFilterChange: (filters: PlaybookFilterState) => void;
@@ -45,8 +47,8 @@ export const PlaybookFilters = ({
 
       {availableCourses.length > 0 && (
         <FilterItem
-          name="Courses"
-          Icon={Book}
+          label="Courses"
+          icon={Playbook}
           options={availableCourses.map((c) => ({ label: c, value: c }))}
           onToggle={(value) => handleToggle("course", value)}
           value={filters.course}

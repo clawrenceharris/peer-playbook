@@ -28,7 +28,6 @@ export function GeneratePlaybookForm() {
       />
       <ContextsSection<GeneratePlaybookFormValues> />
       <ModesSection<GeneratePlaybookFormValues> />
-      <NotesSection<GeneratePlaybookFormValues> />
     </>
   );
 }

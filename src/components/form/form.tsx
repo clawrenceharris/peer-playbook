@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-"use client"
+"use client";
 import { type ReactNode } from "react";
 import {
   FormProvider,
@@ -10,14 +10,20 @@ import {
   type DefaultValues,
   type UseFormReturn,
 } from "react-hook-form";
-import { Button, FieldDescription, FieldError, FieldGroup } from "@/components/ui";
+import {
+  Button,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+} from "@/components/ui";
 import { Loader2 } from "lucide-react";
 import { getUserErrorMessage } from "@/utils/error";
 import { cn } from "@/lib/utils";
 import { BeforeUnload } from "@/components/form";
 
-export interface FormLayoutProps<T extends FieldValues>
-  extends UseFormProps<T> {
+export interface FormLayoutProps<
+  T extends FieldValues,
+> extends UseFormProps<T> {
   children?: ((methods: UseFormReturn<T>) => ReactNode) | ReactNode;
   showsSubmitButton?: boolean;
   showsCancelButton?: boolean;
@@ -87,55 +93,46 @@ export function Form<T extends FieldValues>({
           className={cn("w-full h-full", className)}
           aria-describedby={description}
         >
-         
-
-         
-          
-          <FieldGroup className="relative h-full flex flex-col justify-between">
-          {description && showsDescription && (
-            <FieldDescription className={descriptionClassName}>
-              {description}
-            </FieldDescription>
-          )}
-            
-            {/* General Error */}
-            {form.formState.errors.root && (
-                <FieldError errors={[form.formState.errors.root]} />
+          <div className="relative h-full flex flex-col justify-between">
+            {description && showsDescription && (
+              <FieldDescription className={descriptionClassName}>
+                {description}
+              </FieldDescription>
             )}
             {typeof children === "function" ? children(form) : children}
-
+            {/* General Error */}
+            {form.formState.errors.root && (
+              <FieldError errors={[form.formState.errors.root]} />
+            )}
             <div className="justify-end flex">
+              {showsCancelButton && (
+                <Button
+                  size={"lg"}
+                  variant={"link"}
+                  type="button"
+                  onClick={onCancel}
+                  disabled={isLoading}
+                >
+                  {cancelText}
+                </Button>
+              )}
 
-            
-                {showsCancelButton && (
-                  <Button
-                    size={"lg"}
-                    variant={"link"}
-                    type="button"
-                    onClick={onCancel}
-                    disabled={isLoading}
-                  >
-                    {cancelText}
-                  </Button>
-                )}
-
-                {showsSubmitButton && (
-              <Button
-              
-                    type="submit"
-                    className={cn("flex-1",submitButtonClassName)}
-                    size={"lg"}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      <Loader2 className="animate-spin" />
-                    ) : (
-                      submitText
-                    )}
-                  </Button>
-                )}
+              {showsSubmitButton && (
+                <Button
+                  type="submit"
+                  className={cn("flex-1", submitButtonClassName)}
+                  size={"lg"}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    submitText
+                  )}
+                </Button>
+              )}
+            </div>
           </div>
-          </FieldGroup>
         </form>
       </FormProvider>
     </BeforeUnload>

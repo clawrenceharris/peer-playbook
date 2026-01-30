@@ -8,11 +8,11 @@ export abstract class BaseRepository<
   TDbInsert = TDbRow,
   TDbUpdate = Partial<TDbRow>,
   TInsert = TDomain,
-  TUpdate = Partial<TDomain>
+  TUpdate = Partial<TDomain>,
 > {
   protected constructor(
     protected readonly client: SupabaseClient,
-    protected readonly tableName: string
+    protected readonly tableName: string,
   ) {}
 
   protected toDomain(data: TDbRow): TDomain {
@@ -27,7 +27,7 @@ export abstract class BaseRepository<
     return toSnakeCase(column);
   }
 
-  async getById(id: string): Promise<TDomain | null> {
+  async getById(id: string): Promise<TDomain> {
     const { data, error } = await this.client
       .from(this.tableName)
       .select("*")
@@ -106,7 +106,7 @@ export abstract class BaseRepository<
   async getAllBy(
     column: string,
     value: string,
-    tableName?: string
+    tableName?: string,
   ): Promise<TDomain[]> {
     const { data, error } = await this.client
       .from(tableName || this.tableName)

@@ -83,14 +83,6 @@ export const selectDraftPlaybooks = (playbooks: Playbook[]): Playbook[] =>
   playbooks.filter((p) => !p.isPublished);
 
 /**
- * Filters user's favorite playbooks
- */
-export const selectMyFavoritePlaybooks =
-  (userId: string) =>
-  (playbooks: Playbook[]): Playbook[] =>
-    playbooks.filter((p) => p.favorite && p.createdBy === userId);
-
-/**
  * Filters user's published playbooks
  */
 export const selectMyPublishedPlaybooks =

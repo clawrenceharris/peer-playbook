@@ -20,8 +20,12 @@ import { SessionCard } from "@/features/sessions/components";
 import { useMyUpcomingSessions } from "@/features/sessions/hooks/use-user-sessions";
 import { EmptyState } from "@/components/states";
 import { Loader2 } from "lucide-react";
-import { useRecentPlaybooks } from "@/features/playbooks/hooks";
+import {
+  useMyFavoritePlaybooks,
+  useRecentPlaybooks,
+} from "@/features/playbooks/hooks";
 import { PlaybookCard } from "@/features/playbooks/components";
+import { PlaybookList } from "@/features/playbooks/components";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -34,7 +38,7 @@ export default function Dashboard() {
   const handleCreatePlaybook = () => {
     router.push("/create-playbook");
   };
-
+  const { data: favoritePlaybooks = [] } = useMyFavoritePlaybooks(user.id);
   return (
     <div>
       {/* Hero Section */}
@@ -71,7 +75,7 @@ export default function Dashboard() {
         </div>
       </div>
       <div className="container">
-        <section className=" h-60 ">
+        <section id="upcoming-sessions">
           <h2 className="text-2xl">Upcoming Sessions</h2>
 
           {sessionsLoading ? (
@@ -94,28 +98,17 @@ export default function Dashboard() {
             </div>
           )}
         </section>
-        <section className="  h-60 ">
+        <section id="recent-playbooks">
           <h2 className="text-2xl">Recent Playbooks</h2>
-
-          {playbooksLoading ? (
-            <div className="flex w-full h-full items-center justify-center">
-              <Loader2 className="text-primary-400 animate-spin" />
-            </div>
-          ) : recentPlaybooks.length > 0 ? (
-            <div className="flex flex-wrap gap-4">
-              {recentPlaybooks.map((playbook) => (
-                <PlaybookCard key={playbook.id} playbook={playbook} />
-              ))}
-            </div>
-          ) : (
-            <div className="flex w-full h-full items-center justify-center">
-              <EmptyState
-                title=""
-                className="bg-transparent text-center"
-                message="You don't have any recent playbooks at the moment"
-              />
-            </div>
-          )}
+          <div className="content-body">
+            <PlaybookList
+              onPlaybookClick={() =>
+                router.push(`/library/playbooks/${playbook.id}`)
+              }
+              playbooks={recentPlaybooks}
+              isLoading={playbooksLoading}
+            />
+          </div>
         </section>
       </div>
     </div>

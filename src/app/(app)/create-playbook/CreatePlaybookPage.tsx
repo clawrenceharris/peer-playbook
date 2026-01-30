@@ -91,7 +91,6 @@ export default function CreatePlaybookPage() {
                       topic: "",
                       contexts: [],
                       modes: [],
-                      notes: "",
                       warmup: [],
                       workout: [],
                       closer: [],
@@ -145,7 +144,8 @@ export default function CreatePlaybookPage() {
                   resolver={zodResolver(generatePlaybookSchema)}
                   isLoading={isGenerating}
                   onSubmit={generatePlaybook}
-                  onSuccess={(_, res) => router.push(res.id)}
+                  defaultValues={{subject: "", courseName: "", contexts: [], modes: [], instructions: "", topic:""}}
+                  onSuccess={(_, res) => router.push(`/library/playbooks/${res.id}`)}
                   enableBeforeUnloadProtection={false}
                   submitText="Create Playbook"
                   submitButtonClassName="bg-gradient-to-r from-primary-400 to-secondary-500 hover:from-primary-400/90 hover:to-secondary-500/90 text-white border-0 shadow-md hover:-translate-y-2 hover:shadow-lg transition-all duration-200 p-6"

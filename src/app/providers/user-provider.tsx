@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { createContext, useContext } from "react";
 
 import { ErrorState, LoadingState } from "@/components/states";
@@ -10,19 +10,24 @@ import { User } from "@supabase/supabase-js";
 import { useProfile } from "@/features/profile/hooks";
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const { user, isLoading: loadingAuth } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
 
   // IMPORTANT: only fetch profile when we actually have a user id
   const {
     data: profile,
     refetch,
-    isLoading: loadingProfile,
+    isLoading: profileLoading,
   } = useProfile(user?.id);
 
   const router = useRouter();
   const pathname = usePathname();
-
-  if (loadingAuth || loadingProfile) return <LoadingState />;
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user && !pathname.includes("auth")) {
+      router.replace("/auth/login");
+    }
+  }, [authLoading, pathname, router, user]);
+  if (authLoading || profileLoading) return <LoadingState />;
 
   // signed out
   if (!user) {

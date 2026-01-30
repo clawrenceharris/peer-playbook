@@ -1,4 +1,3 @@
-
 import { SupabaseClient } from "@supabase/supabase-js";
 import { PlaybooksRepository } from "../data/playbook.repository";
 import {
@@ -9,7 +8,10 @@ import {
   PlaybookUpdate,
   PlaybookWithStrategies,
 } from "./playbook.types";
-import { CreatePlaybookFormValues, GeneratePlaybookInput } from "./playbook.schema";
+import {
+  CreatePlaybookFormValues,
+  GeneratePlaybookFormValues,
+} from "./playbook.schema";
 
 export const createPlaybookService = (client: SupabaseClient) => {
   const repository = new PlaybooksRepository(client);
@@ -20,28 +22,37 @@ export const createPlaybookService = (client: SupabaseClient) => {
     repository.getAllBy("createdBy", userId);
 
   const getPlaybookWithStrategies = async (
-    playbookId: string
+    playbookId: string,
   ): Promise<PlaybookWithStrategies> => {
     const playbook = await repository.getById(playbookId);
     const strategies = await repository.getPlaybookStrategies(playbookId);
     return { ...playbook, strategies };
   };
-
+  const getFavoritePlaybooks = (userId: string) =>
+    repository.getFavoritePlaybooks(userId);
+  const getFavoritePlaybookIds = (userId: string): Promise<string[]> =>
+    repository.getFavoritePlaybookIds(userId);
   const getPlaybookStrategies = (playbookId: string) =>
     repository.getPlaybookStrategies(playbookId);
 
   const createPlaybook = (data: PlaybookInsert): Promise<Playbook> =>
     repository.create(data);
+  const addFavoritePlaybook = (playbookId: string, userId: string) =>
+    repository.addFavoritePlaybook(playbookId, userId);
+  const removeFavoritePlaybook = (playbookId: string, userId: string) =>
+    repository.removeFavoritePlaybook(playbookId, userId);
 
-  const update = (playbookId: string, data: PlaybookUpdate): Promise<Playbook> =>
-    repository.update(playbookId, data);
+  const update = (
+    playbookId: string,
+    data: PlaybookUpdate,
+  ): Promise<Playbook> => repository.update(playbookId, data);
 
   const updateStrategySteps = (strategyId: string, steps: string[]) =>
     repository.updatePlaybookStrategy(strategyId, { steps });
 
   const updatePlaybookStrategy = (
     strategyId: string,
-    data: PlaybookStrategyUpdate
+    data: PlaybookStrategyUpdate,
   ): Promise<PlaybookStrategy> =>
     repository.updatePlaybookStrategy(strategyId, data);
 
@@ -52,7 +63,7 @@ export const createPlaybookService = (client: SupabaseClient) => {
     repository.deletePlaybookStrategy(strategyId);
 
   const generatePlaybook = async (
-    data: GeneratePlaybookInput
+    data: GeneratePlaybookFormValues,
   ): Promise<Playbook> => {
     const response = await fetch("/api/playbooks/generate", {
       method: "POST",
@@ -76,7 +87,7 @@ export const createPlaybookService = (client: SupabaseClient) => {
   };
 
   const createManualPlaybook = async (
-    data: CreatePlaybookFormValues
+    data: CreatePlaybookFormValues,
   ): Promise<Playbook> => {
     const response = await fetch("/api/playbooks/create", {
       method: "POST",
@@ -87,7 +98,6 @@ export const createPlaybookService = (client: SupabaseClient) => {
         topic: data.topic,
         modes: data.modes,
         contexts: data.contexts,
-        notes: data.notes,
         strategies: {
           warmup: data.warmup,
           workout: data.workout,
@@ -103,14 +113,13 @@ export const createPlaybookService = (client: SupabaseClient) => {
 
     return repository.getById(payload.playbookId);
   };
-
   const reorderStrategies = async (
-    strategies: PlaybookStrategy[]
+    strategies: PlaybookStrategy[],
   ): Promise<void> => {
     await Promise.all(
       strategies.map((strategy, index) =>
-        repository.updatePlaybookStrategy(strategy.id, { position: index })
-      )
+        repository.updatePlaybookStrategy(strategy.id, { position: index }),
+      ),
     );
   };
 
@@ -120,12 +129,15 @@ export const createPlaybookService = (client: SupabaseClient) => {
     getAllByUser,
     getPlaybookWithStrategies,
     getPlaybookStrategies,
+    getFavoritePlaybooks,
+    getFavoritePlaybookIds,
     createPlaybook,
+    addFavoritePlaybook,
+    removeFavoritePlaybook,
     update,
     updateStrategySteps,
     updatePlaybookStrategy,
     deletePlaybook,
-    delete: deletePlaybook,
     deletePlaybookStrategy,
     generatePlaybook,
     createManualPlaybook,

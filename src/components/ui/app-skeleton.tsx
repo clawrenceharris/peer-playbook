@@ -3,7 +3,7 @@ import { Skeleton } from "./";
 
 export function AppSkeleton() {
   return (
-    <>
+    <div className="w-full h-full">
       <div className="header">
         <Skeleton className="w-60 h-7 rounded-full" />
         <Skeleton className="w-20 h-7 rounded-full" />
@@ -35,6 +35,6 @@ export function AppSkeleton() {
           <Skeleton className="h-50 w-full max-w-[250px] rounded-xl" />
         </div>
       </div>
-    </>
+    </div>
   );
 }

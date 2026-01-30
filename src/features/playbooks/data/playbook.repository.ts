@@ -1,11 +1,18 @@
 import { BaseRepository } from "@/repositories/base.repository";
-import { camelizeKeys, DomainInsert, DomainModel, DomainUpdate, snakeizeKeys } from "@/lib/data/naming";
+import {
+  camelizeKeys,
+  DomainInsert,
+  DomainModel,
+  DomainUpdate,
+  snakeizeKeys,
+} from "@/lib/data/naming";
 import {
   Playbooks,
   PlaybooksInsert,
   PlaybooksUpdate,
   PlaybookStrategies,
   PlaybookStrategiesUpdate,
+  FavoritePlaybooksInsert,
 } from "@/types";
 import { SupabaseClient } from "@supabase/supabase-js";
 
@@ -35,10 +42,56 @@ export class PlaybooksRepository extends BaseRepository<
     return camelizeKeys(strategy);
   }
 
-  private toStrategyUpdate(update: PlaybookStrategyUpdate): PlaybookStrategiesUpdate {
+  private toStrategyUpdate(
+    update: PlaybookStrategyUpdate,
+  ): PlaybookStrategiesUpdate {
     return snakeizeKeys(update) as PlaybookStrategiesUpdate;
   }
+  async addFavoritePlaybook(playbookId: string, userId: string): Promise<void> {
+    await this.client
+      .from("favorite_playbooks")
+      .insert<FavoritePlaybooksInsert>({
+        user_id: userId,
+        playbook_id: playbookId,
+      });
+  }
 
+  async removeFavoritePlaybook(
+    playbookId: string,
+    userId: string,
+  ): Promise<void> {
+    await this.client
+      .from("favorite_playbooks")
+      .delete()
+      .eq("playbook_id", playbookId)
+      .eq("user_id", userId);
+  }
+  async getFavoritePlaybooks(userId: string): Promise<Playbook[]> {
+    // Fetch the user's favorite playbooks using the favorite_playbooks join table
+    const { data, error } = await this.client
+      .from("favorite_playbooks")
+      .select("playbooks(*)")
+      .eq("user_id", userId);
+
+    if (error) throw error;
+
+    // Extract the playbooks array
+    const playbooks = (data ?? [])
+      .map((row) => row.playbooks.map((p) => this.toDomain(p)))
+      .flat();
+    return playbooks;
+  }
+  async getFavoritePlaybookIds(userId: string): Promise<string[]> {
+    const { data, error } = await this.client
+      .from("favorite_playbooks")
+      .select("playbook_id")
+      .eq("user_id", userId);
+
+    if (error) throw error;
+
+    // Extract the playbooks array
+    return (data ?? []).map((entry) => entry.playbook_id);
+  }
   async getPlaybookStrategies(playbookId: string): Promise<PlaybookStrategy[]> {
     const { error, data } = await this.client
       .from("playbook_strategies")
@@ -52,7 +105,7 @@ export class PlaybooksRepository extends BaseRepository<
   }
   async updatePlaybookStrategy(
     strategyId: string,
-    data: PlaybookStrategyUpdate
+    data: PlaybookStrategyUpdate,
   ): Promise<PlaybookStrategy> {
     const { error, data: card } = await this.client
       .from("playbook_strategies")
@@ -75,4 +128,3 @@ export class PlaybooksRepository extends BaseRepository<
     if (error) throw error;
   }
 }
-

@@ -22,7 +22,7 @@ export const useDeletePlaybook = () => {
     {
       queryKey: playbookKeys.all,
       mutationKey: ["delete-playbook"],
-      mutationFn: (playbookService, id) => playbookService.delete(id),
+      mutationFn: (playbookService, id) => playbookService.deletePlaybook(id),
     },
   );
 };
@@ -45,53 +45,34 @@ export const useUpdatePlaybook = () => {
   });
 };
 
-export const useToggleFavoritePlaybook = () => {
-  const queryClient = useQueryClient();
-  const { user } = useUser();
-
-  const { onMutate, onError } = createMultiQueryOptimisticUpdate<
-    { playbookId: string; favorite: boolean },
-    Record<string, Playbook | Playbook[] | undefined>
-  >(queryClient, {
-    cancelKey: playbookKeys.all,
-    queries: [
-      {
-        getKey: ({ playbookId }) => playbookKeys.detail(playbookId),
-        updater: (old, { favorite }) => ({ ...old, favorite }),
-      },
-      {
-        getKey: () => playbookKeys.byUser(user.id),
-        updater: (old, { playbookId, favorite }) =>
-          Array.isArray(old)
-            ? old.map((p) => (p.id === playbookId ? { ...p, favorite } : p))
-            : old,
-      },
-      {
-        getKey: () => playbookKeys.lists(),
-        updater: (old, { playbookId, favorite }) =>
-          Array.isArray(old)
-            ? old.map((p) => (p.id === playbookId ? { ...p, favorite } : p))
-            : old,
-      },
-    ],
-  });
-
+export const useAddFavoritePlaybook = () => {
   return useDomainMutation<
     PlaybookService,
-    Playbook,
+    void,
     DefaultError,
-    { playbookId: string; favorite: boolean }
+    { playbookId: string; userId: string }
   >(usePlaybookService, {
-    queryKey: playbookKeys.all,
-    mutationKey: ["update-playbook", "toggle-favorite-playbook"],
-    mutationFn: (playbookService, { playbookId, favorite }) =>
-      playbookService.update(playbookId, { favorite }),
-    invalidateFn: () => [playbookKeys.all],
-    onMutate,
-    onError,
+    queryKey: playbookKeys.favorite(),
+    mutationKey: ["add-favorite-playbook"],
+    mutationFn: (playbookService, { playbookId, userId }) =>
+      playbookService.addFavoritePlaybook(playbookId, userId),
+    invalidateFn: () => playbookKeys.all,
   });
 };
-
+export const useRemoveFavoritePlaybook = () => {
+  return useDomainMutation<
+    PlaybookService,
+    void,
+    DefaultError,
+    { playbookId: string; userId: string }
+  >(usePlaybookService, {
+    queryKey: playbookKeys.favorite(),
+    mutationKey: ["remove-favorite-playbook"],
+    mutationFn: (playbookService, { playbookId, userId }) =>
+      playbookService.removeFavoritePlaybook(playbookId, userId),
+    invalidateFn: () => playbookKeys.all,
+  });
+};
 export const useGeneratePlaybook = () => {
   return useDomainMutation<
     PlaybookService,

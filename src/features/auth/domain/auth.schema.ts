@@ -1,25 +1,22 @@
 import { email, password } from "@/utils/schema-helpers";
 import z from "zod";
 
-
-
 export const signUpSchema = z.object({
   firstName: z.string("Please enter your first name"),
   lastName: z.string().optional(),
   email,
-  password
+  password,
 });
 
 export const loginSchema = z.object({
   email,
-  password
+  password: z.string(),
 });
 
 export const updatePasswordSchema = z.object({
-  password
-})
+  password,
+});
 
 export const forgotPasswordSchema = z.object({
-  email
-})
-
+  email,
+});

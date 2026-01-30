@@ -105,28 +105,23 @@ export async function POST(req: NextRequest) {
 
   const rows = choice.strategies.map((sel, position) => {
     const s = fullStrategies.find((fc) => fc.slug === sel.slug)!;
-
     const strategy: PlaybookStrategiesInsert = {
       playbook_id: playbook.id,
       title: s.title,
       steps: s.steps,
-
       phase: sel.phase,
-      base_strategy_id: s.id,
-    };
-    return {
-      ...strategy,
       // Polymorphic reference (system strategy)
       source_type: "system",
       source_id: s.id,
       // Position for ordering within the playbook
       position,
-    } as any;
+    }
+    return strategy
   });
 
   const { error: li } = await client.from("playbook_strategies").insert(rows);
 
   if (li) return NextResponse.json({ error: li.message }, { status: 500 });
 
-  return NextResponse.json({ playbookId: playbook.id }, { status: 200 });
+  return NextResponse.json({ id: playbook.id }, { status: 200 });
 }

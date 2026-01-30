@@ -105,7 +105,6 @@ export type Database = {
       }
       playbook_strategies: {
         Row: {
-          base_strategy_id: string | null
           created_at: string | null
           custom_steps: string[] | null
           custom_title: string | null
@@ -113,12 +112,14 @@ export type Database = {
           id: string
           phase: Database["public"]["Enums"]["lesson_phase"]
           playbook_id: string
+          position: number
+          source_id: string
+          source_type: Database["public"]["Enums"]["strategy_source_type"]
           steps: string[]
           title: string
           updated_at: string
         }
         Insert: {
-          base_strategy_id?: string | null
           created_at?: string | null
           custom_steps?: string[] | null
           custom_title?: string | null
@@ -126,12 +127,14 @@ export type Database = {
           id?: string
           phase: Database["public"]["Enums"]["lesson_phase"]
           playbook_id: string
+          position?: number
+          source_id: string
+          source_type: Database["public"]["Enums"]["strategy_source_type"]
           steps: string[]
           title: string
           updated_at?: string
         }
         Update: {
-          base_strategy_id?: string | null
           created_at?: string | null
           custom_steps?: string[] | null
           custom_title?: string | null
@@ -139,6 +142,9 @@ export type Database = {
           id?: string
           phase?: Database["public"]["Enums"]["lesson_phase"]
           playbook_id?: string
+          position?: number
+          source_id?: string
+          source_type?: Database["public"]["Enums"]["strategy_source_type"]
           steps?: string[]
           title?: string
           updated_at?: string
@@ -153,7 +159,7 @@ export type Database = {
           },
           {
             foreignKeyName: "playbook_strategies_base_strategy_id_fkey"
-            columns: ["base_strategy_id"]
+            columns: ["source_id"]
             isOneToOne: false
             referencedRelation: "strategies"
             referencedColumns: ["id"]

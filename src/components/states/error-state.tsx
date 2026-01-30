@@ -4,6 +4,7 @@ import React from "react";
 import {
   Button,
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -64,19 +65,23 @@ export function ErrorState({
     >
       <CardHeader>
         <Image
-          width={510}
-          height={510}
+          width={410}
+          height={410}
           className="w-full max-w-[200px] mx-auto"
           alt="Sad Notebook"
           src="/images/error.png"
         />
       </CardHeader>
+      <CardTitle className="text-2xl">{title}</CardTitle>
+
       <CardContent>
-        <CardTitle className="text-2xl">{title}</CardTitle>
 
         <CardDescription>{message}</CardDescription>
       </CardContent>
       <CardFooter className="gap-4 justify-end">
+        <CardAction>
+
+        
         {onRetry && (
           <Button onClick={onRetry} variant="outline">
             {retryLabel}
@@ -84,7 +89,8 @@ export function ErrorState({
         )}
         {onAction && actionLabel && (
           <Button onClick={onAction}>{actionLabel}</Button>
-        )}
+          )}
+          </CardAction>
       </CardFooter>
     </Card>
   );

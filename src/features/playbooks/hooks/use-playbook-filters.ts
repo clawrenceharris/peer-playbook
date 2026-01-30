@@ -1,17 +1,19 @@
 import { useMemo, useState } from "react";
 import { Playbook } from "@/features/playbooks/domain";
 import { PlaybookFilterState } from "../components";
+import { useUser } from "@/app/providers";
+import { useMyFavoritePlaybooks } from "./use-playbooks";
 
 export function usePlaybookFilters(playbooks: Playbook[]) {
   const [filters, setFilters] = useState<PlaybookFilterState>({});
-
+  const { user } = useUser();
+  const { data: favoritePlaybooks = [] } = useMyFavoritePlaybooks(user.id);
   const filteredPlaybooks = useMemo(() => {
     return playbooks.filter((playbook) => {
       // Status filter
-      if (filters.favorite && !playbook.favorite) {
+      if (filters.favorite && !favoritePlaybooks.includes(playbook.id)) {
         return false;
       }
-
       // Course filter
       if (filters.course && !playbook.courseName) {
         return false;

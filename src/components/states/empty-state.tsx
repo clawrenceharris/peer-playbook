@@ -21,7 +21,7 @@ import Image from "next/image";
 /**
  * Available variants for empty state display
  */
-export type EmptyVariant = "default" | "card" |  "page" | "item";
+export type EmptyVariant = "default" | "card" | "page" | "item";
 
 export interface EmptyStateProps {
   /** The display variant - affects layout and styling */
@@ -41,7 +41,7 @@ export interface EmptyStateProps {
   /** Additional CSS classes to apply */
   className?: string;
 
-  itemVariant?: "default" | "outline" | "muted"
+  itemVariant?: "default" | "outline" | "muted";
 }
 
 export function EmptyState({
@@ -74,63 +74,60 @@ export function EmptyState({
   };
   const renderPage = () => (
     <div className="h-screen flex justify-center gradient-background w-full items-center">
-       
       {renderCard()}
     </div>
   );
   const renderItem = () => (
-    <Item variant={itemVariant} className={className}>
+    <Item
+      variant={itemVariant}
+      className={cn("max-w-md w-full mx-auto", className)}
+    >
       {icon && <ItemMedia>{icon}</ItemMedia>}
       <ItemContent>
         <ItemTitle>{title}</ItemTitle>
         {message && <ItemDescription>{message}</ItemDescription>}
-          <ItemActions>
-          {onAction && actionLabel && (
-            <Button  onClick={onAction}>
-              {actionLabel}
-            </Button>)}
-            {onSecondaryAction && secondaryActionLabel && (
-         
-            <Button variant="outline" onClick={onSecondaryAction}>{secondaryActionLabel}</Button>
-          
-        )}
-          </ItemActions>
-        
-       
       </ItemContent>
+      <ItemActions>
+        {onAction && actionLabel && (
+          <Button onClick={onAction}>{actionLabel}</Button>
+        )}
+        {onSecondaryAction && secondaryActionLabel && (
+          <Button variant="outline" onClick={onSecondaryAction}>
+            {secondaryActionLabel}
+          </Button>
+        )}
+      </ItemActions>
     </Item>
   );
 
   const renderCard = () => (
-    <Card className={cn("shadow-sm border max-w-sm w-full  flex flex-col justify-center text-center", className)}>
+    <Card
+      className={cn(
+        "shadow-sm border max-w-sm w-full  flex flex-col justify-center text-center",
+        className,
+      )}
+    >
       <CardHeader>
-      <Image
+        <Image
           width={510}
           height={510}
           className="w-full max-w-[200px] mx-auto"
           alt="Sad Notebook"
           src="/images/error.png"
         />
-      <CardTitle className="text-2xl">{title}</CardTitle>
-     </CardHeader>
+        <CardTitle className="text-2xl">{title}</CardTitle>
+      </CardHeader>
       <CardContent>
-      {message && <CardDescription>{message}</CardDescription>}
-
+        {message && <CardDescription>{message}</CardDescription>}
       </CardContent>
       <CardFooter className="justify-end">
-        <CardAction>
-         {renderActions()}
-        </CardAction>
-     
+        <CardAction>{renderActions()}</CardAction>
       </CardFooter>
-      
     </Card>
   );
 
   const renderDefault = () => (
-    <div
-      className={className}
-    >
+    <div className={className}>
       <div className="flex flex-col w-full items-center justify-center px-4 text-center">
         {icon && <div className="mb-4">{icon}</div>}
         <h3 className="text-xl font-semibold text-foreground mb-2">{title}</h3>
@@ -148,7 +145,7 @@ export function EmptyState({
         return renderCard();
       case "page":
         return renderPage();
-      
+
       case "item":
         return renderItem();
       case "default":

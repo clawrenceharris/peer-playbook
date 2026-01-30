@@ -69,14 +69,14 @@ export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
       readOnly,
       ...inputProps
     },
-    forwardedRef
+    forwardedRef,
   ) => {
     const containerRef = React.useRef<HTMLDivElement | null>(null);
     const inputRef = React.useRef<HTMLInputElement | null>(null);
 
     const isValueControlled = value !== undefined;
     const [uncontrolledValue, setUncontrolledValue] = React.useState(
-      defaultValue ?? ""
+      defaultValue ?? "",
     );
     const currentValue = isValueControlled ? value : uncontrolledValue;
 
@@ -90,7 +90,7 @@ export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
         if (!isExpandedControlled) setUncontrolledExpanded(next);
         onExpandedChange?.(next);
       },
-      [isExpandedControlled, onExpandedChange]
+      [isExpandedControlled, onExpandedChange],
     );
 
     const setValueState = React.useCallback(
@@ -98,7 +98,7 @@ export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
         if (!isValueControlled) setUncontrolledValue(next);
         onChange?.(next);
       },
-      [isValueControlled, onChange]
+      [isValueControlled, onChange],
     );
 
     const focusInput = React.useCallback(() => {
@@ -118,7 +118,7 @@ export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
         if (!collapseOnOutsideClick) return;
         setExpandedState(false);
       },
-      "mousedown"
+      "mousedown",
     );
 
     return (
@@ -126,9 +126,9 @@ export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
         ref={containerRef}
         data-slot="search-bar"
         className={cn(
-          "max-w-full transition-[width] duration-200 ease-in-out",
+          "w-full transition-[width] duration-200 ease-in-out",
           isExpanded ? expandedWidthClassName : collapsedWidthClassName,
-          containerClassName
+          containerClassName,
         )}
         onPointerDownCapture={(e) => {
           if (disabled) return;
@@ -146,7 +146,10 @@ export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
           setExpandedState(true);
         }}
       >
-        <InputGroup className={cn("w-full", className)} data-disabled={disabled}>
+        <InputGroup
+          className={cn("w-full", className)}
+          data-disabled={disabled}
+        >
           <InputGroupAddon align="inline-start">
             <InputGroupText>
               <Search />
@@ -193,7 +196,6 @@ export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
         </InputGroup>
       </div>
     );
-  }
+  },
 );
 SearchBar.displayName = "SearchBar";
-

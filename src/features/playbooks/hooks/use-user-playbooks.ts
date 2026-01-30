@@ -1,7 +1,6 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { usePlaybookService } from ".";
 import {
-  selectMyFavoritePlaybooks,
   selectMyPublishedPlaybooks,
   selectMyDraftPlaybooks,
 } from "../selectors";
@@ -14,22 +13,15 @@ import { playbookKeys, Playbook } from "../domain";
  */
 export const useUserPlaybooks = <TSelected = Playbook[]>(
   userId: string,
-  select?: (playbooks: Playbook[]) => TSelected
+  select?: (playbooks: Playbook[]) => TSelected,
 ) => {
   const playbookService = usePlaybookService();
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: playbookKeys.byUser(userId),
     queryFn: () => playbookService.getAllByUser(userId),
     select,
   });
 };
-
-/**
- * Hook to fetch user's favorite playbooks
- * @param userId - The user ID
- */
-export const useMyFavoritePlaybooks = (userId: string) =>
-  useUserPlaybooks(userId, selectMyFavoritePlaybooks(userId));
 
 /**
  * Hook to fetch user's published playbooks

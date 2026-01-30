@@ -5,7 +5,6 @@ import { getUserErrorMessage } from "@/utils/error";
 import { authKeys, LoginFormInput, SignUpFormInput } from "../domain";
 import { supabase } from "@/lib/supabase/client";
 
-
 export function useAuth() {
   const [error, setError] = useState<string | null>(null);
   const queryClient = useQueryClient();
@@ -47,7 +46,7 @@ export function useAuth() {
         } catch (error) {
           setError(getUserErrorMessage(error));
         }
-      }
+      },
     );
 
     return () => {
@@ -60,7 +59,7 @@ export function useAuth() {
     if (sessionQuery.data !== undefined) {
       queryClient.setQueryData(
         authKeys.user(),
-        sessionQuery.data?.user ?? null
+        sessionQuery.data?.user ?? null,
       );
     }
   }, [queryClient, sessionQuery.data]);
@@ -96,7 +95,7 @@ export function useAuth() {
       const res = await signupMutation.mutateAsync(data);
       return res.user ?? null;
     },
-    [signupMutation]
+    [signupMutation],
   );
 
   const loginMutation = useMutation({
@@ -124,7 +123,7 @@ export function useAuth() {
       const res = await loginMutation.mutateAsync(data);
       return res.user ?? null;
     },
-    [loginMutation]
+    [loginMutation],
   );
 
   const signOutMutation = useMutation({
@@ -157,9 +156,12 @@ export function useAuth() {
   });
 
   // Send password reset email
-  const resetPassword = useCallback(async (email: string): Promise<void> => {
-    await resetPasswordMutation.mutateAsync(email);
-  }, [resetPasswordMutation]);
+  const resetPassword = useCallback(
+    async (email: string): Promise<void> => {
+      await resetPasswordMutation.mutateAsync(email);
+    },
+    [resetPasswordMutation],
+  );
 
   const updatePasswordMutation = useMutation({
     mutationKey: authKeys.mutations.updatePassword(),
@@ -182,7 +184,7 @@ export function useAuth() {
     async (newPassword: string): Promise<void> => {
       await updatePasswordMutation.mutateAsync(newPassword);
     },
-    [updatePasswordMutation]
+    [updatePasswordMutation],
   );
 
   const reauthenticateMutation = useMutation({

@@ -5,16 +5,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormLayoutProps } from "@/components/form/form";
 import { FieldGroup } from "@/components/ui";
 import {
-  UpdatePlaybookFormInput,
+  UpdatePlaybookFormValues,
   updatePlaybookSchema,
 } from "@/features/playbooks/domain";
 import { LessonDetailsSection, NotesSection } from "./sections";
 
 export function UpdatePlaybookForm({
   ...props
-}: FormLayoutProps<UpdatePlaybookFormInput>) {
+}: FormLayoutProps<UpdatePlaybookFormValues>) {
   return (
-    <Form<UpdatePlaybookFormInput>
+    <Form<UpdatePlaybookFormValues>
       resolver={zodResolver(updatePlaybookSchema)}
       defaultValues={{
         subject: "",
@@ -28,11 +28,11 @@ export function UpdatePlaybookForm({
       {...props}
     >
       <FieldGroup>
-        <LessonDetailsSection<UpdatePlaybookFormInput>
+        <LessonDetailsSection<UpdatePlaybookFormValues>
           courseIsOptional
           topicIsOptional
         />
-        <NotesSection<UpdatePlaybookFormInput> />
+        <NotesSection<UpdatePlaybookFormValues> />
       </FieldGroup>
     </Form>
   );

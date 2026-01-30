@@ -15,12 +15,9 @@ export const contextsSchema = z.object({
 });
 
 export const modesSchema = z.object({
-  modes: z.array(z.string()).default([]),
+  modes: z.array(z.enum(["in-person", "virtual", "hybrid"])).default([]),
 });
 
-export const notesSchema = z.object({
-  notes: z.string().optional().default(""),
-});
 
 export const instructionsSchema = z.object({
   instructions: z.string().optional().default(""),
@@ -49,15 +46,13 @@ export const generatePlaybookSchema = lessonDetailsSchema
   .merge(instructionsSchema)
   .merge(contextsSchema)
   .merge(modesSchema)
-  .merge(notesSchema);
 
 export const updatePlaybookSchema = z.object({
   // Update is used for editing metadata; allow partial updates.
-  // Subject remains required to avoid invalid playbooks (adjust if you prefer optional).
+  // Subject remains required to avoid invalid playbooks.
   subject: z.string().min(1, "Please select a subject"),
   courseName: z.string().min(1, "Course name is required").optional(),
   topic: z.string().min(1, "Topic is required").optional(),
-  notes: z.string().optional(),
 });
 
 
@@ -66,13 +61,29 @@ export const createPlaybookSchema = z.object({
 }).merge(lessonDetailsSchema)
   .merge(contextsSchema)
   .merge(modesSchema)
-  .merge(notesSchema)
   .merge(manualStrategiesSchema);
+
+
+
+export const playbookStrategySchema = z.object({
+  // Update is used for editing metadata; allow partial updates.
+  // Subject remains required to avoid invalid playbooks (adjust if you prefer optional).
+  steps: z.array(z.string()),
+  title: z.string(),
+  phase: z.enum(["warmup", "workout", "closer"]).optional(),
+  resources: z.array(z.object({
+    type: z.enum(["file","text","set","url","other"]).optional(),
+    data: z.any()
+  })).optional()
+});
+
+export const updatePlaybookStrategySchema = playbookStrategySchema.partial()
+
 
 // For react-hook-form + zodResolver, prefer input types (defaults make inputs optional).
 export type GeneratePlaybookFormValues = z.input<typeof generatePlaybookSchema>;
-export type GeneratePlaybookInput = GeneratePlaybookFormValues;
-export type UpdatePlaybookFormInput = z.input<typeof updatePlaybookSchema>;
+export type UpdatePlaybookFormValues = z.input<typeof updatePlaybookSchema>;
 export type CreatePlaybookFormValues = z.input<typeof createPlaybookSchema>;
-
+export type UpdatePlaybookStrategyFormValues = z.input<typeof updatePlaybookStrategySchema>;
+export type PlaybookStrategyFormValues = z.input<typeof playbookStrategySchema>;
 export type StrategyRef = z.infer<typeof strategyRefSchema>;

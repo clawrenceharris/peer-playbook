@@ -114,7 +114,7 @@
   /* Foreground */
   --foreground: #10131a;
   --secondary-foreground: #f3f6fa;
-  --accent-foreground: #595959;
+  --accent-foreground: #818792;
   --primary-foreground: #fff;
 
   /* Status */
@@ -163,11 +163,11 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/70;
   }
 
   body {
-    @apply font-sans h-dvh mx-auto overflow-hidden text-foreground selection:bg-primary-400! selection:text-white;
+    @apply bg-background text-foreground font-sans h-dvh mx-auto overflow-hidden selection:bg-primary-400! selection:text-white;
   }
   main {
     @apply relative h-dvh flex flex-col overflow-y-auto w-full;
@@ -182,29 +182,35 @@
   button {
     @apply cursor-pointer;
   }
+  section {
+    @apply bg-primary-foreground  p-5 rounded-xl border shadow-sm mb-8;
+  }
 }
 
 @layer components {
   .header {
     @apply relative w-full flex py-6 px-8 border-b justify-between items-center gap-5 bg-primary-foreground;
   }
+  .content-body {
+    @apply relative py-5 px-3;
+  }
   .gradient-background {
     @apply bg-linear-to-br to-primary-300 from-secondary-300;
   }
   .input {
-    @apply text-foreground data-placeholder:text-muted-foreground focus-visible:ring-2 shadow-sm focus-visible:bg-blue-200/20 h-11 focus-visible:ring-primary-400/50  placeholder:text-muted-foreground selection:bg-primary-500 border-1 flex w-full min-w-0 rounded-full bg-input px-4 py-3 text-base transition-[color,box-shadow,border,background] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm autofill:border-ring autofill:bg-primary-100/20  autofill:text-foreground;
+    @apply text-foreground data-placeholder:text-muted-foreground focus-visible:ring-2 shadow-xs focus-visible:bg-blue-200/20 h-11 focus-visible:ring-primary-400/50  placeholder:text-muted-foreground selection:bg-primary-500 border flex w-full min-w-0 rounded-full bg-input px-4 py-3 text-base transition-[color,box-shadow,border,background] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm autofill:border-ring autofill:bg-primary-100/20  autofill:text-foreground;
   }
   .secondary-header {
-    @apply sticky bg-primary-foreground flex-wrap flex gap-5 top-0 z-99 px-8 py-4 border-b items-center;
+    @apply sticky bg-primary-foreground flex-wrap flex gap-5 top-0 z-50 px-8 py-4 border-b items-center;
   }
   .strategy-card {
     @apply relative  transition-shadow duration-200 rounded-2xl shadow-md border-2 max-w-xl;
   }
   .container {
-    @apply py-6 px-4 overflow-hidden flex flex-col relative w-full max-w-125 mx-auto  h-full;
+    @apply py-6 px-4 overflow-hidden flex flex-col relative w-full max-w-[1000px]! mx-auto  h-full;
   }
   .btn {
-    @apply relative inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none;
+    @apply relative inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all [&_path]:transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none;
   }
   .btn-destructive {
     @apply bg-destructive-100 text-destructive-500 overflow-hidden shadow-xs hover:bg-destructive-500/30;
@@ -233,10 +239,10 @@
   }
 
   .btn-outline {
-    @apply border bg-transparent shadow-sm text-foreground hover:bg-background;
+    @apply border bg-transparent shadow-sm text-foreground hover:bg-background hover:text-accent-foreground;
   }
   .btn-muted {
-    @apply bg-muted h-10 w-10 rounded-md flex p-0 items-center justify-center text-gray-500 hover:bg-muted-foreground/30;
+    @apply bg-secondary-foreground h-10 w-10 rounded-md flex p-0 items-center justify-center text-gray-500 hover:bg-muted-foreground/30 [&_svg]:size-5;
   }
 
   .card {
@@ -302,13 +308,4 @@
 .dark {
   --highlight: oklch(0.852 0.199 91.936);
   --brand: oklch(0.707 0.165 254.624);
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
 }

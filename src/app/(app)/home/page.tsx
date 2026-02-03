@@ -20,11 +20,7 @@ import { SessionCard } from "@/features/sessions/components";
 import { useMyUpcomingSessions } from "@/features/sessions/hooks/use-user-sessions";
 import { EmptyState } from "@/components/states";
 import { Loader2 } from "lucide-react";
-import {
-  useMyFavoritePlaybooks,
-  useRecentPlaybooks,
-} from "@/features/playbooks/hooks";
-import { PlaybookCard } from "@/features/playbooks/components";
+import { useRecentPlaybooks } from "@/features/playbooks/hooks";
 import { PlaybookList } from "@/features/playbooks/components";
 
 export default function Dashboard() {
@@ -38,7 +34,6 @@ export default function Dashboard() {
   const handleCreatePlaybook = () => {
     router.push("/create-playbook");
   };
-  const { data: favoritePlaybooks = [] } = useMyFavoritePlaybooks(user.id);
   return (
     <div>
       {/* Hero Section */}
@@ -102,7 +97,7 @@ export default function Dashboard() {
           <h2 className="text-2xl">Recent Playbooks</h2>
           <div className="content-body">
             <PlaybookList
-              onPlaybookClick={() =>
+              onPlaybookClick={(playbook) =>
                 router.push(`/library/playbooks/${playbook.id}`)
               }
               playbooks={recentPlaybooks}
@@ -138,7 +133,7 @@ const HomeCard = ({
         "relative group  cursor-pointer hover:shadow-lg shadow-md hover:-translate-y-1  transition-all duration-300",
         variant === "primary"
           ? "hover:bg-primary-400 shadow-primary-700/40"
-          : "hover:bg-secondary-400 shadow-secondary-800/20",
+          : "hover:bg-secondary-400 shadow-secondary-800/20"
       )}
     >
       <CardHeader>
@@ -147,7 +142,7 @@ const HomeCard = ({
             "absolute flex items-center justify-center left-1/2 -translate-x-1/2 -top-6 w-13 h-13 [&_svg]:size-7 group-hover:to-white border-5 border-primary-foreground group-hover:from-white [&_path]:stroke-white rounded-full bg-gradient-to-br group-hover:scale-110 transition-transform duration-300",
             variant === "primary"
               ? "from-primary-400 to-primary-500 group-hover:[&_path]:stroke-primary-400 group-hover:border-primary-400"
-              : "from-secondary-400 to-secondary-600 group-hover:[&_path]:stroke-secondary-400 group-hover:border-secondary-400",
+              : "from-secondary-400 to-secondary-600 group-hover:[&_path]:stroke-secondary-400 group-hover:border-secondary-400"
           )}
         >
           {icon}
@@ -173,7 +168,7 @@ const HomeCard = ({
               "w-full hover:scale-[1.02] text-white group-hover:bg-white",
               variant === "primary"
                 ? "group-hover:text-primary-400"
-                : "group-hover:text-secondary-400",
+                : "group-hover:text-secondary-400"
             )}
           >
             {buttonText}

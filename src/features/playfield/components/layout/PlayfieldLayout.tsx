@@ -16,7 +16,6 @@ import { useEffect, useState } from "react";
 import { PlaybookStrategy } from "@/features/playbooks/domain";
 import { Session } from "@/features/sessions/domain";
 import { usePlayfield, useSessionCall } from "@/app/providers";
-import { isCompiledActivity } from "@/activities/registry";
 
 interface PlayfieldLayoutProps {
   session: Session;
@@ -53,9 +52,6 @@ export function PlayfieldLayout({ session }: PlayfieldLayoutProps) {
       reset();
     }
   }, [reset, strategy]);
-
-  // Check if current strategy is compiled
-  const isCompiled = strategy ? isCompiledActivity(strategy.slug) : false;
 
   return (
     <div className="p-10 h-full w-full flex">
@@ -112,7 +108,7 @@ export function PlayfieldLayout({ session }: PlayfieldLayoutProps) {
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className="flex  w-full h-full p-10 items-center flex-col justify-center gap-6"
           >
-            {isCompiled ? <PlayfieldExpanded /> : <PlayfieldExpanded />}
+            <PlayfieldExpanded />
             <ParticipantListView participants={participants} />
           </motion.div>
         )}

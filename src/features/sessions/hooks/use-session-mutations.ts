@@ -1,6 +1,11 @@
 import { DefaultError } from "@tanstack/react-query";
 import { useSessionService } from ".";
-import { Session, SessionInsert, SessionService, SessionUpdate } from "../domain";
+import {
+  Session,
+  SessionInsert,
+  SessionService,
+  SessionUpdate,
+} from "../domain";
 import { useDomainMutation } from "@/lib/queries";
 import { playbookKeys } from "@/features/playbooks/domain/playbook.keys";
 import { sessionKeys } from "../domain/session.keys";
@@ -18,7 +23,7 @@ export const useCreateSession = () =>
         ...data,
         playbookId,
       }),
-    invalidateFn: (_ ,{playbookId}) =>
+    invalidateFn: (_, { playbookId }) =>
       playbookId
         ? [...sessionKeys.all, ...playbookKeys.all]
         : [...sessionKeys.all],
@@ -46,5 +51,5 @@ export const useDeleteSession = () =>
       invalidateFn: () => sessionKeys.all,
 
       invalidationOptions: { exact: false },
-    },
+    }
   );

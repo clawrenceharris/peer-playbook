@@ -28,11 +28,12 @@ export function UpdatePlaybookModal({
         <UpdatePlaybookForm
           defaultValues={{
             topic: playbook.topic,
-            courseName: playbook.courseName || "",
+            subject: playbook.subject,
+            courseName: playbook.courseName,
           }}
-          onSuccess={closeModal}
+          onSubmit={(data) => onConfirm(data)}
           onCancel={closeModal}
-          onSubmit={onConfirm}
+          onSuccess={closeModal}
           isLoading={isLoading}
         />
       ) : (

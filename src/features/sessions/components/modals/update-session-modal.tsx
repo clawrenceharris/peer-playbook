@@ -22,7 +22,7 @@ export function UpdateSessionModal({
     mutationKey: ["update-session"],
   });
   const handleSubmit = async (
-    data: import("@/features/sessions/domain").CreateSessionInput,
+    data: import("@/features/sessions/domain").CreateSessionFormValues
   ) => {
     await onConfirm(sessionId, data);
     if (onUpdateStatus) {

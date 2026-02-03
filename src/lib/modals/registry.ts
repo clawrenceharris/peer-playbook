@@ -1,4 +1,5 @@
-import type { ComponentType } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { ComponentType } from "react";
 
 /**
  * Modal registry service that maps modal type strings to React components

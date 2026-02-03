@@ -16,23 +16,14 @@ export function UpdatePlaybookForm({
   return (
     <Form<UpdatePlaybookFormValues>
       resolver={zodResolver(updatePlaybookSchema)}
-      defaultValues={{
-        subject: "",
-        courseName: "",
-        topic: "",
-        notes: "",
-      }}
       enableBeforeUnloadProtection={false}
       submitText="Done"
       showsCancelButton={false}
       {...props}
     >
       <FieldGroup>
-        <LessonDetailsSection<UpdatePlaybookFormValues>
-          courseIsOptional
-          topicIsOptional
-        />
-        <NotesSection<UpdatePlaybookFormValues> />
+        <LessonDetailsSection courseIsOptional topicIsOptional />
+        <NotesSection />
       </FieldGroup>
     </Form>
   );

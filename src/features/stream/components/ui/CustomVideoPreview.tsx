@@ -1,4 +1,4 @@
-import { useStreamCall } from "@/hooks";
+import { useStreamCall } from "@/features/stream/hooks";
 import { useCallStateHooks } from "@stream-io/video-react-sdk";
 import { useEffect, useRef } from "react";
 import { DisabledVideoPlaceholder } from "./";

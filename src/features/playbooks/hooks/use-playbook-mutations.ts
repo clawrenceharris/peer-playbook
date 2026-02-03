@@ -1,4 +1,4 @@
-import { DefaultError, useQueryClient } from "@tanstack/react-query";
+import { DefaultError } from "@tanstack/react-query";
 import {
   CreatePlaybookFormValues,
   GeneratePlaybookFormValues,
@@ -9,12 +9,8 @@ import {
   PlaybookService,
   playbookKeys,
 } from "../domain";
-import {
-  createMultiQueryOptimisticUpdate,
-  useDomainMutation,
-} from "@/lib/queries";
+import { useDomainMutation } from "@/lib/queries";
 import { usePlaybookService } from ".";
-import { useUser } from "@/app/providers";
 
 export const useDeletePlaybook = () => {
   return useDomainMutation<PlaybookService, void, DefaultError, string>(
@@ -23,7 +19,7 @@ export const useDeletePlaybook = () => {
       queryKey: playbookKeys.all,
       mutationKey: ["delete-playbook"],
       mutationFn: (playbookService, id) => playbookService.deletePlaybook(id),
-    },
+    }
   );
 };
 

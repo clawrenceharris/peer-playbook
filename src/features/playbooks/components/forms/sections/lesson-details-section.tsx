@@ -4,14 +4,13 @@ import React from "react";
 import { FieldLegend, FieldSet } from "@/components/ui";
 import { ComboboxField, InputField } from "@/components/form";
 import { subjects } from "@/lib/constants";
-import type { FieldValues } from "react-hook-form";
 
 export interface LessonDetailsSectionProps {
   courseIsOptional?: boolean;
   topicIsOptional?: boolean;
 }
 
-export function LessonDetailsSection<T extends FieldValues>({
+export function LessonDetailsSection({
   courseIsOptional,
   topicIsOptional,
 }: LessonDetailsSectionProps) {
@@ -19,8 +18,8 @@ export function LessonDetailsSection<T extends FieldValues>({
     <FieldSet className="flex flex-col md:flex-row items-start gap-2 md:gap-4">
       <FieldLegend className="sr-only">Lesson Details</FieldLegend>
 
-      <ComboboxField<T>
-        name={"subject" as any}
+      <ComboboxField
+        name="subject"
         label="Subject"
         placeholder="Subject"
         items={Object.keys(subjects).map((s) => ({
@@ -30,15 +29,15 @@ export function LessonDetailsSection<T extends FieldValues>({
         }))}
       />
 
-      <InputField<T>
-        name={"courseName" as any}
+      <InputField
+        name="courseName"
         label="Course"
         placeholder="Course"
         isOptional={courseIsOptional}
       />
 
-      <InputField<T>
-        name={"topic" as any}
+      <InputField
+        name="topic"
         label="Topic"
         placeholder="Topic"
         isOptional={topicIsOptional}
@@ -46,4 +45,3 @@ export function LessonDetailsSection<T extends FieldValues>({
     </FieldSet>
   );
 }
-

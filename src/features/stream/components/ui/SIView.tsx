@@ -1,7 +1,8 @@
 import { useCallStateHooks } from "@stream-io/video-react-sdk";
 import { useEffect, useMemo } from "react";
 import { CustomParticipantView, ParticipantListView } from "./";
-import { usePlayfieldParticipants, useStreamCall } from "@/hooks";
+import { usePlayfieldParticipants } from "@/features/playfield/hooks";
+import { useStreamCall } from "../../hooks";
 
 export default function SIView() {
   const { useCallCreatedBy, useParticipants } = useCallStateHooks();

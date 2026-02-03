@@ -36,39 +36,33 @@ export function QueryProvider({ children }: { children: ReactNode }) {
         },
 
         mutations: {
-          onError: (error, variables, context, mutation) => {
+          onError: (error) => {
             // Normalize the error
             const normalizedError = normalizeError(error);
 
-
-
-  
-            if (!mutation.meta?.skipToast) {
-              // Show toast with "See More" action
-              // The actual modal opening will be handled via mutation observer
-              // Show toast with "See More" action
-              showErrorToast(normalizedError, {
-                onShowDetails: () => {
-                  // Access error modal handler via window
-                  if (typeof window !== "undefined") {
-                    const errorHandler = (
-                      window as {
-                        __showErrorModal?: (
-                          error: AppError,
-                          context?: string
-                        ) => void;
-                      }
-                    ).__showErrorModal;
-                    if (errorHandler) {
-                      errorHandler(normalizedError);
+            // Show toast with "See More" action
+            // The actual modal opening will be handled via mutation observer
+            // Show toast with "See More" action
+            showErrorToast(normalizedError, {
+              onShowDetails: () => {
+                // Access error modal handler via window
+                if (typeof window !== "undefined") {
+                  const errorHandler = (
+                    window as {
+                      __showErrorModal?: (
+                        error: AppError,
+                        context?: string
+                      ) => void;
                     }
+                  ).__showErrorModal;
+                  if (errorHandler) {
+                    errorHandler(normalizedError);
                   }
-                },
-              });
-            }
-            
+                }
+              },
+            });
           },
-        
+
           retry: (failureCount, error) => {
             // Don't retry mutations on client errors
             if (error && typeof error === "object" && "status" in error) {
@@ -80,8 +74,6 @@ export function QueryProvider({ children }: { children: ReactNode }) {
             // Retry up to 2 times for server errors
             return failureCount < 2;
           },
-
-         
         },
       },
     });

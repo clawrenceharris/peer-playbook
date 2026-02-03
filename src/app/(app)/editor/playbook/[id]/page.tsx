@@ -1,5 +1,5 @@
 import React from "react";
-import PlaybookEditorPage from "./PlaybookEditorPage";
+// import PlaybookEditorPage from "./PlaybookEditorPage";
 import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 
@@ -25,6 +25,5 @@ export async function generateMetadata({
   };
 }
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = React.use(params);
-  return <PlaybookEditorPage playbookId={id} />;
+  return <></>;
 }

@@ -1,5 +1,6 @@
-"use client"
-import { ForgotPasswordForm } from '@/components/form'
+"use client";
+
+import { ForgotPasswordForm } from "@/features/auth/components";
 
 export default function Page() {
   return (
@@ -8,5 +9,5 @@ export default function Page() {
         <ForgotPasswordForm />
       </div>
     </div>
-  )
+  );
 }

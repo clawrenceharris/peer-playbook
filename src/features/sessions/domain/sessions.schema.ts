@@ -14,4 +14,3 @@ export const createSessionSchema = z.object({
   mode: z.enum(["in-person", "virtual", "hybrid"]).optional(),
   scheduledStart: z.string().min(1, "Start date is required"),
 });
-

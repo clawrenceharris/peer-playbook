@@ -13,9 +13,7 @@ import { Strategy } from "@/features/strategies/domain";
  * Sorts strategies by creation date (newest first)
  * Creates a new array to avoid mutation
  */
-export const selectSortedStrategies = (
-  strategies: Strategy[]
-): Strategy[] =>
+export const selectSortedStrategies = (strategies: Strategy[]): Strategy[] =>
   [...strategies].sort((a, b) => {
     const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
     const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
@@ -51,9 +49,8 @@ export const selectOthersStrategies =
 /**
  * Filters published strategies
  */
-export const selectPublishedStrategies = (
-  strategies: Strategy[]
-): Strategy[] => strategies.filter((s) => s.isPublished);
+export const selectPublishedStrategies = (strategies: Strategy[]): Strategy[] =>
+  strategies.filter((s) => s.isPublished);
 
 /**
  * Filters draft (unpublished) strategies
@@ -64,16 +61,14 @@ export const selectDraftStrategies = (strategies: Strategy[]): Strategy[] =>
 /**
  * Filters system strategies
  */
-export const selectSystemStrategies = (
-  strategies: Strategy[]
-): Strategy[] => strategies.filter((s) => s.isSystem);
+export const selectSystemStrategies = (strategies: Strategy[]): Strategy[] =>
+  strategies.filter((s) => s.isSystem);
 
 /**
  * Filters custom (non-system) strategies
  */
-export const selectCustomStrategies = (
-  strategies: Strategy[]
-): Strategy[] => strategies.filter((s) => !s.isSystem);
+export const selectCustomStrategies = (strategies: Strategy[]): Strategy[] =>
+  strategies.filter((s) => !s.isSystem);
 
 /**
  * Filters user's published strategies
@@ -202,7 +197,7 @@ export const selectStrategyMap = (
  */
 export const selectFirstN =
   (n: number) =>
-  (strategies: Strategies[]): Strategies[] =>
+  (strategies: Strategy[]): Strategy[] =>
     strategies.slice(0, n);
 
 /**
@@ -210,7 +205,7 @@ export const selectFirstN =
  */
 export const selectRecentStrategies =
   (n: number) =>
-  (strategies: Strategies[]): Strategies[] =>
+  (strategies: Strategy[]): Strategy[] =>
     selectFirstN(n)(selectSortedStrategies(strategies));
 
 // ============================================
@@ -222,7 +217,7 @@ export const selectRecentStrategies =
  */
 export const selectSavedStrategiesFromIds =
   (savedIds: string[]) =>
-  (strategies: Strategies[]): Strategies[] =>
+  (strategies: Strategy[]): Strategy[] =>
     strategies.filter((s) => savedIds.includes(s.id));
 
 /**
@@ -230,7 +225,7 @@ export const selectSavedStrategiesFromIds =
  */
 export const selectUnsavedStrategies =
   (savedIds: string[]) =>
-  (strategies: Strategies[]): Strategies[] =>
+  (strategies: Strategy[]): Strategy[] =>
     strategies.filter((s) => !savedIds.includes(s.id));
 
 // ============================================

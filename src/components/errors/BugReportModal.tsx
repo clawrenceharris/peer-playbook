@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogContent, FieldGroup } from "@/components/ui";
+import {
+  Dialog,
+  DialogContent,
+  FieldDescription,
+  FieldGroup,
+} from "@/components/ui";
 import { Form, TextareaField } from "@/components/form";
 import { AppError } from "@/types/errors";
 import { submitBugReport } from "@/lib/bugs/bug-reporter";
@@ -34,7 +39,6 @@ export function BugReportModal({
   error,
   open,
   onOpenChange,
-  context,
 }: BugReportModalProps) {
   const { user } = useAuth();
   const [submitted, setSubmitted] = useState(false);
@@ -65,10 +69,10 @@ export function BugReportModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent
-        title="Report Bug"
-        description="Help us fix this issue by providing details about what happened."
-      >
+      <DialogContent title="Report Bug">
+        <FieldDescription className="mb-4">
+          Help us fix this issue by providing details about what happened.
+        </FieldDescription>
         {submitted ? (
           <div className="flex flex-col items-center justify-center py-8 text-center">
             <CheckCircle2 className="mb-4 size-12 text-green-500" />
@@ -92,11 +96,19 @@ export function BugReportModal({
             }}
           >
             {() => (
-                <FieldGroup>
-                  <TextareaField<BugReportFormInput>  defaultValue="" label="What happened?" name="description" placeholder="Describe what you were trying to do when the error occurred..."/>
-                  <TextareaField<BugReportFormInput> defaultValue="" label="Steps to Reproduce" name="stepsToReproduce" placeholder="1. Go to...&#10;2. Click on...&#10;3. See error..."/>
-
-               
+              <FieldGroup>
+                <TextareaField<BugReportFormInput>
+                  defaultValue=""
+                  label="What happened?"
+                  name="description"
+                  placeholder="Describe what you were trying to do when the error occurred..."
+                />
+                <TextareaField<BugReportFormInput>
+                  defaultValue=""
+                  label="Steps to Reproduce"
+                  name="stepsToReproduce"
+                  placeholder="1. Go to...&#10;2. Click on...&#10;3. See error..."
+                />
               </FieldGroup>
             )}
           </Form>

@@ -5,16 +5,16 @@ import { useSession } from "@/features/sessions/hooks";
 
 import { Session } from "@/features/sessions/domain";
 
-import PlayfieldLayout from "@/components/features/playfield/PlayfieldLayout";
+import { PlayfieldLayout } from "@/features/playfield/components";
 import {
   PlayfieldProvider,
   usePlayfield,
   SessionCallProvider,
   useSessionCall,
-} from "@/providers";
+} from "@/app/providers";
 import { cn } from "@/lib/utils";
-import { PlayfieldLobbyView } from "@/components/features/video-calls";
-import { PlayfieldProfile } from "@/hooks";
+import { PlayfieldLobbyView } from "@/features/stream/components";
+import { PlayfieldProfile } from "@/features/playfield/hooks";
 import { updateUserProfile } from "@/app/actions";
 import { useState } from "react";
 import { CallingState, useCallStateHooks } from "@stream-io/video-react-sdk";
@@ -75,7 +75,7 @@ function MeetingScreen({ session }: { session: Session }) {
       className={cn(
         "relative w-full h-screen overflow-hidden",
         "transition-all duration-200",
-        strategy && hasJoined ? "bg-black/50 backdrop-blur-4xl" : "",
+        strategy && hasJoined ? "bg-black/50 backdrop-blur-4xl" : ""
       )}
     >
       <div className=" flex w-full flex-col h-full mx-auto max-w-4xl overflow-hidden">

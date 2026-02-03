@@ -1,11 +1,8 @@
 "use client";
 import React from "react";
 import { FilterItem, Toggle } from "@/components/ui";
-import { Book } from "lucide-react";
 import { ValueOf } from "next/dist/shared/lib/constants";
 import { Playbook, Star } from "@/components/icons";
-import { useMyFavoritePlaybooks } from "@/features/playbooks/hooks";
-import { useUser } from "@/app/providers";
 
 interface PlaybookFiltersProps {
   onFilterChange: (filters: PlaybookFilterState) => void;
@@ -27,7 +24,7 @@ export const PlaybookFilters = ({
 }: PlaybookFiltersProps) => {
   const handleToggle = (
     key: keyof PlaybookFilterState,
-    value: ValueOf<PlaybookFilterState>,
+    value: ValueOf<PlaybookFilterState>
   ) => {
     const newFilter = filters[key] === value ? "" : value;
     onFilterChange({ ...filters, [key]: newFilter });

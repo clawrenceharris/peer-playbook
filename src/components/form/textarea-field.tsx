@@ -1,10 +1,5 @@
-import React, { HTMLAttributes } from "react";
-import {
-  Controller,
-  ControllerProps,
-  FieldValues,
-  useFormContext,
-} from "react-hook-form";
+import React from "react";
+import { Controller, FieldValues, useFormContext } from "react-hook-form";
 import {
   Field,
   FieldDescription,
@@ -41,14 +36,15 @@ export function TextareaField<T extends FieldValues>({
         <Field>
           <FieldLabel
             className={!showsLabel ? "sr-only" : ""}
-              htmlFor={field.name}>
+            htmlFor={field.name}
+          >
             {label}
             {isOptional && (
               <span className="text-muted-foreground text-sm font-normal">
                 (Optional)
               </span>
             )}
-            </FieldLabel>
+          </FieldLabel>
           <Textarea
             {...field}
             {...textareaProps}
@@ -59,7 +55,7 @@ export function TextareaField<T extends FieldValues>({
             placeholder={`${placeholder} ${!isOptional ? "*" : ""}`}
           />
           {description && <FieldDescription>{description}</FieldDescription>}
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>
       )}
     />

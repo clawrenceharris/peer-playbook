@@ -34,7 +34,13 @@ export function usePlaybookFilters(playbooks: Playbook[]) {
 
       return true;
     });
-  }, [playbooks, filters]);
+  }, [
+    playbooks,
+    filters.favorite,
+    filters.course,
+    filters.recent,
+    favoritePlaybooks,
+  ]);
 
   const availableCourses = useMemo(() => {
     const courses = new Set<string>();

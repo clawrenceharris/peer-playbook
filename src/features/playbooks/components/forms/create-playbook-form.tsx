@@ -2,7 +2,6 @@
 "use client";
 
 import React from "react";
-import { CreatePlaybookFormValues } from "../../domain";
 import {
   ContextsSection,
   LessonDetailsSection,
@@ -13,9 +12,9 @@ import {
 export function CreatePlaybookForm() {
   return (
     <>
-      <LessonDetailsSection<CreatePlaybookFormValues> />
-      <ContextsSection<CreatePlaybookFormValues> />
-      <ModesSection<CreatePlaybookFormValues> />
+      <LessonDetailsSection />
+      <ContextsSection />
+      <ModesSection />
       <ManualStrategyBuilderSection />
     </>
   );

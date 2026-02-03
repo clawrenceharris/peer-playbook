@@ -3,7 +3,7 @@ import { Session, SessionInsert } from "../domain";
 import { useCreateSession, useUpdateSession, useDeleteSession } from "./";
 import { useModal } from "@/app/providers";
 import { SESSION_MODAL_TYPES } from "../components/modals";
-import type { CreateSessionInput } from "../domain";
+import type { CreateSessionFormValues } from "../domain";
 import { useUser } from "@/app/providers";
 import {
   CreateSessionModalProps,
@@ -24,13 +24,13 @@ export const useSessionActions = () => {
     async (sessionId: string, status: Session["status"]) => {
       return await handleUpdateSession({ sessionId, data: { status } });
     },
-    [handleUpdateSession],
+    [handleUpdateSession]
   );
 
   const createSession = useCallback(
     (options?: { defaultValues: DefaultValues<SessionInsert> }) => {
-      const handleConfirm = (data: CreateSessionInput) => {
-        handleCreateSession({
+      const handleConfirm = async (data: CreateSessionFormValues) => {
+        return await handleCreateSession({
           data: {
             ...data,
             leaderId: user.id,
@@ -43,7 +43,7 @@ export const useSessionActions = () => {
         defaultValues: options?.defaultValues,
       });
     },
-    [handleCreateSession, openModal, user.id],
+    [handleCreateSession, openModal, user.id]
   );
 
   const deleteSession = useCallback(
@@ -53,7 +53,7 @@ export const useSessionActions = () => {
         onConfirm: () => handleDeleteSession(sessionId),
       });
     },
-    [handleDeleteSession, openModal],
+    [handleDeleteSession, openModal]
   );
 
   const updateSession = useCallback(
@@ -64,21 +64,21 @@ export const useSessionActions = () => {
         onUpdateStatus: updateSessionStatus,
       });
     },
-    [handleUpdateSession, openModal, updateSessionStatus],
+    [handleUpdateSession, openModal, updateSessionStatus]
   );
 
   const startSession = useCallback(
     async (sessionId: string) => {
       return await updateSessionStatus(sessionId, "active");
     },
-    [updateSessionStatus],
+    [updateSessionStatus]
   );
 
   const endSession = useCallback(
     async (sessionId: string) => {
       return await updateSessionStatus(sessionId, "completed");
     },
-    [updateSessionStatus],
+    [updateSessionStatus]
   );
 
   return {

@@ -1,5 +1,4 @@
 import * as React from "react";
-import { MousePointerClick, X } from "lucide-react";
 
 // ============================================================================
 
@@ -43,10 +42,18 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
       }
     };
 
-    document.addEventListener(eventType, listener as EventListener, eventListenerOptions);
+    document.addEventListener(
+      eventType,
+      listener as EventListener,
+      eventListenerOptions
+    );
 
     return () => {
-      document.removeEventListener(eventType, listener as EventListener, eventListenerOptions);
+      document.removeEventListener(
+        eventType,
+        listener as EventListener,
+        eventListenerOptions
+      );
     };
   }, [ref, eventType, eventListenerOptions]);
 }

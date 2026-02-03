@@ -39,8 +39,8 @@ export const SessionFilters = ({
   return (
     <div className="flex flex-wrap gap-6">
       <FilterItem
-        name="Status"
-        Icon={Clock}
+        label="Status"
+        icon={Clock}
         options={STATUS_OPTIONS}
         onToggle={(value) => handleToggle("status", value)}
         value={
@@ -49,8 +49,8 @@ export const SessionFilters = ({
       />
 
       <FilterItem
-        name="Time Range"
-        Icon={Calendar}
+        label="Time Range"
+        icon={Calendar}
         options={TIME_RANGE_OPTIONS}
         onToggle={(value) => handleToggle("timeRange", value)}
         value={
@@ -61,8 +61,8 @@ export const SessionFilters = ({
 
       {availableCourses.length > 0 && (
         <FilterItem
-          name="Courses"
-          Icon={Book}
+          label="Courses"
+          icon={Book}
           options={availableCourses.map((c) => ({ label: c, value: c }))}
           onToggle={(value) => handleToggle("course", value)}
           value={filters.course}

@@ -9,13 +9,19 @@ import {
   useContext,
   createContext,
 } from "react";
-import type { PlayfieldContext, PlayfieldDefinition } from "@/features/playfield/domain";
+import type {
+  PlayfieldContext,
+  PlayfieldDefinition,
+} from "@/features/playfield/domain";
 import { CustomVideoEvent } from "@stream-io/video-react-sdk";
 import { registry } from "@/activities/registry";
 import { PlaybookStrategy } from "@/features/playbooks/domain";
 import { useSessionCall } from ".";
 import { toast } from "react-toastify";
-import { usePlayfieldLayout, UsePlayfieldLayoutReturn } from "@/features/playfield/hooks";
+import {
+  usePlayfieldLayout,
+  UsePlayfieldLayoutReturn,
+} from "@/features/playfield/hooks";
 
 interface PlayfieldContextType {
   strategy: PlayfieldDefinition | null;
@@ -52,7 +58,9 @@ export function PlayfieldProvider({ children }: PlayfieldProviderProps) {
   const startStrategy = useCallback(
     async (strategy: PlaybookStrategy) => {
       const strategySlug = strategy.slug || strategy.cardSlug;
-      const strategyDefinition = strategySlug ? registry[strategySlug] : undefined;
+      const strategyDefinition = strategySlug
+        ? registry[strategySlug]
+        : undefined;
 
       try {
         if (!strategyDefinition)
@@ -175,7 +183,7 @@ export function PlayfieldProvider({ children }: PlayfieldProviderProps) {
 
       switch (value) {
         case "start": {
-          const strategy = registry[type];
+          // const strategy = registry[type];
           setPhase(phase);
           // setStrategy(strategy);
           break;
@@ -198,10 +206,7 @@ export function PlayfieldProvider({ children }: PlayfieldProviderProps) {
   );
 
   useEffect(() => {
-    const handler = (
-      e: CustomVideoEvent,
-      phase: PlaybookStrategy["phase"]
-    ) => {
+    const handler = (e: CustomVideoEvent, phase: PlaybookStrategy["phase"]) => {
       try {
         if (e.custom.roomId && e.custom.roomId !== ctx.state.roomId) return;
         handleEvent(e, phase);

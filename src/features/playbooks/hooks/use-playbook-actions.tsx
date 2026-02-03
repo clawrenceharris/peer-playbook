@@ -1,11 +1,10 @@
 import { PlaybookStrategy } from "@/features/playbooks/domain";
 import { Strategy } from "@/features/strategies/domain";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useModal } from "@/app/providers";
 import { PLAYBOOK_MODAL_TYPES } from "../components/modals";
 import {
   useDeletePlaybook,
-  useGeneratePlaybook,
   useUpdatePlaybook,
   useUpdatePlaybookStrategy,
 } from ".";
@@ -20,11 +19,9 @@ export const usePlaybookActions = () => {
     useDeletePlaybook();
   const { isPending: isUpdating, mutateAsync: updatePlaybookStrategy } =
     useUpdatePlaybookStrategy();
-  const { mutateAsync: handleGeneratePlaybook, isPending: isGenerating } =
-    useGeneratePlaybook();
+
   const { mutateAsync: handleUpdatePlaybook } = useUpdatePlaybook();
   const { openModal } = useModal();
-
 
   const handleReplaceStrategy = useCallback(
     async (
@@ -40,7 +37,8 @@ export const usePlaybookActions = () => {
         data: {
           playbookId,
           steps,
-          baseStrategyId: id,
+          sourceId: id,
+          sourceType: "playbook",
           title,
           description,
         },

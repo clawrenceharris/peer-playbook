@@ -15,11 +15,11 @@ import {
 } from "@/components/ui";
 import { EmptyState, LoadingState } from "@/components/states";
 import { Plus, RefreshCw, X } from "lucide-react";
-import { Controller, useFormContext, type FieldValues } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { usePlaybookContexts } from "@/features/playbooks/hooks/use-playbook-contexts";
 
-export function ContextsSection<T extends FieldValues>() {
-  const { control } = useFormContext<T>();
+export function ContextsSection() {
+  const { control } = useFormContext<{ contexts: string[] }>();
   const [contextCardOpen, setContextCardOpen] = useState(false);
   const {
     toggleContext,
@@ -33,13 +33,15 @@ export function ContextsSection<T extends FieldValues>() {
 
   const remainingContexts = useMemo(
     () =>
-      Object.values(contexts).filter((c) => !selectedContextKeys.includes(c.key)),
-    [contexts, selectedContextKeys],
+      Object.values(contexts).filter(
+        (c) => !selectedContextKeys.includes(c.key)
+      ),
+    [contexts, selectedContextKeys]
   );
 
   return (
     <Controller
-      name={"contexts" as any}
+      name="contexts"
       control={control}
       render={({ field, fieldState }) => (
         <Field>
@@ -69,7 +71,7 @@ export function ContextsSection<T extends FieldValues>() {
                   <Toggle
                     onPressedChange={() => {
                       field.onChange(
-                        (field.value ?? []).filter((k: string) => k !== key),
+                        (field.value ?? []).filter((k: string) => k !== key)
                       );
                       toggleContext(key);
                     }}
@@ -95,7 +97,9 @@ export function ContextsSection<T extends FieldValues>() {
                     variant="item"
                     itemVariant="outline"
                     title={
-                      isError ? "Failed to load contexts" : "No contexts available"
+                      isError
+                        ? "Failed to load contexts"
+                        : "No contexts available"
                     }
                     message={
                       isError
@@ -136,4 +140,3 @@ export function ContextsSection<T extends FieldValues>() {
     />
   );
 }
-

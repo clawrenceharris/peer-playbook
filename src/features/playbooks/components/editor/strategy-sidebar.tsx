@@ -30,14 +30,14 @@ export function StrategySidebar({
                 "min-w-[220px] shrink-0 rounded-lg border px-3 py-2 text-left transition hover:bg-muted/40",
                 activeStrategyId === strategy.id
                   ? "border-primary-400 bg-muted/60"
-                  : "border-border",
+                  : "border-border"
               )}
             >
               <div className="flex items-start gap-2">
                 <span
                   className={cn(
                     "mt-1 size-2 rounded-full",
-                    getCardBackgroundColor(strategy.phase),
+                    getCardBackgroundColor(strategy.phase)
                   )}
                 />
                 <div className="flex-1">

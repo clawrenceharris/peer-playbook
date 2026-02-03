@@ -19,38 +19,6 @@ export interface PlaybookStrategyOverrides {
 }
 
 /**
- * Resolved/merged strategy type - use this in components
- * This merges base strategy with playbook overrides
- */
-export type MergedStrategy = {
-  // Playbook strategy metadata
-  id: string; // playbook_strategy.id
-  playbookId: string;
-  phase: PlaybookStrategies["phase"];
-
-  // Resolved values (override takes precedence)
-  title: string; // customTitle ?? base.title
-  description: string; // customDescription ?? base.description
-  steps: string[]; // customSteps ?? base.steps
-
-  // Playbook-specific fields
-  instructorNotes?: string | null;
-
-  // Base strategy reference
-  baseStrategyId: string; // base strategy.id
-  baseStrategySlug: string; // base strategy.slug
-
-  // Base strategy metadata (for reference)
-  baseStrategy: BaseStrategy;
-
-  // Other base strategy fields that don't change
-  sessionSize?: BaseStrategy["sessionSize"];
-  virtualFriendly?: boolean;
-  courseTags?: string[];
-  goodFor?: string[];
-};
-
-/**
  * Strategy creation input for user-created strategies
  */
 export interface CreateStrategyInput {

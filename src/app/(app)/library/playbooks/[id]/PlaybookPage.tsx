@@ -44,7 +44,6 @@ import { useUser } from "@/app/providers";
 import { getUserErrorMessage } from "@/utils";
 import { PlaybookCard } from "@/features/playbooks/components";
 import { usePendingMutations } from "@/hooks";
-import { useRouter } from "next/navigation";
 
 const phaseOrder = { warmup: 0, workout: 1, closer: 2 };
 interface PlaybookPageProps {
@@ -56,7 +55,6 @@ export default function PlaybookPage({
   onBackClick,
 }: PlaybookPageProps) {
   const isMobile = useIsMobile();
-  const router = useRouter();
   const { user } = useUser();
   const { createSession } = useSessionActions();
   const { mutateAsync: reorderStrategies } = useReorderStrategies();
@@ -67,7 +65,7 @@ export default function PlaybookPage({
   const [reorderedStrategies, setReorderedStrategies] = useState<
     PlaybookStrategy[]
   >([]);
-  const { setOpen: setSidebarOpen, open: isSidebarOpen } = useSidebar();
+  const { setOpen: setSidebarOpen } = useSidebar();
   const [activeId, setActiveId] = useState<string | null>(null);
   const { toggleSave } = useStrategyActions();
   const { data: savedStrategies = [] } = useMySavedStrategies(user.id);

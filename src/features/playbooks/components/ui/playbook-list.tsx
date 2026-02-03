@@ -2,8 +2,6 @@ import React from "react";
 import { Playbook } from "@/features/playbooks/domain";
 import { Loader2 } from "lucide-react";
 import { PlaybookCard } from "@/features/playbooks/components";
-import { useMyFavoritePlaybooks } from "@/features/playbooks/hooks";
-import { useUser } from "@/app/providers";
 import { EmptyState } from "@/components/states";
 
 interface PlaybookListProps {
@@ -16,9 +14,6 @@ export function PlaybookList({
   isLoading,
   onPlaybookClick,
 }: PlaybookListProps) {
-  const { user } = useUser();
-  const { data: favoritePlaybooks = [] } = useMyFavoritePlaybooks(user.id);
-
   if (isLoading) {
     return (
       <div className="flex w-full h-full items-center justify-center">
@@ -41,10 +36,7 @@ export function PlaybookList({
       {playbooks.map((playbook) => (
         <PlaybookCard
           key={playbook.id}
-          playbook={{
-            ...playbook,
-            isFavorite: favoritePlaybooks.includes(playbook.id),
-          }}
+          playbook={playbook}
           onNavigate={() => onPlaybookClick?.(playbook)}
         />
       ))}

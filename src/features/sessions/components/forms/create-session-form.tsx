@@ -10,33 +10,32 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from "@/components/ui";
-import { CreateSessionInput } from "@/features/sessions/domain";
+import { CreateSessionFormValues } from "@/features/sessions/domain";
 import { subjects } from "@/lib/constants";
 
 import { Controller, useFormContext } from "react-hook-form";
 
 export const CreateSessionForm = () => {
-  const { control } = useFormContext<CreateSessionInput>();
+  const { control } = useFormContext<CreateSessionFormValues>();
 
   return (
     <FieldGroup>
       <FieldSet className="grid grid-cols-1 md:grid-cols-2 items-start gap-2 md:gap-3">
         <FieldLegend>Session Details</FieldLegend>
-        <SelectField<CreateSessionInput>
+        <SelectField<CreateSessionFormValues>
           name="subject"
           label="Subject"
           showsLabel={false}
           placeholder="Subject*"
           defaultValue=""
-          items={Object.keys(subjects)
-            .map(s => ({
-              key: s, value: s, icon: subjects[s]
-            }))
-          }
+          items={Object.keys(subjects).map((s) => ({
+            key: s,
+            value: s,
+            icon: subjects[s],
+          }))}
         />
 
-
-        <InputField<CreateSessionInput>
+        <InputField<CreateSessionFormValues>
           name="courseName"
           label={"Course"}
           showsLabel={false}
@@ -44,15 +43,14 @@ export const CreateSessionForm = () => {
           defaultValue=""
         />
 
-        <InputField<CreateSessionInput>
+        <InputField<CreateSessionFormValues>
           name="topic"
           label={"Topic"}
           placeholder="Topic*"
           showsLabel={false}
           defaultValue=""
-
         />
-        <InputField<CreateSessionInput>
+        <InputField<CreateSessionFormValues>
           name="scheduledStart"
           type="datetime-local"
           label="Start Date"
@@ -68,7 +66,7 @@ export const CreateSessionForm = () => {
           })()}
         />
       </FieldSet>
-      
+
       <Controller
         name="mode"
         control={control}

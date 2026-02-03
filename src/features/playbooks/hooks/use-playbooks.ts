@@ -6,7 +6,7 @@ import {
   selectRecentPlaybooks,
   selectSortedPlaybookStrategies,
 } from "../selectors";
-import { playbookKeys, Playbook, PlaybookWithStrategies } from "../domain";
+import { playbookKeys, Playbook } from "../domain";
 
 /**
  * Base hook to fetch all playbooks with optional selector
@@ -14,7 +14,7 @@ import { playbookKeys, Playbook, PlaybookWithStrategies } from "../domain";
  * @returns React Query result with transformed data
  */
 export function usePlaybooks<TSelected = Playbook[]>(
-  select?: (playbooks: Playbook[]) => TSelected,
+  select?: (playbooks: Playbook[]) => TSelected
 ) {
   const playbookService = usePlaybookService();
   return useQuery({
@@ -29,7 +29,7 @@ export function usePlaybooks<TSelected = Playbook[]>(
  * Hook to fetch playbooks sorted by creation date (newest first)
  */
 export const useSortedPlaybooks = <TSelected = Playbook[]>(
-  select?: (playbooks: Playbook[]) => TSelected,
+  select?: (playbooks: Playbook[]) => TSelected
 ) => {
   return usePlaybooks((p) => {
     const sorted = selectSortedPlaybooks(p);
@@ -41,7 +41,7 @@ export const useSortedPlaybooks = <TSelected = Playbook[]>(
  * Hook to fetch published playbooks only
  */
 export const usePublishedPlaybooks = <TSelected = Playbook[]>(
-  select?: (playbooks: Playbook[]) => TSelected,
+  select?: (playbooks: Playbook[]) => TSelected
 ) => {
   return usePlaybooks((p) => {
     const published = selectPublishedPlaybooks(p);
@@ -63,7 +63,7 @@ export const useRecentPlaybooks = (count: number = 10) => {
  */
 export const usePlaybookSortedStrategies = (playbookId: string) =>
   usePlaybook(playbookId, (playbook) =>
-    playbook ? selectSortedPlaybookStrategies(playbook) : [],
+    playbook ? selectSortedPlaybookStrategies(playbook) : []
   );
 
 /**
@@ -73,7 +73,7 @@ export const usePlaybookSortedStrategies = (playbookId: string) =>
  */
 export const useMyFavoritePlaybooks = <TSelected = string[]>(
   userId: string,
-  select?: (ids: string[]) => TSelected,
+  select?: (ids: string[]) => TSelected
 ) => {
   const playbookService = usePlaybookService();
   return useQuery({

@@ -1,17 +1,15 @@
 "use client";
 
-import React from "react";
 import { TextareaField } from "@/components/form";
-import type { FieldValues } from "react-hook-form";
+import React from "react";
 
-export function NotesSection<T extends FieldValues>() {
+export function NotesSection() {
   return (
-    <TextareaField<T>
-      name={"notes" as any}
+    <TextareaField
+      name="notes"
       label="Notes"
       isOptional
       placeholder="Add any notes for this playbook (optional)."
     />
   );
 }
-

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useMemo, useState } from "react";
@@ -55,8 +56,8 @@ export function StrategyPicker({
       source === "system"
         ? systemItems
         : source === "saved"
-          ? savedItems
-          : userItems;
+        ? savedItems
+        : userItems;
     return active.map((i) => ({
       label: i.title,
       value: keyOf(i),
@@ -71,7 +72,9 @@ export function StrategyPicker({
     <Field>
       <FieldContent>
         <FieldLabel>{label}</FieldLabel>
-        {description ? <FieldDescription>{description}</FieldDescription> : null}
+        {description ? (
+          <FieldDescription>{description}</FieldDescription>
+        ) : null}
       </FieldContent>
 
       <FieldContent className="flex flex-col gap-3">
@@ -116,4 +119,3 @@ export function StrategyPicker({
     </Field>
   );
 }
-

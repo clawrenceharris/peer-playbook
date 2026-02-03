@@ -18,9 +18,9 @@ import {
   MoreHorizontal,
   Notebook,
 } from "lucide-react";
-import { AudioVolumeIndicator, BreakoutCreator } from ".";
+import { AudioVolumeIndicator } from ".";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
-import { useSessionCall, useModal } from "@/app/providers";
+import { useSessionCall } from "@/app/providers";
 import { toast } from "react-toastify";
 
 interface CustomCallControlsProps {
@@ -39,25 +39,20 @@ export default function CustomCallControls({
   const camState = useCameraState();
   const { session } = useSessionCall();
 
-  const createdBy = useCallCreatedBy();
-  const {
-    openModal: openBreakoutRoomsModal,
-    closeModal: closeBreakoutRoomsModal,
-  } = useModal();
   const handleCreateBreakoutRooms = () => {
-    openBreakoutRoomsModal({
-      title: "Create Breakout Rooms",
-      description:
-        "Ener the group size to divide breakout rooms assignements. There may be one rooms with uneven number of participants.",
-      children: (
-        <BreakoutCreator
-          onClose={() => closeBreakoutRoomsModal}
-          participants={call.state.remoteParticipants.filter(
-            (p) => p.userId !== createdBy?.id
-          )}
-        />
-      ),
-    });
+    // openBreakoutRoomsModal({
+    //   title: "Create Breakout Rooms",
+    //   description:
+    //     "Ener the group size to divide breakout rooms assignements. There may be one rooms with uneven number of participants.",
+    //   children: (
+    //     <BreakoutCreator
+    //       onClose={() => closeBreakoutRoomsModal}
+    //       participants={call.state.remoteParticipants.filter(
+    //         (p) => p.userId !== createdBy?.id
+    //       )}
+    //     />
+    //   ),
+    // });
   };
   const handleMicClick = async () => {
     try {

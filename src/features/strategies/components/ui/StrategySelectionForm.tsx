@@ -35,7 +35,7 @@ export const StrategySelectionForm = ({
       if (!strategies) return null;
       return (
         strategies.find(
-          (strategy) => strategy.id === strategyToReplace.baseStrategyId
+          (strategy) => strategy.id === strategyToReplace.sourceId
         ) ?? null
       );
     }
@@ -64,67 +64,60 @@ export const StrategySelectionForm = ({
   };
 
   return (
-    <Form
-        submitText="Replace"
-        {...props}
-      >
-      
+    <Form submitText="Replace" {...props}>
       {({ control }) => (
-          <FieldGroup>
+        <FieldGroup>
+          <Controller
+            control={control}
+            name="strategy"
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldLabel>Add Strategy</FieldLabel>
+                <FieldContent>
+                  <Combobox
+                    value={field.value.id}
+                    items={strategies.map((item) => ({
+                      value: item.id,
+                      label: item.title,
+                    }))}
+                    // placeholder="Select a Strategy"
+                    onValueChange={(value) => {
+                      handleStrategyReplace(value, field);
+                    }}
+                  />
+                  <FieldError errors={[fieldState.error]} />
+                </FieldContent>
+              </Field>
+            )}
+          />
 
-<Controller
-        control={control}
-        name="strategy"
-        render={({ field, fieldState }) => (
-          <Field>
-            <FieldLabel>Add Strategy</FieldLabel>
-            <FieldContent>
-              <Combobox
-                value={field.value.id}
-                items={strategies.map((item) => ({
-                  value: item.id,
-                  label: item.title,
-                }))}
-                // placeholder="Select a Strategy"
-                onValueChange={(value) => {
-                  handleStrategyReplace(value, field);
-                }}
-              />
-                <FieldError errors={[fieldState.error]} />
-            </FieldContent>
-          </Field>
-        )}
-      />
-
-      {selectedStrategy && (
-        <HoverCard>
-          <HoverCardTrigger>
-            <StrategyCard
-              strategy={selectedStrategy}
-              showsSteps={false}
-              headerClassName="rounded-xl"
-              phase={strategyToReplace.phase}
-              showActionButtons={false}
-            />
-          </HoverCardTrigger>
-          <HoverCardContent
-            side="top"
-            className="w-[400px] p-0 rounded-2xl"
-            align="center"
-          >
-            <StrategyCard
-              headerClassName="hidden"
-              showActionButtons={false}
-              phase={strategyToReplace.phase}
-              strategy={selectedStrategy}
-            />
-          </HoverCardContent>
-        </HoverCard>
+          {selectedStrategy && (
+            <HoverCard>
+              <HoverCardTrigger>
+                <StrategyCard
+                  strategy={selectedStrategy}
+                  showsSteps={false}
+                  headerClassName="rounded-xl"
+                  phase={strategyToReplace.phase}
+                  showActionButtons={false}
+                />
+              </HoverCardTrigger>
+              <HoverCardContent
+                side="top"
+                className="w-[400px] p-0 rounded-2xl"
+                align="center"
+              >
+                <StrategyCard
+                  headerClassName="hidden"
+                  showActionButtons={false}
+                  phase={strategyToReplace.phase}
+                  strategy={selectedStrategy}
+                />
+              </HoverCardContent>
+            </HoverCard>
+          )}
+        </FieldGroup>
       )}
-          </FieldGroup>
-        )
-
-     }
-      
- </Form>  );
+    </Form>
+  );
 };

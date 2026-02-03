@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@import "tw-animate-css";
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -300,9 +300,4 @@
   .participant-preview-container {
     @apply mx-auto max-w-107.5 min-w-65 aspect-video  rounded-xl shadow-md  border-white border-3 overflow-hidden;
   }
-}
-
-.dark {
-  --highlight: oklch(0.852 0.199 91.936);
-  --brand: oklch(0.707 0.165 254.624);
 }

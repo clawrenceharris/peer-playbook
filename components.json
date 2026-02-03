@@ -19,8 +19,6 @@
     "hooks": "@/hooks"
   },
   "registries": {
-    "@plate": "https://platejs.org/r/{name}.json",
-    "@blocks": "https://blocks.so/r/{name}.json",
-    "@platejs": "https://platejs.org/r/{name}.json"
+    "@blocks": "https://blocks.so/r/{name}.json"
   }
 }

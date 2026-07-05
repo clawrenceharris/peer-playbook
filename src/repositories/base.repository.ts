@@ -1,31 +1,51 @@
 // repositories/base.repository.ts
+import { camelizeKeys, snakeizeKeys, toSnakeCase } from "@/lib/data/naming";
 import { SupabaseClient } from "@supabase/supabase-js";
 
-export abstract class BaseRepository<TDomain> {
+export abstract class BaseRepository<
+  TDbRow,
+  TDomain,
+  TDbInsert = TDbRow,
+  TDbUpdate = Partial<TDbRow>,
+  TInsert = TDomain,
+  TUpdate = Partial<TDomain>,
+> {
   protected constructor(
     protected readonly client: SupabaseClient,
-    protected readonly tableName: string
+    protected readonly tableName: string,
   ) {}
 
-  async getById(id: string): Promise<TDomain | null> {
+  protected toDomain(data: TDbRow): TDomain {
+    return camelizeKeys(data) as TDomain;
+  }
+
+  protected toDb(data: TInsert | TUpdate): TDbInsert | TDbUpdate {
+    return snakeizeKeys(data) as TDbInsert | TDbUpdate;
+  }
+
+  protected mapColumn(column: string): string {
+    return toSnakeCase(column);
+  }
+
+  async getById(id: string): Promise<TDomain> {
     const { data, error } = await this.client
       .from(this.tableName)
       .select("*")
       .eq("id", id)
       .single();
 
-    if (error || !data) return null;
-    return data;
+    if (error || !data) throw error;
+    return this.toDomain(data);
   }
 
   async getSingleBy(column: string, value: string): Promise<TDomain | null> {
     const { data, error } = await this.client
       .from(this.tableName)
       .select("*")
-      .eq(column, value)
+      .eq(this.mapColumn(column), value)
       .maybeSingle();
     if (error || !data) return null;
-    return data;
+    return this.toDomain(data);
   }
 
   /**
@@ -52,27 +72,27 @@ export abstract class BaseRepository<TDomain> {
     }
   }
 
-  async create<T>(data: T): Promise<TDomain> {
+  async create(data: TInsert): Promise<TDomain> {
     const { data: result, error } = await this.client
       .from(this.tableName)
-      .insert<T>(data)
+      .insert(this.toDb(data) as any)
       .select()
       .single();
 
     if (error) throw error;
-    return result;
+    return this.toDomain(result);
   }
 
-  async update<T>(id: string, updatedFields: T): Promise<TDomain> {
+  async update(id: string, updatedFields: TUpdate): Promise<TDomain> {
     const { data, error } = await this.client
       .from(this.tableName)
-      .update<T>(updatedFields)
+      .update(this.toDb(updatedFields) as any)
       .eq("id", id)
       .select()
       .single();
 
     if (error) throw error;
-    return data;
+    return this.toDomain(data);
   }
 
   async delete(id: string): Promise<void> {
@@ -83,21 +103,28 @@ export abstract class BaseRepository<TDomain> {
 
     if (error) throw error;
   }
-  async getAllBy(column: string, value: string): Promise<TDomain[]> {
+  async getAllBy(
+    column: string,
+    value: string,
+    tableName?: string,
+  ): Promise<TDomain[]> {
     const { data, error } = await this.client
-      .from(this.tableName)
+      .from(tableName || this.tableName)
       .select()
-      .eq(column, value);
+      .eq(this.mapColumn(column), value);
     if (error) {
       throw error;
     }
-    return data || [];
+    return (data || []).map((row) => this.toDomain(row));
   }
-  async getAll(): Promise<TDomain[]> {
-    const { data, error } = await this.client.from(this.tableName).select();
+
+  async getAll(tableName?: string): Promise<TDomain[]> {
+    const { data, error } = await this.client
+      .from(tableName || this.tableName)
+      .select();
     if (error) {
       throw error;
     }
-    return data || [];
+    return (data || []).map((row) => this.toDomain(row));
   }
 }

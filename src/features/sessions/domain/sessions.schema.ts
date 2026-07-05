@@ -1,16 +1,14 @@
 import z from "zod";
 
 export const createSessionSchema = z.object({
-  start_date: z.iso.date("Invalid date"),
-  start_time: z.iso.time("Invalid time"),
-  course_name: z.string().nonoptional(),
-  topic: z.string().nonoptional(),
-  virtual: z.boolean(),
-  description: z.string(),
-  status: z
-    .enum(["active", "completed", "canceled", "scheduled"])
-    .default("scheduled")
-    .nonoptional(),
+  courseName: z.string().min(1, "Course name is required"),
+  playbookId: z.string().optional(),
+  topic: z.string().min(1, "Topic is required"),
+  description: z.string().optional(),
+  status: z.enum(["active", "completed", "canceled", "scheduled"]),
+  subject: z.string(),
+  mode: z.enum(["in-person", "virtual", "hybrid"]).optional(),
+  scheduledStart: z.string().min(1, "Start date is required"),
 });
 
-export type CreateSessionInput = z.infer<typeof createSessionSchema>;
+export const updateSessionSchema = createSessionSchema.partial();

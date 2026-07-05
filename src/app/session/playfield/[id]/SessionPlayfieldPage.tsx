@@ -1,0 +1,90 @@
+"use client";
+
+import { ErrorState, LoadingState } from "@/components/states";
+import { useSession } from "@/features/sessions/hooks";
+
+import { Session } from "@/features/sessions/domain";
+
+import { PlayfieldLayout } from "@/features/playfield/components";
+import {
+  PlayfieldProvider,
+  usePlayfield,
+  SessionCallProvider,
+  useSessionCall,
+} from "@/components/providers";
+import { cn } from "@/lib/utils";
+import { PlayfieldLobbyView } from "@/features/stream/components";
+import { PlayfieldProfile } from "@/features/playfield/hooks";
+import { updateUserProfile } from "@/app/actions";
+import { useState } from "react";
+import { CallingState, useCallStateHooks } from "@stream-io/video-react-sdk";
+
+interface SessionPlayfieldPageProps {
+  id: string;
+}
+
+export default function SessionPlayfieldPage({
+  id,
+}: SessionPlayfieldPageProps) {
+  const { data: session, isLoading: sessionLoading } = useSession(id);
+  if (sessionLoading) {
+    return <LoadingState />;
+  }
+  if (!session) {
+    return <ErrorState variant="card" message="No session found." />;
+  }
+  return (
+    <SessionCallProvider session={session}>
+      <PlayfieldProvider>
+        <MeetingScreen session={session} />
+      </PlayfieldProvider>
+    </SessionCallProvider>
+  );
+}
+function MeetingScreen({ session }: { session: Session }) {
+  const { strategy } = usePlayfield();
+  const { mainCall, client } = useSessionCall();
+  const [hasJoined, setHasJoined] = useState(false);
+  const { useCallCallingState } = useCallStateHooks();
+  const callingState = useCallCallingState();
+  const handleJoin = async ({ name, image }: PlayfieldProfile) => {
+    try {
+      if (!client.state.connectedUser) {
+        return;
+      }
+
+      const user = client.state.connectedUser;
+      await updateUserProfile({
+        user,
+        name,
+        image,
+      });
+      setHasJoined(true);
+
+      if (callingState !== CallingState.JOINED) await mainCall.join();
+    } catch (error) {
+      console.error(error);
+      setHasJoined(false);
+
+      // toast("An unexpected error occured while joining");
+    }
+  };
+
+  return (
+    <main
+      className={cn(
+        "relative w-full h-screen overflow-hidden",
+        "transition-all duration-200",
+        strategy && hasJoined ? "bg-black/50 backdrop-blur-4xl" : ""
+      )}
+    >
+      <div className=" flex w-full flex-col h-full mx-auto max-w-4xl overflow-hidden">
+        {hasJoined ? (
+          <PlayfieldLayout session={session} />
+        ) : (
+          <PlayfieldLobbyView onJoin={handleJoin} />
+        )}
+      </div>
+    </main>
+  );
+}

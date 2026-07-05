@@ -1,46 +1,21 @@
 "use client";
 
-import { CreateSessionForm, SessionCard } from "@/components/features";
-import { FormLayout } from "@/components/layouts";
+import { SessionCard } from "@/features/sessions/components";
 import { EmptyState, ErrorState, LoadingState } from "@/components/states";
-import {
-  CreateSessionInput,
-  createSessionSchema,
-} from "@/features/sessions/domain";
-import { useSessions } from "@/features/sessions/hooks";
-import { useModal } from "@/hooks";
-import { useUser } from "@/providers";
-import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useSessionActions } from "@/features/sessions/hooks";
+import { useUserSessions } from "@/features/sessions/hooks";
+import { useUser } from "@/components/providers";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui";
 
 export default function SessionsPage() {
   const { user } = useUser();
-  const { sessionsQuery } = useSessions(user.id);
+  const { data: sessions = [], isLoading, error } = useUserSessions(user.id);
+  const { createSession } = useSessionActions();
   const router = useRouter();
-  const { data: sessions, error } = sessionsQuery;
-  const {
-    modal: createSessionModal,
-    openModal: openSessionCreationModal,
-    closeModal: closeSessionCreationModal,
-  } = useModal({
-    title: "New Session",
-    description: "Create a new session",
-    hidesDescription: true,
-    children: (
-      <FormLayout<CreateSessionInput>
-        resolver={zodResolver(createSessionSchema)}
-        onCancel={() => closeSessionCreationModal()}
-        onSubmit={() => {
-          closeSessionCreationModal();
-          sessionsQuery.refetch();
-        }}
-      >
-        <CreateSessionForm />
-      </FormLayout>
-    ),
-  });
 
-  if (sessionsQuery.isLoading) {
+  if (isLoading) {
     return <LoadingState />;
   }
   if (error) {
@@ -52,28 +27,30 @@ export default function SessionsPage() {
       />
     );
   }
-  if (!sessions) {
-    return (
-      <EmptyState
-        variant="card"
-        className="text-white"
-        title="You don't have any sessions yet."
-        onAction={openSessionCreationModal}
-      />
-    );
-  }
-
   return (
-    <main>
-      <div className="container">
-        <h1 className="text-white">My Sessions</h1>
-        {createSessionModal}
-        <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
-          {sessions?.map((session) => (
-            <SessionCard key={session.id} session={session} />
-          ))}
-        </div>
+    <>
+      <div className="header">
+        <h1>My Sessions</h1>
+        <Button>Create Sessions</Button>
       </div>
-    </main>
+      <div className="container">
+        {sessions.length > 0 ? (
+          <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
+            {sessions.map((session) => (
+              <SessionCard key={session.id} session={session} />
+            ))}
+          </div>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <EmptyState
+              variant="card"
+              message="You don't have any sessions at the moment."
+              onAction={createSession}
+              actionLabel="Create Session"
+            />
+          </div>
+        )}
+      </div>
+    </>
   );
 }

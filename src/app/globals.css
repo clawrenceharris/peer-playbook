@@ -1,7 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-body: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-heading), sans-serif;
   --color-primary-50: var(--primary-50);
   --color-primary-100: var(--primary-100);
   --color-primary-200: var(--primary-200);
@@ -12,7 +15,26 @@
   --color-primary-700: var(--primary-700);
   --color-primary-800: var(--primary-800);
   --color-primary-900: var(--primary-900);
+  --color-primary: var(--primary);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
 
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-selection: var(--selection);
+  --color-selection-foreground: var(--selection-foreground);
   --color-secondary-50: var(--secondary-50);
   --color-secondary-100: var(--secondary-100);
   --color-secondary-200: var(--secondary-200);
@@ -23,7 +45,7 @@
   --color-secondary-700: var(--secondary-700);
   --color-secondary-800: var(--secondary-800);
   --color-secondary-900: var(--secondary-900);
-
+  --color-secondary: var(--secondary);
   --color-accent-50: var(--accent-50);
   --color-accent-100: var(--accent-100);
   --color-accent-200: var(--accent-200);
@@ -34,7 +56,7 @@
   --color-accent-700: var(--accent-700);
   --color-accent-800: var(--accent-800);
   --color-accent-900: var(--accent-900);
-
+  --color-accent: var(--accent);
   --color-success-100: var(--success-100);
   --color-success-500: var(--success-500);
   --color-success-700: var(--success-700);
@@ -62,31 +84,91 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --color-brand: var(--brand);
+  --color-highlight: var(--highlight);
 }
 
 :root {
+  --foreground: #1e1b4b;
+  --muted-background: #d9e9f19e;
+
+  --card: #ffffff;
+  --card-foreground: #1e1b4b;
+
+  --popover: #ffffff;
+  --popover-foreground: #1e1b4b;
+  --radius: 1rem;
+  --primary-foreground: #ffffff;
+
+  --secondary-foreground: #ffffff;
+
+  --tertiary: #000000;
+  --tertiary-foreground: #ffffff;
+
+  /* In this design system, accent is the bright mint/cyan brand accent. */
+  --accent: #00e4c5;
+  --accent-foreground: #063b43;
+  /* Selection */
+  --selection: #54d2f28f;
+  --selection-foreground: #1e1b4b;
+  /* Surface */
+  --surface: #ffffff;
+  --surface-foreground: #1e1b4b;
+
+  /* Muted */
+  --muted: #f6f7fb;
+  --muted-foreground: #979da8;
+
+  /* Status */
+  --success: #20c997;
+  --success-foreground: #ffffff;
+
+  --warning: #fbbf24;
+  --warning-foreground: #3b2f05;
+
+  /* Border */
+  --border: #e2e8f0;
+  /* Input */
+  --input: #f6f7fb;
+  /* Ring */
+  --ring: #4fe7ff;
+  --focus: #4fe7ff;
+
+  --chart-1: #8d54e2;
+  --chart-2: #54cbe2;
+  --chart-3: #00e4c5;
+  --chart-4: #a78bfa;
+  --chart-5: #93c5fd;
+
+  /* --sidebar: #e8ebed; */
+  --sidebar: rgb(249, 250, 251);
+
+  --sidebar-foreground: #1e1b4b;
+  --sidebar-primary: #8d54e2;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eef7fb;
+  --sidebar-accent-foreground: #1e1b4b;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #8d54e2;
+
+  --gradient-start: #ffffff;
+  --gradient-mid: #fcfdff;
+  --gradient-end: #f9faff;
+
+  --spacing: 0.27rem;
   /* Core Palette */
 
-  --primary-50: #eff6ff;
-  --primary-100: #dbeafe;
-  --primary-200: #bfdbfe;
-  --primary-300: #93c5fd;
-  --primary-400: #60a7ff; /* anchor */
-  --primary-500: #3b82f6;
-  --primary-600: #2563eb;
-  --primary-700: #1d4ed8;
-  --primary-800: #1e40af;
-  --primary-900: #1e3a8a;
-
+  --primary-50: #caf4ff;
+  --primary-100: #b0edfc;
+  --primary-200: #94eaff;
+  --primary-300: #7be5ff;
+  --primary-400: #51d5f7; /* anchor */
+  --primary-500: #1fc8f2;
+  --primary-600: #0db8e3;
+  --primary-700: #008fc3;
+  --primary-800: #027fac;
+  --primary-900: #006489;
+  --primary: #1fc8f2;
   --secondary-50: #faf5ff;
   --secondary-100: #f3e8ff;
   --secondary-200: #e9d5ff;
@@ -97,7 +179,7 @@
   --secondary-700: #7e22ce;
   --secondary-800: #6b21a8;
   --secondary-900: #581c87;
-
+  --secondary: #a855f7;
   --accent-50: #fff7ed;
   --accent-100: #ffedd5;
   --accent-200: #fed7aa;
@@ -108,113 +190,134 @@
   --accent-700: #c2410c;
   --accent-800: #9a3412;
   --accent-900: #7c2d12;
-
+  --accent: #f59e0b;
   /* Background */
-  --background: #fafafa;
+  --background: #ffffff;
 
   /* Foreground */
-  --foreground: #10131a;
-  --primary-foreground: #fff;
-  --secondary-foreground: #e0ebfb;
-  --accent-foreground: #595959;
+  --secondary-foreground: #f3f6fa;
+  --accent-foreground: #818792;
 
   /* Status */
   --success-100: #dcfce7;
-  --success-500: #22c55e; /* anchor */
+  --success-500: #22c55e;
   --success-700: #15803d;
 
   --destructive-100: #fee2e2;
-  --destructive-500: #ef4444; /* anchor */
+  --destructive-500: #f55a6c;
   --destructive-700: #b91c1c;
-  --destructive: #ef4444;
+  --destructive: #f55a6c;
+  --destructive-foreground: #ffffff;
 
   /* Card */
   --card: #ffffff;
-  --card-foreground: #111827;
-
-  /* Muted */
-  --muted: #f3f4f6;
-  --muted-foreground: #979da8;
-
+  --card-foreground: #10131a;
+  --font-body: Outfit, ui-sans-serif, system-ui, sans-serif;
+  --font-heading: Figtree, ui-sans-serif, system-ui, sans-serif;
   /* Popover */
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --radius: 0.625rem;
-  /* Sidebar */
-  --sidebar: rgba(39, 39, 39, 0.5);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  --input: #e1e6ec;
-  --border: #e1e5eb;
-  --ring: #93c5fd;
+
+  --toastify-toast-background: "#000";
+  --toastify-container-width: fit-content;
+  --toastify-toast-width: clamp(400px, 10vw, 500px);
+  --toastify-toast-bd-radius: var(--spacing-md);
+  --toastify-text-color-error: var(--color-destructive-500);
+  --toastify-z-index: 9999;
+  --toastify-toast-padding: 10px;
+  --highlight: oklch(0.852 0.199 91.936);
+  --brand: oklch(0.623 0.214 259.815);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/70;
   }
+
   body {
-    @apply min-h-screen bg-gradient-to-br from-primary-300 to-primary-600;
+    @apply bg-background text-foreground selection:bg-selection! selection:text-selection-foreground mx-auto h-dvh overflow-hidden;
   }
   main {
-    @apply min-h-screen text-foreground;
+    @apply relative flex h-dvh w-full flex-col overflow-y-auto;
   }
+
   h1 {
-    @apply text-4xl font-bold;
+    @apply font-heading text-2xl font-bold;
+  }
+  h2 {
+    @apply font-heading text-xl font-bold;
+  }
+  button {
+    @apply cursor-pointer;
+  }
+  section {
+    @apply bg-primary-foreground mb-8 rounded-xl border p-5 shadow-sm;
+  }
+
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+  }
+  /*
+ * Chrome autofill overrides â€” kept outside @layer so they beat UA styles.
+ * Uses inset box-shadow to paint over Chrome's blue autofill background.
+ */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  textarea:-webkit-autofill:active,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus,
+  select:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px var(--input) inset !important;
+    box-shadow: 0 0 0 1000px var(--input) inset !important;
+    -webkit-text-fill-color: var(--foreground) !important;
+    caret-color: var(--foreground);
+    font-family: var(--font-body) !important;
+    font-size-adjust: 0.47;
+    transition:
+      background-color 5000s ease-in-out 0s,
+      color 5000s ease-in-out 0s;
   }
 }
+
 @layer components {
+  .header {
+    @apply bg-primary-foreground relative flex w-full items-center justify-between gap-5 border-b px-8 py-6;
+  }
+  .content-body {
+    @apply relative px-3 py-5;
+  }
+  .gradient-background {
+    @apply to-primary-300 from-secondary-300 bg-linear-to-br;
+  }
+
+  .secondary-header {
+    @apply bg-primary-foreground sticky top-0 z-50 flex flex-wrap items-center gap-5 border-b px-8 py-4;
+  }
   .strategy-card {
-    @apply relative transition-shadow duration-200 rounded-2xl shadow-md border-2 max-w-xl
-      hover:shadow-lg bg-secondary-50;
+    @apply relative max-w-xl rounded-2xl border-2 shadow-md transition-shadow duration-200;
   }
   .container {
-    @apply px-12 mx-auto space-y-14 h-full  max-w-6xl py-30;
-  }
-  .btn {
-    @apply inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0;
-  }
-  .btn-destructive {
-    @apply bg-destructive text-primary-foreground shadow-xs hover:bg-destructive/90;
-  }
-  .btn-primary {
-    @apply bg-primary-400 text-primary-foreground hover:bg-primary-600;
-  }
-
-  .btn-secondary {
-    @apply bg-secondary-500 text-primary-foreground hover:bg-secondary-600;
-  }
-  .btn-tertiary {
-    @apply bg-primary-foreground shadow-md shadow-foreground/10 text-foreground hover:bg-primary-foreground/50;
-  }
-  .btn-ghost {
-    @apply hover:bg-foreground/20;
-  }
-  .btn-accent {
-    @apply bg-accent-500 text-accent-foreground hover:bg-accent-600;
-  }
-
-  .btn-outline {
-    @apply border border text-foreground hover:bg-muted;
+    @apply relative mx-auto flex h-full w-full max-w-[1000px]! flex-col overflow-hidden px-4 py-6;
   }
 
   .card {
-    @apply bg-card text-card-foreground rounded-lg shadow-sm border border-border p-4;
+    @apply bg-card text-card-foreground border-border rounded-2xl border p-4 shadow-sm;
   }
 
   .heading-xl {
-    @apply text-3xl font-semibold text-foreground;
+    @apply text-foreground text-3xl font-semibold;
   }
   .heading-lg {
-    @apply text-2xl font-semibold text-foreground;
+    @apply text-foreground text-2xl font-semibold;
   }
   .heading-md {
-    @apply text-xl font-semibold text-foreground;
+    @apply text-foreground text-xl font-semibold;
   }
 
   .loading-state {
@@ -222,7 +325,7 @@
   }
 
   .loading-state-grid {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-6;
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 2xl:grid-cols-4;
   }
 
   .loading-state-list {
@@ -237,6 +340,28 @@
     @apply space-y-3;
   }
   .card-content {
-    @apply inset-0 flex flex-col justify-between p-6 text-white z-10;
+    @apply inset-0 z-10 flex flex-col justify-between p-6 text-white;
+  }
+  .row {
+    @apply flex flex-row! items-center gap-3 md:gap-4 lg:gap-5;
+  }
+
+  .icon-ghost {
+    @apply bg-foreground/20 flex h-10 min-w-10 items-center justify-center rounded-full;
+  }
+  .faded-row {
+    @apply mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)];
+  }
+  .faded-top {
+    @apply mask-[linear-gradient(to_bottom,transparent,black_10%,black)];
+  }
+  .faded-col {
+    @apply mask-[linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)];
+  }
+  .disabled-video-container {
+    @apply from-primary-400 to-secondary-600 flex h-full w-full flex-col items-center justify-center bg-linear-to-br p-6 text-center text-white;
+  }
+  .participant-preview-container {
+    @apply mx-auto aspect-video max-w-107.5 min-w-65 overflow-hidden rounded-xl border-3 border-white shadow-md;
   }
 }

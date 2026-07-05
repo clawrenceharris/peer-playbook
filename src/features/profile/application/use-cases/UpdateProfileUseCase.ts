@@ -1,0 +1,52 @@
+import { ProfileRepository } from "../../domain/repositories";
+import { UserAvatarStorage } from "../../domain/services";
+import { UpdateProfileInput } from "../dto";
+import { fail, ok, Result } from "@/shared/application";
+import { UpdateProfileResult } from "../dto";
+import { ApplicationError, normalizeError } from "@/shared/utils";
+import { ActionError } from "@/shared/action";
+import { UpdateProfileCommand } from "../../domain/types";
+
+export class UpdateProfileUseCase {
+  constructor(
+    private readonly profileRepository: ProfileRepository,
+    private readonly storage: UserAvatarStorage,
+  ) {}
+
+  async execute(
+    input: UpdateProfileInput,
+  ): Promise<Result<UpdateProfileResult, ApplicationError | ActionError>> {
+    const { avatarFile, id } = input;
+    let uploadedAvatar: { url: string | null; path: string } | null = null;
+
+    try {
+      if (avatarFile) {
+        uploadedAvatar = await this.storage.upload({
+          userId: id,
+          file: avatarFile,
+        });
+      }
+
+      const command: UpdateProfileCommand = {
+        ...(input.firstName !== undefined && { firstName: input.firstName }),
+        ...(input.lastName !== undefined && { lastName: input.lastName }),
+        ...(input.courses !== undefined && { courses: input.courses }),
+        ...(uploadedAvatar !== undefined && {
+          avatarUrl: uploadedAvatar?.url ?? null,
+        }),
+      };
+      const profile = await this.profileRepository.updateProfile(id, command);
+      return ok(profile);
+    } catch (error) {
+      console.error("Error creating or updating profile", error);
+      if (uploadedAvatar?.path) {
+        try {
+          await this.storage.remove(uploadedAvatar.path);
+        } catch (error) {
+          console.error("Error removing avatar", error);
+        }
+      }
+      return fail(normalizeError(error));
+    }
+  }
+}

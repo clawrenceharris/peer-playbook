@@ -1,10 +1,9 @@
 import { useCallback } from "react";
 import { Session, SessionInsert } from "../domain";
 import { useCreateSession, useUpdateSession, useDeleteSession } from "./";
-import { useModal } from "@/app/providers";
+import { useModal, useUser } from "@/components/providers";
 import { SESSION_MODAL_TYPES } from "../components/modals";
 import type { CreateSessionFormValues } from "../domain";
-import { useUser } from "@/app/providers";
 import {
   CreateSessionModalProps,
   DeleteSessionModalProps,
@@ -24,7 +23,7 @@ export const useSessionActions = () => {
     async (sessionId: string, status: Session["status"]) => {
       return await handleUpdateSession({ sessionId, data: { status } });
     },
-    [handleUpdateSession]
+    [handleUpdateSession],
   );
 
   const createSession = useCallback(
@@ -34,51 +33,52 @@ export const useSessionActions = () => {
           data: {
             ...data,
             leaderId: user.id,
+            mode: "virtual",
           },
         });
       };
 
       openModal<CreateSessionModalProps>(SESSION_MODAL_TYPES.CREATE, {
-        onConfirm: handleConfirm,
+        onSuccess: handleConfirm,
         defaultValues: options?.defaultValues,
       });
     },
-    [handleCreateSession, openModal, user.id]
+    [handleCreateSession, openModal, user.id],
   );
 
   const deleteSession = useCallback(
     (sessionId: string) => {
       openModal<DeleteSessionModalProps>(SESSION_MODAL_TYPES.DELETE, {
         sessionId,
-        onConfirm: () => handleDeleteSession(sessionId),
+        onSubmit: () => handleDeleteSession(sessionId),
       });
     },
-    [handleDeleteSession, openModal]
+    [handleDeleteSession, openModal],
   );
 
   const updateSession = useCallback(
     (sessionId: string) => {
       openModal<UpdateSessionModalProps>(SESSION_MODAL_TYPES.UPDATE, {
         sessionId: sessionId,
-        onConfirm: (_, data) => handleUpdateSession({ sessionId, data }),
+        onSubmit: (_, data) => handleUpdateSession({ sessionId, data }),
         onUpdateStatus: updateSessionStatus,
       });
     },
-    [handleUpdateSession, openModal, updateSessionStatus]
+    [handleUpdateSession, openModal, updateSessionStatus],
   );
 
   const startSession = useCallback(
     async (sessionId: string) => {
       return await updateSessionStatus(sessionId, "active");
     },
-    [updateSessionStatus]
+    [updateSessionStatus],
   );
 
   const endSession = useCallback(
     async (sessionId: string) => {
       return await updateSessionStatus(sessionId, "completed");
     },
-    [updateSessionStatus]
+    [updateSessionStatus],
   );
 
   return {

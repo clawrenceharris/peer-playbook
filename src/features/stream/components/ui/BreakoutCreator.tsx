@@ -1,10 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Form, FormLayoutProps } from "@/components/form";
-import { Field, FieldContent, FieldError, FieldLabel, Input } from "@/components/ui";
-import { BreakoutRoom, useSessionCall } from "@/app/providers";
+import {
+  Field,
+  FieldContent,
+  FieldError,
+  FieldLabel,
+  Input,
+} from "@/components/ui";
+import { BreakoutRoom, useSessionCall } from "@/components/providers";
 import { generateRooms } from "@/utils";
 import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import z from "zod";
 
 interface BreakoutCreatorProps extends FormLayoutProps<{ maxSize: number }> {
   onClose: () => void;
@@ -17,16 +25,17 @@ export function BreakoutCreator({
 }: BreakoutCreatorProps) {
   const { isCreatingRooms, createBreakoutRooms } = useSessionCall();
   const [rooms, setRooms] = useState<BreakoutRoom[]>([]);
+  const form = useForm<{ maxSize: number }>();
   const {
     control,
     formState: { defaultValues },
-  } = useForm<{ maxSize: number }>();
+  } = form;
   const handleMaxSizeChange = useCallback(
     (maxSize: number) => {
       const generated = generateRooms(participants, maxSize);
       setRooms(generated);
     },
-    [participants]
+    [participants],
   );
 
   useEffect(() => {
@@ -39,15 +48,14 @@ export function BreakoutCreator({
   }
   return (
     <Form<{ maxSize: number }>
-      enableBeforeUnloadProtection={false}
-      defaultValues={{ maxSize: 2 }}
-      isLoading={isCreatingRooms}
-      onSuccess={onClose}
-      onCancel={onClose}
-      onSubmit={handleSubmit}
       {...props}
+      form={form}
+      enableBeforeUnloadProtection={false}
+      isLoading={isCreatingRooms}
+      onCancel={onClose}
+      handleSubmit={handleSubmit}
     >
-      <div className="p-4 border overflow-hidden rounded-xl bg-muted/30 space-y-4">
+      <div className="bg-muted/30 space-y-4 overflow-hidden rounded-xl border p-4">
         <Controller
           rules={{
             required: true,
@@ -62,7 +70,7 @@ export function BreakoutCreator({
               <FieldContent>
                 <Input
                   id="maxSize"
-                  
+
                   type="number"
                   placeholder="Number of Breakout Rooms"
                   aria-invalid={fieldState.invalid}
@@ -76,22 +84,22 @@ export function BreakoutCreator({
           )}
         />
 
-        <div className="overflow-y-auto max-h-50 h-full">
+        <div className="h-full max-h-50 overflow-y-auto">
           {rooms.length > 0 && (
-            <div className="space-y-2 mt-4">
+            <div className="mt-4 space-y-2">
               {rooms.map((r, i) => (
                 <div
                   key={r.id}
-                  className="rounded-md border bg-white/40 p-3 flex flex-wrap gap-2"
+                  className="flex flex-wrap gap-2 rounded-md border bg-white/40 p-3"
                 >
-                  <strong className="w-full mb-1">
+                  <strong className="mb-1 w-full">
                     Room {i + 1} ({r.members.length})
                   </strong>
 
                   {r.members.map((m) => (
                     <span
                       key={m.sessionId}
-                      className="text-xs bg-primary/10 px-2 py-1 rounded-md"
+                      className="bg-primary/10 rounded-md px-2 py-1 text-xs"
                     >
                       {m.name}
                     </span>

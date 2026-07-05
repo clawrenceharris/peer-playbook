@@ -11,7 +11,7 @@ import {
   usePlayfield,
   SessionCallProvider,
   useSessionCall,
-} from "@/app/providers";
+} from "@/components/providers";
 import { cn } from "@/lib/utils";
 import { PlayfieldLobbyView } from "@/features/stream/components";
 import { PlayfieldProfile } from "@/features/playfield/hooks";

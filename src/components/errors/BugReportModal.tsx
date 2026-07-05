@@ -7,13 +7,14 @@ import {
   FieldDescription,
   FieldGroup,
 } from "@/components/ui";
-import { Form, TextareaField } from "@/components/form";
-import { AppError } from "@/types/errors";
+import { Form, InputField } from "@/components/form";
+import { ApplicationError } from "@/shared/utils/errors";
 import { submitBugReport } from "@/lib/bugs/bug-reporter";
 import { CheckCircle2 } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuth } from "@/features/auth/hooks";
+import { useAuth } from "@/features/auth/presentation/hooks";
+import { useForm } from "react-hook-form";
 
 const bugReportSchema = z.object({
   description: z
@@ -29,7 +30,7 @@ const bugReportSchema = z.object({
 type BugReportFormInput = z.infer<typeof bugReportSchema>;
 
 interface BugReportModalProps {
-  error: AppError;
+  error: ApplicationError;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   context?: string;
@@ -43,7 +44,13 @@ export function BugReportModal({
   const { user } = useAuth();
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const form = useForm<BugReportFormInput>({
+    resolver: zodResolver(bugReportSchema),
+    defaultValues: {
+      description: "",
+      stepsToReproduce: "",
+    },
+  });
   const handleSubmit = async (data: BugReportFormInput) => {
     setIsSubmitting(true);
     try {
@@ -83,27 +90,24 @@ export function BugReportModal({
           </div>
         ) : (
           <Form<BugReportFormInput>
-            resolver={zodResolver(bugReportSchema)}
-            onSubmit={handleSubmit}
+            form={form}
+
+            handleSubmit={handleSubmit}
             isLoading={isSubmitting}
             showsCancelButton={true}
             submitText="Submit"
             cancelText="Cancel"
             onCancel={() => onOpenChange(false)}
-            defaultValues={{
-              description: "",
-              stepsToReproduce: "",
-            }}
           >
             {() => (
               <FieldGroup>
-                <TextareaField<BugReportFormInput>
+                <InputField<BugReportFormInput, "description">
                   defaultValue=""
                   label="What happened?"
                   name="description"
                   placeholder="Describe what you were trying to do when the error occurred..."
                 />
-                <TextareaField<BugReportFormInput>
+                <InputField<BugReportFormInput, "stepsToReproduce">
                   defaultValue=""
                   label="Steps to Reproduce"
                   name="stepsToReproduce"

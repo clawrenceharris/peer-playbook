@@ -2,12 +2,8 @@
 export const runtime = "nodejs";
 
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import type {
-  PlaybooksInsert,
-  Strategies,
-  UserStrategies,
-} from "@/types/tables";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
+import type { PlaybooksInsert, Strategies } from "@/types";
 
 type StrategyRef = { sourceType: "system" | "user"; sourceId: string };
 
@@ -26,7 +22,7 @@ export async function POST(req: NextRequest) {
     };
   };
 
-  const client = await createClient();
+  const client = await createServerSupabaseClient();
   const {
     data: { user },
   } = await client.auth.getUser();
@@ -37,9 +33,8 @@ export async function POST(req: NextRequest) {
   const { data: playbook, error: pe } = await client
     .from("playbooks")
     .insert<PlaybooksInsert>({
+      subject: body.subject,
       topic: body.topic,
-      subject: body.subject as any,
-      modes: body.modes as any,
       course_name: body.course_name,
     })
     .select()
@@ -48,7 +43,7 @@ export async function POST(req: NextRequest) {
   if (pe || !playbook) {
     return NextResponse.json(
       { error: pe?.message || "Failed to create playbook" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -93,8 +88,8 @@ export async function POST(req: NextRequest) {
     ? await client
         .from("user_strategies")
         .select("id,title,steps")
-        .in("id", userIds)
-    : { data: [] as UserStrategies[], error: null };
+        .eq("created_by", user.id)
+    : { data: [] as Strategies[], error: null };
 
   if (ue) return NextResponse.json({ error: ue.message }, { status: 500 });
 
@@ -138,7 +133,7 @@ export async function POST(req: NextRequest) {
   } catch (e: any) {
     return NextResponse.json(
       { error: e?.message || "Failed to create playbook strategies" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 

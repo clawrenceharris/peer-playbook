@@ -10,8 +10,7 @@ import {
 } from "@tanstack/react-query";
 import { DomainMutationOptions } from "./types";
 import { useCallback, useState } from "react";
-import { AppError } from "@/types/errors";
-import { normalizeError } from "@/utils";
+import { normalizeError,ApplicationError } from "@/shared/utils/errors";
 
 /**
  * Configuration for a single query update in a multi-query optimistic update
@@ -134,7 +133,7 @@ export function createMultiQueryOptimisticUpdate<
  * Useful for components that need custom error handling
  */
 export function useMutationError() {
-  const [error, setError] = useState<AppError | null>(null);
+  const [error, setError] = useState<ApplicationError | null>(null);
   const [errorContext, setErrorContext] = useState<string | undefined>();
   const [showModal, setShowModal] = useState(false);
 
@@ -145,7 +144,7 @@ export function useMutationError() {
     setShowModal(true);
   }, []);
 
-  const showErrorModal = useCallback((error: AppError, context?: string) => {
+  const showErrorModal = useCallback((error: ApplicationError, context?: string) => {
     setError(error);
     setErrorContext(context);
     setShowModal(true);

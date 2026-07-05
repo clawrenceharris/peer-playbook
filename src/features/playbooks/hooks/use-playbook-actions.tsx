@@ -1,7 +1,7 @@
 import { PlaybookStrategy } from "@/features/playbooks/domain";
 import { Strategy } from "@/features/strategies/domain";
 import { useCallback } from "react";
-import { useModal } from "@/app/providers";
+import { useModal } from "@/components/providers";
 import { PLAYBOOK_MODAL_TYPES } from "../components/modals";
 import {
   useDeletePlaybook,
@@ -27,7 +27,7 @@ export const usePlaybookActions = () => {
     async (
       playbookId: string,
       strategyToReplace: PlaybookStrategy,
-      newStrategy: Strategy
+      newStrategy: Strategy,
     ) => {
       const { steps, id, title, description } = newStrategy;
 
@@ -44,7 +44,7 @@ export const usePlaybookActions = () => {
         },
       });
     },
-    [updatePlaybookStrategy]
+    [updatePlaybookStrategy],
   );
   const replaceStrategy = useCallback(
     (playbookId: string, strategy: PlaybookStrategy) => {
@@ -53,23 +53,23 @@ export const usePlaybookActions = () => {
         {
           strategyToReplace: strategy,
           playbookId,
-          onConfirm: (strategyToReplace, newStrategy) =>
+          onSubmit: (strategyToReplace, newStrategy) =>
             handleReplaceStrategy(playbookId, strategyToReplace, newStrategy),
           isLoading: isUpdating,
-        }
+        },
       );
     },
-    [handleReplaceStrategy, isUpdating, openModal]
+    [handleReplaceStrategy, isUpdating, openModal],
   );
 
   const updatePlaybook = useCallback(
     (playbookId: string) => {
       openModal<UpdatePlaybookModalProps>(PLAYBOOK_MODAL_TYPES.UPDATE, {
         playbookId,
-        onConfirm: (data) => handleUpdatePlaybook({ playbookId, data }),
+        onSubmit: (data) => handleUpdatePlaybook({ playbookId, data }),
       });
     },
-    [handleUpdatePlaybook, openModal]
+    [handleUpdatePlaybook, openModal],
   );
 
   const deletePlaybook = useCallback(
@@ -81,7 +81,7 @@ export const usePlaybookActions = () => {
         isLoading: isDeleting,
       });
     },
-    [handleDeletePlaybook, isDeleting, openModal]
+    [handleDeletePlaybook, isDeleting, openModal],
   );
 
   return {

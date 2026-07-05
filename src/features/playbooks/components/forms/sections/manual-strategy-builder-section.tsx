@@ -14,7 +14,7 @@ import {
   useMyUserStrategies,
   useStrategies,
 } from "@/features/strategies/hooks";
-import { useUser } from "@/app/providers";
+import { useUser } from "@/components/providers";
 
 type Phase = "warmup" | "workout" | "closer";
 

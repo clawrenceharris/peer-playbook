@@ -7,24 +7,32 @@ import {
   type CreateSessionFormValues,
 } from "@/features/sessions/domain";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useModal } from "@/app/providers";
+import { useModal } from "@/components/providers";
 import { CreateSessionModalProps } from "@/lib/modals";
 import { usePendingMutations } from "@/hooks/use-pending-mutations";
-import { Form } from "@/components/form/form";
+import { Form } from "@/components/form";
 import { CreateSessionForm } from "@/features/sessions/components";
+import { useForm } from "react-hook-form";
 
 export function CreateSessionModal({
-  onConfirm,
+  onSuccess,
   playbook,
 }: CreateSessionModalProps) {
   const { closeModal } = useModal();
   const { pending: isLoading } = usePendingMutations({
     mutationKey: ["create-session"],
   });
-  const handleSubmit = async (data: CreateSessionFormValues) => {
-    await onConfirm(data);
-  };
-
+  const form = useForm<CreateSessionFormValues>({
+    resolver: zodResolver(createSessionSchema),
+    defaultValues: {
+      topic: playbook?.topic || "",
+      courseName: playbook?.courseName || "",
+      playbookId: playbook?.id,
+    },
+  });
+  function handleSubmit(data: CreateSessionFormValues) {
+    onSuccess(data);
+  }
   return (
     <DialogContent className="max-w-2xl">
       <DialogTitle>Create Session</DialogTitle>
@@ -33,17 +41,9 @@ export function CreateSessionModal({
       </DialogDescription>
       <Form
         id="form-create-session"
-        defaultValues={{
-          topic: playbook?.topic || "",
-          courseName: playbook?.courseName || "",
-          subject: playbook?.subject || "",
-          playbookId: playbook?.id,
-          mode: playbook?.modes.length ? playbook?.modes[0] : undefined,
-        }}
-        resolver={zodResolver(createSessionSchema)}
+        form={form}
         onCancel={closeModal}
-        onSuccess={closeModal}
-        onSubmit={handleSubmit}
+        handleSubmit={handleSubmit}
         isLoading={isLoading}
       >
         <CreateSessionForm />

@@ -8,7 +8,7 @@ export function NotesSection() {
     <TextareaField
       name="notes"
       label="Notes"
-      isOptional
+      required={false}
       placeholder="Add any notes for this playbook (optional)."
     />
   );

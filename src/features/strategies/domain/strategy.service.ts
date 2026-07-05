@@ -1,5 +1,5 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { CreateStrategyInput } from "@/types/strategies";
+import { CreateStrategyInput } from "@/types/strategies.types";
 import { StrategiesRepository } from "../data";
 import { Strategy, StrategyInsert } from "./strategy.types";
 
@@ -11,25 +11,23 @@ export const createStrategyService = (client: SupabaseClient) => {
 
   const publishStrategy = (strategyId: string, isPublished: boolean) =>
     repository.update(strategyId, {
-      isPublished,
-      publishedAt: isPublished ? new Date().toISOString() : null,
+      published: isPublished,
     });
 
   const createStrategy = (
     userId: string,
-    input: CreateStrategyInput
+    input: CreateStrategyInput,
   ): Promise<Strategy> => {
     const insertData: StrategyInsert = {
       title: input.title,
       description: input.description,
       steps: input.steps,
-      sessionSize: input.sessionSize || "2+",
+      sessionSize: "2+",
       virtualFriendly: input.virtualFriendly ?? true,
       courseTags: input.courseTags || [],
       goodFor: input.goodFor || [],
       createdBy: userId,
-      isSystem: false,
-      isPublished: false,
+      published: false,
     };
 
     return repository.create(insertData);
@@ -51,7 +49,7 @@ export const createStrategyService = (client: SupabaseClient) => {
     const strategies = await repository.getSystemStrategies();
     return strategies.map((strategy) => ({
       ...strategy,
-      isSystem: strategy.isSystem ?? true,
+      createdBy: strategy.createdBy ?? null,
     }));
   };
 

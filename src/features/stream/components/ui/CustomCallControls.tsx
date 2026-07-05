@@ -7,7 +7,7 @@ import {
   TooltipContent,
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import { getUserErrorMessage } from "@/utils";
+import { getUserErrorMessage } from "@/shared/utils/errors";
 import { useCallStateHooks } from "@stream-io/video-react-sdk";
 import {
   Camera,
@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { AudioVolumeIndicator } from ".";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
-import { useSessionCall } from "@/app/providers";
+import { useSessionCall } from "@/components/providers";
 import { toast } from "react-toastify";
 
 interface CustomCallControlsProps {

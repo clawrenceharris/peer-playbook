@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import { TextareaField } from "@/components/form";
 import {
   ContextsSection,
   LessonDetailsSection,
   ModesSection,
 } from "./sections";
+import { InputField } from "@/components/form";
 
 /**
  * Fields-only component used inside an outer <Form>.
@@ -16,11 +16,11 @@ export function GeneratePlaybookForm() {
   return (
     <>
       <LessonDetailsSection />
-      <TextareaField
+      <InputField
         name="instructions"
         placeholder="Add instructions or more details here: Describe the lesson topic, expected group size, or specific requirements."
         label="Instructions"
-        isOptional
+        required={false}
       />
       <ContextsSection />
       <ModesSection />

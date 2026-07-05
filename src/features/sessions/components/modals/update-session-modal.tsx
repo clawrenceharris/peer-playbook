@@ -2,18 +2,23 @@
 
 import { DialogContent } from "@/components/ui";
 import { Form } from "@/components/form";
-import { createSessionSchema } from "@/features/sessions/domain";
+import {
+  createSessionSchema,
+  UpdateSessionFormValues,
+  updateSessionSchema,
+} from "@/features/sessions/domain";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UpdateSessionModalProps } from "@/lib/modals/types";
-import { useModal } from "@/app/providers";
+import { useModal } from "@/components/providers";
 import { useSession } from "../../hooks";
 import { EmptyState } from "@/components/states";
 import { CreateSessionForm } from "..";
 import { usePendingMutations } from "@/hooks";
+import { useForm } from "react-hook-form";
 
 export function UpdateSessionModal({
   sessionId,
-  onConfirm,
+  onSubmit,
   onUpdateStatus,
 }: UpdateSessionModalProps) {
   const { closeModal } = useModal();
@@ -21,12 +26,22 @@ export function UpdateSessionModal({
   const { pending: isLoading } = usePendingMutations({
     mutationKey: ["update-session"],
   });
-  const handleSubmit = async (
-    data: import("@/features/sessions/domain").CreateSessionFormValues
-  ) => {
-    await onConfirm(sessionId, data);
+  const form = useForm<UpdateSessionFormValues>({
+    resolver: zodResolver(updateSessionSchema),
+    defaultValues: {
+      status: "scheduled",
+      topic: session?.topic ?? "",
+      courseName: session?.courseName || "",
+      scheduledStart: session?.scheduledStart
+        ? session.scheduledStart.slice(0, 16)
+        : "",
+      mode: session?.mode ?? "virtual",
+    },
+  });
+  const handleSubmit = async (data: UpdateSessionFormValues) => {
+    await onSubmit(sessionId, data);
     if (onUpdateStatus) {
-      await onUpdateStatus(sessionId, "scheduled");
+      onUpdateStatus(sessionId, "scheduled");
     }
   };
 
@@ -44,23 +59,12 @@ export function UpdateSessionModal({
       description={`Edit your ${session.topic} session`}
       className="max-w-2xl"
     >
-      <Form
+      <Form<UpdateSessionFormValues>
         id="form-update-session"
-        resolver={zodResolver(createSessionSchema)}
-        defaultValues={{
-          status: "scheduled",
-          topic: session.topic,
-          courseName: session.courseName || "",
-          scheduledStart: session.scheduledStart
-            ? session.scheduledStart.slice(0, 16)
-            : "",
-          subject: session.subject,
-          mode: session.mode ?? undefined,
-        }}
+        form={form}
         isLoading={isLoading}
         onCancel={closeModal}
-        onSuccess={closeModal}
-        onSubmit={handleSubmit}
+        handleSubmit={handleSubmit}
       >
         <CreateSessionForm />
       </Form>

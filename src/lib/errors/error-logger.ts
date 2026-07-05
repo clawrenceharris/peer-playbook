@@ -1,4 +1,4 @@
-import { AppError } from "@/types/errors";
+import { ApplicationError } from "@/shared/utils/errors";
 
 /**
  * Centralized error logging
@@ -6,16 +6,11 @@ import { AppError } from "@/types/errors";
  * Production: Sends to Sentry (configured separately)
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function logError(error: AppError, context?: Record<string, any>) {
+export function logError(error: ApplicationError, context?: Record<string, any>) {
   const errorLog = {
-    timestamp: error.timestamp,
     code: error.code,
-    category: error.category,
-    severity: error.severity,
+    title: "Something went wrong",
     message: error.message,
-    userMessage: error.userMessage,
-    canRetry: error.canRetry,
-    metadata: error.metadata,
     context,
     userAgent:
       typeof navigator !== "undefined" ? navigator.userAgent : "server",
@@ -43,16 +38,14 @@ export function logError(error: AppError, context?: Record<string, any>) {
             contexts: {
               app: {
                 error_code: error.code,
-                category: error.category,
-                severity: error.severity,
-                can_retry: error.canRetry,
-                user_message: error.userMessage,
+                title: "Something went wrong",
+                message: error.message,
               },
             },
             tags: {
               error_code: error.code,
-              category: error.category,
-              severity: error.severity,
+              title: "Something went wrong",
+              message: error.message,
             },
             extra: {
               ...errorLog,

@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 
 import { PlaybookStrategy } from "@/features/playbooks/domain";
 import { Session } from "@/features/sessions/domain";
-import { usePlayfield, useSessionCall } from "@/app/providers";
+import { usePlayfield, useSessionCall } from "@/components/providers";
 
 interface PlayfieldLayoutProps {
   session: Session;

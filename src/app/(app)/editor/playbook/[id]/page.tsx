@@ -1,10 +1,10 @@
 import React from "react";
 // import PlaybookEditorPage from "./PlaybookEditorPage";
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 
 async function fetchPlaybookTitle(id: string): Promise<string> {
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
   const { data: playbook } = await supabase
     .from("playbooks")
     .select("topic")

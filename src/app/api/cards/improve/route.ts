@@ -2,11 +2,11 @@ export const runtime = "nodejs";
 
 import { NextRequest, NextResponse } from "next/server";
 import { openai } from "@/lib/openai/client";
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
   const { lessonCardId } = await req.json();
-  const client = await createClient();
+  const client = await createServerSupabaseClient();
   const {
     data: { user },
   } = await client.auth.getUser();

@@ -3,13 +3,19 @@
 import { DialogContent } from "@/components/ui";
 import { UpdatePlaybookForm } from "..";
 import type { UpdatePlaybookModalProps } from "@/lib/modals/types";
-import { useModal } from "@/app/providers";
+import { useModal } from "@/components/providers";
 import { usePlaybook } from "@/features/playbooks/hooks";
 import { usePendingMutations } from "@/hooks";
 import { EmptyState } from "@/components/states";
+import {
+  UpdatePlaybookFormValues,
+  updatePlaybookSchema,
+} from "../../domain/playbook.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 export function UpdatePlaybookModal({
-  onConfirm,
+  onSubmit: onConfirm,
   playbookId,
 }: UpdatePlaybookModalProps) {
   const { closeModal } = useModal();
@@ -17,7 +23,14 @@ export function UpdatePlaybookModal({
   const { pending: isLoading } = usePendingMutations({
     mutationKey: ["update-playbook"],
   });
-
+  const form = useForm<UpdatePlaybookFormValues>({
+    resolver: zodResolver(updatePlaybookSchema),
+    defaultValues: {
+      subject: playbook?.subject ?? "",
+      topic: playbook?.topic ?? "",
+      courseName: playbook?.courseName ?? "",
+    },
+  });
   return (
     <DialogContent
       title="Edit Playbook"
@@ -26,14 +39,9 @@ export function UpdatePlaybookModal({
     >
       {playbook ? (
         <UpdatePlaybookForm
-          defaultValues={{
-            topic: playbook.topic,
-            subject: playbook.subject,
-            courseName: playbook.courseName,
-          }}
-          onSubmit={(data) => onConfirm(data)}
+          form={form}
+          handleSubmit={(data) => onConfirm(data)}
           onCancel={closeModal}
-          onSuccess={closeModal}
           isLoading={isLoading}
         />
       ) : (

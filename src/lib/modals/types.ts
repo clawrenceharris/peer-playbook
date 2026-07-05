@@ -1,6 +1,7 @@
 import type {
   CreateSessionFormValues,
   Session,
+  UpdateSessionFormValues,
 } from "@/features/sessions/domain";
 import type {
   GeneratePlaybookFormValues,
@@ -9,15 +10,12 @@ import type {
   PlaybookUpdate,
 } from "@/features/playbooks/domain";
 import type { Strategy } from "@/features/strategies/domain";
-import { Profile } from "@/features/profile/domain";
+import type { ProfileDetailDTO } from "@/features/profile/application/dto";
 
 /**
  * Base interface for all modal props
  * CRUD modals do NOT include isLoading - they handle it internally via usePendingMutations
  */
-export interface ModalProps {
-  [key: string]: unknown;
-}
 
 /**
  * Union type of all modal type strings
@@ -26,6 +24,7 @@ export type ModalType =
   | "session:create"
   | "session:update"
   | "session:delete"
+  | "profile:create"
   | "profile:update"
   | "profile:delete"
   | "playbook:update"
@@ -41,39 +40,45 @@ export interface ModalState {
   props: ModalProps | null;
 }
 
+export interface ModalProps {
+  [key: string]: unknown;
+  onError?: (error: string) => void;
+  onCancel?: () => void;
+  isAlert?: boolean;
+}
+
 // ============================================================================
 // Session Modal Props
 // ============================================================================
 
 export interface CreateSessionModalProps extends ModalProps {
-  onConfirm: (data: CreateSessionFormValues) => Promise<Session>;
+  onSuccess: (data: CreateSessionFormValues) => Promise<Session>;
   playbook?: Playbook | null;
 }
 
 export interface UpdateSessionModalProps extends ModalProps {
   sessionId: string;
-  onConfirm: (
+  onSubmit: (
     sessionId: string,
-    data: CreateSessionFormValues
+    data: UpdateSessionFormValues,
   ) => Promise<Session>;
   onUpdateStatus?: (sessionId: string, status: Session["status"]) => void;
 }
 
 export interface DeleteSessionModalProps extends ModalProps {
   sessionId: string;
-  onConfirm: (sessionId: string) => Promise<void>;
+  onSubmit: (sessionId: string) => Promise<void>;
 }
 
 // ============================================================================
 // Profile Modal Props
 // ============================================================================
-
+export interface CreateProfileModalProps extends ModalProps {
+  userId: string;
+  onSuccess: () => void;
+}
 export interface UpdateProfileModalProps extends ModalProps {
-  profileId: string;
-  onConfirm: (data: {
-    firstName?: string;
-    lastName?: string;
-  }) => Promise<Profile>;
+  profile: ProfileDetailDTO;
 }
 
 export interface DeleteAccountModalProps extends ModalProps {
@@ -86,7 +91,7 @@ export interface DeleteAccountModalProps extends ModalProps {
 
 export interface UpdatePlaybookModalProps extends ModalProps {
   playbookId: string;
-  onConfirm: (data: PlaybookUpdate) => Promise<Playbook>;
+  onSubmit: (data: PlaybookUpdate) => Promise<Playbook>;
 }
 
 export interface DeletePlaybookModalProps extends ModalProps {
@@ -97,12 +102,18 @@ export interface DeletePlaybookModalProps extends ModalProps {
 export interface ReplaceStrategyModalProps extends ModalProps {
   strategyToReplace: PlaybookStrategy;
   playbookId: string;
-  onConfirm: (
+  onSubmit: (
     strategyToReplace: PlaybookStrategy,
-    newStrategy: Strategy
+    newStrategy: Strategy,
   ) => Promise<void>;
 }
 
 export interface GeneratePlaybookModalProps extends ModalProps {
-  onConfirm: (data: GeneratePlaybookFormValues) => Promise<Playbook>;
+  onSubmit: (data: GeneratePlaybookFormValues) => Promise<Playbook>;
+}
+
+export interface ConfirmationModalProps extends ModalProps {
+  title: string;
+  description: string;
+  onConfirm: () => void | Promise<void>;
 }

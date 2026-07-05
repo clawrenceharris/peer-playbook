@@ -1,6 +1,10 @@
 import "./globals.css";
 
-import { ModalProvider, QueryProvider } from "@/app/providers";
+import {
+  AuthProvider,
+  ModalProvider,
+  QueryProvider,
+} from "@/components/providers";
 import { ReactNode } from "react";
 import { Outfit, Figtree } from "next/font/google";
 import { Metadata } from "next";
@@ -14,20 +18,24 @@ export const metadata: Metadata = {
 const figtree = Figtree({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-figtree",
+  variable: "--font-heading",
 });
 const outfit = Outfit({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-outfit",
+  variable: "--font-body",
   weight: "500",
 });
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${figtree.variable} ${outfit.variable} antialiased`}>
+      <body
+        className={`${figtree.variable} ${outfit.variable} font-body antialiased`}
+      >
         <QueryProvider>
-          <ModalProvider>{children}</ModalProvider>
+          <AuthProvider>
+            <ModalProvider>{children}</ModalProvider>
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>

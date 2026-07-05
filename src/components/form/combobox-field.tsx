@@ -1,6 +1,6 @@
 import React from "react";
-import { FieldProps } from "@/types";
-import { Controller, FieldValues, useFormContext } from "react-hook-form";
+import { InputFieldProps } from "@/types";
+import { Controller, FieldValues, Path, useController, useFormContext } from "react-hook-form";
 import {
   Combobox,
   Field,
@@ -10,35 +10,29 @@ import {
   FieldLabel,
 } from "../ui";
 
-interface SelectFieldProps<T extends FieldValues>
-  extends FieldProps<T, "input"> {
+interface ComboboxFieldProps<T extends FieldValues, U extends Path<T>>
+  extends InputFieldProps<T, U> {
   items: { icon: React.ReactNode; value: string; label: string }[];
 }
 
-export function ComboboxField<T extends FieldValues>({
+export function ComboboxField<T extends FieldValues, U extends Path<T>>({
   name,
   label,
   description,
   showsLabel = true,
-  isOptional,
+  required,
   placeholder,
   items,
-  fieldClassName,
-  rules,
-  shouldUnregister,
-  defaultValue,
+  inputId: inputIdProp,
+  className,
   ...comboboxProps
-}: SelectFieldProps<T>) {
+}: ComboboxFieldProps<T, U>) {
   const { control } = useFormContext<T>();
+  const { field, fieldState } = useController<T, U>({ name, control });
+  const inputId = inputIdProp || field.name;
   return (
-    <Controller
-      name={name}
-      control={control}
-      rules={rules}
-      shouldUnregister={shouldUnregister}
-      defaultValue={defaultValue}
-      render={({ field, fieldState }) => (
-        <Field className={fieldClassName}>
+    
+        <Field className={className}>
           <FieldContent>
             <FieldLabel
               className={!showsLabel ? "sr-only" : ""}
@@ -50,15 +44,15 @@ export function ComboboxField<T extends FieldValues>({
           </FieldContent>
           <Combobox
             {...comboboxProps}
+            inputId={inputId}
             onValueChange={field.onChange}
             value={field.value}
             items={items}
-            placeholder={`${placeholder}${!isOptional ? "*" : ""}`}
+            placeholder={`${placeholder}${required ? "*" : ""}`}
           />
 
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>
-      )}
-    />
+     
   );
 }

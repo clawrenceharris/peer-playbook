@@ -1,57 +1,49 @@
 import React from 'react'
-import { FieldProps } from '@/types'
-import { Controller, FieldValues, useFormContext } from 'react-hook-form'
+import { InputFieldProps } from '@/types'
+import { Controller, FieldValues, Path, useController, useFormContext } from 'react-hook-form'
 import { Field, FieldContent, FieldDescription, FieldError, FieldLabel, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui';
 
-interface SelectFieldProps<T extends FieldValues> extends FieldProps<T, "select"> {
+interface SelectFieldProps<T extends FieldValues, U extends Path<T>> extends InputFieldProps<T, U> {
   items: { icon: React.ReactNode; value: string; key: string; }[];
-  placeholder?: string;
 
 }
 
-export function SelectField<T extends FieldValues>({
+export function SelectField<T extends FieldValues, U extends Path<T>>({
   name,
   label,
   description,
   showsLabel = true,
-  isOptional,
+  required,
   placeholder,
+  inputId: inputIdProp,
   items,
-  fieldClassName,
-  rules,
-  shouldUnregister,
+  className,
   defaultValue,
   ...selectProps 
-}: SelectFieldProps<T>) {
+}: SelectFieldProps<T, U>) {
   const { control } = useFormContext<T>();
+  const { field, fieldState } = useController({ control, name });
+  const inputId = inputIdProp ?? field.name;
 
   return (
-    <Controller
-      name={name}
-      control={control}
-      rules={rules}
-      shouldUnregister={shouldUnregister}
-      defaultValue={defaultValue}
-      render={({ field, fieldState }) => (
-        <Field className={fieldClassName}>
+    
+        <Field className={className}>
           <FieldContent>
             <FieldLabel className={!showsLabel ? "sr-only" : ""} htmlFor={field.name}>{label}</FieldLabel>
             {description && <FieldDescription>{description}</FieldDescription>}
           </FieldContent>
           <Select
-            {...selectProps}
+            {...field}
             dir='ltr'
-            name={field.name}
-            value={field.value ?? ""}
-            onValueChange={field.onChange}
+            
           >
             <SelectTrigger
               id={field.name}
               aria-invalid={fieldState.invalid}
-              aria-required={!isOptional}
+              aria-required={required}
             >
               <SelectValue
-                placeholder={`${placeholder}${!isOptional ? "*" : ""}`}              
+                placeholder={`${placeholder}${required ? "*" : ""}`}              
               />
             </SelectTrigger>
 
@@ -69,7 +61,7 @@ export function SelectField<T extends FieldValues>({
           </Select>
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>
-      )}
-    />
+      
+    
   );
 }

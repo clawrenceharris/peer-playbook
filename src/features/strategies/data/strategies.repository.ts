@@ -1,6 +1,10 @@
 import { BaseRepository } from "@/repositories/base.repository";
 import { DomainInsert, DomainModel, DomainUpdate } from "@/lib/data/naming";
-import { Strategies, StrategiesInsert, StrategiesUpdate } from "@/types/tables";
+import {
+  Strategies,
+  StrategiesInsert,
+  StrategiesUpdate,
+} from "@/types/table.types";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 /**

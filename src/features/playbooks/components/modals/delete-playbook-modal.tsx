@@ -3,8 +3,10 @@
 import { Form } from "@/components/form";
 import { DialogContent } from "@/components/ui";
 import type { DeletePlaybookModalProps } from "@/lib/modals/types";
-import { useModal } from "@/app/providers";
+import { useModal } from "@/components/providers";
 import { usePendingMutations } from "@/hooks";
+import { zodResolver } from "@hookform/resolvers/zod";
+import z from "zod";
 
 export function DeletePlaybookModal({
   playbookId,
@@ -26,15 +28,6 @@ export function DeletePlaybookModal({
         Are you sure you want to delete this playbook? You can&apos;t undo this
         action.
       </p>
-      <Form<{ confirm: boolean }>
-        submitText="I'm sure"
-        onSuccess={closeModal}
-        onSubmit={async () => {
-          await onConfirm(playbookId);
-        }}
-        onCancel={closeModal}
-        isLoading={isLoading}
-      />
     </DialogContent>
   );
 }

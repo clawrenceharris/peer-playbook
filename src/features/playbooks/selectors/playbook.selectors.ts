@@ -74,13 +74,13 @@ export const selectOthersPlaybooks =
  * Filters published playbooks
  */
 export const selectPublishedPlaybooks = (playbooks: Playbook[]): Playbook[] =>
-  playbooks.filter((p) => p.isPublished);
+  playbooks.filter((p) => p.published);
 
 /**
  * Filters unpublished (draft) playbooks
  */
 export const selectDraftPlaybooks = (playbooks: Playbook[]): Playbook[] =>
-  playbooks.filter((p) => !p.isPublished);
+  playbooks.filter((p) => !p.published);
 
 /**
  * Filters user's published playbooks
@@ -88,7 +88,7 @@ export const selectDraftPlaybooks = (playbooks: Playbook[]): Playbook[] =>
 export const selectMyPublishedPlaybooks =
   (userId: string) =>
   (playbooks: Playbook[]): Playbook[] =>
-    playbooks.filter((p) => p.createdBy === userId && p.isPublished);
+    playbooks.filter((p) => p.createdBy === userId && p.published);
 
 /**
  * Filters user's draft playbooks
@@ -96,7 +96,7 @@ export const selectMyPublishedPlaybooks =
 export const selectMyDraftPlaybooks =
   (userId: string) =>
   (playbooks: Playbook[]): Playbook[] =>
-    playbooks.filter((p) => p.createdBy === userId && !p.isPublished);
+    playbooks.filter((p) => p.createdBy === userId && !p.published);
 
 // ============================================
 // Filter Selectors - Course/Topic

@@ -30,7 +30,7 @@ export abstract class BaseService<TDomain, TUpdate, TInsert> {
   async create(data: TInsert): Promise<TDomain> {
     const { data: result, error } = await this.client
       .from(this.tableName)
-      .insert(data)
+      .insert(data as any)
       .select()
       .single();
 
@@ -41,7 +41,7 @@ export abstract class BaseService<TDomain, TUpdate, TInsert> {
   async update(id: string, updatedFields: TUpdate): Promise<void> {
     const { error } = await this.client
       .from(this.tableName)
-      .update(updatedFields)
+      .update(updatedFields as any)
       .eq("id", id);
 
     if (error) throw error;

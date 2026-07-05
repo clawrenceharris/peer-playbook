@@ -75,7 +75,7 @@ export abstract class BaseRepository<
   async create(data: TInsert): Promise<TDomain> {
     const { data: result, error } = await this.client
       .from(this.tableName)
-      .insert(this.toDb(data) as TDbInsert)
+      .insert(this.toDb(data) as any)
       .select()
       .single();
 
@@ -86,7 +86,7 @@ export abstract class BaseRepository<
   async update(id: string, updatedFields: TUpdate): Promise<TDomain> {
     const { data, error } = await this.client
       .from(this.tableName)
-      .update(this.toDb(updatedFields) as TDbUpdate)
+      .update(this.toDb(updatedFields) as any)
       .eq("id", id)
       .select()
       .single();

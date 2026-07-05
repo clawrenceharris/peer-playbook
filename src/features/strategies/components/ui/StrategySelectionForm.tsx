@@ -18,27 +18,42 @@ import { EmptyState, LoadingState } from "@/components/states";
 import { StrategyCard } from ".";
 import { PlaybookStrategy } from "@/features/playbooks/domain";
 import { Strategy } from "@/features/strategies/domain";
-import { Controller, ControllerRenderProps } from "react-hook-form";
+import { Controller, ControllerRenderProps, useForm } from "react-hook-form";
 import { Form, FormLayoutProps } from "@/components/form";
+import { usePendingMutations } from "@/hooks";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 interface StrategySelectionFieldProps {
   strategyToReplace: PlaybookStrategy;
+  onCancel?: () => void;
+  onSuccess?: () => void;
+  onConfirm: (strategyToReplace: PlaybookStrategy, strategy: Strategy) => void;
 }
 export const StrategySelectionForm = ({
   strategyToReplace,
-  ...props
-}: FormLayoutProps<{ strategy: Strategy }> & StrategySelectionFieldProps) => {
+  onCancel,
+  onSuccess,
+  onConfirm,
+}: StrategySelectionFieldProps) => {
   const { data: strategies, isLoading: strategiesLoading } = useStrategies();
+  const { pending: isLoading } = usePendingMutations({
+    mutationKey: ["replace-playbook-strategy"],
+  });
+  const form = useForm<{ strategy: Strategy }>({
+    resolver: zodResolver(z.object({ strategy: z.any() })),
+    defaultValues: { strategy: strategyToReplace },
+  });
 
   const [selectedStrategy, setSelectedStrategy] = useState<Strategy | null>(
     () => {
       if (!strategies) return null;
       return (
         strategies.find(
-          (strategy) => strategy.id === strategyToReplace.sourceId
+          (strategy) => strategy.id === strategyToReplace.sourceId,
         ) ?? null
       );
-    }
+    },
   );
 
   if (strategiesLoading) {
@@ -54,7 +69,7 @@ export const StrategySelectionForm = ({
         strategy: Strategy;
       },
       "strategy"
-    >
+    >,
   ) => {
     if (id === strategyToReplace.id) return;
     const strategy = strategies.find((strategy) => strategy.id === id);
@@ -64,7 +79,14 @@ export const StrategySelectionForm = ({
   };
 
   return (
-    <Form submitText="Replace" {...props}>
+    <Form<{ strategy: Strategy }>
+      form={form}
+      enableBeforeUnloadProtection={false}
+      onCancel={onCancel}
+      handleSubmit={() => {}}
+      submitText="Replace"
+      isLoading={isLoading}
+    >
       {({ control }) => (
         <FieldGroup>
           <Controller
@@ -104,7 +126,7 @@ export const StrategySelectionForm = ({
               </HoverCardTrigger>
               <HoverCardContent
                 side="top"
-                className="w-[400px] p-0 rounded-2xl"
+                className="w-[400px] rounded-2xl p-0"
                 align="center"
               >
                 <StrategyCard

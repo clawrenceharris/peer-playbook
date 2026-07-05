@@ -12,7 +12,8 @@ import {
   PlaybooksUpdate,
   PlaybookStrategies,
   PlaybookStrategiesUpdate,
-  FavoritePlaybooksInsert,
+  SavedPlaybooks,
+  SavedPlaybooksInsert,
 } from "@/types";
 import { SupabaseClient } from "@supabase/supabase-js";
 
@@ -48,12 +49,10 @@ export class PlaybooksRepository extends BaseRepository<
     return snakeizeKeys(update) as PlaybookStrategiesUpdate;
   }
   async addFavoritePlaybook(playbookId: string, userId: string): Promise<void> {
-    await this.client
-      .from("favorite_playbooks")
-      .insert<FavoritePlaybooksInsert>({
-        user_id: userId,
-        playbook_id: playbookId,
-      });
+    await this.client.from("saved_playbooks").insert<SavedPlaybooksInsert>({
+      user_id: userId,
+      playbook_id: playbookId,
+    });
   }
 
   async removeFavoritePlaybook(

@@ -1,5 +1,5 @@
 import React from "react";
-import { Controller, FieldValues, useFormContext } from "react-hook-form";
+import { Controller, FieldValues, useFormContext, Path, useController } from "react-hook-form";
 import {
   Field,
   FieldDescription,
@@ -8,38 +8,27 @@ import {
   Textarea,
 } from "../ui";
 import { cn } from "@/lib/utils";
-import { FieldProps } from "@/types";
-
-export function TextareaField<T extends FieldValues>({
+import type { InputFieldProps } from "@/types";
+export function TextareaField<T extends FieldValues, U extends Path<T>>({
   className,
   label,
   description,
   showsLabel = true,
-  isOptional = false,
+  required,
   placeholder,
   name,
-  rules,
-  shouldUnregister,
-  defaultValue,
-  ...textareaProps
-}: FieldProps<T, "textarea">) {
+}: InputFieldProps<T, U>) {
   const { control } = useFormContext<T>();
-
+  const { field, fieldState } = useController<T, U>({ name, control });
   return (
-    <Controller
-      name={name}
-      control={control}
-      defaultValue={defaultValue}
-      shouldUnregister={shouldUnregister}
-      rules={rules}
-      render={({ field, fieldState }) => (
+    
         <Field>
           <FieldLabel
             className={!showsLabel ? "sr-only" : ""}
             htmlFor={field.name}
           >
             {label}
-            {isOptional && (
+            {required && (
               <span className="text-muted-foreground text-sm font-normal">
                 (Optional)
               </span>
@@ -47,17 +36,14 @@ export function TextareaField<T extends FieldValues>({
           </FieldLabel>
           <Textarea
             {...field}
-            {...textareaProps}
             id={field.name}
             className={cn("min-h-30", className)}
             aria-invalid={fieldState.invalid}
-            aria-required={!isOptional}
-            placeholder={`${placeholder} ${!isOptional ? "*" : ""}`}
+            aria-required={required}
+            placeholder={`${placeholder} ${required ? "*" : ""}`}
           />
           {description && <FieldDescription>{description}</FieldDescription>}
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>
-      )}
-    />
   );
 }

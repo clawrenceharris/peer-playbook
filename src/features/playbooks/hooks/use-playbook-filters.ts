@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Playbook } from "@/features/playbooks/domain";
 import { PlaybookFilterState } from "../components";
-import { useUser } from "@/app/providers";
+import { useUser } from "@/components/providers";
 import { useMyFavoritePlaybooks } from "./use-playbooks";
 
 export function usePlaybookFilters(playbooks: Playbook[]) {

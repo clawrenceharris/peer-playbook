@@ -33,14 +33,14 @@ export function LessonDetailsSection({
         name="courseName"
         label="Course"
         placeholder="Course"
-        isOptional={courseIsOptional}
+        required={!courseIsOptional}
       />
 
       <InputField
         name="topic"
         label="Topic"
         placeholder="Topic"
-        isOptional={topicIsOptional}
+        required={!topicIsOptional}
       />
     </FieldSet>
   );

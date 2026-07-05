@@ -1,4 +1,5 @@
-import { InputField, SelectField } from "@/components/form";
+import { InputField } from "@/components/form";
+import { SelectField } from "@/components/form/select-field";
 import {
   Field,
   FieldContent,
@@ -22,7 +23,7 @@ export const CreateSessionForm = () => {
     <FieldGroup>
       <FieldSet className="grid grid-cols-1 md:grid-cols-2 items-start gap-2 md:gap-3">
         <FieldLegend>Session Details</FieldLegend>
-        <SelectField<CreateSessionFormValues>
+        <SelectField<CreateSessionFormValues, "subject">
           name="subject"
           label="Subject"
           showsLabel={false}
@@ -35,7 +36,7 @@ export const CreateSessionForm = () => {
           }))}
         />
 
-        <InputField<CreateSessionFormValues>
+        <InputField<CreateSessionFormValues, "courseName">
           name="courseName"
           label={"Course"}
           showsLabel={false}
@@ -43,14 +44,14 @@ export const CreateSessionForm = () => {
           defaultValue=""
         />
 
-        <InputField<CreateSessionFormValues>
+        <InputField<CreateSessionFormValues, "topic">
           name="topic"
           label={"Topic"}
           placeholder="Topic*"
           showsLabel={false}
           defaultValue=""
         />
-        <InputField<CreateSessionFormValues>
+        <InputField<CreateSessionFormValues, "scheduledStart">
           name="scheduledStart"
           type="datetime-local"
           label="Start Date"

@@ -7,14 +7,14 @@ import {
   PlaybookStrategiesInsert,
   PlaybooksInsert,
   Strategies,
-} from "@/types/tables";
-import { createClient } from "@/lib/supabase/server";
+} from "@/types/table.types";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
   const { subject, course_name, topic, modes, instructions, contexts } =
     await req.json();
 
-  const client = await createClient();
+  const client = await createServerSupabaseClient();
   const {
     data: { user },
   } = await client.auth.getUser();
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     "get_strategies_by_context",
     {
       contexts,
-    }
+    },
   );
   if (ce) return NextResponse.json({ error: ce.message }, { status: 500 });
 
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
         error:
           "Playbooks need at least 3 strategies but your filters returned less than that",
       },
-      { status: 404 }
+      { status: 404 },
     );
   }
 
@@ -84,9 +84,8 @@ export async function POST(req: NextRequest) {
   const { data: playbook, error: le } = await client
     .from("playbooks")
     .insert<PlaybooksInsert>({
-      topic,
       subject,
-      modes,
+      topic,
       course_name,
     })
     .select()
@@ -115,8 +114,9 @@ export async function POST(req: NextRequest) {
       source_id: s.id,
       // Position for ordering within the playbook
       position,
-    }
-    return strategy
+      category: "",
+    };
+    return strategy;
   });
 
   const { error: li } = await client.from("playbook_strategies").insert(rows);

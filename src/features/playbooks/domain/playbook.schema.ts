@@ -48,10 +48,9 @@ export const generatePlaybookSchema = lessonDetailsSchema
   .merge(modesSchema);
 
 export const updatePlaybookSchema = z.object({
-  // Update is used for editing metadata; allow partial updates.
   // Subject remains required to avoid invalid playbooks.
-  subject: z.enum(Object.keys(subjects) as [keyof typeof subjects]),
-  courseName: z.string().min(1, "Course name is required").optional(),
+  subject: z.string().min(1, "Subject is required"),
+  courseName: z.string().optional(),
   topic: z.string().min(1, "Topic is required").optional(),
 });
 
@@ -75,7 +74,7 @@ export const playbookStrategySchema = z.object({
       z.object({
         type: z.enum(["file", "text", "set", "url", "other"]).optional(),
         data: z.any(),
-      })
+      }),
     )
     .optional(),
 });

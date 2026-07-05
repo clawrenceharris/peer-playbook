@@ -1,7 +1,7 @@
 import { EmptyState, LoadingState } from "@/components/states";
 import { Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import { usePlayfield } from "@/app/providers";
+import { usePlayfield } from "@/components/providers";
 import { getCardBackgroundColor, getCardIcon } from "@/utils";
 import { useCallStateHooks } from "@stream-io/video-react-sdk";
 import { AnimatePresence, motion } from "framer-motion";

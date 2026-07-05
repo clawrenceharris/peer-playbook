@@ -30,7 +30,7 @@ import {
 import { cn, timeAgo } from "@/lib/utils";
 import { StrategyCard } from "@/features/strategies/components";
 import { usePlaybookSessions } from "@/features/sessions/hooks";
-import { useUser } from "@/app/providers";
+import { useUser } from "@/components/providers";
 import { Playbook } from "@/features/playbooks/domain";
 import { useRouter } from "next/navigation";
 
@@ -93,25 +93,25 @@ export const PlaybookCard = ({
           onClick={onNavigate}
           key={playbook.id}
           className={cn(
-            "group w-full p-5 shadow-sm rounded-md border-l-10 border-l-primary-400 flex-col max-w-4xl bg-primary-foreground justify-center cursor-pointer flex transition-all duration-200",
+            "group border-l-primary-400 bg-primary-foreground flex w-full max-w-4xl cursor-pointer flex-col justify-center rounded-md border-l-10 p-5 shadow-sm transition-all duration-200",
             className,
           )}
         >
-          <div className="flex-col md:flex-row  w-full flex justify-between">
-            <div className="flex flex-1 gap-3 items-center">
+          <div className="flex w-full flex-col justify-between md:flex-row">
+            <div className="flex flex-1 items-center gap-3">
               <ItemMedia className="flex-1">
                 <HoverCardTrigger
                   onClick={(e) => {
                     e.stopPropagation();
                     setPreviewOpen(true);
                   }}
-                  className="rounded-sm size-18 flex items-center justify-center  [&_path]:stroke-muted-foreground bg-primary-foreground border "
+                  className="[&_path]:stroke-muted-foreground bg-primary-foreground flex size-18 items-center justify-center rounded-sm border"
                 >
-                  <PlaybookIcon className="group-hover:scale-[1.2] transition-all duration-200" />
+                  <PlaybookIcon className="transition-all duration-200 group-hover:scale-[1.2]" />
                 </HoverCardTrigger>
               </ItemMedia>
 
-              <div className="flex flex-col w-full md:flex-row gap-4 justify-between">
+              <div className="flex w-full flex-col justify-between gap-4 md:flex-row">
                 <div>
                   <div className="row gap-2">
                     <ItemTitle
@@ -123,10 +123,10 @@ export const PlaybookCard = ({
                       {playbook.topic}
                     </ItemTitle>
                     {hasSession && (
-                      <span className="text-success-500 flex items-center gap-1 rounded-full pl-1 pr-2 py-1 text-xs bg-success-100">
+                      <span className="text-success-500 bg-success-100 flex items-center gap-1 rounded-full py-1 pr-2 pl-1 text-xs">
                         <Check
                           size={15}
-                          className="p-0.5 bg-success-500 text-white border-white  rounded-full"
+                          className="bg-success-500 rounded-full border-white p-0.5 text-white"
                         />
                         Session Created
                       </span>
@@ -136,20 +136,23 @@ export const PlaybookCard = ({
                     )}
                   </div>
                   <ItemDescription className="text-xs">
-                    {[playbook.courseName || "", timeAgo(playbook.createdAt)]
+                    {[
+                      playbook.courseName ?? "",
+                      playbook.createdAt ? timeAgo(playbook.createdAt) : "",
+                    ]
                       .filter((item) => Boolean(item))
                       .join(" • ")}
                   </ItemDescription>
                 </div>
 
-                <ItemActions className="flex gap-2 items-center">
+                <ItemActions className="flex items-center gap-2">
                   {canEdit && (
                     <Button
                       onClick={(e) => {
                         e.stopPropagation();
                         router.push(`/editor/playbook/${playbook.id}`);
                       }}
-                      className="shadow-sm border bg-primary-foreground"
+                      className="bg-primary-foreground border shadow-sm"
                       variant="outline"
                     >
                       <PencilEdit />
@@ -160,7 +163,7 @@ export const PlaybookCard = ({
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
-                        className="shadow-sm border bg-primary-foreground"
+                        className="bg-primary-foreground border shadow-sm"
                         onClick={(e) => e.stopPropagation()}
                         variant="outline"
                         size="icon"
@@ -202,7 +205,7 @@ export const PlaybookCard = ({
           <HoverCardContent
             side="bottom"
             align="start"
-            className="flex rounded-2xl w-screen border-none p-1 bg-white max-w-145"
+            className="flex w-screen max-w-145 rounded-2xl border-none bg-white p-1"
           >
             {strategies.map((s) => (
               <StrategyCard

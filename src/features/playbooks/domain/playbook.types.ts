@@ -6,7 +6,7 @@ import {
   PlaybookStrategies,
   PlaybookStrategiesInsert,
   PlaybookStrategiesUpdate,
-} from "@/types/tables";
+} from "@/types/table.types";
 
 export type Playbook = DomainModel<Playbooks>;
 

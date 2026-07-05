@@ -1,5 +1,5 @@
 "use client";
-import { useUser } from "@/app/providers";
+import { useUser } from "@/components/providers";
 import { useSessionActions } from "@/features/sessions/hooks";
 
 import { ReactNode } from "react";

@@ -34,7 +34,9 @@ export const selectSortedByUpdated = (sessions: Session[]): Session[] =>
  * Sorts sessions alphabetically by topic
  */
 export const selectSortedByTopic = (sessions: Session[]): Session[] =>
-  [...sessions].sort((a, b) => a.topic.localeCompare(b.topic));
+  [...sessions].sort((a, b) =>
+    a.topic && b.topic ? a.topic.localeCompare(b.topic) : 0,
+  );
 
 // ============================================
 // Filter Selectors
@@ -136,31 +138,37 @@ export const selectUniqueCourses = (sessions: Session[]): string[] =>
  * Groups sessions by status
  */
 export const selectSessionsByStatusGroup = (
-  sessions: Session[]
+  sessions: Session[],
 ): Record<string, Session[]> =>
-  sessions.reduce((acc, session) => {
-    const status = session.status;
-    if (!acc[status]) {
-      acc[status] = [];
-    }
-    acc[status].push(session);
-    return acc;
-  }, {} as Record<string, Session[]>);
+  sessions.reduce(
+    (acc, session) => {
+      const status = session.status;
+      if (!acc[status]) {
+        acc[status] = [];
+      }
+      acc[status].push(session);
+      return acc;
+    },
+    {} as Record<string, Session[]>,
+  );
 
 /**
  * Groups sessions by leader
  */
 export const selectSessionsByLeaderGroup = (
-  sessions: Session[]
+  sessions: Session[],
 ): Record<string, Session[]> =>
-  sessions.reduce((acc, session) => {
-    const leaderId = session.leaderId || "unknown";
-    if (!acc[leaderId]) {
-      acc[leaderId] = [];
-    }
-    acc[leaderId].push(session);
-    return acc;
-  }, {} as Record<string, Session[]>);
+  sessions.reduce(
+    (acc, session) => {
+      const leaderId = session.leaderId || "unknown";
+      if (!acc[leaderId]) {
+        acc[leaderId] = [];
+      }
+      acc[leaderId].push(session);
+      return acc;
+    },
+    {} as Record<string, Session[]>,
+  );
 
 // ============================================
 // Pagination & Limiting Selectors

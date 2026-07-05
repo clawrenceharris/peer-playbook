@@ -1,7 +1,6 @@
 import { SessionContexts } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
-import { selectContextsByKey } from "@/features/playbooks/selectors";
 import { supabase } from "@/lib/supabase/client";
 
 export const usePlaybookContexts = () => {
@@ -29,7 +28,6 @@ export const usePlaybookContexts = () => {
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes
     // Fail silently - contexts are optional, form works without them
     throwOnError: false,
-    select: selectContextsByKey,
   });
 
   const toggleContext = useCallback(
@@ -40,7 +38,7 @@ export const usePlaybookContexts = () => {
       }
       setSelectedContextKeys((prev) => [...prev, key]);
     },
-    [selectedContextKeys]
+    [selectedContextKeys],
   );
 
   return {

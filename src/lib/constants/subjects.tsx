@@ -1,3 +1,4 @@
+import { Enums } from "@/types";
 import {
   Atom,
   Beaker,
@@ -10,17 +11,14 @@ import {
   Microscope,
 } from "lucide-react";
 
-export const subjects: Record<
-  import("@/types").Enums<"course_subject">,
-  React.ReactNode
-> = {
-  Biology: <Leaf />,
-  Chemistry: <Beaker />,
-  Coding: <Code />,
-  Cybersecurity: <Key />,
-  Geography: <Earth />,
-  Math: <Divide />,
-  Physics: <Atom />,
-  Science: <Microscope />,
-  Other: <BookPlus />,
-};
+export const subjects: { id: string; label: string; description: string }[] = [
+  { id: "biology", label: "Biology", description: "Biology" },
+  { id: "chemistry", label: "Chemistry", description: "Chemistry" },
+  { id: "coding", label: "Coding", description: "Coding" },
+  { id: "cybersecurity", label: "Cybersecurity", description: "Cybersecurity" },
+  { id: "geography", label: "Geography", description: "Geography" },
+  { id: "math", label: "Math", description: "Math" },
+  { id: "physics", label: "Physics", description: "Physics" },
+  { id: "science", label: "Science", description: "Science" },
+  { id: "other", label: "Other", description: "Other" },
+];

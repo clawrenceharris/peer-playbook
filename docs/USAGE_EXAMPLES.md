@@ -104,7 +104,7 @@ function CoursePlaybooks({ courseName }: { courseName: string }) {
 
 ```typescript
 import { useMyFavoritePlaybooks } from "@/features/playbooks/hooks";
-import { useUser } from "@/app/providers";
+import { useUser } from "@/components/providers";
 
 function MyFavorites() {
   const { user } = useUser();
@@ -118,7 +118,7 @@ function MyFavorites() {
 
 ```typescript
 import { selectCompletedSessions } from "@/features/sessions/selectors";
-import { useUser } from "@/app/providers";
+import { useUser } from "@/components/providers";
 
 function MyCompletedSessions() {
   const { user } = useUser();
@@ -171,7 +171,7 @@ function SessionsByStatus() {
 ```typescript
 import { usePlaybooks } from "@/features/playbooks/hooks";
 import { selectMyPublishedPlaybooks } from "@/features/playbooks/selectors";
-import { useUser } from "@/app/providers";
+import { useUser } from "@/components/providers";
 
 function MyPlaybookStats() {
   const { user } = useUser();
@@ -307,7 +307,7 @@ function StrategySearch() {
 ```typescript
 import { useSessions } from "@/features/sessions/hooks";
 import { usePlaybooks } from "@/features/playbooks/hooks";
-import { useUser } from "@/app/providers";
+import { useUser } from "@/components/providers";
 import { selectMyPlaybooks } from "@/features/playbooks/selectors";
 
 function MyPlaybooksWithSessionCounts() {
@@ -359,7 +359,7 @@ function PlaybookList({ showPublished }: { showPublished: boolean }) {
 
 ```typescript
 import { useMySavedStrategiesWithDetails } from "@/features/strategies/hooks";
-import { useUser } from "@/app/providers";
+import { useUser } from "@/components/providers";
 import { selectSortedByTitle } from "@/features/strategies/selectors";
 
 function MySavedStrategies() {

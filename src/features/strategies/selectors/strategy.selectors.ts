@@ -50,25 +50,25 @@ export const selectOthersStrategies =
  * Filters published strategies
  */
 export const selectPublishedStrategies = (strategies: Strategy[]): Strategy[] =>
-  strategies.filter((s) => s.isPublished);
+  strategies.filter((s) => s.published);
 
 /**
  * Filters draft (unpublished) strategies
  */
 export const selectDraftStrategies = (strategies: Strategy[]): Strategy[] =>
-  strategies.filter((s) => !s.isPublished);
+  strategies.filter((s) => !s.published);
 
 /**
  * Filters system strategies
  */
 export const selectSystemStrategies = (strategies: Strategy[]): Strategy[] =>
-  strategies.filter((s) => s.isSystem);
+  strategies.filter((s) => s.createdBy === null);
 
 /**
  * Filters custom (non-system) strategies
  */
 export const selectCustomStrategies = (strategies: Strategy[]): Strategy[] =>
-  strategies.filter((s) => !s.isSystem);
+  strategies.filter((s) => s.createdBy !== null);
 
 /**
  * Filters user's published strategies
@@ -76,7 +76,7 @@ export const selectCustomStrategies = (strategies: Strategy[]): Strategy[] =>
 export const selectMyPublishedStrategies =
   (userId: string) =>
   (strategies: Strategy[]): Strategy[] =>
-    strategies.filter((s) => s.createdBy === userId && s.isPublished);
+    strategies.filter((s) => s.createdBy === userId && s.published);
 
 /**
  * Filters user's draft strategies
@@ -84,7 +84,7 @@ export const selectMyPublishedStrategies =
 export const selectMyDraftStrategies =
   (userId: string) =>
   (strategies: Strategy[]): Strategy[] =>
-    strategies.filter((s) => s.createdBy === userId && !s.isPublished);
+    strategies.filter((s) => s.createdBy === userId && !s.published);
 
 // ============================================
 // Filter Selectors - Category & Tags
@@ -121,7 +121,7 @@ export const selectStrategiesByTitle =
   (searchTerm: string) =>
   (strategies: Strategy[]): Strategy[] =>
     strategies.filter((s) =>
-      s.title.toLowerCase().includes(searchTerm.toLowerCase())
+      s.title.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
 /**
@@ -131,7 +131,7 @@ export const selectStrategiesByDescription =
   (searchTerm: string) =>
   (strategies: Strategy[]): Strategy[] =>
     strategies.filter((s) =>
-      s.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      s.description?.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
 /**
@@ -145,7 +145,7 @@ export const selectStrategiesBySearch =
       (s) =>
         s.title.toLowerCase().includes(term) ||
         s.description?.toLowerCase().includes(term) ||
-        s.slug?.toLowerCase().includes(term)
+        s.slug?.toLowerCase().includes(term),
     );
   };
 
@@ -170,22 +170,25 @@ export const selectUniqueTags = (strategies: Strategy[]): string[] => [
  * Groups strategies by creator
  */
 export const selectStrategiesByCreatorGroup = (
-  strategies: Strategy[]
+  strategies: Strategy[],
 ): Record<string, Strategy[]> =>
-  strategies.reduce((acc, strategy) => {
-    const creator = strategy.createdBy || "unknown";
-    if (!acc[creator]) {
-      acc[creator] = [];
-    }
-    acc[creator].push(strategy);
-    return acc;
-  }, {} as Record<string, Strategy[]>);
+  strategies.reduce(
+    (acc, strategy) => {
+      const creator = strategy.createdBy || "unknown";
+      if (!acc[creator]) {
+        acc[creator] = [];
+      }
+      acc[creator].push(strategy);
+      return acc;
+    },
+    {} as Record<string, Strategy[]>,
+  );
 
 /**
  * Creates a map of strategy ID to strategy
  */
 export const selectStrategyMap = (
-  strategies: Strategy[]
+  strategies: Strategy[],
 ): Map<string, Strategy> => new Map(strategies.map((s) => [s.id, s]));
 
 // ============================================

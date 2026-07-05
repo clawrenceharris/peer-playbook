@@ -1,63 +1,91 @@
-import React from "react";
+"use client";
+import React, { forwardRef } from "react";
 import {
-  Controller,
+  ControllerFieldState,
+  ControllerRenderProps,
   FieldValues,
+  Path,
+  useController,
   useFormContext,
 } from "react-hook-form";
-import { Field, FieldContent, FieldDescription, FieldError, FieldLabel, Input } from "../ui";
-import { FieldProps } from "@/types";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+  Input,
+} from "../ui";
+import { cn } from "@/lib/utils";
+import { InputFieldProps } from "@/types";
 
-export function InputField<T extends FieldValues>({
-  name,
-  label,
-  placeholder,
-  description,
-  showsLabel = true,
-  isOptional,
-  rules,
-  shouldUnregister,
-  defaultValue,
-  ...inputProps
-}: FieldProps<T, "input">) {
+
+function InputFieldInner<T extends FieldValues, U extends Path<T>>(
+  props: InputFieldProps<T, U>,
+  ref: React.ForwardedRef<HTMLDivElement>,
+) {
+  const {
+    label,
+    name,
+    placeholder,
+    showsDescription = true,
+    description,
+    required,
+    showsLabel = true,
+    orientation = "vertical",
+    inputId: inputIdProp,
+    renderInput,
+    ...inputProps
+  } = props;
   const { control } = useFormContext<T>();
-  return (
-    <Controller
-      name={name}
-      control={control}
-      defaultValue={defaultValue}
-      shouldUnregister={shouldUnregister}
-      rules={rules}
-      render={({ field, fieldState }) => (
-        <Field>
-          <FieldContent>
-          <FieldLabel
-            className={!showsLabel ? "sr-only" : ""}
-              htmlFor={field.name}>
-              {label}
-              {isOptional && (
-              <span className="text-muted-foreground text-sm font-normal">
-                (Optional)
-              </span>
-            )}
-            </FieldLabel>
-          {description && <FieldDescription>{description}</FieldDescription>}
+  const { field, fieldState } = useController({ control, name });
+  const inputId = inputIdProp ?? field.name;
 
-          </FieldContent>
-          
-          <Input
-            {...field}
-            {...inputProps}
-            aria-required={!isOptional}
-            id={field.name}
-            placeholder={`${placeholder}${!isOptional ? "*" : ""}`}
-            aria-invalid={fieldState.invalid}
-            
-            
-          />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-        </Field>
+  return (
+    <Field
+      ref={ref}
+      orientation={orientation}
+      // className={cn(orientation === "responsive" && "@container/field-group")}
+    >
+      <FieldContent>
+        <FieldLabel
+          className={cn(
+            !showsLabel && "sr-only",
+            "font-body flex items-center gap-1 text-lg font-bold",
+          )}
+          htmlFor={inputId}
+        >
+          {label}
+        </FieldLabel>
+        {description && (
+          <FieldDescription
+            className={cn("text-sm", !showsDescription && "sr-only")}
+          >
+            {description}
+          </FieldDescription>
+        )}
+      </FieldContent>
+
+      {renderInput ? (
+        renderInput({ field, fieldState, inputId })
+      ) : (
+        <Input
+          {...field}
+          {...inputProps}
+          aria-required={required}
+          id={inputId}
+          placeholder={`${placeholder} ${!required ? "(Optional)" : ""}`}
+          aria-invalid={fieldState.invalid}
+        />
       )}
-     
-    />
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </Field>
   );
 }
+
+export const InputField = forwardRef(InputFieldInner) as <
+  T extends FieldValues,
+  U extends Path<T>,
+>(
+  props: InputFieldProps<T, U> & React.RefAttributes<HTMLDivElement>,
+) => React.ReactElement;

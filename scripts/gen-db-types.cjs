@@ -6,17 +6,17 @@ const fs = require("fs");
 const path = require("path");
 
 const TYPES_DIR = path.resolve(__dirname, "../src/types");
-const DB_TYPES_FILE = path.join(TYPES_DIR, "database.ts");
-const TABLES_FILE = path.join(TYPES_DIR, "tables.ts");
-const PROJECT_ID = "zdbqltzqdvjpvppuibdw";
+const DB_TYPES_FILE = path.join(TYPES_DIR, "database.types.ts");
+const TABLES_FILE = path.join(TYPES_DIR, "table.types.ts");
+const PROJECT_ID = "nqoqtjdmhxtnfpeprbme";
 
 //Run Supabase codegen
 execSync(
   `supabase gen types typescript --project-id ${PROJECT_ID} --schema public > ${DB_TYPES_FILE}`,
-  { stdio: "inherit" }
+  { stdio: "inherit" },
 );
 
-//Read database.ts text
+//Read database.types.ts text
 const fileContents = fs.readFileSync(DB_TYPES_FILE, "utf-8");
 
 //Extracts table names (looks for "<tableName>: { Row:")
@@ -30,7 +30,7 @@ while ((match = tableRegex.exec(fileContents)) !== null) {
 
 if (tableNames.length === 0) {
   throw new Error(
-    "Could not find any tables in database.ts — check that Supabase generated correctly."
+    "Could not find any tables in database.types.ts — check that Supabase generated correctly.",
   );
 }
 
@@ -46,9 +46,9 @@ if (enumBlockMatch) {
   }
 }
 
-//Generate tables.ts file
+//Generate table.types.ts file
 let output = `// Auto-generated. Do not edit.
-import { Database } from "./database";
+import { Database } from "./database.types";
 
 `;
 
@@ -76,5 +76,5 @@ for (const enumName of enumNames) {
 
 fs.writeFileSync(TABLES_FILE, output, "utf-8");
 console.log(
-  `Wrote ${TABLES_FILE} with ${tableNames.length} tables and ${enumNames.length} enums`
+  `Wrote ${TABLES_FILE} with ${tableNames.length} tables and ${enumNames.length} enums`,
 );

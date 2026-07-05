@@ -6,7 +6,7 @@ import { Button } from "@/components/ui";
 import { getCardBackgroundColor, getCardIcon } from "@/utils";
 import { cn } from "@/lib/utils";
 import { Play, Squircle, X } from "lucide-react";
-import { usePlayfield } from "@/app/providers";
+import { usePlayfield } from "@/components/providers";
 import { PlayfieldDefinition } from "../../domain";
 import { useStreamCall } from "@/features/stream/hooks";
 

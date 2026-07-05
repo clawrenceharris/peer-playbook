@@ -21,13 +21,14 @@ interface ComboboxProps extends PopoverProps {
   disabled?: boolean;
   showTrigger?: boolean;
   value: string;
+  inputId?: string;
   placeholder?: string;
   onValueChange?: (value: string) => void;
 }
 
 export function Combobox({
   items,
-
+  inputId,
   placeholder,
   value,
   onValueChange,
@@ -60,7 +61,7 @@ export function Combobox({
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder={placeholder} />
+          <CommandInput id={inputId} placeholder={placeholder} />
           <CommandList>
             <CommandEmpty>No Items found</CommandEmpty>
             <CommandGroup>

@@ -5,7 +5,7 @@ import { EmptyState, ErrorState, LoadingState } from "@/components/states";
 
 import { useSessionActions } from "@/features/sessions/hooks";
 import { useUserSessions } from "@/features/sessions/hooks";
-import { useUser } from "@/app/providers";
+import { useUser } from "@/components/providers";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui";
 

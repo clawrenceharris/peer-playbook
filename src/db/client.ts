@@ -1,12 +1,2 @@
-import "server-only";
-
-import postgres from "postgres";
-import { drizzle } from "drizzle-orm/postgres-js";
-
-const client = postgres(process.env.DATABASE_URL!, {
-  prepare: false,
-});
-
-export const db = drizzle({ client });
-export type DrizzleClient = typeof db;
-export * from "../../drizzle/schema";
+export { db, prisma } from "@/lib/db/client";
+export * from "@/lib/db/client";

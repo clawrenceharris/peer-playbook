@@ -1,28 +1,19 @@
-import { profiles } from "@/db/client";
-import { InferSelectModel } from "drizzle-orm";
-import { SelectResultFields } from "drizzle-orm/query-builders/select.types";
-
-export const profileDetailProjection = {
-  id: profiles.id,
-  firstName: profiles.firstName,
-  lastName: profiles.lastName,
-  avatarUrl: profiles.avatarUrl,
-  courses: profiles.courses,
-  role: profiles.role,
-  createdAt: profiles.createdAt,
-  onboardingCompletedAt: profiles.onboardingCompletedAt,
-  updatedAt: profiles.updatedAt,
-};
-export const profileCardProjection = {
-  id: profiles.id,
-  firstName: profiles.firstName,
-  lastName: profiles.lastName,
-  avatarUrl: profiles.avatarUrl,
+export type ProfileDetailRecord = {
+  id: string;
+  first_name: string;
+  last_name: string | null;
+  avatar_url: string | null;
+  courses: string[] | null;
+  role: string | null;
+  created_at: Date;
+  onboarding_completed_at: Date | null;
+  updated_at: Date | null;
 };
 
-export type ProfileDetailRecord = SelectResultFields<
-  typeof profileDetailProjection
+export type ProfileCardRecord = Pick<
+  ProfileDetailRecord,
+  "id" | "first_name" | "last_name" | "avatar_url"
 >;
-export type ProfileCardRecord = SelectResultFields<
-  typeof profileCardProjection
->;
+
+export const profileDetailProjection = {} as ProfileDetailRecord;
+export const profileCardProjection = {} as ProfileCardRecord;

@@ -45,7 +45,10 @@ export function OnboardingFieldRenderer({
                 key={field.fieldKey}
                 name={name}
                 label={field.label}
-                options={field.options}
+                options={field.options.map((option) => ({
+                  value: option.id,
+                  label: option.label,
+                }))}
                 required={field.required}
               />
             );

@@ -1,45 +1,80 @@
 import { ProfileRepository } from "../../domain/repositories";
-import { profileDetailProjection, ProfileDetailRecord } from "../projections";
 import { UserProfile } from "../../domain/entities";
 import { ProfileMapper } from "../mappers";
 import { CreateProfileCommand, UpdateProfileCommand } from "../../domain/types";
-
-import { DrizzleClient, profiles } from "@/db/client";
-import { eq } from "drizzle-orm";
+import { prisma, type PrismaClient } from "@/db/client";
 
 export class DrizzleProfileRepository implements ProfileRepository {
-  constructor(private readonly drizzle: DrizzleClient) {}
+  constructor(private readonly client: PrismaClient = prisma) {}
 
   async updateProfile(
     id: string,
     data: UpdateProfileCommand,
   ): Promise<UserProfile> {
-    const record = await this.drizzle
-      .update(profiles)
-      .set(data)
-      .where(eq(profiles.id, id))
-      .returning(profileDetailProjection);
+    const record = await this.client.profiles.update({
+      where: { id },
+      data: {
+        ...(data.school !== undefined && { school: data.school }),
+        ...(data.firstName !== undefined && { first_name: data.firstName }),
+        ...(data.lastName !== undefined && { last_name: data.lastName }),
+        ...(data.avatarUrl !== undefined && { avatar_url: data.avatarUrl }),
+        ...(data.role !== undefined && { role: data.role }),
+        ...(data.courses !== undefined && { courses: data.courses }),
+        ...(data.onboardingCompletedAt !== undefined && {
+          onboarding_completed_at: data.onboardingCompletedAt,
+        }),
+        updated_at: new Date(),
+      },
+      select: {
+        id: true,
+        first_name: true,
+        last_name: true,
+        avatar_url: true,
+        courses: true,
+        created_at: true,
+        onboarding_completed_at: true,
+        role: true,
+        updated_at: true,
+      },
+    });
 
-    return ProfileMapper.toDomain(record[0]);
+    return ProfileMapper.toDomain(record);
   }
   async createProfile(data: CreateProfileCommand): Promise<UserProfile> {
-    const record = await this.drizzle
-      .insert(profiles)
-      .values({ id: data.userId, ...data })
-      .returning(profileDetailProjection);
-    return ProfileMapper.toDomain(record[0]);
+    const record = await this.client.profiles.create({
+      data: {
+        id: data.userId,
+        email: data.email,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        courses: data.courses,
+        role: data.role,
+        avatar_url: data.avatarUrl,
+      },
+      select: {
+        id: true,
+        first_name: true,
+        last_name: true,
+        avatar_url: true,
+        courses: true,
+        created_at: true,
+        onboarding_completed_at: true,
+        role: true,
+        updated_at: true,
+      },
+    });
+    return ProfileMapper.toDomain(record);
   }
 
   async deleteProfile(userId: string): Promise<void> {
-    await this.drizzle.delete(profiles).where(eq(profiles.id, userId));
+    await this.client.profiles.delete({ where: { id: userId } });
   }
 
   async existsById(userId: string): Promise<boolean> {
-    const record = await this.drizzle
-      .select()
-      .from(profiles)
-      .where(eq(profiles.id, userId))
-      .limit(1);
-    return record.length > 0 ? true : false;
+    const record = await this.client.profiles.findUnique({
+      where: { id: userId },
+      select: { id: true },
+    });
+    return record !== null;
   }
 }

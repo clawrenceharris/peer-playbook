@@ -5,8 +5,10 @@ import { ApplicationError } from "@/shared/utils/errors";
  * Development: Logs to console
  * Production: Sends to Sentry (configured separately)
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function logError(error: ApplicationError, context?: Record<string, any>) {
+export function logError(
+  error: ApplicationError,
+  context?: Record<string, any>,
+) {
   const errorLog = {
     code: error.code,
     title: "Something went wrong",

@@ -1,49 +1,59 @@
 import { ProfileReadRepository } from "../../domain/repositories";
-import {
-  profileCardProjection,
-  profileDetailProjection,
-  ProfileDetailRecord,
-} from "../projections";
 import { ProfileMapper } from "../mappers";
 import { ProfileCardDTO, ProfileDetailDTO } from "../../application/dto";
-import { profiles } from "@/db/client";
-import { DrizzleClient } from "@/db/client";
-import {
-  eq,
-  InferRelationalQueryTableResult,
-  InferSelectModel,
-} from "drizzle-orm";
-import { UserProfile } from "../../domain/entities";
+import { prisma, type PrismaClient } from "@/db/client";
 
 export class DrizzleProfileReadRepository implements ProfileReadRepository {
-  constructor(private readonly drizzle: DrizzleClient) {}
+  constructor(private readonly client: PrismaClient = prisma) {}
   async findProfileDetailById(id: string): Promise<ProfileDetailDTO | null> {
-    const record = await this.drizzle
-      .select(profileDetailProjection)
-      .from(profiles)
-      .where(eq(profiles.id, id))
-      .limit(1);
+    const record = await this.client.profiles.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        first_name: true,
+        last_name: true,
+        avatar_url: true,
+        courses: true,
+        created_at: true,
+        onboarding_completed_at: true,
+        role: true,
+        updated_at: true,
+      },
+    });
 
-    return record.length > 0 ? ProfileMapper.toDetailDTO(record[0]) : null;
+    return record ? ProfileMapper.toDetailDTO(record) : null;
   }
 
   async findProfileCardById(id: string): Promise<ProfileCardDTO | null> {
-    const record = await this.drizzle
-      .select(profileCardProjection)
-      .from(profiles)
-      .where(eq(profiles.id, id))
-      .limit(1);
-    return record.length > 0 ? ProfileMapper.toCardDTO(record[0]) : null;
+    const record = await this.client.profiles.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        first_name: true,
+        last_name: true,
+        avatar_url: true,
+      },
+    });
+    return record ? ProfileMapper.toCardDTO(record) : null;
   }
 
   async findProfileDetailByEmail(
     email: string,
   ): Promise<ProfileDetailDTO | null> {
-    const record = await this.drizzle
-      .select(profileDetailProjection)
-      .from(profiles)
-      .where(eq(profiles.email, email))
-      .limit(1);
-    return record.length > 0 ? ProfileMapper.toDetailDTO(record[0]) : null;
+    const record = await this.client.profiles.findFirst({
+      where: { email },
+      select: {
+        id: true,
+        first_name: true,
+        last_name: true,
+        avatar_url: true,
+        courses: true,
+        created_at: true,
+        onboarding_completed_at: true,
+        role: true,
+        updated_at: true,
+      },
+    });
+    return record ? ProfileMapper.toDetailDTO(record) : null;
   }
 }

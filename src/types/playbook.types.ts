@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Call, CustomVideoEvent } from "@stream-io/video-react-sdk";
 
 export interface VirtualPlaybookContext extends PlaybookContext {

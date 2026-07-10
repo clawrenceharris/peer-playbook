@@ -4,7 +4,7 @@ import {
 } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { resetPassword as resetPasswordAction } from "@/actions/auth/commands";
+import { resetPasswordAction as resetPasswordAction } from "@/actions/auth/commands";
 import { useState } from "react";
 export const useResetPasswordForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +16,7 @@ export const useResetPasswordForm = () => {
     },
   });
 
-  const resetPassword = async ({password}: UpdatePasswordFormValues) => {
+  const resetPassword = async ({ password }: UpdatePasswordFormValues) => {
     setIsLoading(true);
     const result = await resetPasswordAction(password);
     if (!result.success) {

@@ -2,7 +2,6 @@ import z from "zod";
 
 export const createSessionSchema = z.object({
   courseName: z.string().min(1, "Course name is required"),
-  playbookId: z.string().optional(),
   topic: z.string().min(1, "Topic is required"),
   description: z.string().optional(),
   status: z.enum(["active", "completed", "canceled", "scheduled"]),

@@ -153,14 +153,22 @@ export const relations = defineRelations(schema, (r) => ({
 		sessions: r.many.sessions(),
 		strategies: r.many.strategies(),
 	},
-	playbookStrategies: {
-		playbook: r.one.playbooks({
-			from: r.playbookStrategies.playbookId,
-			to: r.playbooks.id
+	phaseIntents: {
+		playbooks: r.many.playbooks({
+			from: r.phaseIntents.id.through(r.playbookPhases.phaseIntentId),
+			to: r.playbooks.id.through(r.playbookPhases.playbookId)
+		}),
+		strategies: r.many.strategies({
+			from: r.phaseIntents.id.through(r.strategyPhaseIntents.phaseIntentId),
+			to: r.strategies.id.through(r.strategyPhaseIntents.strategyId)
 		}),
 	},
 	playbooks: {
-		playbookStrategies: r.many.playbookStrategies(),
+		phaseIntents: r.many.phaseIntents(),
+		playbookPhases: r.many.playbookPhases({
+			from: r.playbooks.id.through(r.playbookStrategies.playbookId),
+			to: r.playbookPhases.id.through(r.playbookStrategies.playbookPhaseId)
+		}),
 		profile: r.one.profiles({
 			from: r.playbooks.createdBy,
 			to: r.profiles.id,
@@ -173,12 +181,16 @@ export const relations = defineRelations(schema, (r) => ({
 		}),
 		sessions: r.many.sessions(),
 	},
+	playbookPhases: {
+		playbooks: r.many.playbooks(),
+	},
 	strategies: {
 		profile: r.one.profiles({
 			from: r.strategies.createdBy,
 			to: r.profiles.id
 		}),
 		sessionContexts: r.many.sessionContexts(),
+		phaseIntents: r.many.phaseIntents(),
 	},
 	sessionContexts: {
 		strategies: r.many.strategies({

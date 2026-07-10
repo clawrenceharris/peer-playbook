@@ -6,3 +6,4 @@ export * from "./content-header";
 export * from "./user-nav";
 export * from "./sidebar-toggle";
 export * from "./sidebar-layout";
+export * from "./collapsed-menu-button";

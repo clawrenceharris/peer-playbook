@@ -24,12 +24,23 @@ export class ApplicationError extends Error {
   get field() {
     return this.details.field;
   }
-
-  static unexpected(cause: unknown) {
+  static validation(message?: string) {
+    return new ApplicationError({
+      code: AppErrorCode.VALIDATION_FAILED,
+      message: message ?? errorMessages[AppErrorCode.VALIDATION_FAILED],
+    });
+  }
+  static unexpected(cause?: unknown, message?: string) {
     return new ApplicationError({
       code: AppErrorCode.UNKNOWN_ERROR,
-      message: "Something went wrong. Please try again.",
+      message: message ?? errorMessages[AppErrorCode.UNKNOWN_ERROR],
       cause,
+    });
+  }
+  static notFound(message?: string) {
+    return new ApplicationError({
+      code: AppErrorCode.RESOURCE_NOT_FOUND,
+      message: message ?? errorMessages[AppErrorCode.RESOURCE_NOT_FOUND],
     });
   }
 }
@@ -115,35 +126,6 @@ export function isSupabaseError(error: unknown): error is {
     "message" in error &&
     typeof (error as { message: unknown }).message === "string"
   );
-}
-
-function normalizeSupabaseAuthError(error: AuthError): ApplicationError {
-  const normalizedMessage = error.message?.toLowerCase() ?? "";
-
-  if (error.code === "P2002") {
-    return new ApplicationError({ code: AppErrorCode.RESOURCE_ALREADY_EXISTS });
-  }
-
-  if (error.code === "P2025") {
-    return new ApplicationError({ code: AppErrorCode.RESOURCE_NOT_FOUND });
-  }
-
-  if (error.code === "P2003") {
-    return new ApplicationError({ code: AppErrorCode.DATABASE_ERROR });
-  }
-
-  if (error.code === "P2004" || error.code === "P5034") {
-    return new ApplicationError({ code: AppErrorCode.DATABASE_ERROR });
-  }
-
-  if (
-    normalizedMessage.includes("unique constraint") ||
-    normalizedMessage.includes("duplicate")
-  ) {
-    return new ApplicationError({ code: AppErrorCode.RESOURCE_ALREADY_EXISTS });
-  }
-
-  return new ApplicationError({ code: AppErrorCode.DATABASE_ERROR });
 }
 
 function normalizeSupabaseError(error: {

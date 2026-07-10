@@ -11,7 +11,8 @@ import {
 import {
   CreatePlaybookFormValues,
   GeneratePlaybookFormValues,
-} from "./playbook.schema";
+} from "@/lib/validation";
+import { PlaybookStrategyCardDTO } from "../application/dto";
 
 export const createPlaybookService = (client: SupabaseClient) => {
   const repository = new PlaybooksRepository(client);
@@ -83,7 +84,7 @@ export const createPlaybookService = (client: SupabaseClient) => {
       throw new Error(payload?.error || "Failed to generate playbook");
     }
 
-    return repository.getById(payload.playbookId);
+    return repository.getById(payload.id);
   };
 
   const createManualPlaybook = async (
@@ -98,6 +99,8 @@ export const createPlaybookService = (client: SupabaseClient) => {
         topic: data.topic,
         modes: data.modes,
         contexts: data.contexts,
+        instructionalModelId: data.instructionalModelId,
+        phases: data.phases,
         strategies: {
           warmup: data.warmup,
           workout: data.workout,
@@ -114,7 +117,7 @@ export const createPlaybookService = (client: SupabaseClient) => {
     return repository.getById(payload.playbookId);
   };
   const reorderStrategies = async (
-    strategies: PlaybookStrategy[],
+    strategies: PlaybookStrategyCardDTO[],
   ): Promise<void> => {
     await Promise.all(
       strategies.map((strategy, index) =>

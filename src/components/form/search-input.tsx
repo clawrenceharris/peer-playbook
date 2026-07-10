@@ -47,6 +47,8 @@ export type SearchInputProps = Omit<
   collapseOnOutsideClick?: boolean;
   /** If true, Escape collapses and blurs the input. */
   collapseOnEscape?: boolean;
+
+  children?: React.ReactNode;
 };
 
 export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
@@ -64,6 +66,7 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
       placeholder = "Search…",
       disabled,
       readOnly,
+      children,
       ...inputProps
     },
     forwardedRef,
@@ -188,6 +191,7 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
             </InputGroupButton>
           </InputGroupAddon>
         )}
+        {children}
       </InputGroup>
     );
   },

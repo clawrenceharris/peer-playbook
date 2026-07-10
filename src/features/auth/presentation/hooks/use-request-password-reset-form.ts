@@ -4,7 +4,7 @@ import {
   forgotPasswordSchema,
   type ForgotPasswordFormValues,
 } from "@/lib/validation";
-import { requestPasswordReset as requestPasswordResetAction } from "@/actions/auth/commands/requestPasswordReset";
+import { requestPasswordResetAction as requestPasswordResetAction } from "@/actions/auth/commands/requestPasswordResetAction";
 import { useState } from "react";
 export const useRequestPasswordResetForm = () => {
   const [success, setSuccess] = useState(false);

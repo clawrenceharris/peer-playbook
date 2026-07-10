@@ -16,6 +16,8 @@ export * from "./checkbox";
 export * from "./sheet";
 export * from "./drawer";
 export * from "./avatar";
+export * from "./collapsible";
+export * from "./input-group";
 export * from "./toggle";
 export * from "./carousel";
 export * from "./field";

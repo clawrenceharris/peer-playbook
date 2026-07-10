@@ -3,11 +3,7 @@ import { Form, InputField } from "@/components/form";
 import { FieldGroup } from "@/components/ui";
 import { type CreateProfileFormValues } from "@/lib/validation";
 import { useCreateProfile } from "../../hooks";
-import type { CreateProfileResult } from "../../../application/dto";
 import { ProfileAvatarField } from "./profile-avatar-field";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { subjects } from "@/lib/constants";
-import { SelectField } from "@/components/form/select-field";
 
 type CreateProfileFormProps = {
   onSuccess: () => void;

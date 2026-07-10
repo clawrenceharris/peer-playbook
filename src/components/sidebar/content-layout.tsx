@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import { ContentHeader } from "./content-header";
 import React from "react";
+import { ScrollArea, ScrollBar } from "../ui";
 
 type ContentLayoutProps = {
   title?: string | React.ReactNode;
@@ -12,11 +13,11 @@ type ContentLayoutProps = {
   showHeader?: boolean;
   contentContainerClassName?: string;
   scrollAreaClassName?: string;
-  scrollable?: boolean;
   showThemeToggle?: boolean;
   headerRight?: React.ReactNode;
   headerClassName?: string;
   showSearch?: boolean;
+  showUserNav?: boolean;
 } & Omit<React.HTMLAttributes<HTMLDivElement>, "title">;
 
 export const ContentLayout = React.forwardRef<
@@ -33,46 +34,43 @@ export const ContentLayout = React.forwardRef<
       className,
       showHeader = true,
       contentContainerClassName,
-      scrollable = true,
       headerRight,
       headerClassName,
       scrollAreaClassName,
       showThemeToggle = true,
+      showUserNav = true,
       ...props
     }: ContentLayoutProps,
     ref,
   ) => {
     return (
       <div
-        className={cn("flex h-full flex-1 flex-col pl-3 md:pl-1", className)}
+        className={cn("flex h-full w-full flex-1 flex-col", className)}
         {...props}
       >
-        {showHeader && (
-          <ContentHeader
-            showSearch={showSearch}
-            title={title}
-            canGoBack={canGoBack}
-            onBack={onBack}
-            headerRight={headerRight}
-            className={headerClassName}
-            showThemeToggle={showThemeToggle}
-          />
-        )}
-
-        <div
-          ref={ref}
-          className={cn(
-            "border-border/70 relative flex h-full flex-1 flex-col overflow-hidden rounded-tl-2xl border-t-2 border-l-2 px-6 py-4 pb-22 shadow-xs",
-            scrollAreaClassName,
-            scrollable && "overflow-y-auto overscroll-y-contain",
+        <ScrollArea ref={ref} className={cn("min-h-0", scrollAreaClassName)}>
+          {showHeader && (
+            <ContentHeader
+              showSearch={showSearch}
+              title={title}
+              showUserNav={showUserNav}
+              canGoBack={canGoBack}
+              onBack={onBack}
+              headerRight={headerRight}
+              className={headerClassName}
+              showThemeToggle={showThemeToggle}
+            />
           )}
-        >
+
           <div
-            className={cn("flex flex-1 flex-col", contentContainerClassName)}
+            className={cn(
+              "flex min-h-full flex-1 flex-col px-3 py-4 pb-22",
+              contentContainerClassName,
+            )}
           >
             {children}
           </div>
-        </div>
+        </ScrollArea>
       </div>
     );
   },

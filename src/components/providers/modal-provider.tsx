@@ -13,6 +13,8 @@ import { ModalProps, modalRegistry, ModalState, ModalType } from "@/lib/modals";
 import { ConfirmationModal } from "@/components/modals";
 // import { registerProfileModals } from "@/features/profile/presentation/components/modals";
 import { usePathname } from "next/navigation";
+import { registerSessionModals } from "@/features/sessions/components";
+import { registerPlaybookModals } from "@/features/playbooks/presentation/components";
 interface ModalContextType {
   openModal: <T extends ModalProps>(type: ModalType, props: T) => void;
   closeModal: () => void;
@@ -110,7 +112,8 @@ export function useModal() {
 export function ModalRegistration() {
   useEffect(() => {
     modalRegistry.register("confirmation", ConfirmationModal);
-   
+    registerSessionModals();
+    registerPlaybookModals();
   }, []);
 
   return null;

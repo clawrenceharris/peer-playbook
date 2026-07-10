@@ -1,5 +1,5 @@
-import { Playbook, Session } from "@/components/icons";
-import { Home, Search } from "lucide-react";
+import { Playbook } from "@/components/icons";
+import { Home, Search, Plus, Library, Brain, PieChart } from "lucide-react";
 
 type Submenu = {
   href: string;
@@ -13,6 +13,7 @@ type Menu = {
   active: boolean;
   icon: React.ComponentType<{ className?: string }>;
   submenus?: Submenu[];
+  tooltip?: string;
 };
 
 type Group = {
@@ -35,21 +36,49 @@ export function getMenuList(pathname: string): Group[] {
         {
           href: "/my-library/playbooks",
           label: "My Library",
-          icon: Playbook,
+          icon: Library,
           active: pathname.startsWith("/my-library"),
         },
         {
           href: `/sessions`,
           label: "Sessions",
-          icon: Session,
+          icon: PieChart,
           active: pathname.startsWith(`/sessions`),
         },
-
+      ],
+    },
+    {
+      groupLabel: "Create",
+      menus: [
+        {
+          href: `/playbooks/create`,
+          label: "New Playbook",
+          icon: Plus,
+          tooltip: "New playbook",
+          active: pathname.startsWith(`/playbooks/create`),
+        },
+      ],
+    },
+    {
+      groupLabel: "Find more",
+      menus: [
         {
           href: `/discover`,
           label: "Discover",
           icon: Search,
           active: pathname.startsWith(`/discover`),
+        },
+        {
+          href: `/discover/playbooks`,
+          label: "Playbooks",
+          icon: Playbook,
+          active: pathname.startsWith(`/discover/playbooks`),
+        },
+        {
+          href: `/discover/strategies`,
+          label: "Strategies",
+          icon: Brain,
+          active: pathname.startsWith(`/discover/strategies`),
         },
       ],
     },

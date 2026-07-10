@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
@@ -47,7 +46,7 @@ export function PlayfieldProvider({ children }: PlayfieldProviderProps) {
   const [isLoading, setIsLoading] = useState(false);
   const layout = usePlayfieldLayout();
   const [currentEvent, setCurrentEvent] = useState<CustomVideoEvent | null>(
-    null
+    null,
   );
   const [reactions, setReactions] = useState<
     { id: string; userId: string; emoji: string }[]
@@ -77,11 +76,11 @@ export function PlayfieldProvider({ children }: PlayfieldProviderProps) {
         toast.error(
           error instanceof Error
             ? error.message
-            : "Couldn't run Strategy. Please try again later."
+            : "Couldn't run Strategy. Please try again later.",
         );
       }
     },
-    [call]
+    [call],
   );
 
   useEffect(() => {
@@ -115,8 +114,8 @@ export function PlayfieldProvider({ children }: PlayfieldProviderProps) {
         isHost: false,
         slug: strategy?.slug,
         setState,
-      } as unknown as PlayfieldContext),
-    [call, phase, state, strategy?.slug]
+      }) as unknown as PlayfieldContext,
+    [call, phase, state, strategy?.slug],
   );
 
   //----- Parsing events-----//
@@ -126,7 +125,7 @@ export function PlayfieldProvider({ children }: PlayfieldProviderProps) {
 
     if (parts?.length !== 2) {
       throw new Error(
-        "Custom event must have a type and be in the format slug-or-type:event-name"
+        "Custom event must have a type and be in the format slug-or-type:event-name",
       );
     }
 
@@ -139,7 +138,7 @@ export function PlayfieldProvider({ children }: PlayfieldProviderProps) {
 
     if (parts?.length !== 2) {
       throw new Error(
-        "Custom event must have a type and be in the format slug-or-type:event-name"
+        "Custom event must have a type and be in the format slug-or-type:event-name",
       );
     }
 
@@ -202,7 +201,7 @@ export function PlayfieldProvider({ children }: PlayfieldProviderProps) {
         }
       }
     },
-    [ctx, endStrategy, strategy]
+    [ctx, endStrategy, strategy],
   );
 
   useEffect(() => {
@@ -239,7 +238,7 @@ export function PlayfieldProvider({ children }: PlayfieldProviderProps) {
   );
 }
 const PlayfieldContext = createContext<PlayfieldContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export function usePlayfield() {

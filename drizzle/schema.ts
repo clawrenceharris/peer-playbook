@@ -1,4 +1,4 @@
-import { pgSchema, pgEnum, pgTable, uuid, text, varchar, timestamp, bigserial, json, customType, jsonb, boolean, inet, bigint, integer, smallint, index, uniqueIndex, foreignKey, primaryKey, unique, check, pgPolicy } from "drizzle-orm/pg-core"
+import { pgSchema, pgEnum, pgTable, uuid, text, varchar, timestamp, bigserial, smallint, jsonb, customType, json, boolean, inet, integer, bigint, index, uniqueIndex, foreignKey, primaryKey, unique, check, pgPolicy } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 export const auth = pgSchema("auth");
@@ -434,6 +434,32 @@ export const activityResponses = pgTable.withRLS("activity_responses", {
 	index("idx_activity_responses_submitted_at").using("btree", table.submittedAt.desc().nullsFirst()),
 ]);
 
+export const phaseIntents = pgTable.withRLS("phase_intents", {
+	id: uuid().defaultRandom().primaryKey(),
+	key: text().notNull(),
+	label: text().notNull(),
+	description: text().notNull(),
+	colorToken: text("color_token").notNull(),
+	iconName: text("icon_name"),
+	sortOrder: integer("sort_order").notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true }).default(sql`now()`).notNull(),
+}, (table) => [
+	unique("phase_intents_color_token_key").on(table.colorToken),	unique("phase_intents_key_key").on(table.key),check("phase_intents_color_token_check", sql`(color_token = ANY (ARRAY['intent-activate'::text, 'intent-explore'::text, 'intent-apply'::text, 'intent-reflect'::text]))`),check("phase_intents_key_check", sql`(key = ANY (ARRAY['activate'::text, 'explore'::text, 'apply'::text, 'reflect'::text]))`),]);
+
+export const playbookPhases = pgTable.withRLS("playbook_phases", {
+	id: uuid().defaultRandom().primaryKey(),
+	playbookId: uuid("playbook_id").notNull().references(() => playbooks.id, { onDelete: "cascade" } ),
+	phaseIntentId: uuid("phase_intent_id").notNull().references(() => phaseIntents.id, { onDelete: "restrict" } ),
+	title: text().notNull(),
+	description: text(),
+	objective: text(),
+	estimatedMinutes: integer("estimated_minutes"),
+	position: integer().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true }).default(sql`now()`).notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
+}, (table) => [
+	unique("playbook_phases_playbook_id_position_key").on(table.playbookId, table.position),]);
+
 export const playbookStrategies = pgTable.withRLS("playbook_strategies", {
 	id: uuid().defaultRandom().primaryKey(),
 	playbookId: uuid("playbook_id").notNull().references(() => playbooks.id, { onDelete: "cascade" } ),
@@ -443,12 +469,13 @@ export const playbookStrategies = pgTable.withRLS("playbook_strategies", {
 	steps: text().array().notNull(),
 	phase: lessonPhase().notNull(),
 	position: integer().notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true }).default(sql`now()`),
+	createdAt: timestamp("created_at", { withTimezone: true }).default(sql`now()`).notNull(),
 	virtualized: boolean().default(false),
 	description: text().default("No description").notNull(),
 	updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`),
 	sourceId: uuid("source_id"),
 	sourceType: text("source_type"),
+	playbookPhaseId: uuid("playbook_phase_id").references(() => playbookPhases.id, { onDelete: "cascade" } ),
 }, (table) => [
 
 	pgPolicy("Enable read access for all users", { for: "select", using: sql`true` }),
@@ -463,10 +490,10 @@ export const playbookStrategies = pgTable.withRLS("playbook_strategies", {
 export const playbooks = pgTable.withRLS("playbooks", {
 	id: uuid().defaultRandom().primaryKey(),
 	topic: text().notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true }).default(sql`now()`),
+	createdAt: timestamp("created_at", { withTimezone: true }).default(sql`now()`).notNull(),
 	updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`),
 	courseName: text("course_name"),
-	createdBy: uuid().default(sql`auth.uid()`).references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	createdBy: uuid().default(sql`auth.uid()`).notNull().references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" } ),
 	published: boolean().default(true),
 	subject: text().notNull(),
 }, (table) => [
@@ -506,8 +533,9 @@ export const sessionContexts = pgTable.withRLS("session_contexts", {
 	id: uuid().defaultRandom().primaryKey(),
 	createdAt: timestamp("created_at", { withTimezone: true }).default(sql`now()`).notNull(),
 	context: text().notNull(),
+	key: text().notNull(),
 }, (table) => [
-	unique("student_contexts_context_key").on(table.context),
+	unique("session_contexts_key_key").on(table.key),	unique("student_contexts_context_key").on(table.context),
 	pgPolicy("Enable read access for all users", { for: "select", to: ["authenticated"], using: sql`true` }),
 ]);
 
@@ -540,7 +568,7 @@ export const sessions = pgTable.withRLS("sessions", {
 ]);
 
 export const strategies = pgTable.withRLS("strategies", {
-	id: uuid().defaultRandom().notNull(),
+	id: uuid().defaultRandom().primaryKey(),
 	slug: text().default("custom-card").notNull(),
 	title: text().notNull(),
 	category: text().default(""),
@@ -555,7 +583,6 @@ export const strategies = pgTable.withRLS("strategies", {
 	createdBy: uuid("created_by").references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" } ),
 	published: boolean().default(true).notNull(),
 }, (table) => [
-	primaryKey({ columns: [table.id, table.slug], name: "strategy_cards_pkey"}),
 	index("strategy_cards_course_tags_gin").using("gin", table.courseTags.asc().nullsLast()),
 	index("strategy_cards_session_virtual_idx").using("btree", table.sessionSize.asc().nullsLast(), table.virtualFriendly.asc().nullsLast()),
 	unique("strategy_cards_slug_key").on(table.slug),
@@ -571,3 +598,11 @@ export const strategyContexts = pgTable.withRLS("strategy_contexts", {
 
 	pgPolicy("Enable read access for all users", { for: "select", using: sql`true` }),
 ]);
+
+export const strategyPhaseIntents = pgTable.withRLS("strategy_phase_intents", {
+	strategyId: uuid("strategy_id").notNull().references(() => strategies.id, { onDelete: "cascade" } ),
+	phaseIntentId: uuid("phase_intent_id").notNull().references(() => phaseIntents.id, { onDelete: "cascade" } ),
+	suitability: smallint().default(1).notNull(),
+}, (table) => [
+	primaryKey({ columns: [table.strategyId, table.phaseIntentId], name: "strategy_phase_intents_pkey"}),
+check("strategy_phase_intents_suitability_check", sql`((suitability >= 1) AND (suitability <= 3))`),]);

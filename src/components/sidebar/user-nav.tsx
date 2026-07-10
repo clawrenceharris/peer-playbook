@@ -27,33 +27,23 @@ export function UserNav() {
   return (
     <div className="flex items-center gap-3">
       <DropdownMenu>
-        <TooltipProvider disableHoverableContent>
-          <Tooltip delayDuration={100}>
-            <TooltipTrigger asChild>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-[999px]"
-                  asChild
-                >
-                  <Avatar>
-                    <AvatarImage
-                      src={profile?.avatarUrl ?? undefined}
-                      alt="Avatar"
-                    />
-                    <AvatarFallback>
-                      {profile.displayName?.charAt(0).toUpperCase() ??
-                        profile.username.charAt(0).toUpperCase() ??
-                        ""}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">Profile</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon-lg"
+            className="rounded-full"
+            asChild
+          >
+            <Avatar className="border-secondary border-2">
+              <AvatarImage src={profile?.avatarUrl ?? undefined} alt="Avatar" />
+              <AvatarFallback>
+                {profile.displayName?.charAt(0).toUpperCase() ??
+                  profile.username.charAt(0).toUpperCase() ??
+                  ""}
+              </AvatarFallback>
+            </Avatar>
+          </Button>
+        </DropdownMenuTrigger>
 
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
@@ -78,12 +68,12 @@ export function UserNav() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer" asChild>
-              <Link href="/account" className="flex items-center">
+              <Link href={`/user/${user.id}`} className="flex items-center">
                 <User
                   strokeWidth={3}
                   className="text-muted-foreground mr-3 h-4 w-4"
                 />
-                Account
+                My Profile
               </Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>

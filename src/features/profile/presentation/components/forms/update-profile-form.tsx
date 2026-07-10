@@ -3,12 +3,11 @@
 import { Form, InputField } from "@/components/form";
 import { SelectField } from "@/components/form/select-field";
 import { FieldGroup } from "@/components/ui";
-import { UpdateProfileFormValues, updateProfileSchema } from "@/lib/validation";
+import { UpdateProfileFormValues } from "@/lib/validation";
 import { ProfileAvatarField } from "./profile-avatar-field";
-import { subjects } from "@/lib/constants";
 import { UpdateProfileModalProps } from "@/lib/modals";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useUpdateProfileForm } from "../../hooks";
+import { subjects } from "@/features/playbooks/application/assemblers/PlaybookCreationPageAssembler";
 
 export function UpdateProfileForm({
   profile,
@@ -32,14 +31,10 @@ export function UpdateProfileForm({
           name="avatarFile"
         />
 
-        <SelectField<UpdateProfileFormValues, "firstName">
+        <InputField<UpdateProfileFormValues, "firstName">
           name="firstName"
           defaultValue=""
-          items={Object.keys(subjects).map((s) => ({
-            key: s,
-            value: s,
-            icon: subjects[s],
-          }))}
+
           label="First name"
           placeholder="First name"
         />
@@ -51,12 +46,12 @@ export function UpdateProfileForm({
         />
         <SelectField<UpdateProfileFormValues, "courses">
           name="courses"
-          defaultValue={[]}
-          items={Object.keys(subjects).map((s) => ({
-            key: s,
-            value: s,
-            icon: subjects[s],
+          items={subjects.map((s) => ({
+            value: s.id,
+            label: s.label,
+            icon: s.icon,
           }))}
+
           label="Courses instructed"
           placeholder="Courses instructed"
         />

@@ -4,6 +4,8 @@ import { CSS } from "@dnd-kit/utilities";
 
 import { cn } from "@/lib/utils";
 import { StrategyCard, StrategyCardProps } from "./";
+import { Item, ItemTitle, ItemHeader } from "@/components/ui";
+import { MoreVertical } from "lucide-react";
 
 interface SortableStrategyCardProps extends StrategyCardProps {
   onReplaceClick?: () => void;
@@ -15,6 +17,7 @@ export function SortableStrategyCard({
   strategy,
   onReplaceClick,
   onSaveClick,
+  className,
   isSaved = false,
   ...props
 }: SortableStrategyCardProps) {
@@ -34,28 +37,43 @@ export function SortableStrategyCard({
     transform: CSS.Transform.toString(transform),
     transition: transition,
   };
-
   return (
-    <StrategyCard
+    <Item
+      variant="outline"
+      className={cn(
+        "rounded-lg shadow-xs",
+        isDragging && "ring-primary-500 ring-2",
+        className,
+      )}
       ref={setNodeRef}
       style={style}
-      strategy={strategy}
-      phase={index === 0 ? "warmup" : index === 1 ? "workout" : "closer"}
-      onReplaceClick={onReplaceClick}
-      onSaveClick={onSaveClick}
-      isSaved={isSaved}
-      className={cn(isDragging ? "ring-2 ring-primary-500" : "")}
       {...props}
     >
-      <button
-        ref={setActivatorNodeRef}
-        {...attributes}
-        {...listeners}
-        aria-label="Drag to reorder"
-        className="absolute z-9 -top-3 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full
-                     bg-white text-foreground shadow border border-border
-                     cursor-grab active:cursor-grabbing touch-none"
-      />
-    </StrategyCard>
+      <ItemHeader>
+        <ItemTitle>{strategy.title}</ItemTitle>
+        <MoreVertical />
+      </ItemHeader>
+    </Item>
   );
+  // return (
+  //   <PlaybookStrategyItem
+  //     ref={setNodeRef}
+  //     style={style}
+  //     strategy={strategy}
+  //     phase={index === 0 ? "warmup" : index === 1 ? "workout" : "closer"}
+  //     onReplaceClick={onReplaceClick}
+  //     onSaveClick={onSaveClick}
+  //     isSaved={isSaved}
+  //     className={cn(isDragging && "ring-primary-500 ring-2", className)}
+  //     {...props}
+  //   >
+  //     <button
+  //       ref={setActivatorNodeRef}
+  //       {...attributes}
+  //       {...listeners}
+  //       aria-label="Drag to reorder"
+  //       className="text-foreground border-border absolute -top-3 left-1/2 z-9 h-6 w-6 -translate-x-1/2 cursor-grab touch-none rounded-full border bg-white shadow active:cursor-grabbing"
+  //     />
+  //   </StrategyCard>
+  // );
 }

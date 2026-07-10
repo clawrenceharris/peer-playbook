@@ -77,7 +77,7 @@ export function SessionCallProvider({
   const [showNotification, setShowNotification] = useState(false);
 
   const [myBreakoutRoom, setMyBreakoutRoom] = useState<BreakoutRoom | null>(
-    null
+    null,
   );
   const {
     leaveBreakoutRoom,
@@ -125,9 +125,8 @@ export function SessionCallProvider({
     if (!mainCall) return;
 
     function findMyBreakoutRoom(call: Call): BreakoutRoom | null {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const myRoom = call.state.custom.rooms?.find((r: any) =>
-        r.members.includes(mainCall?.currentUserId)
+        r.members.includes(mainCall?.currentUserId),
       );
       console.log({ rooms: call.state.custom.rooms });
 
@@ -273,10 +272,7 @@ export function SessionCallProvider({
     <SessionCallContext.Provider value={value}>
       <StreamCall call={activeCall}>
         {showNotification && (
-          <div
-            className="fixed bottom-4 left-1/2 transform -translate-x-1/2 
-                  bg-gray-900 text-white px-4 py-2 rounded-xl shadow-lg"
-          >
+          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 transform rounded-xl bg-gray-900 px-4 py-2 text-white shadow-lg">
             Breakout rooms ending in {countdown} seconds...
           </div>
         )}
@@ -286,14 +282,14 @@ export function SessionCallProvider({
   );
 }
 const SessionCallContext = createContext<SessionCallContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export function useSessionCall() {
   const context = useContext(SessionCallContext);
   if (!context)
     throw new Error(
-      "useSessionCall must be used within a SessionCallProvider."
+      "useSessionCall must be used within a SessionCallProvider.",
     );
   return context;
 }
@@ -310,7 +306,7 @@ interface UseBreakoutRoomsOptions {
 }
 function useBreakoutRooms(
   mainCall: Call | null,
-  options?: UseBreakoutRoomsOptions
+  options?: UseBreakoutRoomsOptions,
 ) {
   const client = useStreamVideoClient();
 
@@ -430,7 +426,7 @@ function useBreakoutRooms(
             mainCall,
             members,
           };
-        })
+        }),
       );
 
       // Notify all participants via the main call

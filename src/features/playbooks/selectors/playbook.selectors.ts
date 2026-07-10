@@ -1,4 +1,5 @@
 import { Playbook, PlaybookStrategy, PlaybookWithStrategies } from "../domain";
+import { PlaybookCardDTO } from "../application/dto";
 
 /**
  * Playbook selectors for composable data transformations
@@ -23,7 +24,9 @@ export const selectSortedPlaybooks = (playbooks: Playbook[]): Playbook[] =>
 /**
  * Sorts playbooks by updated date (most recently updated first)
  */
-export const selectSortedByUpdated = (playbooks: Playbook[]): Playbook[] =>
+export const selectSortedByUpdated = (
+  playbooks: PlaybookCardDTO[],
+): PlaybookCardDTO[] =>
   [...playbooks].sort((a, b) => {
     const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
     const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
@@ -55,7 +58,7 @@ export const selectSortedByCourse = (playbooks: Playbook[]): Playbook[] =>
  */
 export const selectMyPlaybooks =
   (userId: string) =>
-  (playbooks: Playbook[]): Playbook[] =>
+  (playbooks: PlaybookCardDTO[]): PlaybookCardDTO[] =>
     playbooks.filter((p) => p.createdBy === userId);
 
 /**
@@ -63,7 +66,7 @@ export const selectMyPlaybooks =
  */
 export const selectOthersPlaybooks =
   (userId: string) =>
-  (playbooks: Playbook[]): Playbook[] =>
+  (playbooks: PlaybookCardDTO[]): PlaybookCardDTO[] =>
     playbooks.filter((p) => p.createdBy !== userId);
 
 // ============================================
@@ -73,21 +76,23 @@ export const selectOthersPlaybooks =
 /**
  * Filters published playbooks
  */
-export const selectPublishedPlaybooks = (playbooks: Playbook[]): Playbook[] =>
-  playbooks.filter((p) => p.published);
+export const selectPublishedPlaybooks = (
+  playbooks: PlaybookCardDTO[],
+): PlaybookCardDTO[] => playbooks.filter((p) => p.published);
 
 /**
  * Filters unpublished (draft) playbooks
  */
-export const selectDraftPlaybooks = (playbooks: Playbook[]): Playbook[] =>
-  playbooks.filter((p) => !p.published);
+export const selectDraftPlaybooks = (
+  playbooks: PlaybookCardDTO[],
+): PlaybookCardDTO[] => playbooks.filter((p) => !p.published);
 
 /**
  * Filters user's published playbooks
  */
 export const selectMyPublishedPlaybooks =
   (userId: string) =>
-  (playbooks: Playbook[]): Playbook[] =>
+  (playbooks: PlaybookCardDTO[]): PlaybookCardDTO[] =>
     playbooks.filter((p) => p.createdBy === userId && p.published);
 
 /**
@@ -95,7 +100,7 @@ export const selectMyPublishedPlaybooks =
  */
 export const selectMyDraftPlaybooks =
   (userId: string) =>
-  (playbooks: Playbook[]): Playbook[] =>
+  (playbooks: PlaybookCardDTO[]): PlaybookCardDTO[] =>
     playbooks.filter((p) => p.createdBy === userId && !p.published);
 
 // ============================================
@@ -188,7 +193,7 @@ export const selectPlaybooksByCourseGroup = (
  */
 export const selectFirstN =
   (n: number) =>
-  (playbooks: Playbook[]): Playbook[] =>
+  (playbooks: PlaybookCardDTO[]): PlaybookCardDTO[] =>
     playbooks.slice(0, n);
 
 /**
@@ -196,7 +201,7 @@ export const selectFirstN =
  */
 export const selectRecentPlaybooks =
   (n: number) =>
-  (playbooks: Playbook[]): Playbook[] =>
+  (playbooks: PlaybookCardDTO[]): PlaybookCardDTO[] =>
     selectFirstN(n)(selectSortedByUpdated(playbooks));
 
 // ============================================

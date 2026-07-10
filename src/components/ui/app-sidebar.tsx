@@ -43,9 +43,9 @@ const items: {
 
   {
     title: "Library",
-    href: "/library/playbooks",
+    href: "/my-library/playbooks",
     icon: Playbook,
-    isActive: (pathname) => pathname.startsWith("/library"),
+    isActive: (pathname) => pathname.startsWith("/my-library"),
   },
   {
     title: "Sessions",

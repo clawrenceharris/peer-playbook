@@ -12,11 +12,11 @@ const buttonVariants = cva(
         tertiary:
           "bg-tertiary text-tertiary-foreground hover:bg-tertiary/80 aria-expanded:bg-tertiary aria-expanded:text-tertiary-foreground",
         primary:
-          "bg-primary text-primary-foreground shadow-[0_6px_0_hsl(var(--primary-hue)_95%_40%)] active:shadow-[0_1px_0_hsl(var(--primary-hue)_95%_40%)] hover:bg-primary-200  bg-primary hover:text-primary",
+          "bg-primary text-primary-foreground shadow-[0_6px_0_hsl(var(--primary-hue)_95%_40%)] active:shadow-[0_1px_0_hsl(var(--primary-hue)_95%_40%)] hover:bg-primary-600  bg-primary",
         muted: "bg-muted text-muted-foreground hover:text-muted-foreground/80",
         default: "text-foreground hover:text-muted-foreground",
         outline:
-          "border border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
+          "border border-border shadow-xs bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground  bg-secondary hover:bg-secondary/70",
         ghost: "hover:bg-muted aria-expanded:bg-muted text-muted-foreground",

@@ -137,7 +137,6 @@
 // }
 
 // // Central error logging
-// // eslint-disable-next-line @typescript-eslint/no-explicit-any
 // export function logError(error: AppError, context?: Record<string, any>) {
 //   const errorLog = {
 //     timestamp: error.timestamp,

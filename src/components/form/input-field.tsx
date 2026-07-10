@@ -19,7 +19,6 @@ import {
 import { cn } from "@/lib/utils";
 import { InputFieldProps } from "@/types";
 
-
 function InputFieldInner<T extends FieldValues, U extends Path<T>>(
   props: InputFieldProps<T, U>,
   ref: React.ForwardedRef<HTMLDivElement>,
@@ -49,10 +48,7 @@ function InputFieldInner<T extends FieldValues, U extends Path<T>>(
     >
       <FieldContent>
         <FieldLabel
-          className={cn(
-            !showsLabel && "sr-only",
-            "font-body flex items-center gap-1 text-lg font-bold",
-          )}
+          className={cn(!showsLabel && "sr-only", "")}
           htmlFor={inputId}
         >
           {label}
@@ -74,7 +70,7 @@ function InputFieldInner<T extends FieldValues, U extends Path<T>>(
           {...inputProps}
           aria-required={required}
           id={inputId}
-          placeholder={`${placeholder} ${!required ? "(Optional)" : ""}`}
+          placeholder={`${placeholder}${required ? "*" : " (Optional)"}`}
           aria-invalid={fieldState.invalid}
         />
       )}

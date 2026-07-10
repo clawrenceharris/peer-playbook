@@ -10,7 +10,7 @@ type SidebarStore = {
   toggleOpen: () => void;
   setIsOpen: (isOpen: boolean) => void;
   setIsHover: (isHover: boolean) => void;
-  getOpenState: () => boolean;
+  getOpenState: (isLibraryOpen?: boolean) => boolean;
   setSettings: (settings: Partial<SidebarSettings>) => void;
 };
 
@@ -29,8 +29,11 @@ export const useSidebar = create(
       setIsHover: (isHover: boolean) => {
         set({ isHover });
       },
-      getOpenState: () => {
+      getOpenState: (isLibraryOpen: boolean = false) => {
         const state = get();
+        if (isLibraryOpen) {
+          return false;
+        }
         return state.isOpen || (state.settings.isHoverOpen && state.isHover);
       },
       setSettings: (settings: Partial<SidebarSettings>) => {

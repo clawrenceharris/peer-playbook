@@ -1,16 +1,16 @@
 import type {
-  CreateSessionFormValues,
   Session,
   UpdateSessionFormValues,
 } from "@/features/sessions/domain";
 import type {
-  GeneratePlaybookFormValues,
   Playbook,
   PlaybookStrategy,
   PlaybookUpdate,
 } from "@/features/playbooks/domain";
 import type { Strategy } from "@/features/strategies/domain";
 import type { ProfileDetailDTO } from "@/features/profile/application/dto";
+import { GeneratePlaybookFormValues } from "../validation";
+import { PlaybookCardDTO } from "@/features/playbooks/application/dto";
 
 /**
  * Base interface for all modal props
@@ -30,7 +30,8 @@ export type ModalType =
   | "playbook:update"
   | "playbook:delete"
   | "playbook:replace-strategy"
-  | "playbook:generate";
+  | "playbook:generate"
+  | "confirmation";
 
 /**
  * State interface for ModalProvider
@@ -52,8 +53,7 @@ export interface ModalProps {
 // ============================================================================
 
 export interface CreateSessionModalProps extends ModalProps {
-  onSuccess: (data: CreateSessionFormValues) => Promise<Session>;
-  playbook?: Playbook | null;
+  playbook?: PlaybookCardDTO | null;
 }
 
 export interface UpdateSessionModalProps extends ModalProps {

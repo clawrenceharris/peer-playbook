@@ -98,7 +98,7 @@ export type Database = {
         Row: {
           card_slug: string
           category: string
-          created_at: string | null
+          created_at: string
           description: string
           id: string
           phase: Database["public"]["Enums"]["lesson_phase"]
@@ -114,7 +114,7 @@ export type Database = {
         Insert: {
           card_slug?: string
           category: string
-          created_at?: string | null
+          created_at?: string
           description?: string
           id?: string
           phase: Database["public"]["Enums"]["lesson_phase"]
@@ -130,7 +130,7 @@ export type Database = {
         Update: {
           card_slug?: string
           category?: string
-          created_at?: string | null
+          created_at?: string
           description?: string
           id?: string
           phase?: Database["public"]["Enums"]["lesson_phase"]
@@ -156,7 +156,7 @@ export type Database = {
       playbooks: {
         Row: {
           course_name: string | null
-          created_at: string | null
+          created_at: string
           createdBy: string | null
           id: string
           published: boolean | null
@@ -166,7 +166,7 @@ export type Database = {
         }
         Insert: {
           course_name?: string | null
-          created_at?: string | null
+          created_at?: string
           createdBy?: string | null
           id?: string
           published?: boolean | null
@@ -176,7 +176,7 @@ export type Database = {
         }
         Update: {
           course_name?: string | null
-          created_at?: string | null
+          created_at?: string
           createdBy?: string | null
           id?: string
           published?: boolean | null

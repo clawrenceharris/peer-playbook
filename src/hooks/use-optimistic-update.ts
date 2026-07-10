@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useTransition } from "react";
 
 interface UseOptimisticUpdateProps {

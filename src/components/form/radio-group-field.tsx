@@ -18,7 +18,7 @@ import {
   RadioGroupItem,
 } from "../ui";
 import { cn } from "@/lib/utils";
-type RadioGroupOption = { id: string; label: string; description?: string };
+type RadioGroupOption = { value: string; label: string; description?: string };
 interface RadioGroupFieldProps<T extends FieldValues, U extends Path<T>> {
   label: string;
   name: U;
@@ -71,15 +71,16 @@ function RadioGroupFieldInner<T extends FieldValues, U extends Path<T>>(
         value={field.value ?? ""}
         onValueChange={field.onChange}
         aria-invalid={fieldState.invalid}
+        aria-required={required}
         className="grid grid-cols-1 gap-2 md:grid-cols-2"
       >
         {options.map((option) => (
           <FieldLabel
-            key={option.id}
-            htmlFor={`${field.name}-${option.id}`}
+            key={option.value}
+            htmlFor={`${field.name}-${option.value}`}
             className={cn(
               "cursor-pointer transition-colors",
-              field.value === option.id &&
+              field.value === option.value &&
                 "border-primary bg-primary/5 ring-primary/20 ring-1",
             )}
           >
@@ -91,9 +92,9 @@ function RadioGroupFieldInner<T extends FieldValues, U extends Path<T>>(
                 )}
               </FieldContent>
               <RadioGroupItem
-                checked={field.value === option.id}
-                value={option.id}
-                id={`${field.name}-${option.id}`}
+                checked={field.value === option.value}
+                value={option.value}
+                id={`${field.name}-${option.value}`}
               />
             </Field>
           </FieldLabel>

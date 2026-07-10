@@ -8,15 +8,19 @@ import logo from "@/assets/images/logo.png";
 import pencil from "@/assets/icons/pencil.png";
 import authHero from "@/assets/images/auth-hero.png";
 import wordmark from "@/assets/images/wordmark.png";
+import pencilEdit from "@/assets/icons/edit.png";
+import puzzle from "@/assets/icons/puzzle.png";
 export const assets = {
-    authHero,
-    book,
-    paperClip,
-    logo,
-    sparkles,
-    sparkle,
-    error,
-    pencils,
-    pencil,
-    wordmark,
-}
+  authHero,
+  book,
+  puzzle,
+  pencilEdit,
+  paperClip,
+  logo,
+  sparkles,
+  sparkle,
+  error,
+  pencils,
+  pencil,
+  wordmark,
+};

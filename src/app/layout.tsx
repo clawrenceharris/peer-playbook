@@ -8,6 +8,9 @@ import {
 import { ReactNode } from "react";
 import { Outfit, Figtree } from "next/font/google";
 import { Metadata } from "next";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { prefetchAuthenticatedAppData } from "@/lib/queries/prefetchAuthenticatedAppData";
+import { User } from "@supabase/supabase-js";
 
 export const metadata: Metadata = {
   title: "PeerPlaybook",
@@ -26,7 +29,21 @@ const outfit = Outfit({
   variable: "--font-body",
   weight: "500",
 });
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const queryClient = new QueryClient();
+  let initialUser: User | null | undefined;
+
+  try {
+    initialUser = await prefetchAuthenticatedAppData(queryClient);
+  } catch (error) {
+    console.error("[RootLayout] prefetchAuthenticatedAppData failed:", error);
+  }
+
+  const dehydratedState = dehydrate(queryClient);
   return (
     <html lang="en">
       <body

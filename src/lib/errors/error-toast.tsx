@@ -9,13 +9,11 @@ import { CustomToast } from "@/components/ui";
 export function shouldShowToast(
   mutation:
     | Mutation<unknown, unknown, unknown, unknown>
-    | MutationState<unknown, unknown, unknown, unknown>
+    | MutationState<unknown, unknown, unknown, unknown>,
 ): boolean {
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mutationObj = mutation as any;
   const meta = mutationObj.meta || mutationObj.options?.meta;
-  console.log(meta?.skipToast)
+  console.log(meta?.skipToast);
   return meta?.skipToast !== true;
 }
 
@@ -29,7 +27,7 @@ export function showErrorToast(
   options?: {
     onShowDetails?: () => void;
     duration?: number;
-  }
+  },
 ) {
   const { onShowDetails, duration } = options || {};
 
@@ -55,6 +53,6 @@ export function showErrorToast(
         text: error.message,
         delay: duration,
       },
-    }
+    },
   );
 }

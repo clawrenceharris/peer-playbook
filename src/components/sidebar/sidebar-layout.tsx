@@ -7,17 +7,21 @@ import { useSidebar } from "@/store/use-sidebar";
 import { Loader2 } from "lucide-react";
 import { SidebarProvider } from "../ui/sidebar";
 import { UserProvider } from "../providers";
+import { usePathname } from "next/navigation";
 
 type SidebarLayoutProps = {
   children: React.ReactNode;
 };
 export function SidebarLayout({ children }: SidebarLayoutProps) {
   const sidebar = useStore(useSidebar, (x) => x);
+  const pathname = usePathname();
+  const isLibraryOpen = pathname.startsWith("/my-library");
   if (!sidebar) return null;
   const { getOpenState, settings } = sidebar;
   return (
     <UserProvider>
       <SidebarProvider
+        open={pathname.startsWith("/my-library")}
         style={
           {
             "--sidebar-width": "14rem",
@@ -27,9 +31,11 @@ export function SidebarLayout({ children }: SidebarLayoutProps) {
         <Sidebar />
         <main
           className={cn(
-            "flex min-h-0 w-full flex-1 flex-col overflow-hidden! transition-[padding-left] duration-300 ease-in-out",
-            !settings.disabled &&
-              (!getOpenState() ? "md:pl-[95px]" : "md:pl-48"),
+            "transition-[padding-left] duration-300 ease-in-out",
+            !getOpenState(isLibraryOpen)
+              ? "md:pl-(--sidebar-width-collapsed)"
+              : "md:pl-(--sidebar-width)",
+            settings.disabled ? "md:pl-0" : "",
           )}
         >
           <Suspense

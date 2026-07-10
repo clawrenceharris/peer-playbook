@@ -24,3 +24,15 @@ export const profileKeys = {
   detail: (id: string, shape: "base" | "detail" | "card" = "base") =>
     [...profileKeys.details(), id, shape] as const,
 } as const;
+
+export const playbookKeys = {
+  all: ["playbooks"] as const,
+  lists: () => [...playbookKeys.all, "list"] as const,
+  list: (filters?: Record<string, unknown>) =>
+    [...playbookKeys.lists(), { filters }] as const,
+  details: () => [...playbookKeys.all, "detail"] as const,
+  detail: (id: string) => [...playbookKeys.details(), id] as const,
+
+  byUserId: (userId: string) => [...playbookKeys.all, "user", userId] as const,
+  favorite: () => [...playbookKeys.all, "favorite"],
+} as const;

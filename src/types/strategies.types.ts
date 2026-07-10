@@ -1,10 +1,19 @@
-import { strategies } from "@/db/client";
-import { DomainModel } from "@/lib/data/naming";
 /**
- * Base strategy interface with ownership and publishing metadata
- * Note: Some fields (created_by, is_system, is_published) need to be added to the database schema
+ * Base strategy shape used by the legacy Supabase strategy service.
+ * The Prisma migration keeps this type local so it no longer depends on Drizzle table objects.
  */
-export type BaseStrategy = DomainModel<typeof strategies>;
+export type BaseStrategy = {
+  id?: string;
+  title?: string;
+  description?: string;
+  steps?: string[];
+  sessionSize?: string | null;
+  virtualFriendly?: boolean;
+  courseTags?: string[];
+  goodFor?: string[];
+  createdBy?: string | null;
+  published?: boolean;
+};
 
 /**
  * Strategy override fields for playbook-specific customizations

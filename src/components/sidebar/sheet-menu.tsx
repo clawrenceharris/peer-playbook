@@ -11,12 +11,13 @@ import {
   SheetTitle,
 } from "@/components/ui";
 import Image from "next/image";
+import { assets } from "@/lib/constants";
 
 export function SheetMenu() {
   return (
     <Sheet>
       <SheetTrigger className="lg:hidden" asChild>
-        <Button className="rounded-md" variant="ghost" size="icon">
+        <Button className="bg-surface rounded-md" variant="ghost" size="icon">
           <MenuIcon
             strokeWidth={2}
             className="text-muted-foreground size-6.5"
@@ -25,25 +26,20 @@ export function SheetMenu() {
       </SheetTrigger>
       <SheetContent
         aria-describedby={undefined}
-        className="flex h-full flex-col px-3 sm:w-72"
+        className="flex h-full flex-col px-4 sm:w-59"
         side="left"
       >
-        <SheetHeader>
-          <Button
-            className="flex items-center justify-center pt-1 pb-2"
-            variant="link"
-            asChild
-          >
-            <Link href="/home" className="flex items-center gap-2">
-              <Image
-                src={"/logo-text.png"}
-                alt="Logo"
-                width={130}
-                height={130}
-              />
-              <SheetTitle className="sr-only">Brand logo</SheetTitle>
-            </Link>
-          </Button>
+        <SheetHeader className="items-start">
+          <Link href="/home">
+            <Image
+              src={assets.logo}
+              loading="eager"
+              alt="PeerPlaybook Logo"
+              width={50}
+              height={50}
+            />
+            <SheetTitle className="sr-only">Brand logo</SheetTitle>
+          </Link>
         </SheetHeader>
         <Menu isOpen />
       </SheetContent>

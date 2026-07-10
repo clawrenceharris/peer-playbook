@@ -104,7 +104,7 @@ export const StrategySelectionForm = ({
                     }))}
                     // placeholder="Select a Strategy"
                     onValueChange={(value) => {
-                      handleStrategyReplace(value, field);
+                      handleStrategyReplace(value ?? "", field);
                     }}
                   />
                   <FieldError errors={[fieldState.error]} />

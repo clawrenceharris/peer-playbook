@@ -11,8 +11,6 @@ import { BreakoutRoom, useSessionCall } from "@/components/providers";
 import { generateRooms } from "@/utils";
 import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
 
 interface BreakoutCreatorProps extends FormLayoutProps<{ maxSize: number }> {
   onClose: () => void;

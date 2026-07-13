@@ -19,7 +19,7 @@ import { StrategyCard } from ".";
 import { PlaybookStrategy } from "@/features/playbooks/domain";
 import { Strategy } from "@/features/strategies/domain";
 import { Controller, ControllerRenderProps, useForm } from "react-hook-form";
-import { Form, FormLayoutProps } from "@/components/form";
+import { Form } from "@/components/form";
 import { usePendingMutations } from "@/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -83,9 +83,13 @@ export const StrategySelectionForm = ({
       form={form}
       enableBeforeUnloadProtection={false}
       onCancel={onCancel}
-      handleSubmit={() => {}}
+      handleSubmit={async (data) => {
+        await onConfirm(strategyToReplace, data.strategy);
+        onSuccess?.();
+      }}
       submitText="Replace"
       isLoading={isLoading}
+      isDialog
     >
       {({ control }) => (
         <FieldGroup>

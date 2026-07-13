@@ -1,30 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
-import { usePlaybookService } from "@/features/playbooks/presentation/hooks";
-import { PlaybookWithStrategies } from "@/features/playbooks/domain";
 import { playbookKeys } from "@/lib/queries/keys";
-import { getPlaybookByIdAction } from "@/actions/playbook/queries/getPlaybookByIdAction";
+import {
+  getPlaybookByIdAction,
+  getPlaybookDetailAction,
+} from "@/actions/playbook/queries";
 
-/**
- * Hook to fetch a single playbook by ID
- * @param playbookId - The playbook ID
- */
-export const usePlaybook = <TSelected = PlaybookWithStrategies>(
-  playbookId: string,
-  select?: (playbook: PlaybookWithStrategies | null) => TSelected,
-) => {
-  const playbookService = usePlaybookService();
+export function usePlaybook(playbookId: string) {
   return useQuery({
     queryKey: playbookKeys.detail(playbookId),
-    queryFn: () => playbookService.getPlaybookWithStrategies(playbookId),
-    select,
+    queryFn: async () => {
+      const result = await getPlaybookByIdAction(playbookId);
+      if (!result.success) {
+        throw result.error;
+      }
+      return result.data;
+    },
   });
-};
+}
 
 export const usePlaybookDetail = (id: string) => {
   return useQuery({
-    queryKey: playbookKeys.detail(id),
+    queryKey: playbookKeys.detail(id, "detail"),
     queryFn: async () => {
-      const result = await getPlaybookByIdAction(id);
+      const result = await getPlaybookDetailAction(id);
       if (!result.success) {
         throw result.error;
       }

@@ -4,22 +4,16 @@ import { DialogContent } from "@/components/ui";
 import { UpdatePlaybookForm } from "..";
 import type { UpdatePlaybookModalProps } from "@/lib/modals/types";
 import { useModal } from "@/components/providers";
-import { usePlaybook } from "@/features/playbooks/presentation/hooks";
+import { usePlaybookDetail } from "@/features/playbooks/presentation/hooks";
 import { usePendingMutations } from "@/hooks";
 import { EmptyState } from "@/components/states";
-import {
-  UpdatePlaybookFormValues,
-  updatePlaybookSchema,
-} from "@/lib/validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 
 export function UpdatePlaybookModal({
-  onSubmit: onConfirm,
+  onSubmit,
   playbookId,
 }: UpdatePlaybookModalProps) {
   const { closeModal } = useModal();
-  const { data: playbook } = usePlaybook(playbookId);
+  const { data: playbook } = usePlaybookDetail(playbookId);
   const { pending: isLoading } = usePendingMutations({
     mutationKey: ["update-playbook"],
   });
@@ -31,7 +25,12 @@ export function UpdatePlaybookModal({
       className="max-w-2xl"
     >
       {playbook ? (
-        <UpdatePlaybookForm playbook={playbook} subjects={[]} />
+        <UpdatePlaybookForm
+          playbook={playbook}
+          onSubmit={onSubmit}
+          onSuccess={closeModal}
+          isLoading={isLoading}
+        />
       ) : (
         <EmptyState
           variant="card"

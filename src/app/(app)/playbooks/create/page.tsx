@@ -1,10 +1,7 @@
 "use server";
-import React from "react";
-import CreatePlaybookPage from "./CreatePlaybookPage";
+import CreatePlaybookPageClient from "./CreatePlaybookPageClient";
 import { getPlaybookCreationPageAction } from "@/actions/playbook";
-import { notFound } from "next/navigation";
 import { ErrorState } from "@/components/states";
-import { getUserErrorMessage } from "@/shared/utils";
 
 export default async function Page() {
   const result = await getPlaybookCreationPageAction();
@@ -17,5 +14,5 @@ export default async function Page() {
       />
     );
   }
-  return <CreatePlaybookPage page={result.data} />;
+  return <CreatePlaybookPageClient page={result.data} />;
 }

@@ -6,7 +6,6 @@ import { SESSION_MODAL_TYPES } from "../components/modals";
 import type { CreateSessionFormValues } from "../domain";
 import {
   CreateSessionModalProps,
-  DeleteSessionModalProps,
   UpdateSessionModalProps,
 } from "@/lib/modals/types";
 import { DefaultValues } from "react-hook-form";
@@ -45,15 +44,14 @@ export const useSessionActions = () => {
     },
     [handleCreateSession, openModal, user.id],
   );
-
+  /**
+   * @deprecated
+   */
   const deleteSession = useCallback(
     (sessionId: string) => {
-      openModal<DeleteSessionModalProps>(SESSION_MODAL_TYPES.DELETE, {
-        sessionId,
-        onSubmit: () => handleDeleteSession(sessionId),
-      });
+      return handleDeleteSession(sessionId);
     },
-    [handleDeleteSession, openModal],
+    [handleDeleteSession],
   );
 
   const updateSession = useCallback(

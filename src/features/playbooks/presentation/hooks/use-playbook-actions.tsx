@@ -9,11 +9,13 @@ import {
   useUpdatePlaybookStrategy,
 } from ".";
 import {
-  DeletePlaybookModalProps,
   UpdatePlaybookModalProps,
   ReplaceStrategyModalProps,
+  ConfirmationModalProps,
 } from "@/lib/modals/types";
-
+/**
+ * @deprecated
+ */
 export const usePlaybookActions = () => {
   const { isPending: isDeleting, mutateAsync: handleDeletePlaybook } =
     useDeletePlaybook();
@@ -29,18 +31,20 @@ export const usePlaybookActions = () => {
       strategyToReplace: PlaybookStrategy,
       newStrategy: Strategy,
     ) => {
-      const { steps, id, title, description } = newStrategy;
+      const { steps, id, title, description, slug, category } = newStrategy;
 
       await updatePlaybookStrategy({
         strategyId: strategyToReplace.id,
         playbookId,
         data: {
-          playbookId,
-          steps,
-          sourceId: id,
-          sourceType: "playbook",
           title,
-          description,
+          steps,
+          cardSlug:
+            slug ?? title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          category: category ?? "strategy",
+          sourceId: id,
+          sourceType: "system",
+          description: description ?? "",
         },
       });
     },
@@ -74,10 +78,11 @@ export const usePlaybookActions = () => {
 
   const deletePlaybook = useCallback(
     (playbookId: string) => {
-      openModal<DeletePlaybookModalProps>(PLAYBOOK_MODAL_TYPES.DELETE, {
-        playbookId,
+      openModal<ConfirmationModalProps>("confirmation", {
+        title: "Delete Playbook",
+        description: "Are you sure you want to delete this playbook?",
         onConfirm: () => handleDeletePlaybook(playbookId),
-
+        isAlert: true,
         isLoading: isDeleting,
       });
     },

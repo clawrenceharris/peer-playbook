@@ -12,14 +12,12 @@ import { Playbook } from "@/components/icons";
 import { Bookmark, Brain } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useStore } from "zustand";
-import { useSidebar } from "@/store";
-import PlaybooksPage from "./playbooks/PlaybooksPage";
+import PlaybooksPage from "./_components/PlaybooksPage";
 import { PlaybooksPageOutput } from "@/features/playbooks/application/dto/PlaybooksPageDTO";
 import { PlaybooksPageSkeleton } from "@/features/playbooks/presentation/components";
 import { useEffect, useRef, useState } from "react";
 
-const items: {
+const menuItems: {
   id: string;
   label: string;
   href: string;
@@ -52,10 +50,11 @@ const items: {
 type LibraryPageClientProps = {
   playbooksPage: PlaybooksPageOutput;
 };
+
 export function LibraryPageClient({ playbooksPage }: LibraryPageClientProps) {
   const pathname = usePathname();
 
-  const activePath = items.find((item) => item.isActive(pathname));
+  const activePath = menuItems.find((item) => item.isActive(pathname));
   const activePathId = activePath?.id ?? "playbooks";
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -80,7 +79,7 @@ export function LibraryPageClient({ playbooksPage }: LibraryPageClientProps) {
         </SidebarHeader>
         <SidebarContent className="px-3 py-5">
           <SidebarMenu className="flex flex-col items-start gap-3">
-            {items.map(({ id, label, href, isActive, icon: Icon }) => {
+            {menuItems.map(({ id, label, href, isActive, icon: Icon }) => {
               return (
                 <SidebarMenuItem className="w-full" key={id}>
                   <SidebarMenuButton
@@ -89,7 +88,7 @@ export function LibraryPageClient({ playbooksPage }: LibraryPageClientProps) {
                       "text-foreground/80 [&_svg]:stroke-foreground/80 flex h-10 items-center justify-start rounded-md p-4 text-sm font-normal transition-all",
                       "hover:bg-muted-foreground/10",
                       isActive(pathname)
-                        ? "bg-primary-foreground text-primary-400 [&_path]:stroke-primary-400 border font-semibold"
+                        ? "bg-primary-foreground text-primary hover:text-primary [&_path]:stroke-primary-400 border font-semibold shadow-xs"
                         : "",
                     )}
                   >
@@ -104,7 +103,7 @@ export function LibraryPageClient({ playbooksPage }: LibraryPageClientProps) {
           </SidebarMenu>
         </SidebarContent>
       </Sidebar>
-      <div className="pl-[calc(var(--library-sidebar-width))]">
+      <div className="h-full pl-[calc(var(--library-sidebar-width))]">
         {activePathId === "playbooks" && <PlaybooksPage page={playbooksPage} />}
         {/* {activePathId === "strategies" && <StrategiesPage />}
         {activePathId === "bookmarks" && <BookmarksPage />} */}

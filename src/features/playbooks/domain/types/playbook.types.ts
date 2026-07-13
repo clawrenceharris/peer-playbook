@@ -1,4 +1,5 @@
 export type UpdatePlaybookCommand = {
+  title?: string;
   topic?: string;
   courseName?: string;
   subject?: string;
@@ -7,6 +8,7 @@ export type UpdatePlaybookCommand = {
 
 export type CreatePlaybookCommand = {
   topic: string;
+  title: string;
   courseName: string | null;
   methodology: string | null;
   instructionalModelId?: string;

@@ -10,9 +10,14 @@ import {
 import { cn } from "@/lib/utils";
 import { PlaybookStrategy } from "@/features/playbooks/domain";
 import { getCardBackgroundColor, getCardIcon } from "@/utils";
+import { PlaybookStrategyCardDTO } from "@/features/playbooks/application/dto";
+import {
+  PHASE_INTENT_ICONS,
+  PHASE_STYLES,
+} from "@/features/reference-data/phase-intents/domain/constants/phase-intents.constants";
 
 interface VirtualStrategyCardProps {
-  strategy: PlaybookStrategy;
+  strategy: PlaybookStrategyCardDTO;
   onAction?: () => void;
   description?: string;
   actionLabel?: string;
@@ -26,23 +31,24 @@ export const VirtualStrategyCard = ({
   showsDescription = true,
   onAction,
 }: VirtualStrategyCardProps) => {
+  const Icon = PHASE_INTENT_ICONS[strategy.phase];
   return (
-    <Card className="strategy-card flex-1 p-0 relative rounded-2xl border border-border shadow-md bg-card text-card-foreground transition-transform">
+    <Card className="strategy-card border-border bg-card text-card-foreground relative flex-1 rounded-2xl border p-0 shadow-md transition-transform">
       <CardHeader
         className={cn(
-          `flex relative text-background items-center p-3 gap-6 rounded-tl-2xl rounded-tr-2xl`,
-          `${getCardBackgroundColor(strategy.phase)}`
+          `text-background relative flex items-center gap-6 rounded-tl-2xl rounded-tr-2xl p-3`,
+          `${PHASE_STYLES[strategy.phase].card}`,
         )}
       >
-        <div className="min-w-[40px] min-h-[40px] bg-foreground/20 rounded-full flex items-center justify-center">
-          {getCardIcon(strategy.phase)}
+        <div className="bg-foreground/20 flex min-h-[40px] min-w-[40px] items-center justify-center rounded-full">
+          <Icon />
         </div>
         <div className="w-full">
           <div>
-            <h2 className="font-bold text-xl">{strategy.title} </h2>
+            <h2 className="text-xl font-bold">{strategy.title} </h2>
           </div>
-          <div className="flex items-center  justify-between">
-            <span className="uppercase font-light text-background/70 text-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-background/70 text-sm font-light uppercase">
               {strategy.phase}
             </span>
           </div>
@@ -51,14 +57,14 @@ export const VirtualStrategyCard = ({
       <CardContent>
         {showsDescription && (
           <CardDescription>
-            <p className="text-muted-foreground bg-muted text-center rounded-xl py-3 px-5 text-sm">
-              {description || strategy.description}
+            <p className="text-muted-foreground bg-muted rounded-xl px-5 py-3 text-center text-sm">
+              {description || strategy.title}
             </p>
           </CardDescription>
         )}
       </CardContent>
       {onAction && actionLabel && (
-        <CardFooter className="p-6 w-full flex justify-end">
+        <CardFooter className="flex w-full justify-end p-6">
           <Button onClick={onAction}>{actionLabel}</Button>
         </CardFooter>
       )}

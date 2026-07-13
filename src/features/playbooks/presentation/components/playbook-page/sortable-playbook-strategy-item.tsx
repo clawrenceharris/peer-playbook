@@ -3,26 +3,33 @@ import {
   Item,
   ItemActions,
   ItemContent,
-  ItemHeader,
-  ItemMedia,
   ItemTitle,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  ContextMenu,
+  ContextMenuTrigger,
+  ContextMenuContent,
+  ContextMenuItem,
 } from "@/components/ui";
-import { PlaybookStrategyCardDTO } from "@/features/playbooks/application/dto";
 import { cn } from "@/lib/utils";
 import { useSortable } from "@dnd-kit/sortable";
 import {
   EllipsisVertical,
-  LucideIcon,
+  GripVertical,
   LucideProps,
-  MoreVertical,
+  Repeat2,
+  Trash2,
 } from "lucide-react";
 import { CSS } from "@dnd-kit/utilities";
-import { HTMLAttributes, useState } from "react";
+import { HTMLAttributes } from "react";
 import { PHASE_STYLES } from "@/features/reference-data/phase-intents/domain/constants/phase-intents.constants";
 import { PhaseIntent } from "@/features/reference-data/phase-intents/domain/types/PhaseIntent";
 
 type StrategyItem = {
   id: string;
+  playbookPhaseId: string;
   title: string;
   duration: string;
   phase: PhaseIntent;
@@ -32,11 +39,15 @@ type StrategyItem = {
 type StrategyItemProps = {
   strategy: StrategyItem;
   onClick?: () => void;
+  onReplaceClick?: () => void;
+  onRemoveClick?: () => void;
   isSelected?: boolean;
 } & HTMLAttributes<HTMLDivElement>;
 export function SortablePlaybookStrategyItem({
   strategy,
   onClick,
+  onReplaceClick,
+  onRemoveClick,
   isSelected,
   ...props
 }: StrategyItemProps) {
@@ -50,52 +61,55 @@ export function SortablePlaybookStrategyItem({
   };
   const styles = PHASE_STYLES[strategy.phase];
   return (
-    <Item
-      ref={setNodeRef}
-      style={style}
-      key={strategy.id}
-      tabIndex={0}
-      onClick={onClick}
-      className={cn(
-        "rounded-none shadow-xs",
-        isDragging && "ring-primary-500 ring-2",
-        "group hover:bg-muted/50 cursor-pointer px-4 py-3",
-        isSelected && styles.active,
-      )}
-      {...props}
-    >
-      <div
-        aria-hidden="true"
-        className="text-muted-foreground/70 group-hover:text-foreground mr-2 flex shrink-0 cursor-grab transition-colors"
-      >
-        <span className="tracking-[-2px]">⋮⋮</span>
-      </div>
-
-      <ItemContent className="min-w-0 gap-1">
-        <ItemTitle className="truncate text-sm font-semibold">
-          {strategy.title}
-        </ItemTitle>
-      </ItemContent>
-
-      <ItemActions className="ml-auto shrink-0 gap-2 self-center">
-        <span className="bg-background text-muted-foreground rounded-full border px-2 py-1 text-xs font-medium">
-          {strategy.duration}
-        </span>
-
-        <Button
-          type="button"
-          size="icon-xs"
-          variant="outline"
-          aria-label={`More options for ${strategy.title}`}
-          onClick={(event) => {
-            event.stopPropagation();
-            // Replace with DropdownMenu later.
-          }}
-          className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-full p-1 transition-colors"
+    <ContextMenu>
+      <ContextMenuTrigger>
+        <Item
+          ref={setNodeRef}
+          style={style}
+          key={strategy.id}
+          tabIndex={0}
+          onClick={onClick}
+          className={cn(
+            "relative flex-1 overflow-hidden rounded-none shadow-xs",
+            isDragging && "ring-primary-500 ring-2",
+            "group cursor-pointer px-4 py-4",
+            isSelected && styles.activeStrategy,
+          )}
+          {...props}
         >
-          <EllipsisVertical className="size-4" />
-        </Button>
-      </ItemActions>
-    </Item>
+          <span
+            aria-hidden
+            className={cn(
+              "absolute bottom-0 left-0 h-full w-[3.6px] bg-transparent",
+              {
+                "bg-intent-activate": strategy.phase === PhaseIntent.ACTIVATE,
+                "bg-intent-explore": strategy.phase === PhaseIntent.EXPLORE,
+                "bg-intent-apply": strategy.phase === PhaseIntent.APPLY,
+                "bg-intent-reflect": strategy.phase === PhaseIntent.REFLECT,
+              },
+              !isSelected && "bg-transparent",
+            )}
+          />
+          <div
+            aria-hidden="true"
+            className="text-muted-foreground/70 group-hover:text-foreground mr-2 flex shrink-0 cursor-grab transition-colors"
+          >
+            <GripVertical className="size-4" />
+          </div>
+
+          <ItemContent className="min-w-0 gap-1">
+            <ItemTitle className="line-clamp-1 max-w-[200px] truncate text-sm font-semibold select-none">
+              {strategy.title}
+            </ItemTitle>
+          </ItemContent>
+        </Item>
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem variant="destructive" onClick={onRemoveClick}>
+          <Trash2 />
+          Remove
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 }

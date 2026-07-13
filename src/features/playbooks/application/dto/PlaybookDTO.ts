@@ -1,13 +1,17 @@
+import { PlaybookStrategyCardDTO } from "./PlaybookStrategyDTO";
+
 export type PlaybookDetailDTO = {
   id: string;
   methodology: string | null;
   createdAt: Date;
   courseName: string | null;
-  subject: string;
+  subject: string | null;
+  title: string;
   topic: string;
   published: boolean;
   updatedAt: Date | null;
   createdBy: string;
+  strategies: PlaybookStrategyCardDTO[];
 };
 
 export type PlaybookCardDTO = {
@@ -16,7 +20,8 @@ export type PlaybookCardDTO = {
   published: boolean;
   createdAt: Date;
   courseName: string | null;
-  subject: string;
+  subject: string | null;
+  title: string;
   topic: string;
   createdBy: string | null;
 };

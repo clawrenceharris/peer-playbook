@@ -56,21 +56,31 @@ export class CreatePlaybookUseCase {
     input: CreatePlaybookInput,
   ): Promise<Result<CreatePlaybookResult>> {
     try {
-      const { topic, courseName, subject, contexts, modes } = input;
+      const { topic, courseName, title, subject, contexts, modes } = input;
 
       const result = await this.playbookRepository.createPlaybook({
         topic,
         courseName: courseName ?? null,
-        subject,
+        subject: subject ?? "",
         createdBy: input.userId,
         methodology: null, // TODO: Implement methodology generation
         instructionalModelId: input.instructionalModelId,
         contexts,
+        title,
         modes: modes ?? [],
         phases: buildCreatePhases(input),
       });
       return ok(result);
     } catch (error) {
+      if (
+        error instanceof Error &&
+        (error.message.startsWith("Missing phase intent") ||
+          error.message.startsWith("Missing strategy") ||
+          error.message.startsWith("Missing playbook phase"))
+      ) {
+        return fail(ApplicationError.validation(error.message));
+      }
+
       const appError = ApplicationError.unexpected(
         error,
         "Failed to create playbook",

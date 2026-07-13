@@ -3,3 +3,8 @@ export * from "./GetPlaybookPageUseCase";
 export * from "./CreatePlaybookUseCase";
 export * from "./UpdatePlaybookUseCase";
 export * from "./UpdatePlaybookPhasesUseCase";
+export * from "./UpdatePlaybookStrategyUseCase";
+export * from "./DeletePlaybookUseCase";
+export * from "./FavoritePlaybookUseCase";
+export * from "./AddPlaybookStrategyUseCase";
+export * from "./RemovePlaybookStrategyUseCase";

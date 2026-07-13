@@ -11,7 +11,7 @@ const TIPS = [
   "A new session can be created directly from a created playbook",
   "Strategies can be customized to fit your needs",
   "Easily reorder your playbook strategies by dragging and dropping them into your preferred sequence",
-  "Really like a playbook? Add it to your Favorites for easier search",
+  "Really like a playbook? Add it to your Favorites for easier lookup",
 ];
 
 const TIP_DURATION = 4000; // 4 seconds per tip
@@ -29,7 +29,7 @@ export function AIGeneratingState() {
 
   return (
     <div
-      className="relative flex flex-col  items-center justify-center py-16  px-6 min-h-[500px] gap-10 overflow-hidden"
+      className="relative flex min-h-[500px] flex-col items-center justify-center gap-10 overflow-hidden px-6 py-16"
       aria-label="Generating playbook"
     >
       <LoaderFive text={"Generating playbook..."} />
@@ -45,17 +45,17 @@ export function AIGeneratingState() {
             duration: 0.5,
             ease: "easeInOut",
           }}
-          className="text-center px-4 flex-col w-full flex items-center absolute bottom-2 justify-center"
+          className="absolute bottom-2 flex w-full flex-col items-center justify-center px-4 text-center"
         >
-          <div className="flex items-center gap-3 justify-center mb-2">
-            <div className="h-1 w-1 rounded-full bg-secondary-400"></div>
+          <div className="mb-2 flex items-center justify-center gap-3">
+            <div className="bg-secondary-400 h-1 w-1 rounded-full"></div>
 
-            <p className="text-sm font-semibold text-secondary-400 uppercase tracking-wide">
+            <p className="text-secondary-400 text-sm font-semibold tracking-wide uppercase">
               Tip
             </p>
-            <div className="h-1 w-1 rounded-full bg-secondary-400"></div>
+            <div className="bg-secondary-400 h-1 w-1 rounded-full"></div>
           </div>
-          <p className="text-muted-foreground text-lg max-w-xl">
+          <p className="text-muted-foreground max-w-xl text-lg">
             {TIPS[currentTipIndex]}
           </p>
         </motion.div>

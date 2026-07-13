@@ -2,9 +2,10 @@ import { PlaybookStrategyCardDTO } from "../../application/dto";
 
 export type PlaybookProps = {
   id: string;
+  title: string;
   topic: string;
   courseName: string | null;
-  subject: string;
+  subject: string | null;
   createdBy: string | null;
   createdAt: Date;
   strategies: PlaybookStrategyCardDTO[];
@@ -19,6 +20,10 @@ export class Playbook {
 
   get topic() {
     return this.props.topic;
+  }
+
+  get title() {
+    return this.props.title;
   }
 
   get courseName() {

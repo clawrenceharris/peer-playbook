@@ -4,7 +4,7 @@ import {
   CreatePlaybookResult,
   CreatePlaybookInput,
 } from "@/features/playbooks/application/dto";
-import { createPlaybookSchema } from "@/lib/validation";
+import { buildPlaybookSchema } from "@/lib/validation";
 import { ActionResult, toActionError } from "@/shared/action";
 import { fail } from "@/shared/application";
 import { ApplicationError } from "@/shared/utils";
@@ -13,7 +13,7 @@ export async function createPlaybookAction(
   input: CreatePlaybookInput,
 ): Promise<ActionResult<CreatePlaybookResult>> {
   try {
-    const { error } = createPlaybookSchema.safeParse(input);
+    const { error } = buildPlaybookSchema.safeParse(input);
     if (error) {
       const appError = ApplicationError.validation(error.message);
       return fail(toActionError(appError));

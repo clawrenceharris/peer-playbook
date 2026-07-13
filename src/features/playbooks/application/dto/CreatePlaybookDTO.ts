@@ -1,8 +1,8 @@
-import { CreatePlaybookFormValues } from "@/lib/validation";
+import { BuildPlaybookFormValues } from "@/lib/validation";
 
 export type CreatePlaybookInput = {
   userId: string;
-} & CreatePlaybookFormValues;
+} & BuildPlaybookFormValues;
 
 export type CreatePlaybookResult = {
   id: string;

@@ -24,7 +24,7 @@ export const PlaybookFilters = ({
 }: PlaybookFiltersProps) => {
   const handleToggle = (
     key: keyof PlaybookFilterState,
-    value: ValueOf<PlaybookFilterState>
+    value: ValueOf<PlaybookFilterState>,
   ) => {
     const newFilter = filters[key] === value ? "" : value;
     onFilterChange({ ...filters, [key]: newFilter });
@@ -32,7 +32,7 @@ export const PlaybookFilters = ({
   return (
     <div className="flex flex-wrap gap-6">
       <Toggle
-        className="text-muted-foreground bg-primary-foreground shadow-sm border-1 hover:bg-background transition-[background] duration-200"
+        className="text-muted-foreground bg-primary-foreground hover:bg-background border shadow-xs"
         pressed={filters.favorite === true}
         onPressedChange={() => handleToggle("favorite", !filters.favorite)}
         size="lg"

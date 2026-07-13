@@ -43,6 +43,12 @@ export class ApplicationError extends Error {
       message: message ?? errorMessages[AppErrorCode.RESOURCE_NOT_FOUND],
     });
   }
+  static permissionDenied(message?: string) {
+    return new ApplicationError({
+      code: AppErrorCode.PERMISSION_DENIED,
+      message: message ?? errorMessages[AppErrorCode.PERMISSION_DENIED],
+    });
+  }
 }
 
 // Centralized error message mapping

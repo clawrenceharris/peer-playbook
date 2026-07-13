@@ -23,3 +23,22 @@ export async function getPlaybookByIdAction(
     return fail(toActionError(appError));
   }
 }
+
+export async function getPlaybookDetailAction(
+  id: string,
+): Promise<ActionResult<PlaybookDetailDTO | null>> {
+  try {
+    const playbookService = makePlaybookReadService();
+    const result = await playbookService.getPlaybookDetail(id);
+    if (!result.success) {
+      return fail(toActionError(result.error));
+    }
+    return result;
+  } catch (error) {
+    const appError = ApplicationError.unexpected(
+      error,
+      "Failed to load playbook detail",
+    );
+    return fail(toActionError(appError));
+  }
+}

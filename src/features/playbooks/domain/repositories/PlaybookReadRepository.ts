@@ -20,4 +20,5 @@ export interface PlaybookReadRepository {
   findPlaybookDetailById(id: string): Promise<PlaybookDetailDTO | null>;
   listPlaybooks(): Promise<PlaybookCardDTO[]>;
   listPlaybooksByUserId(userId: string): Promise<PlaybookCardDTO[]>;
+  listSavedPlaybookIdsByUserId(userId: string): Promise<string[]>;
 }

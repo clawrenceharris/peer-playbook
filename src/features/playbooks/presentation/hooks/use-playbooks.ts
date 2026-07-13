@@ -1,14 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { usePlaybook, usePlaybookService } from ".";
 import {
-  selectSortedPlaybooks,
   selectPublishedPlaybooks,
   selectRecentPlaybooks,
-  selectSortedPlaybookStrategies,
 } from "../../selectors";
-import { Playbook } from "../../domain";
 import { PlaybookCardDTO } from "../../application/dto";
 import { playbookKeys } from "@/lib/queries/keys";
+import { getSavedPlaybookIdsAction } from "@/actions/playbook";
 
 /**
  * Base hook to fetch all playbooks with optional selector
@@ -18,7 +15,6 @@ import { playbookKeys } from "@/lib/queries/keys";
 export function usePlaybooks<TSelected = PlaybookCardDTO[]>(
   select?: (playbooks: PlaybookCardDTO[]) => TSelected,
 ) {
-  const playbookService = usePlaybookService();
   return useQuery({
     queryKey: playbookKeys.all,
     meta: { invaidatesQuery: playbookKeys.all },
@@ -26,17 +22,6 @@ export function usePlaybooks<TSelected = PlaybookCardDTO[]>(
     select,
   });
 }
-
-/**
- * Hook to fetch playbooks sorted by creation date (newest first)
- */
-export const useSortedPlaybooks = <TSelected = PlaybookCardDTO[]>(
-  select?: (playbooks: PlaybookCardDTO[]) => TSelected,
-) => {
-  return usePlaybooks((p) => {
-    return [];
-  });
-};
 
 /**
  * Hook to fetch published playbooks only
@@ -59,15 +44,6 @@ export const useRecentPlaybooks = (count: number = 10) => {
 };
 
 /**
- * Hook to get playbook with strategies sorted by phase (warmup -> workout -> closer)
- * @param playbookId - The playbook ID
- */
-export const usePlaybookSortedStrategies = (playbookId: string) =>
-  usePlaybook(playbookId, (playbook) =>
-    playbook ? selectSortedPlaybookStrategies(playbook) : [],
-  );
-
-/**
  * Hook to fetch favorite playbook IDs for a user
  * @param userId - The user ID
  * @param select - Optional selector function to transform the data
@@ -76,11 +52,14 @@ export const useMyFavoritePlaybooks = <TSelected = string[]>(
   userId: string,
   select?: (ids: string[]) => TSelected,
 ) => {
-  const playbookService = usePlaybookService();
   return useQuery({
     queryKey: playbookKeys.favorite(),
-    queryFn: () => {
-      return playbookService.getFavoritePlaybookIds(userId);
+    queryFn: async () => {
+      const result = await getSavedPlaybookIdsAction(userId);
+      if (!result.success) {
+        throw result.error;
+      }
+      return result.data;
     },
     meta: { invaidatesQuery: playbookKeys.favorite() },
 

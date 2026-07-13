@@ -454,7 +454,6 @@ model users {
   webauthn_challenges         webauthn_challenges[]
   webauthn_credentials        webauthn_credentials[]
   profiles                    profiles?
-  public_sessions                    public_sessions[]
 
   @@index([created_at(sort: Desc)], map: "idx_users_created_at_desc")
   @@index([email], map: "idx_users_email")
@@ -606,12 +605,14 @@ model playbooks {
   created_at          DateTime              @default(now()) @db.Timestamptz(6)
   updated_at          DateTime?             @default(now()) @db.Timestamptz(6)
   course_name         String?
-  createdBy           String                @default(dbgenerated("auth.uid()")) @db.Uuid
+  created_by          String                @default(dbgenerated("auth.uid()")) @db.Uuid
   published           Boolean?              @default(true)
-  subject             String
+  subject             String?
+  title               String                @default("'Untitled Playbook'::text")
+  duration_minutes    String?               @default("NULL")
   playbook_phases     playbook_phases[]
   playbook_strategies playbook_strategies[]
-  profiles            profiles              @relation(fields: [createdBy], references: [id], onDelete: Cascade, map: "playbooks_owner_fkey")
+  profiles            profiles              @relation(fields: [created_by], references: [id], onDelete: Cascade, map: "playbooks_owner_fkey")
   saved_playbooks     saved_playbooks[]
   sessions            public_sessions[]
 
@@ -682,8 +683,7 @@ model public_sessions {
   call_id             String?               @db.Uuid
   mode                session_mode
   activity_executions activity_executions[]
-  profiles            profiles?             @relation(fields: [leader_id], references: [id], onDelete: Cascade)
-  users               users?                @relation(fields: [leader_id], references: [id], onDelete: Cascade, map: "sessions_leader_id_fkey1")
+  users               profiles?             @relation(fields: [leader_id], references: [id], onDelete: Cascade, map: "sessions_leader_id_fkey1")
   playbooks           playbooks?            @relation(fields: [playbook_id], references: [id])
 
   @@index([course_name], map: "idx_sessions_course_name")
@@ -707,7 +707,7 @@ model strategies {
   good_for               String[]                 @default([])
   created_at             DateTime?                @default(now()) @db.Timestamptz(6)
   course_tags            String[]                 @default([])
-  session_size           session_size             @default(dbgenerated("2+"))
+  session_size           session_size             @default(two_plus)
   virtual_friendly       Boolean                  @default(false)
   virtualized            Boolean?                 @default(false)
   description            String                   @default("No description")
@@ -836,13 +836,13 @@ enum session_mode {
 }
 
 enum session_size {
-
-  one_plus   @map("1+")
-  two_plus   @map("2+")
-  four_plus  @map("4+")
-  two_to_four @map("2-4")
+  one_plus      @map("1+")
+  two_plus      @map("2+")
+  four_plus     @map("4+")
+  two_to_four   @map("2-4")
   four_to_eight @map("4-8")
-  eight_plus  @map("8+")
+  eight_plus    @map("8+")
+
   @@schema("public")
 }
 

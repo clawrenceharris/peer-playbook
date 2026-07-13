@@ -39,16 +39,5 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-
-  const result = await getPlaybookPageAction(id);
-  if (!result.success) {
-    return (
-      <SidebarLayout>
-        <ErrorState variant="card" message={result.error.message} />
-      </SidebarLayout>
-    );
-  }
-
-  const page = result.data;
-  return <PlaybookPage page={page} />;
+  return <PlaybookPage playbookId={id} />;
 }

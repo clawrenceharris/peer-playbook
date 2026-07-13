@@ -3,16 +3,14 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
   AppSkeleton,
   Button,
-  CardTitle,
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
-  ItemGroup,
   ItemMedia,
+  ItemTitle,
   useSidebar,
 } from "@/components/ui";
-import { useSensor, useSensors, PointerSensor } from "@dnd-kit/core";
 
 import {
   Brain,
@@ -25,7 +23,14 @@ import {
   LucideProps,
   Plus,
 } from "lucide-react";
-import { useReorderStrategies } from "@/features/playbooks/presentation/hooks";
+import {
+  usePlaybookPage,
+  useAddPlaybookStrategy,
+  useReorderStrategies,
+  useRemovePlaybookStrategy,
+  useUpdatePlaybookStrategy,
+  useUpdatePlaybookPhases,
+} from "@/features/playbooks/presentation/hooks";
 import {
   useMySavedStrategiesWithDetails,
   useMyUserStrategies,
@@ -34,13 +39,13 @@ import {
 import { BeforeUnload } from "@/components/form";
 import { useUser } from "@/components/providers";
 import { useModals, usePendingMutations } from "@/hooks";
+import { useModal } from "@/components/providers";
 import {
-  GetPlaybookPageOutput,
   PlaybookPagePhaseDTO,
   PlaybookStrategyDetailDTO,
 } from "@/features/playbooks/application/dto";
 import { cn, timeAgo } from "@/lib/utils";
-import { Playbook } from "@/components/icons";
+import { PencilEdit, Playbook } from "@/components/icons";
 import { StrategyListPanel } from "@/features/playbooks/presentation/components/playbook-page/strategy-list-panel";
 import { StrategyDetails } from "@/features/playbooks/presentation/components/playbook-page/strategy-details";
 import {
@@ -53,14 +58,10 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Icon } from "@/components/icons/icon";
-import { assets } from "@/lib/constants";
 import { StrategyPanel } from "@/components/shared";
-
-interface PlaybookPageProps {
-  page: GetPlaybookPageOutput;
-  onBackClick?: () => void;
-}
+import { PLAYBOOK_MODAL_TYPES } from "@/features/playbooks/presentation/components/modals";
+import { StrategyRef } from "@/lib/validation";
+import { ErrorState } from "@/components/states";
 
 const legacyPhaseIntentMap: Record<string, PhaseIntent> = {
   warmup: PhaseIntent.ACTIVATE,
@@ -122,15 +123,51 @@ function getStrategyIntent(strategy: PlaybookStrategyDetailDTO): PhaseIntent {
   return legacyPhaseIntentMap[strategy.phase] ?? PhaseIntent.ACTIVATE;
 }
 
-export default function PlaybookPage({ page, onBackClick }: PlaybookPageProps) {
-  const { playbook } = page;
+function toPhaseIntentKey(
+  intent: PhaseIntent,
+): "activate" | "explore" | "apply" | "reflect" {
+  if (
+    intent === PhaseIntent.ACTIVATE ||
+    intent === PhaseIntent.EXPLORE ||
+    intent === PhaseIntent.APPLY ||
+    intent === PhaseIntent.REFLECT
+  ) {
+    return intent;
+  }
+
+  return PhaseIntent.APPLY;
+}
+
+function toLegacyPhase(intent: PhaseIntent): "warmup" | "workout" | "closer" {
+  if (intent === PhaseIntent.ACTIVATE) return "warmup";
+  if (intent === PhaseIntent.EXPLORE) return "workout";
+  if (intent === PhaseIntent.REFLECT) return "closer";
+  return "workout";
+}
+
+interface PlaybookPageProps {
+  playbookId: string;
+  onBackClick?: () => void;
+}
+export default function PlaybookPage({
+  playbookId,
+  onBackClick,
+}: PlaybookPageProps) {
+  const {
+    data: page,
+    error,
+    isLoading,
+  } = usePlaybookPage({
+    playbookId,
+  });
   const { user } = useUser();
+  const { openModal } = useModal();
+  const { mutateAsync: addPlaybookStrategy } = useAddPlaybookStrategy();
   const { mutateAsync: reorderStrategies } = useReorderStrategies();
+  const { mutateAsync: removePlaybookStrategy } = useRemovePlaybookStrategy();
+  const { mutateAsync: updatePlaybookStrategy } = useUpdatePlaybookStrategy();
   const { data: userStrategies = [] } = useMyUserStrategies(user.id);
   const [isStrategyPanelOpen, setIsStrategyPanelOpen] = useState(false);
-  const [reorderedStrategies, setReorderedStrategies] = useState<
-    PlaybookStrategyDetailDTO[]
-  >([]);
   const { setOpen: setSidebarOpen } = useSidebar();
   const { data: savedStrategies = [] } = useMySavedStrategiesWithDetails(
     user.id,
@@ -152,12 +189,13 @@ export default function PlaybookPage({ page, onBackClick }: PlaybookPageProps) {
     Icon: React.ComponentType<LucideProps>;
     strategies: PlaybookStrategyDetailDTO[];
   }[] = useMemo(() => {
+    if (!page) return [];
     const strategiesHavePhaseLinks = page.strategies.some(
       (strategy) => strategy.playbookPhaseId,
     );
 
-    if (playbook.phases.length > 0) {
-      return playbook.phases.map((phase) => {
+    if (page.playbook.phases.length > 0) {
+      return page.playbook.phases.map((phase) => {
         const intent = getPhaseIntentKey(phase);
         const edit = phaseEdits[phase.id];
         const phaseTitle = edit?.title ?? phase.title;
@@ -186,33 +224,31 @@ export default function PlaybookPage({ page, onBackClick }: PlaybookPageProps) {
         (strategy) => getStrategyIntent(strategy) === phase.intent,
       ),
     }));
-  }, [page.strategies, phaseEdits, playbook.phases]);
+  }, [page, phaseEdits]);
   const metadata: { label: string; value: string }[] = useMemo(() => {
+    if (!page) return [];
     return [
-      playbook.creator
+      page.playbook.creator
         ? {
             label: "Created by",
-            value: playbook.creator.displayName,
+            value: page.playbook.creator.displayName,
           }
         : null,
-      playbook.updatedAt &&
-      playbook.updatedAt.toISOString() !== playbook.createdAt.toISOString()
+      page.playbook.updatedAt &&
+      page.playbook.updatedAt.toISOString() !==
+        page.playbook.createdAt.toISOString()
         ? {
             label: "Updated",
-            value: timeAgo(playbook.updatedAt?.toISOString()),
+            value: timeAgo(page.playbook.updatedAt?.toISOString()),
           }
         : null,
       {
         label: "",
-        value: timeAgo(playbook.createdAt?.toISOString()),
+        value: timeAgo(page.playbook.createdAt?.toISOString()),
       },
     ].filter(Boolean) as { label: string; value: string }[];
-  }, [playbook]);
-  const [isDirty, setIsDirty] = useState(false);
+  }, [page]);
   const isPhaseDirty = Object.keys(phaseEdits).length > 0;
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
-  );
   const { data: systemStrategies = [] } = useStrategies();
 
   const [isEditingPhaseTitle, setIsEditingPhaseTitle] = useState(false);
@@ -220,59 +256,129 @@ export default function PlaybookPage({ page, onBackClick }: PlaybookPageProps) {
   const activePhase = phases[phaseIndex] ?? phases[0];
   const activeStrategies = activePhase?.strategies ?? [];
   const activeStrategy = activeStrategies[strategyIndex] ?? null;
-
-  const strategies = useMemo(
-    () =>
-      reorderedStrategies.length > 0 ? reorderedStrategies : page.strategies,
-    [reorderedStrategies, page.strategies],
-  );
+  const { mutateAsync: updatePlaybookPhases } = useUpdatePlaybookPhases();
   const {
     modals: { "session:create": createSessionModal },
   } = useModals();
+  const strategySourceByKey = useMemo(() => {
+    const entries = [
+      ...systemStrategies.map(
+        (strategy) => [`system:${strategy.id}`, strategy] as const,
+      ),
+      ...savedStrategies.map(
+        (strategy) => [`system:${strategy.id}`, strategy] as const,
+      ),
+      ...userStrategies.map(
+        (strategy) => [`user:${strategy.id}`, strategy] as const,
+      ),
+    ];
+    return new Map(entries);
+  }, [savedStrategies, systemStrategies, userStrategies]);
   const handleSave = async () => {
     try {
+      if (!page) return;
       setIsSavingWorkspace(true);
       const updates: Promise<unknown>[] = [];
-
-      if (isDirty) {
+      if (isPhaseDirty && page.playbook.phases.length > 0) {
         updates.push(
-          reorderStrategies({
-            playbookId: playbook.id,
-            strategies,
+          updatePlaybookPhases({
+            playbookId: page.playbook.id,
+            phases: phases.map((phase, position) => ({
+              id: phase.id,
+              intentKey: toPhaseIntentKey(phase.intent),
+              title: phase.title,
+              intent: phase.intent,
+              position,
+            })),
           }),
         );
       }
-
-      if (isPhaseDirty && playbook.phases.length > 0) {
-        updates.push(
-          fetch(`/api/playbooks/${playbook.id}/phases`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              phases: phases.map((phase, position) => ({
-                id: phase.id,
-                title: phase.title,
-                intentKey: phase.intent,
-                position,
-              })),
-            }),
-          }).then(async (response) => {
-            if (!response.ok) {
-              const payload = await response.json().catch(() => null);
-              throw new Error(payload?.error ?? "Failed to update phases");
-            }
-          }),
-        );
-      }
-
       await Promise.all(updates);
-      setIsDirty(false);
       setPhaseEdits({});
     } catch {
     } finally {
       setIsSavingWorkspace(false);
     }
   };
+  const handleAddStrategy = async (ref: StrategyRef) => {
+    if (!activePhase || !page) return;
+    const source = strategySourceByKey.get(`${ref.sourceType}:${ref.sourceId}`);
+    if (!source) return;
+
+    await addPlaybookStrategy({
+      playbookId: page.playbook.id,
+      playbookPhaseId: activePhase.id,
+      title: source.title,
+      cardSlug:
+        source.slug ??
+        source.title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, ""),
+      category: source.category ?? "strategy",
+      steps: source.steps ?? [],
+      description: source.description ?? "",
+      phase: toLegacyPhase(activePhase.intent),
+      position: activeStrategies.length,
+      sourceId: source.id,
+      sourceType: ref.sourceType,
+    });
+  };
+  const handleReorderPhaseStrategies = async (
+    phaseId: string,
+    reordered: Array<
+      Pick<
+        (typeof activeStrategies)[number],
+        "id" | "title" | "phase" | "playbookPhaseId"
+      >
+    >,
+  ) => {
+    if (!page) return;
+    await reorderStrategies({
+      playbookId: page.playbook.id,
+      phaseId,
+      strategies: reordered,
+    });
+  };
+  const handleReplaceStrategy = (strategy: PlaybookStrategyDetailDTO) => {
+    if (!page) return;
+    openModal(PLAYBOOK_MODAL_TYPES.REPLACE_STRATEGY, {
+      strategyToReplace: strategy,
+      playbookId: page.playbook.id,
+      onSubmit: async (_strategyToReplace, newStrategy) => {
+        await updatePlaybookStrategy({
+          playbookId: page.playbook.id,
+          strategyId: strategy.id,
+          data: {
+            title: newStrategy.title,
+            cardSlug: newStrategy.slug,
+            category: newStrategy.category,
+            steps: newStrategy.steps,
+            description: newStrategy.description ?? "",
+            sourceId: newStrategy.id,
+            sourceType: "system",
+          },
+        });
+      },
+    });
+  };
+  async function handleRemoveStrategy(strategy: PlaybookStrategyDetailDTO) {
+    if (!page) return;
+
+    await removePlaybookStrategy({
+      playbookId: page.playbook.id,
+      strategyId: strategy.id,
+    });
+    const remaining = activeStrategies.filter(
+      (item) => item.id !== strategy.id,
+    );
+    if (remaining.length > 0) {
+      await handleReorderPhaseStrategies(
+        activePhase.id,
+        remaining as typeof activeStrategies,
+      );
+    }
+  }
   function updatePhaseTitle(id: string, title: string) {
     const currentPhase = phases.find((phase) => phase.id === id);
     if (!currentPhase) return;
@@ -304,12 +410,18 @@ export default function PlaybookPage({ page, onBackClick }: PlaybookPageProps) {
   useEffect(() => {
     setStrategyIndex(0);
   }, [phaseIndex]);
-  if (!page) {
+  if (isLoading) {
     return <AppSkeleton />;
   }
+  if (error) {
+    return <ErrorState variant="card" message={error.message} />;
+  }
+  if (!page) {
+    return <ErrorState variant="card" message="Pag>e not found" />;
+  }
   return (
-    <BeforeUnload disabled={!isDirty}>
-      <header className="header h-40">
+    <BeforeUnload disabled={!isPhaseDirty}>
+      <header className="header h-32">
         {onBackClick && (
           <Button variant="outline" size="icon" onClick={onBackClick}>
             <ChevronLeft className="size-6" />
@@ -325,14 +437,14 @@ export default function PlaybookPage({ page, onBackClick }: PlaybookPageProps) {
           </ItemMedia>
           <ItemContent>
             <div className="row gap-2">
-              <CardTitle
+              <ItemTitle
                 className={cn(
                   "text-lg font-semibold",
                   "line-clamp-2 max-w-[85%] flex-1 truncate text-lg font-semibold",
                 )}
               >
-                {playbook.topic}
-              </CardTitle>
+                {page.playbook.title}
+              </ItemTitle>
               {/* {playbook?.hasSession && (
                 <span className="text-success-500 bg-success-100 flex items-center gap-1 rounded-full py-1 pr-2 pl-1 text-xs">
                   <Check
@@ -343,16 +455,16 @@ export default function PlaybookPage({ page, onBackClick }: PlaybookPageProps) {
                 </span>
               )} */}
             </div>
-            {/* {isFavorite && (
-                        <StarIcon className="fill-accent-400 stroke-accent-400 size-4" />
-                      )} */}
             <ItemDescription className="text-xs">
+              <span className="text-muted-foreground text-sm font-normal">
+                {page.playbook.topic}
+              </span>
               {metadata.map((item, index) => (
                 <span
                   key={item.label}
                   className="text-muted-foreground text-sm font-normal"
                 >
-                  {index > 0 ? " • " : ""} {item.label} {item.value}
+                  {index > 0 ? " • " : " • "} {item.label} {item.value}
                 </span>
               ))}
             </ItemDescription>
@@ -373,9 +485,7 @@ export default function PlaybookPage({ page, onBackClick }: PlaybookPageProps) {
             </Button>
             <Button
               variant="primary"
-              disabled={
-                (!isDirty && !isPhaseDirty) || isUpdating || isSavingWorkspace
-              }
+              disabled={!isPhaseDirty || isUpdating || isSavingWorkspace}
               onClick={handleSave}
             >
               {isUpdating || isSavingWorkspace ? (
@@ -388,155 +498,163 @@ export default function PlaybookPage({ page, onBackClick }: PlaybookPageProps) {
           </ItemActions>
         </Item>
       </header>
-      <div className="secondary-header flex h-40 flex-col overflow-hidden px-3 py-0">
-        <ItemGroup
-          className="flex w-full min-w-0 flex-1 flex-row items-center justify-center gap-4 overflow-x-auto"
-          style={{
-            gridTemplateColumns: `repeat(${Math.max(phases.length, 1)}, minmax(0, 1fr))`,
-          }}
-        >
-          {phases.map((phase) => (
-            <Item
-              key={phase.id}
-              onClick={() => {
-                if (phase.id !== activePhase.id) {
-                  setIsEditingPhaseTitle(false);
-                }
-                setPhaseIndex(phases.findIndex((p) => p.id === phase.id));
-              }}
-              tabIndex={0}
+      <div className="secondary-header">
+        <div className="flex items-center gap-2">
+          <div
+            className={cn(
+              "flex size-9 items-center justify-center rounded-full border-0",
+              PHASE_STYLES[activePhase.intent].icon,
+              {
+                "bg-intent-activate/20":
+                  activePhase.intent === PhaseIntent.ACTIVATE,
+                "bg-intent-explore/20":
+                  activePhase.intent === PhaseIntent.EXPLORE,
+                "bg-intent-apply/20": activePhase.intent === PhaseIntent.APPLY,
+                "bg-intent-reflect/20":
+                  activePhase.intent === PhaseIntent.REFLECT,
+                "bg-intent-transition/20":
+                  activePhase.intent === PhaseIntent.TRANSITION,
+              },
+            )}
+          >
+            <activePhase.Icon strokeWidth={2.5} className={cn("size-4.5")} />
+          </div>
+
+          {isEditingPhaseTitle && activePhase.id === activePhase.id ? (
+            <InputGroup
               className={cn(
-                "group/phase relative flex-1 cursor-pointer overflow-hidden rounded-2xl py-1 shadow-md transition-transform duration-200 ease-in-out hover:-translate-y-1",
-                PHASE_STYLES[phase.intent].card,
-                activePhase?.id === phase.id &&
-                  PHASE_STYLES[phase.intent].active,
+                "text-foreground h-10 w-fit rounded-lg border-transparent text-xl font-bold shadow-none",
+
+                {
+                  "focus-visible:ring-intent-activate":
+                    activePhase.intent === PhaseIntent.ACTIVATE,
+                  "focus-visible:ring-intent-explore":
+                    activePhase.intent === PhaseIntent.EXPLORE,
+                  "focus-visible:ring-intent-apply":
+                    activePhase.intent === PhaseIntent.APPLY,
+                  "focus-visible:ring-intent-reflect":
+                    activePhase.intent === PhaseIntent.REFLECT,
+                },
               )}
             >
-              <ItemContent
-                className={"relative flex-row items-center gap-3 p-3"}
+              <InputGroupInput
+                aria-label={`${activePhase.label} phase title`}
+                value={activePhase.label}
+                onClick={(event) => event.stopPropagation()}
+                onChange={(event) =>
+                  updatePhaseTitle(activePhase.id, event.target.value)
+                }
+              />
+              <InputGroupButton
+                onClick={() => setIsEditingPhaseTitle(false)}
+                variant="ghost"
+                size="icon-sm"
+                className={cn(
+                  "hover:bg-muted-foreground/10 mr-1",
+                  PHASE_STYLES[activePhase.intent].icon,
+                )}
               >
-                <ItemMedia
-                  variant="icon"
+                <Check strokeWidth={3} className="size-5" />
+              </InputGroupButton>
+            </InputGroup>
+          ) : (
+            <div className="flex items-center gap-2">
+              <h2
+                className={cn(
+                  "line-clamp-1 w-full max-w-full truncate text-xl font-bold",
+                )}
+              >
+                {activePhase.label}
+              </h2>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => setIsEditingPhaseTitle(true)}
+              >
+                <PencilEdit />
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="flex flex-1 flex-row gap-4 px-6 py-4">
+        <div className="bg-surface flex flex-col justify-center gap-6 rounded-lg border shadow-xs">
+          {phases.map((phase) => (
+            <div key={phase.id} className="relative w-full">
+              {phase.id === activePhase.id && (
+                <span
+                  aria-hidden
                   className={cn(
-                    "flex size-10 items-center justify-center rounded-full border-0",
-                    PHASE_STYLES[phase.intent].icon,
-                    activePhase?.id === phase.id && "bg-white/50",
+                    "absolute top-1/2 left-0 h-4.5 w-2.5 -translate-y-1/2 rounded-r-full",
+                    {
+                      "bg-intent-activate":
+                        phase.intent === PhaseIntent.ACTIVATE,
+                      "bg-intent-explore": phase.intent === PhaseIntent.EXPLORE,
+                      "bg-intent-apply": phase.intent === PhaseIntent.APPLY,
+                      "bg-intent-reflect": phase.intent === PhaseIntent.REFLECT,
+                      "bg-intent-transition":
+                        phase.intent === PhaseIntent.TRANSITION,
+                    },
+                  )}
+                />
+              )}
+              <div className="px-4">
+                <div
+                  onClick={() => {
+                    if (phase.id !== activePhase.id) {
+                      setIsEditingPhaseTitle(false);
+                    }
+                    setPhaseIndex(phases.findIndex((p) => p.id === phase.id));
+                  }}
+                  tabIndex={0}
+                  className={cn(
+                    "group/phase relative flex size-13 cursor-pointer items-center justify-center overflow-hidden rounded-lg p-2 shadow-md transition-all duration-200 hover:scale-107",
+                    PHASE_STYLES[phase.intent].card,
+                    activePhase?.id === phase.id &&
+                      PHASE_STYLES[phase.intent].active,
                   )}
                 >
-                  <phase.Icon className="size-6" />
-                </ItemMedia>
-                {isEditingPhaseTitle && phase.id === activePhase.id ? (
-                  <InputGroup
-                    className={cn(
-                      "text-foreground h-10 w-fit rounded-lg border-transparent text-xl font-bold shadow-none",
-
-                      {
-                        "focus-visible:ring-intent-activate":
-                          phase.intent === PhaseIntent.ACTIVATE,
-                        "focus-visible:ring-intent-explore":
-                          phase.intent === PhaseIntent.EXPLORE,
-                        "focus-visible:ring-intent-apply":
-                          phase.intent === PhaseIntent.APPLY,
-                        "focus-visible:ring-intent-reflect":
-                          phase.intent === PhaseIntent.REFLECT,
-                      },
-                    )}
-                  >
-                    {" "}
-                    <InputGroupInput
-                      aria-label={`${phase.label} phase title`}
-                      value={phase.label}
-                      onClick={(event) => event.stopPropagation()}
-                      onChange={(event) =>
-                        updatePhaseTitle(phase.id, event.target.value)
-                      }
-                    />
-                    <InputGroupButton
-                      onClick={() => setIsEditingPhaseTitle(false)}
-                      variant="ghost"
-                      size="icon-sm"
-                      className={cn(
-                        "hover:bg-muted-foreground/10 mr-1",
-                        PHASE_STYLES[phase.intent].icon,
-                      )}
-                    >
-                      <Check strokeWidth={3} className="size-5" />
-                    </InputGroupButton>
-                  </InputGroup>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <p
-                      className={cn(
-                        "text-xl font-bold whitespace-nowrap",
-                        phase.id === activePhase.id && "text-white",
-                      )}
-                    >
-                      {phase.label}
-                    </p>
-                  </div>
-                )}
-              </ItemContent>
-              <ItemActions>
-                {phase.id === activePhase.id && !isEditingPhaseTitle && (
-                  <Button
-                    size="icon"
-                    className="opacity-0 group-hover/phase:opacity-100"
-                    onClick={() => setIsEditingPhaseTitle(true)}
-                  >
-                    <Icon
-                      alt="Edit"
-                      src={assets.pencilEdit}
-                      className="size-5 invert"
-                    />
-                  </Button>
-                )}
-              </ItemActions>
-            </Item>
+                  <phase.Icon
+                    className="text-primary-foreground"
+                    strokeWidth={2.5}
+                  />
+                </div>
+              </div>
+            </div>
           ))}
-        </ItemGroup>
-      </div>
-      <div className="container flex-row gap-4">
+        </div>
         <StrategyListPanel
+          selectedStrategyId={activeStrategies[strategyIndex]?.id ?? null}
+          phaseId={activePhase.id}
           onAddStrategyClick={() => setIsStrategyPanelOpen(true)}
           strategies={activeStrategies.map((strategy) => ({
             title: strategy.title,
             id: strategy.id,
+            playbookPhaseId: activePhase.id,
             duration: "10 min",
             phase: activePhase?.intent ?? PhaseIntent.ACTIVATE,
             Icon: activePhase?.Icon ?? Brain,
           }))}
+          onReorder={handleReorderPhaseStrategies}
           onStrategyClick={(id) =>
             setStrategyIndex(
               activeStrategies.findIndex((strategy) => strategy.id === id),
             )
           }
+          onReplaceStrategyClick={(id) => {
+            const strategy = activeStrategies.find((item) => item.id === id);
+            if (strategy) {
+              handleReplaceStrategy(strategy);
+            }
+          }}
+          onRemoveStrategyClick={(id) => {
+            const strategy = activeStrategies.find((item) => item.id === id);
+            if (strategy) {
+              handleRemoveStrategy(strategy);
+            }
+          }}
         />
         <div className="bg-surface flex flex-1 flex-col gap-4 rounded-lg border p-5 shadow-xs">
-          <div className="flex items-center gap-2">
-            <div
-              className={cn(
-                "flex size-10 items-center justify-center rounded-full border-0",
-                PHASE_STYLES[activePhase.intent].icon,
-                {
-                  "bg-intent-activate/20":
-                    activePhase.intent === PhaseIntent.ACTIVATE,
-                  "bg-intent-explore/20":
-                    activePhase.intent === PhaseIntent.EXPLORE,
-                  "bg-intent-apply/20":
-                    activePhase.intent === PhaseIntent.APPLY,
-                  "bg-intent-reflect/20":
-                    activePhase.intent === PhaseIntent.REFLECT,
-                  "bg-intent-transition/20":
-                    activePhase.intent === PhaseIntent.TRANSITION,
-                },
-              )}
-            >
-              <activePhase.Icon className={cn("size-6")} />
-            </div>
-            <h2 className="text-foreground text-2xl font-bold">
-              {activePhase.label}
-            </h2>
-          </div>
           {/* <p>
             {activePhase.objective}
           </p> */}
@@ -571,8 +689,12 @@ export default function PlaybookPage({ page, onBackClick }: PlaybookPageProps) {
           sourceId: strategy.id,
           title: strategy.title,
         }))}
-        disabledKeys={[]}
-        onPick={() => {}}
+        disabledKeys={activeStrategies.flatMap((strategy) =>
+          strategy.sourceType && strategy.sourceId
+            ? [`${strategy.sourceType}:${strategy.sourceId}`]
+            : [],
+        )}
+        onPick={handleAddStrategy}
       />
     </BeforeUnload>
   );

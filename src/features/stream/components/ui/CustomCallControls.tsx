@@ -32,8 +32,7 @@ export default function CustomCallControls({
 }: CustomCallControlsProps) {
   const { activeCall: call } = useSessionCall();
 
-  const { useMicrophoneState, useCameraState, useCallCreatedBy } =
-    useCallStateHooks();
+  const { useMicrophoneState, useCameraState } = useCallStateHooks();
 
   const micState = useMicrophoneState();
   const camState = useCameraState();
@@ -94,12 +93,12 @@ export default function CustomCallControls({
     });
   };
   return (
-    <div className="px-6 pt-5 pb-3 fixed shadow-black/20 bottom-0 left-1/2 -translate-x-1/2 flex items-center justify-center gap-6 bg-background rounded-t-xl">
+    <div className="bg-background fixed bottom-0 left-1/2 flex -translate-x-1/2 items-center justify-center gap-6 rounded-t-xl px-6 pt-5 pb-3 shadow-black/20">
       <button
         className={cn(
           "btn-muted",
           camState.isEnabled ? "bg-primary-100 text-primary-400" : "",
-          !camState.hasBrowserPermission ? "bg-accent-100 text-accent-500" : ""
+          !camState.hasBrowserPermission ? "bg-accent-100 text-accent-500" : "",
         )}
         onClick={handleCamClick}
       >
@@ -120,7 +119,7 @@ export default function CustomCallControls({
         className={cn(
           "btn-muted",
           micState.isEnabled ? "bg-primary-100" : "",
-          !micState.hasBrowserPermission ? "bg-accent-100" : ""
+          !micState.hasBrowserPermission ? "bg-accent-100" : "",
         )}
         onClick={handleMicClick}
       >
@@ -128,7 +127,7 @@ export default function CustomCallControls({
           <AudioVolumeIndicator
             className={cn(
               "text-muted-foreground",
-              micState.isEnabled ? "text-primary-400" : ""
+              micState.isEnabled ? "text-primary-400" : "",
             )}
           />
         ) : !micState.hasBrowserPermission ? (

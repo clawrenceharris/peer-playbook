@@ -4,10 +4,11 @@ import { z } from "zod";
 // Shared schema blocks (compose to avoid drift across forms)
 // ============================================================
 
-export const lessonDetailsSchema = z.object({
-  subject: z.string().min(1, "Please select a subject"),
-  courseName: z.string().optional(),
+export const playbookDetailsSchema = z.object({
+  title: z.string().min(1, "Please enter a title"),
   topic: z.string().min(1, "Please enter a topic"),
+  subject: z.string().optional(),
+  courseName: z.string().optional(),
 });
 
 export const contextsSchema = z.object({
@@ -47,9 +48,11 @@ export const playbookPhaseInputSchema = z.object({
   position: z.number().int().nonnegative(),
   strategies: z.array(strategyRefSchema).default([]),
 });
-
+export const createPlaybookFromScratchSchema = z.object({
+  ...playbookDetailsSchema.shape,
+});
 export const manualStrategiesSchema = z.object({
-  instructionalModelId: z.string().min(1).optional(),
+  instructionalModelId: z.string().optional(),
   warmup: z.array(strategyRefSchema).default([]),
   workout: z.array(strategyRefSchema).default([]),
   closer: z.array(strategyRefSchema).default([]),
@@ -60,20 +63,20 @@ export const manualStrategiesSchema = z.object({
 // Form schemas (composed)
 // ============================================================
 
-export const generatePlaybookSchema = lessonDetailsSchema
+export const generatePlaybookSchema = playbookDetailsSchema
   .merge(instructionsSchema)
   .merge(contextsSchema)
   .merge(modesSchema);
 
 export const updatePlaybookSchema = z.object({
-  // Subject remains required to avoid invalid playbooks.
-  subject: z.string().min(1, "Subject is required"),
+  title: z.string().min(1, "Title is required").optional(),
+  subject: z.string().optional(),
   courseName: z.string().optional(),
   topic: z.string().min(1, "Topic is required").optional(),
 });
 
-export const createPlaybookSchema = z.object({
-  ...lessonDetailsSchema.shape,
+export const buildPlaybookSchema = z.object({
+  ...playbookDetailsSchema.shape,
   ...contextsSchema.shape,
   ...modesSchema.shape,
   ...manualStrategiesSchema.shape,
@@ -84,7 +87,13 @@ export const playbookStrategySchema = z.object({
   // Subject remains required to avoid invalid playbooks (adjust if you prefer optional).
   steps: z.array(z.string()),
   title: z.string(),
+  cardSlug: z.string().optional(),
+  category: z.string().optional(),
   phase: z.enum(["warmup", "workout", "closer"]).optional(),
+  position: z.number().int().nonnegative().optional(),
+  description: z.string().optional(),
+  sourceId: z.string().uuid().optional(),
+  sourceType: z.string().optional(),
   resources: z
     .array(
       z.object({
@@ -100,7 +109,7 @@ export const updatePlaybookStrategySchema = playbookStrategySchema.partial();
 // For react-hook-form + zodResolver, prefer input types (defaults make inputs optional).
 export type GeneratePlaybookFormValues = z.input<typeof generatePlaybookSchema>;
 export type UpdatePlaybookFormValues = z.input<typeof updatePlaybookSchema>;
-export type CreatePlaybookFormValues = z.input<typeof createPlaybookSchema>;
+export type BuildPlaybookFormValues = z.input<typeof buildPlaybookSchema>;
 export type UpdatePlaybookStrategyFormValues = z.input<
   typeof updatePlaybookStrategySchema
 >;
@@ -108,3 +117,6 @@ export type PlaybookStrategyFormValues = z.input<typeof playbookStrategySchema>;
 export type StrategyRef = z.infer<typeof strategyRefSchema>;
 export type PlaybookPhaseFormValues = z.input<typeof playbookPhaseInputSchema>;
 export type PhaseIntentKey = z.infer<typeof phaseIntentKeySchema>;
+export type CreatePlaybookFromScratchFormValues = z.input<
+  typeof createPlaybookFromScratchSchema
+>;

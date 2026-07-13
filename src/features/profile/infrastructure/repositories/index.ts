@@ -1,2 +1,2 @@
-export * from "./DrizzleProfileRepository";
-export * from "./DrizzleProfileReadRepository";
+export * from "./PrismaProfileRepository";
+export * from "./PrismaProfileReadRepository";

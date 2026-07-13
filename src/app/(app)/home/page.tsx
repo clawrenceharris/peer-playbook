@@ -1,14 +1,14 @@
 "use client";
 
 import { useUser } from "@/components/providers";
-import { Button, ScrollBar } from "@/components/ui";
+import { Button } from "@/components/ui";
 import { useRecentPlaybooks } from "@/features/playbooks/presentation/hooks";
 import { useSessionActions } from "@/features/sessions/hooks";
 import { useMyUpcomingSessions } from "@/features/sessions/hooks/use-user-sessions";
 import { cn, timeAgo } from "@/lib/utils";
 import type { PlaybookCardDTO } from "@/features/playbooks/application/dto";
 import type { Session } from "@/features/sessions/domain";
-import { ArrowRight, Loader2, Plus, Search } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { FormEvent, ReactNode } from "react";
 import { useMemo, useState } from "react";
@@ -148,10 +148,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <TodaySection
-            nextTopic={nextSession?.topic}
-            recentTopic={recentPlaybooks[0]?.topic}
-          />
+          <TodaySection />
         </div>
       </section>
 
@@ -478,13 +475,7 @@ function HomeEmptyState({
   );
 }
 
-function TodaySection({
-  nextTopic,
-  recentTopic,
-}: {
-  nextTopic?: string | null;
-  recentTopic?: string | null;
-}) {
+function TodaySection() {
   return (
     <div className="bg-surface relative mx-auto w-full max-w-md rounded-lg border-[1.6px] p-4 xl:absolute xl:right-5 xl:-bottom-10">
       <h2 className="text-foreground mb-4 text-lg font-bold">

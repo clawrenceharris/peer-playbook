@@ -1,4 +1,9 @@
-import { ControllerFieldState, ControllerRenderProps, FieldValues, Path } from "react-hook-form";
+import {
+  ControllerFieldState,
+  ControllerRenderProps,
+  FieldValues,
+  Path,
+} from "react-hook-form";
 
 export interface InputFieldProps<
   T extends FieldValues,
@@ -21,4 +26,6 @@ export interface InputFieldProps<
     fieldState: ControllerFieldState;
     inputId: string;
   }) => React.ReactNode;
+  showsRequired?: boolean;
+  showsOptional?: boolean;
 }

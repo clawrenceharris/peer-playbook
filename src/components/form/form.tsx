@@ -77,7 +77,7 @@ function FormFooter({
       {showsSubmitButton && (
         <Button
           variant="primary"
-          type="button"
+          type="submit"
           onClick={onSubmitClick}
           className={cn("flex-1", submitButtonClassName)}
           disabled={disabled}
@@ -124,13 +124,16 @@ export function Form<T extends FieldValues>({
   } = form;
   const isDisabled = props.disabled || disabled || isLoading || isSubmitting;
   const handleSubmit = async (data: T) => {
+    console.log(data);
     try {
       clearErrors();
       return await handleSubmitProp?.(data);
     } catch (error) {
+      console.log(error);
       setError("root", { message: getUserErrorMessage(error) });
     }
   };
+  console.log(errors);
   return (
     <BeforeUnload disabled={!isDirty || !enableBeforeUnloadProtection}>
       <FormProvider {...form}>
@@ -141,7 +144,7 @@ export function Form<T extends FieldValues>({
           aria-describedby={description}
         >
           <FieldGroup>
-            <FieldContent className="space-y-3">
+            <FieldContent>
               {title && (
                 <FieldTitle
                   className={cn(

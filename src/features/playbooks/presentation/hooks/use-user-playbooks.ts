@@ -1,10 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { usePlaybookService } from ".";
 import {
   selectMyPublishedPlaybooks,
   selectMyDraftPlaybooks,
 } from "../../selectors";
-import { Playbook } from "../../domain";
 import { playbookKeys } from "@/lib/queries/keys";
 import { getPlaybooksByUserAction } from "@/actions/playbook/queries/getPlaybooksByUserAction";
 import { PlaybookCardDTO } from "../../application/dto";

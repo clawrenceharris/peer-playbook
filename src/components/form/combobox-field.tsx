@@ -39,7 +39,10 @@ export function ComboboxField<T extends FieldValues, U extends Path<T>>({
   emptyMessage = "No items found.",
   inputId: inputIdProp,
   className,
-}: ComboboxFieldProps<T, U>) {
+  showsRequired = true,
+  showsOptional,
+  ...props
+}: ComboboxFieldProps<T, U> & React.ComponentProps<typeof Combobox>) {
   const { control } = useFormContext<T>();
   const { field, fieldState } = useController<T, U>({ name, control });
   const inputId = inputIdProp || field.name;
@@ -51,18 +54,27 @@ export function ComboboxField<T extends FieldValues, U extends Path<T>>({
           className={!showsLabel ? "sr-only" : ""}
           htmlFor={field.name}
         >
-          {label}
+          <span>
+            {label}
+            {required && showsRequired && (
+              <span className="text-destructive">*</span>
+            )}
+            {!required && showsOptional && (
+              <span className="text-muted-foreground text-sm"> (Optional)</span>
+            )}
+          </span>
         </FieldLabel>
         {description && <FieldDescription>{description}</FieldDescription>}
       </FieldContent>
       <Combobox
         name={field.name}
         value={field.value}
-        onValueChange={field.onChange}
+        onInputValueChange={field.onChange}
         items={items}
         aria-invalid={fieldState.invalid}
         aria-required={required}
         id={inputId}
+        {...props}
       >
         <ComboboxInput placeholder={`${placeholder}${required ? "*" : ""}`} />
 

@@ -48,23 +48,29 @@ export const ContentLayout = React.forwardRef<
         className={cn("flex h-full w-full flex-1 flex-col", className)}
         {...props}
       >
-        <ScrollArea ref={ref} className={cn("min-h-0", scrollAreaClassName)}>
-          {showHeader && (
-            <ContentHeader
-              showSearch={showSearch}
-              title={title}
-              showUserNav={showUserNav}
-              canGoBack={canGoBack}
-              onBack={onBack}
-              headerRight={headerRight}
-              className={headerClassName}
-              showThemeToggle={showThemeToggle}
-            />
-          )}
+        {showHeader && (
+          <ContentHeader
+            showSearch={showSearch}
+            title={title}
+            showUserNav={showUserNav}
+            canGoBack={canGoBack}
+            onBack={onBack}
+            headerRight={headerRight}
+            className={headerClassName}
+            showThemeToggle={showThemeToggle}
+          />
+        )}
 
+        <ScrollArea
+          ref={ref}
+          className={cn(
+            "mx-auto flex h-full min-h-0 w-full max-w-[1200px]",
+            scrollAreaClassName,
+          )}
+        >
           <div
             className={cn(
-              "flex min-h-full flex-1 flex-col px-3 py-4 pb-22",
+              "flex min-h-full flex-1 flex-col p-5",
               contentContainerClassName,
             )}
           >

@@ -1,24 +1,26 @@
-import { modalRegistry } from "@/lib/modals";
-import { DeletePlaybookModal } from "./delete-playbook-modal";
+import { modalRegistry, ModalType } from "@/lib/modals";
 import { UpdatePlaybookModal } from "./update-playbook-modal";
 import { ReplaceStrategyModal } from "./replace-strategy-modal";
+import { CreatePlaybookModal } from "./create-playbook-modal";
 
 /**
  * Modal type constants for playbook modals
  */
 export const PLAYBOOK_MODAL_TYPES = {
+  CREATE: "playbook:create",
   UPDATE: "playbook:update",
-  DELETE: "playbook:delete",
   REPLACE_STRATEGY: "playbook:replace-strategy",
-} as const;
+} as const satisfies Record<string, ModalType>;
 
 /**
  * Register all playbook modals with the modal registry
  * This should be called during app initialization
  */
 export function registerPlaybookModals() {
-
-  modalRegistry.register(PLAYBOOK_MODAL_TYPES.DELETE, DeletePlaybookModal);
+  modalRegistry.register(PLAYBOOK_MODAL_TYPES.CREATE, CreatePlaybookModal);
   modalRegistry.register(PLAYBOOK_MODAL_TYPES.UPDATE, UpdatePlaybookModal);
-  modalRegistry.register(PLAYBOOK_MODAL_TYPES.REPLACE_STRATEGY, ReplaceStrategyModal);
+  modalRegistry.register(
+    PLAYBOOK_MODAL_TYPES.REPLACE_STRATEGY,
+    ReplaceStrategyModal,
+  );
 }

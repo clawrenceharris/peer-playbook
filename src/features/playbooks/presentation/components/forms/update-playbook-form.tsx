@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormLayoutProps } from "@/components/form";
+import { Form } from "@/components/form";
 import { FieldGroup } from "@/components/ui";
 import {
   UpdatePlaybookFormValues,
@@ -11,16 +11,21 @@ import { useForm } from "react-hook-form";
 import { PlaybookDetailDTO } from "@/features/playbooks/application/dto";
 
 type UpdatePlaybookFormProps = {
-  subjects: { id: string; label: string; icon: React.ReactNode }[];
-  playbook: Pick<PlaybookDetailDTO, "subject" | "topic" | "courseName">;
+  playbook: Pick<PlaybookDetailDTO, "title" | "subject" | "topic" | "courseName">;
+  onSubmit: (data: UpdatePlaybookFormValues) => Promise<unknown>;
+  onSuccess?: () => void;
+  isLoading?: boolean;
 };
 export function UpdatePlaybookForm({
-  subjects,
   playbook,
+  onSubmit,
+  onSuccess,
+  isLoading,
 }: UpdatePlaybookFormProps) {
   const form = useForm<UpdatePlaybookFormValues>({
     resolver: zodResolver(updatePlaybookSchema),
     defaultValues: {
+      title: playbook?.title ?? "",
       subject: playbook?.subject ?? "",
       topic: playbook?.topic ?? "",
       courseName: playbook?.courseName ?? "",
@@ -30,11 +35,17 @@ export function UpdatePlaybookForm({
     <Form<UpdatePlaybookFormValues>
       form={form}
       enableBeforeUnloadProtection={false}
+      handleSubmit={async (data) => {
+        await onSubmit(data);
+        onSuccess?.();
+      }}
+      isLoading={isLoading}
+      isDialog
       submitText="Done"
       showsCancelButton={false}
     >
       <FieldGroup>
-        <LessonDetailsSection subjects={subjects} />
+        <LessonDetailsSection />
         <NotesSection />
       </FieldGroup>
     </Form>

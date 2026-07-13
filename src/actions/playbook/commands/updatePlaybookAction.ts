@@ -8,6 +8,10 @@ import { updatePlaybookSchema } from "@/lib/validation";
 import { ActionResult, toActionError } from "@/shared/action";
 import { fail } from "@/shared/application";
 import { ApplicationError } from "@/shared/utils";
+import {
+  assertPlaybookOwnership,
+  requireCurrentUserId,
+} from "../utils/ownership";
 
 export async function updatePlaybookAction(
   input: UpdatePlaybookInput,
@@ -18,6 +22,8 @@ export async function updatePlaybookAction(
       const appError = ApplicationError.validation(error.message);
       return fail(toActionError(appError));
     }
+    const userId = await requireCurrentUserId();
+    await assertPlaybookOwnership(input.id, userId);
     const updatePlaybookUseCase = makeUpdatePlaybookUseCase();
     const result = await updatePlaybookUseCase.execute(input);
     if (!result.success) {
@@ -25,6 +31,9 @@ export async function updatePlaybookAction(
     }
     return result;
   } catch (error) {
+    if (error instanceof ApplicationError) {
+      return fail(toActionError(error));
+    }
     const appError = ApplicationError.unexpected(
       error,
       "Failed to update playbook",

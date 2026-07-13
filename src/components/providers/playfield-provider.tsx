@@ -21,13 +21,14 @@ import {
   usePlayfieldLayout,
   UsePlayfieldLayoutReturn,
 } from "@/features/playfield/hooks";
+import { PlaybookStrategyCardDTO } from "@/features/playbooks/application/dto";
 
 interface PlayfieldContextType {
   strategy: PlayfieldDefinition | null;
   ctx: PlayfieldContext;
   isLoading: boolean;
   reactions: { id: string; userId: string; emoji: string }[];
-  startStrategy: (strategy: PlaybookStrategy) => void;
+  startStrategy: (strategy: PlaybookStrategyCardDTO) => void;
   endStrategy: () => void;
   handleReaction: (emoji: string, userId: string) => void;
   syncLocal: () => void;
@@ -55,8 +56,8 @@ export function PlayfieldProvider({ children }: PlayfieldProviderProps) {
   //---- Strategy State -----//
 
   const startStrategy = useCallback(
-    async (strategy: PlaybookStrategy) => {
-      const strategySlug = strategy.slug || strategy.cardSlug;
+    async (strategy: PlaybookStrategyCardDTO) => {
+      const strategySlug = strategy.slug || strategy.slug;
       const strategyDefinition = strategySlug
         ? registry[strategySlug]
         : undefined;

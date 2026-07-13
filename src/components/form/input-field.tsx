@@ -34,6 +34,8 @@ function InputFieldInner<T extends FieldValues, U extends Path<T>>(
     orientation = "vertical",
     inputId: inputIdProp,
     renderInput,
+    showsRequired = true,
+    showsOptional = true,
     ...inputProps
   } = props;
   const { control } = useFormContext<T>();
@@ -48,10 +50,25 @@ function InputFieldInner<T extends FieldValues, U extends Path<T>>(
     >
       <FieldContent>
         <FieldLabel
-          className={cn(!showsLabel && "sr-only", "")}
+          className={cn("gap-0", !showsLabel && "sr-only", "")}
           htmlFor={inputId}
         >
-          {label}
+          <span>
+            {label}
+            {required && showsRequired ? (
+              <span aria-hidden="true" className="text-destructive">
+                *
+              </span>
+            ) : (
+              showsOptional &&
+              !required && (
+                <span className="text-muted-foreground text-sm font-normal">
+                  {" "}
+                  (Optional)
+                </span>
+              )
+            )}
+          </span>
         </FieldLabel>
         {description && (
           <FieldDescription
@@ -70,7 +87,7 @@ function InputFieldInner<T extends FieldValues, U extends Path<T>>(
           {...inputProps}
           aria-required={required}
           id={inputId}
-          placeholder={`${placeholder}${required ? "*" : " (Optional)"}`}
+          placeholder={placeholder}
           aria-invalid={fieldState.invalid}
         />
       )}

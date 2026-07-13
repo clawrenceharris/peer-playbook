@@ -1,7 +1,6 @@
 import { modalRegistry } from "@/lib/modals";
 import { CreateSessionModal } from "./create-session-modal";
 import { UpdateSessionModal } from "./update-session-modal";
-import { DeleteSessionModal } from "./delete-session-modal";
 
 /**
  * Modal type constants for session modals
@@ -9,7 +8,6 @@ import { DeleteSessionModal } from "./delete-session-modal";
 export const SESSION_MODAL_TYPES = {
   CREATE: "session:create",
   UPDATE: "session:update",
-  DELETE: "session:delete",
 } as const;
 
 /**
@@ -19,5 +17,4 @@ export const SESSION_MODAL_TYPES = {
 export function registerSessionModals() {
   modalRegistry.register(SESSION_MODAL_TYPES.CREATE, CreateSessionModal);
   modalRegistry.register(SESSION_MODAL_TYPES.UPDATE, UpdateSessionModal);
-  modalRegistry.register(SESSION_MODAL_TYPES.DELETE, DeleteSessionModal);
 }

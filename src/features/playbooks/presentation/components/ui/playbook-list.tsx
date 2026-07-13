@@ -8,6 +8,7 @@ import { PlaybookCardDTO } from "@/features/playbooks/application/dto";
 interface PlaybookListProps {
   playbooks: {
     id: string;
+    title: string;
     topic: string;
     courseName: string | null;
     creator?: {
@@ -33,17 +34,19 @@ export function PlaybookList({
     );
   }
   if (playbooks.length === 0) {
-    <div className="flex h-full w-full items-center justify-center">
-      <EmptyState
-        title=""
-        className="bg-transparent text-center"
-        message="You don't have any recent playbooks at the moment"
-      />
-    </div>;
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <EmptyState
+          title=""
+          className="bg-transparent text-center"
+          message="You don't have any recent playbooks at the moment"
+        />
+      </div>
+    );
   }
 
   return (
-    <div className="flex h-full flex-col gap-4 overflow-y-auto">
+    <div className="flex min-h-0 flex-col gap-4">
       {playbooks.map((playbook) => {
         const cardPlaybook = {
           ...playbook,

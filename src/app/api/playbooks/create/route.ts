@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { makeCreatePlaybookUseCase } from "@/composition/playbook";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { createPlaybookSchema } from "@/lib/validation";
+import { buildPlaybookSchema } from "@/lib/validation";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
   }
 
   const input = {
+    title: body.title ?? body.topic,
     subject: body.subject,
     courseName: body.courseName ?? body.course_name,
     topic: body.topic,
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
     closer: body.strategies?.closer,
     userId: user.id,
   };
-  const { error } = createPlaybookSchema.safeParse(input);
+  const { error } = buildPlaybookSchema.safeParse(input);
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
@@ -38,10 +39,7 @@ export async function POST(req: NextRequest) {
   const useCase = makeCreatePlaybookUseCase();
   const result = await useCase.execute(input);
   if (!result.success) {
-    return NextResponse.json(
-      { error: result.error.message },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: result.error.message }, { status: 500 });
   }
 
   return NextResponse.json({ playbookId: result.data.id }, { status: 200 });

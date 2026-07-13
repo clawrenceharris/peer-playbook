@@ -5,7 +5,7 @@ export const instructionalModelCatalog: InstructionalModel[] = [
     id: "peerplaybook_core",
     label: "PeerPlaybook Core",
     description:
-      "PeerPlaybook’s signature four-part flow for active, collaborative, peer-led learning.",
+      "A flexible peer-led model for active, collaborative learning.",
     goodFor:
       "Most peer-led learning sessions, including tutoring, SI, study groups, review sessions, and mentoring.",
     supportsCustomPhases: true,
@@ -49,7 +49,7 @@ export const instructionalModelCatalog: InstructionalModel[] = [
     id: "classic_si",
     label: "Classic SI",
     description:
-      "A traditional Supplemental Instruction flow built around preparation, collaborative practice, and closing reflection.",
+      "A traditional Supplemental Instruction model for structured peer-led review.",
     goodFor:
       "Supplemental Instruction sessions, recurring study sessions, and structured peer-led review.",
     supportsCustomPhases: true,
@@ -93,7 +93,7 @@ export const instructionalModelCatalog: InstructionalModel[] = [
     id: "exam_review",
     label: "Exam Review",
     description:
-      "A focused review model for helping students recall, diagnose, practice, and plan before an assessment.",
+      "A focused review model for assessment prep and targeted practice.",
     goodFor:
       "Quiz review, midterm review, finals prep, cumulative review, and sessions where students need targeted practice.",
     supportsCustomPhases: true,
@@ -137,7 +137,7 @@ export const instructionalModelCatalog: InstructionalModel[] = [
     id: "workshop",
     label: "Collaborative Workshop",
     description:
-      "A flexible workshop model centered on solving authentic problems, cases, or tasks together.",
+      "A workshop model centered on collaborative problem solving.",
     goodFor:
       "Problem-solving sessions, coding practice, case studies, writing workshops, lab review, and project-based work.",
     supportsCustomPhases: true,
@@ -181,7 +181,7 @@ export const instructionalModelCatalog: InstructionalModel[] = [
     id: "five_e",
     label: "5E Learning Cycle",
     description:
-      "A discovery-oriented model that moves students from curiosity to exploration, explanation, extension, and evaluation.",
+      "An inquiry model for discovery, evidence, and concept development.",
     goodFor:
       "Science learning, inquiry-based sessions, concept discovery, labs, demonstrations, and evidence-based reasoning.",
     supportsCustomPhases: true,
@@ -233,7 +233,7 @@ export const instructionalModelCatalog: InstructionalModel[] = [
     id: "four_as",
     label: "4A’s Lesson Model",
     description:
-      "A structured lesson model that moves students from activity to analysis, abstraction, and application.",
+      "A structured model for developing concepts from examples and experience.",
     goodFor:
       "Concept development, guided discovery, structured review, and sessions where students need to move from examples to general principles.",
     supportsCustomPhases: true,
@@ -277,7 +277,7 @@ export const instructionalModelCatalog: InstructionalModel[] = [
     id: "peer_instruction",
     label: "Peer Instruction",
     description:
-      "A discussion-driven model where students commit to an answer, explain reasoning, and refine their thinking with peers.",
+      "A discussion model for conceptual questions and peer reasoning.",
     goodFor:
       "Conceptual questions, STEM review, misconception checks, clicker-style questions, and reasoning-heavy topics.",
     supportsCustomPhases: true,
@@ -329,7 +329,7 @@ export const instructionalModelCatalog: InstructionalModel[] = [
     id: "study_sprint",
     label: "Study Sprint",
     description:
-      "A focused, lightweight structure for independent or small-group work with accountability checkpoints.",
+      "A lightweight model for focused work, check-ins, and accountability.",
     goodFor:
       "Study groups, tutoring check-ins, homework support, project work time, and sessions where students need structure more than a full lesson.",
     supportsCustomPhases: true,
@@ -372,7 +372,7 @@ export const instructionalModelCatalog: InstructionalModel[] = [
     id: "custom",
     label: "Custom",
     description:
-      "Start from a blank structure and shape the session around your own facilitation plan.",
+      "A blank structure for unusual sessions or fully custom plans.",
     goodFor:
       "Experienced facilitators, unusual sessions, or cases where no preset model fits the plan.",
     supportsCustomPhases: true,

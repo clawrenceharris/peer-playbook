@@ -36,6 +36,12 @@ export type PlaybookStrategy = DomainModel<PlaybookStrategies> & {
 };
 export type PlaybookStrategyInsert = DomainInsert<PlaybookStrategiesInsert>;
 export type PlaybookStrategyUpdate = DomainUpdate<PlaybookStrategiesUpdate> & {
+  title?: string;
+  steps?: string[];
+  description?: string;
+  phase?: string;
+  sourceId?: string;
+  sourceType?: string;
   slug?: string;
   cardSlug?: string;
   position?: number;

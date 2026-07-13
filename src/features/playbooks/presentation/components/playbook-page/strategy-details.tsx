@@ -31,6 +31,7 @@ export function StrategyDetails({ strategy }: StrategyStepsSectionProps) {
 
   return (
     <div>
+      <h2 className="text-foreground text-2xl font-bold">{strategy.title}</h2>
       <section className="space-y-4 rounded-lg border p-5 shadow-xs">
         <h3 className="text-foreground text-lg font-semibold">Steps</h3>
         <ol className="text-foreground/80 space-y-4">

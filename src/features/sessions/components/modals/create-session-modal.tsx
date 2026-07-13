@@ -1,13 +1,12 @@
 "use client";
 
 import React from "react";
-import { DialogContent, DialogDescription, DialogTitle } from "@/components/ui";
+import { DialogContent } from "@/components/ui";
 import {
   createSessionSchema,
   type CreateSessionFormValues,
 } from "@/features/sessions/domain";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useModal } from "@/components/providers";
 import { CreateSessionModalProps } from "@/lib/modals";
 import { usePendingMutations } from "@/hooks/use-pending-mutations";
 import { Form } from "@/components/form";

@@ -1,14 +1,15 @@
-import { usePlaybook } from "@/features/playbooks/presentation/hooks";
+import { usePlaybookDetail } from "@/features/playbooks/presentation/hooks";
 import { useMemo } from "react";
 import { LoadingState } from "@/components/states";
-import { PlaybookStrategy } from "@/features/playbooks/domain";
 import { Button } from "@/components/ui";
-import { getCardBackgroundColor, getCardIcon } from "@/utils";
+import { getCardIcon } from "@/utils";
 import { cn } from "@/lib/utils";
 import { Play, Squircle, X } from "lucide-react";
 import { usePlayfield } from "@/components/providers";
 import { PlayfieldDefinition } from "../../domain";
 import { useStreamCall } from "@/features/stream/hooks";
+import { PlaybookStrategyCardDTO } from "@/features/playbooks/application/dto";
+import { PHASE_STYLES } from "@/features/reference-data/phase-intents/domain/constants/phase-intents.constants";
 
 interface PlayfieldPreviewProps {
   strategyDef: PlayfieldDefinition;
@@ -18,10 +19,12 @@ interface PlayfieldPreviewProps {
   onEnd: () => void;
 }
 
-function StrategyInfo({ strategy }: { strategy: PlaybookStrategy }) {
+function StrategyInfo({ strategy }: { strategy: PlaybookStrategyCardDTO }) {
   return (
     <div className="flex w-full items-center gap-2 md:gap-4">
-      <div className="icon-ghost mr-1">{getCardIcon(strategy.phase)}</div>
+      <div className="icon-ghost mr-1">
+        {getCardIcon(PHASE_STYLES[strategy.phase].icon)}
+      </div>
       <div className="w-full">
         <h2 className="text-xl font-bold">{strategy.title} </h2>
 
@@ -42,7 +45,7 @@ export function PlayfieldControlbar({
   onLeave,
   onEnd,
 }: PlayfieldPreviewProps) {
-  const { data: playbook, isLoading } = usePlaybook(playbookId);
+  const { data: playbook, isLoading } = usePlaybookDetail(playbookId);
   const strategy = useMemo(
     () => playbook?.strategies.find((s) => s.slug === strategyDef.slug),
     [playbook?.strategies, strategyDef.slug],
@@ -59,7 +62,6 @@ export function PlayfieldControlbar({
         className={cn(
           "center-all",
           "text-background fixed top-25 left-0 z-999 flex-1 gap-6 rounded-r-2xl px-1 py-4 shadow-md shadow-black/20 transition-shadow duration-200 hover:shadow-lg md:px-5",
-          getCardBackgroundColor(strategy.phase),
         )}
       >
         <Button
@@ -91,7 +93,6 @@ export function PlayfieldControlbar({
       className={cn(
         "center-all",
         "text-background fixed top-3 left-0 z-999 flex flex-1 items-center justify-between gap-8 rounded-r-2xl p-2 shadow-md shadow-black/20 transition-shadow duration-200 hover:shadow-lg md:top-5 md:px-5",
-        getCardBackgroundColor(strategy.phase),
       )}
     >
       <StrategyInfo strategy={strategy} />

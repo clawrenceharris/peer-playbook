@@ -1,3 +1,3 @@
-export * from "./playbook.mappers";
-export * from "./playbook-strategy.mappers";
-export * from "./playbook-phase.mappers";
+export * from "./PlaybookMapper";
+export * from "./PlaybookStrategyMapper";
+export * from "./PlaybookPhaseMapper";

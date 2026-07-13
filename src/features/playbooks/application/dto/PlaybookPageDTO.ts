@@ -12,7 +12,8 @@ export type GetPlaybookPageOutput = {
     id: string;
     courseName: string | null;
     methodology: string | null;
-    subject: string;
+    subject: string | null;
+    title: string;
     topic: string;
     published: boolean;
     createdAt: Date;

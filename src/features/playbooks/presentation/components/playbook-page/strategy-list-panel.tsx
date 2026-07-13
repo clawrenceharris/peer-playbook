@@ -1,36 +1,17 @@
 "use client";
 
 import * as React from "react";
-import type { LucideIcon, LucideProps } from "lucide-react";
-import {
-  EllipsisVertical,
-  ImageIcon,
-  Network,
-  Plus,
-  Repeat2,
-  Snowflake,
-  Star,
-  UsersRound,
-} from "lucide-react";
+import type { LucideProps } from "lucide-react";
+import { Plus } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemGroup,
-  ItemMedia,
-  ItemTitle,
-} from "@/components/ui/item";
+import { ItemGroup } from "@/components/ui/item";
 import { SortablePlaybookStrategyItem } from "./sortable-playbook-strategy-item";
 import {
   arrayMove,
-  rectSortingStrategy,
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { useIsMobile } from "@/hooks";
 import {
   closestCenter,
   DndContext,
@@ -39,7 +20,7 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   restrictToFirstScrollableAncestor,
   restrictToWindowEdges,
@@ -49,6 +30,7 @@ import { PhaseIntent } from "@/features/reference-data/phase-intents/domain/type
 
 type StrategyItem = {
   id: string;
+  playbookPhaseId: string;
   title: string;
   duration: string;
   phase: PhaseIntent;
@@ -56,31 +38,43 @@ type StrategyItem = {
 };
 
 type StrategyListPanelProps = {
+  phaseId: string;
   onAddStrategyClick: () => void;
   strategies: StrategyItem[];
   onStrategyClick: (id: string) => void;
+  selectedStrategyId: string | null;
+  onReorder: (
+    phaseId: string,
+    strategies: Array<
+      Pick<StrategyItem, "id" | "title" | "phase" | "playbookPhaseId">
+    >,
+  ) => void;
+  onReplaceStrategyClick?: (strategyId: string) => void;
+  onRemoveStrategyClick?: (strategyId: string) => void;
 };
 export function StrategyListPanel({
+  phaseId,
   onAddStrategyClick,
   strategies,
   onStrategyClick,
+  selectedStrategyId,
+  onReorder,
+  onReplaceStrategyClick,
+  onRemoveStrategyClick,
 }: StrategyListPanelProps) {
-  const isMobile = useIsMobile();
-  const [isDirty, setIsDirty] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const phaseOrder = [
-    PhaseIntent.ACTIVATE,
-    PhaseIntent.EXPLORE,
-    PhaseIntent.APPLY,
-    PhaseIntent.REFLECT,
-  ];
-  const [reorderedStrategies, setReorderedStrategies] =
+  const [displayStrategies, setDisplayStrategies] =
     useState<StrategyItem[]>(strategies);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
   );
+
+  useEffect(() => {
+    setDisplayStrategies(strategies);
+  }, [strategies]);
+
   return (
-    <aside className="bg-surface flex min-h-0 min-w-64 flex-col overflow-hidden rounded-2xl border shadow-xs">
+    <aside className="bg-surface flex min-h-0 w-69 flex-col overflow-hidden rounded-2xl border shadow-xs">
       <header className="flex items-center justify-between border-b px-5 py-4">
         <h2 className="text-foreground text-lg font-semibold">Strategies</h2>
 
@@ -109,16 +103,13 @@ export function StrategyListPanel({
           setActiveId(null);
 
           if (!over || active.id === over.id) return;
-          const oldIndex = strategies.findIndex((c) => c.id === active.id);
-          const newIndex = strategies.findIndex((c) => c.id === over.id);
-          const next = arrayMove(strategies, oldIndex, newIndex).map(
-            (c, i) => ({
-              ...c,
-              phase: phaseOrder[i] ?? c.phase,
-            }),
+          const oldIndex = displayStrategies.findIndex(
+            (c) => c.id === active.id,
           );
-          setReorderedStrategies(next);
-          setIsDirty(true);
+          const newIndex = displayStrategies.findIndex((c) => c.id === over.id);
+          const next = arrayMove(displayStrategies, oldIndex, newIndex);
+          setDisplayStrategies(next);
+          onReorder(phaseId, next);
         }}
         onDragCancel={() => {
           document.body.style.overscrollBehavior = "";
@@ -127,17 +118,22 @@ export function StrategyListPanel({
         }}
       >
         <SortableContext
-          items={strategies}
-          strategy={
-            isMobile ? verticalListSortingStrategy : rectSortingStrategy
-          }
+          items={displayStrategies}
+          strategy={verticalListSortingStrategy}
         >
-          <ItemGroup className="min-h-0 flex-1 divide-y">
-            {strategies.map((strategy) => (
+          <ItemGroup className="flex-1">
+            {displayStrategies.map((strategy) => (
               <SortablePlaybookStrategyItem
                 key={strategy.id}
+                isSelected={selectedStrategyId === strategy.id}
                 strategy={strategy}
                 onClick={() => onStrategyClick(strategy.id)}
+                onReplaceClick={
+                  onReplaceStrategyClick
+                    ? () => onReplaceStrategyClick(strategy.id)
+                    : undefined
+                }
+                onRemoveClick={() => onRemoveStrategyClick?.(strategy.id)}
               />
             ))}
           </ItemGroup>
@@ -148,8 +144,8 @@ export function StrategyListPanel({
           {activeId ? (
             <CardGhost
               phase={
-                strategies.find((c) => c.id === activeId)!.phase as unknown as
-                  "warmup" | "workout" | "closer"
+                displayStrategies.find((c) => c.id === activeId)!
+                  .phase as unknown as "warmup" | "workout" | "closer"
               }
             />
           ) : null}
@@ -160,6 +156,7 @@ export function StrategyListPanel({
         <Button
           variant="outline"
           className="text-muted-foreground hover:text-primary h-20 w-full gap-2 border-dashed"
+          onClick={onAddStrategyClick}
         >
           <Plus className="size-5" />
           Add Strategy

@@ -1,5 +1,3 @@
-import PlaybooksPage from "./PlaybooksPage";
-
-export default function Page() {
+export default function PlaybooksPage() {
   return null;
 }

@@ -1,2 +1,2 @@
-export * from "./DrizzlePlaybookReadRepository";
-export * from "./DrizzlePlaybookWriteRepository";
+export * from "./PrismaPlaybookReadRepository";
+export * from "./PrismaPlaybookWriteRepository";

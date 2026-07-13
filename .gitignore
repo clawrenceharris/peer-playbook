@@ -199,7 +199,5 @@ scripts/
 # Sentry Config File
 .env.sentry-build-plugin
 
-/src/generated/prisma
 
-/src/generated/prisma
 .prisma/

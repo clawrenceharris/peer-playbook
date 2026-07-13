@@ -8,6 +8,7 @@ export const config = {
   matcher: [
     "/",
     "/home",
+    "/auth/:path*",
     "/playbooks/:path*",
     "/my-library/:path*",
     "/sessions/:path*",

@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServerSupabaseClient } from "@/lib/supabase/server";
 import { StreamClient } from "@stream-io/node-sdk";
 import { UserRequest } from "@stream-io/video-react-sdk";
 
@@ -17,7 +17,7 @@ export async function updateUserProfile({
   image: string;
 }) {
   const stream = await createStreamClient();
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
   const {
     data: { user: authedUser },
   } = await supabase.auth.getUser();
@@ -58,7 +58,7 @@ export async function updateUserCustomData({
  * @returns Generates a new token for the Stream Video API
  */
 export async function getToken() {
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

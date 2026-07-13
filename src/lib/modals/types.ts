@@ -1,23 +1,20 @@
 import type {
-  CreateSessionFormValues,
   Session,
+  UpdateSessionFormValues,
 } from "@/features/sessions/domain";
-import type {
-  GeneratePlaybookFormValues,
-  Playbook,
-  PlaybookStrategy,
-  PlaybookUpdate,
-} from "@/features/playbooks/domain";
+import type { Playbook, PlaybookStrategy } from "@/features/playbooks/domain";
 import type { Strategy } from "@/features/strategies/domain";
-import { Profile } from "@/features/profile/domain";
+import type { ProfileDetailDTO } from "@/features/profile/application/dto";
+import { GeneratePlaybookFormValues, UpdatePlaybookFormValues } from "../validation";
+import {
+  PlaybookCardDTO,
+  UpdatePlaybookResult,
+} from "@/features/playbooks/application/dto";
 
 /**
  * Base interface for all modal props
  * CRUD modals do NOT include isLoading - they handle it internally via usePendingMutations
  */
-export interface ModalProps {
-  [key: string]: unknown;
-}
 
 /**
  * Union type of all modal type strings
@@ -25,13 +22,13 @@ export interface ModalProps {
 export type ModalType =
   | "session:create"
   | "session:update"
-  | "session:delete"
+  | "profile:create"
   | "profile:update"
-  | "profile:delete"
   | "playbook:update"
-  | "playbook:delete"
   | "playbook:replace-strategy"
-  | "playbook:generate";
+  | "playbook:generate"
+  | "playbook:create"
+  | "confirmation";
 
 /**
  * State interface for ModalProvider
@@ -41,68 +38,68 @@ export interface ModalState {
   props: ModalProps | null;
 }
 
+export interface ModalProps {
+  [key: string]: unknown;
+  onError?: (error: string) => void;
+  onCancel?: () => void;
+  isAlert?: boolean;
+}
+
 // ============================================================================
 // Session Modal Props
 // ============================================================================
 
 export interface CreateSessionModalProps extends ModalProps {
-  onConfirm: (data: CreateSessionFormValues) => Promise<Session>;
-  playbook?: Playbook | null;
+  playbook?: PlaybookCardDTO | null;
 }
 
 export interface UpdateSessionModalProps extends ModalProps {
   sessionId: string;
-  onConfirm: (
+  onSubmit: (
     sessionId: string,
-    data: CreateSessionFormValues
+    data: UpdateSessionFormValues,
   ) => Promise<Session>;
   onUpdateStatus?: (sessionId: string, status: Session["status"]) => void;
-}
-
-export interface DeleteSessionModalProps extends ModalProps {
-  sessionId: string;
-  onConfirm: (sessionId: string) => Promise<void>;
 }
 
 // ============================================================================
 // Profile Modal Props
 // ============================================================================
-
-export interface UpdateProfileModalProps extends ModalProps {
-  profileId: string;
-  onConfirm: (data: {
-    firstName?: string;
-    lastName?: string;
-  }) => Promise<Profile>;
+export interface CreateProfileModalProps extends ModalProps {
+  userId: string;
+  onSuccess: () => void;
 }
-
-export interface DeleteAccountModalProps extends ModalProps {
-  onConfirm: () => Promise<void>;
+export interface UpdateProfileModalProps extends ModalProps {
+  profile: ProfileDetailDTO;
 }
 
 // ============================================================================
 // Playbook Modal Props
 // ============================================================================
 
+export interface CreatePlaybookModalProps extends ModalProps {
+  userId: string;
+}
 export interface UpdatePlaybookModalProps extends ModalProps {
   playbookId: string;
-  onConfirm: (data: PlaybookUpdate) => Promise<Playbook>;
-}
-
-export interface DeletePlaybookModalProps extends ModalProps {
-  playbookId: string;
-  onConfirm: (playbookId: string) => Promise<void>;
+  onSubmit: (data: UpdatePlaybookFormValues) => Promise<UpdatePlaybookResult>;
 }
 
 export interface ReplaceStrategyModalProps extends ModalProps {
   strategyToReplace: PlaybookStrategy;
   playbookId: string;
-  onConfirm: (
+  onSubmit: (
     strategyToReplace: PlaybookStrategy,
-    newStrategy: Strategy
+    newStrategy: Strategy,
   ) => Promise<void>;
 }
 
 export interface GeneratePlaybookModalProps extends ModalProps {
-  onConfirm: (data: GeneratePlaybookFormValues) => Promise<Playbook>;
+  onSubmit: (data: GeneratePlaybookFormValues) => Promise<Playbook>;
+}
+
+export interface ConfirmationModalProps extends ModalProps {
+  title: string;
+  description: string;
+  onConfirm: () => void | Promise<void>;
 }

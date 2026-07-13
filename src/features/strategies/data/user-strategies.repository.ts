@@ -1,25 +1,21 @@
 import { BaseRepository } from "@/repositories/base.repository";
 import { DomainInsert, DomainModel, DomainUpdate } from "@/lib/data/naming";
-import {
-  UserStrategies,
-  UserStrategiesInsert,
-  UserStrategiesUpdate,
-} from "@/types/tables";
+import { Strategies, StrategiesInsert, StrategiesUpdate } from "@/types";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 /**
  * Repository for user_strategies data operations using Supabase.
  * This is the canonical store for user-created strategies.
  */
-type UserStrategy = DomainModel<UserStrategies>;
-type UserStrategyInsert = DomainInsert<UserStrategiesInsert>;
-type UserStrategyUpdate = DomainUpdate<UserStrategiesUpdate>;
+type UserStrategy = DomainModel<Strategies>;
+type UserStrategyInsert = DomainInsert<StrategiesInsert>;
+type UserStrategyUpdate = DomainUpdate<StrategiesUpdate>;
 
 export class UserStrategiesRepository extends BaseRepository<
-  UserStrategies,
+  Strategies,
   UserStrategy,
-  UserStrategiesInsert,
-  UserStrategiesUpdate,
+  StrategiesInsert,
+  StrategiesUpdate,
   UserStrategyInsert,
   UserStrategyUpdate
 > {
@@ -27,4 +23,3 @@ export class UserStrategiesRepository extends BaseRepository<
     super(client, "user_strategies");
   }
 }
-

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ComponentType } from "react";
 
 /**
@@ -12,7 +11,7 @@ class ModalRegistry {
    */
   register<T extends Record<string, any>>(
     type: string,
-    component: ComponentType<T>
+    component: ComponentType<T>,
   ): void {
     if (this.registry.has(type)) {
       console.warn(`Modal type "${type}" is already registered. Overwriting.`);

@@ -59,15 +59,15 @@ export function ErrorState({
   const renderCard = () => (
     <Card
       className={cn(
-        "m-auto max-w-md min-w-sm text-center shadow-none border-2",
-        className
+        "m-auto max-w-md min-w-sm border-2 text-center shadow-none",
+        className,
       )}
     >
       <CardHeader>
         <Image
           width={410}
           height={410}
-          className="w-full max-w-[200px] mx-auto"
+          className="mx-auto w-full max-w-[200px]"
           alt="Sad Notebook"
           src="/images/error.png"
         />
@@ -75,22 +75,23 @@ export function ErrorState({
       <CardTitle className="text-2xl">{title}</CardTitle>
 
       <CardContent>
-
         <CardDescription>{message}</CardDescription>
       </CardContent>
-      <CardFooter className="gap-4 justify-end">
-        <CardAction>
-
-        
+      <CardFooter className="w-full justify-end gap-4">
         {onRetry && (
-          <Button onClick={onRetry} variant="outline">
-            {retryLabel}
-          </Button>
+          <CardAction>
+            <Button className="w-full" onClick={onRetry} variant="outline">
+              {retryLabel}
+            </Button>
+          </CardAction>
         )}
         {onAction && actionLabel && (
-          <Button onClick={onAction}>{actionLabel}</Button>
-          )}
+          <CardAction>
+            <Button className="w-full" variant="primary" onClick={onAction}>
+              {actionLabel}
+            </Button>
           </CardAction>
+        )}
       </CardFooter>
     </Card>
   );
@@ -109,14 +110,16 @@ export function ErrorState({
         )}
         {onAction && actionLabel && (
           <ItemActions>
-            <Button onClick={onAction}>{actionLabel}</Button>
+            <Button variant="primary" onClick={onAction}>
+              {actionLabel}
+            </Button>
           </ItemActions>
         )}
       </ItemContent>
     </Item>
   );
   const renderPage = () => (
-    <div className="h-screen flex justify-center gradient-background w-full items-center">
+    <div className="gradient-background flex h-screen w-full items-center justify-center">
       {renderCard()}
     </div>
   );

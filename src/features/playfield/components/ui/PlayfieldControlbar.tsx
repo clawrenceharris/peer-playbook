@@ -1,14 +1,15 @@
-import { usePlaybook } from "@/features/playbooks/hooks";
+import { usePlaybookDetail } from "@/features/playbooks/presentation/hooks";
 import { useMemo } from "react";
 import { LoadingState } from "@/components/states";
-import { PlaybookStrategy } from "@/features/playbooks/domain";
 import { Button } from "@/components/ui";
-import { getCardBackgroundColor, getCardIcon } from "@/utils";
+import { getCardIcon } from "@/utils";
 import { cn } from "@/lib/utils";
 import { Play, Squircle, X } from "lucide-react";
-import { usePlayfield } from "@/app/providers";
+import { usePlayfield } from "@/components/providers";
 import { PlayfieldDefinition } from "../../domain";
 import { useStreamCall } from "@/features/stream/hooks";
+import { PlaybookStrategyCardDTO } from "@/features/playbooks/application/dto";
+import { PHASE_STYLES } from "@/features/reference-data/phase-intents/domain/constants/phase-intents.constants";
 
 interface PlayfieldPreviewProps {
   strategyDef: PlayfieldDefinition;
@@ -18,15 +19,17 @@ interface PlayfieldPreviewProps {
   onEnd: () => void;
 }
 
-function StrategyInfo({ strategy }: { strategy: PlaybookStrategy }) {
+function StrategyInfo({ strategy }: { strategy: PlaybookStrategyCardDTO }) {
   return (
-    <div className="flex items-center gap-2 md:gap-4 w-full">
-      <div className="icon-ghost mr-1">{getCardIcon(strategy.phase)}</div>
+    <div className="flex w-full items-center gap-2 md:gap-4">
+      <div className="icon-ghost mr-1">
+        {getCardIcon(PHASE_STYLES[strategy.phase].icon)}
+      </div>
       <div className="w-full">
-        <h2 className="font-bold text-xl">{strategy.title} </h2>
+        <h2 className="text-xl font-bold">{strategy.title} </h2>
 
-        <div className="flex items-center  justify-between">
-          <span className="uppercase font-light text-background/70 text-sm">
+        <div className="flex items-center justify-between">
+          <span className="text-background/70 text-sm font-light uppercase">
             {strategy.phase}
           </span>
         </div>
@@ -42,10 +45,10 @@ export function PlayfieldControlbar({
   onLeave,
   onEnd,
 }: PlayfieldPreviewProps) {
-  const { data: playbook, isLoading } = usePlaybook(playbookId);
+  const { data: playbook, isLoading } = usePlaybookDetail(playbookId);
   const strategy = useMemo(
     () => playbook?.strategies.find((s) => s.slug === strategyDef.slug),
-    [playbook?.strategies, strategyDef.slug]
+    [playbook?.strategies, strategyDef.slug],
   );
   const {
     layout: { state },
@@ -58,15 +61,14 @@ export function PlayfieldControlbar({
       <div
         className={cn(
           "center-all",
-          "fixed z-999  top-25 left-0 text-background py-4 px-1 md:px-5 shadow-black/20 flex-1 shadow-md rounded-r-2xl gap-6 hover:shadow-lg transition-shadow duration-200",
-          getCardBackgroundColor(strategy.phase)
+          "text-background fixed top-25 left-0 z-999 flex-1 gap-6 rounded-r-2xl px-1 py-4 shadow-md shadow-black/20 transition-shadow duration-200 hover:shadow-lg md:px-5",
         )}
       >
         <Button
           variant="tertiary"
           size="icon"
           aria-label="Leave Playfield"
-          className="text-foreground hover:scale-[1.02] hover:bg-background/80"
+          className="text-foreground hover:bg-background/80 hover:scale-[1.02]"
           onClick={onLeave}
         >
           <X className="scale-x-[-1]" />
@@ -76,7 +78,7 @@ export function PlayfieldControlbar({
             variant="tertiary"
             size="icon"
             aria-label="End Playfield for everyone"
-            className="text-destructive-500 hover:scale-[1.02] hover:bg-destructive-100"
+            className="text-destructive-500 hover:bg-destructive-100 hover:scale-[1.02]"
             onClick={onEnd}
           >
             <Squircle fill="var(--color-destructive-500)" />
@@ -90,8 +92,7 @@ export function PlayfieldControlbar({
     <div
       className={cn(
         "center-all",
-        "flex fixed z-999 top-3 md:top-5 left-0 text-background  p-2 md:px-5 shadow-black/20 flex-1 shadow-md rounded-r-2xl justify-between  items-center gap-8 hover:shadow-lg transition-shadow duration-200",
-        getCardBackgroundColor(strategy.phase)
+        "text-background fixed top-3 left-0 z-999 flex flex-1 items-center justify-between gap-8 rounded-r-2xl p-2 shadow-md shadow-black/20 transition-shadow duration-200 hover:shadow-lg md:top-5 md:px-5",
       )}
     >
       <StrategyInfo strategy={strategy} />
@@ -100,7 +101,7 @@ export function PlayfieldControlbar({
           <Button
             variant="tertiary"
             size="icon"
-            className="text-destructive-500 hover:scale-[1.02] hover:bg-destructive-100"
+            className="text-destructive-500 hover:bg-destructive-100 hover:scale-[1.02]"
             onClick={onEnd}
           >
             <Squircle fill="var(--color-destructive-500)" />
@@ -110,7 +111,7 @@ export function PlayfieldControlbar({
           variant="tertiary"
           size="icon"
           aria-label="Start Playfield"
-          className="text-primary-400 hover:scale-[1.02] hover:bg-primary-100"
+          className="text-primary-400 hover:bg-primary-100 hover:scale-[1.02]"
           onClick={onJoin}
         >
           <Play fill="var(--color-primary-400)" />

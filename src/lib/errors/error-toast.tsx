@@ -1,4 +1,4 @@
-import { AppError } from "@/types/errors";
+import { ApplicationError } from "@/shared/utils/errors";
 import type { Mutation, MutationState } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { CustomToast } from "@/components/ui";
@@ -9,13 +9,11 @@ import { CustomToast } from "@/components/ui";
 export function shouldShowToast(
   mutation:
     | Mutation<unknown, unknown, unknown, unknown>
-    | MutationState<unknown, unknown, unknown, unknown>
+    | MutationState<unknown, unknown, unknown, unknown>,
 ): boolean {
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mutationObj = mutation as any;
   const meta = mutationObj.meta || mutationObj.options?.meta;
-  console.log(meta?.skipToast)
+  console.log(meta?.skipToast);
   return meta?.skipToast !== true;
 }
 
@@ -25,11 +23,11 @@ export function shouldShowToast(
  * @param options - Optional configuration
  */
 export function showErrorToast(
-  error: AppError,
+  error: ApplicationError,
   options?: {
     onShowDetails?: () => void;
     duration?: number;
-  }
+  },
 ) {
   const { onShowDetails, duration } = options || {};
 
@@ -51,9 +49,10 @@ export function showErrorToast(
     ),
     {
       data: {
-        title: error.userMessage,
+        title: "Something went wrong",
+        text: error.message,
         delay: duration,
       },
-    }
+    },
   );
 }

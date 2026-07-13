@@ -1,4 +1,4 @@
-import { AppError } from "@/types/errors";
+import { ApplicationError } from "@/shared/utils/errors";
 import { supabase } from "../supabase/client";
 
 export interface BugReport {
@@ -17,7 +17,7 @@ export interface BugReport {
  * Submits a bug report to the database
  */
 export async function submitBugReport(
-  error: AppError,
+  error: ApplicationError,
   additionalData?: {
     userDescription?: string;
     stepsToReproduce?: string;
@@ -28,24 +28,16 @@ export async function submitBugReport(
     const bugReport: BugReport = {
       error_code: error.code,
       error_message: error.message,
-      user_message: error.userMessage,
+      user_message: error.message,
       technical_details: {
         code: error.code,
-        category: error.category,
-        severity: error.severity,
-        canRetry: error.canRetry,
-        metadata: error.metadata,
         stack: error.stack,
-        timestamp: error.timestamp.toISOString(),
       },
       user_description: additionalData?.userDescription,
       steps_to_reproduce: additionalData?.stepsToReproduce,
       user_agent:
         typeof navigator !== "undefined" ? navigator.userAgent : undefined,
       url: typeof window !== "undefined" ? window.location.href : undefined,
-      metadata: {
-        ...error.metadata,
-      },
     };
 
     const { error: dbError } = await supabase

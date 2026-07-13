@@ -1,5 +1,6 @@
-export type * from "./database";
-export type * from "./pagination"
-export type * from "./form"
-export type * from "./tables"
-export type * from "./errors"
+export type * from "./pagination.types";
+export type * from "./error.types";
+export type * from "./database.types";
+export type * from "./table.types";
+
+export type * from "./form.types";

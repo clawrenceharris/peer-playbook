@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   DefaultError,
   QueryKey,
@@ -16,7 +15,7 @@ export type DomainMutationOptions<
   TData = unknown,
   TError = DefaultError,
   TVariables = void,
-  TContext = unknown
+  TContext = unknown,
 > = Omit<
   UseMutationOptions<TData, TError, TVariables, TContext>,
   "mutationFn" | "onSuccess" | "onMutate"
@@ -29,7 +28,7 @@ export type DomainMutationOptions<
   invalidateFn?: (
     data: TData,
     variables: TVariables,
-    context: TContext
+    context: TContext,
   ) => QueryKey;
 
   // Options for invalidation behavior
@@ -38,7 +37,7 @@ export type DomainMutationOptions<
   onSuccess?: (
     data: TData,
     variables: TVariables,
-    context: TContext
+    context: TContext,
   ) => void | Promise<void>;
   // optimistic update handler
   onMutate?: (variables: TVariables) => Promise<TContext> | TContext;

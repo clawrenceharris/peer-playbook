@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import {
   DefaultError,
   QueryClient,
@@ -10,8 +8,7 @@ import {
 } from "@tanstack/react-query";
 import { DomainMutationOptions } from "./types";
 import { useCallback, useState } from "react";
-import { AppError } from "@/types/errors";
-import { normalizeError } from "@/utils";
+import { normalizeError, ApplicationError } from "@/shared/utils/errors";
 
 /**
  * Configuration for a single query update in a multi-query optimistic update
@@ -34,7 +31,7 @@ export interface MultiQueryOptimisticUpdateConfig<TVariables, TContext> {
   /** Optional function to create custom context from snapshots */
   createContext?: (
     snapshots: Record<string, any>,
-    variables: TVariables
+    variables: TVariables,
   ) => TContext;
 }
 
@@ -61,10 +58,10 @@ export interface MultiQueryOptimisticUpdateConfig<TVariables, TContext> {
  */
 export function createMultiQueryOptimisticUpdate<
   TVariables,
-  TContext = Record<string, unknown>
+  TContext = Record<string, unknown>,
 >(
   queryClient: QueryClient,
-  config: MultiQueryOptimisticUpdateConfig<TVariables, TContext>
+  config: MultiQueryOptimisticUpdateConfig<TVariables, TContext>,
 ) {
   const { cancelKey, queries, createContext } = config;
 
@@ -102,7 +99,7 @@ export function createMultiQueryOptimisticUpdate<
   const onError = (
     err: unknown,
     variables: TVariables,
-    context: unknown
+    context: unknown,
   ): void => {
     // Rollback all queries to their previous values
     if (context) {
@@ -134,7 +131,7 @@ export function createMultiQueryOptimisticUpdate<
  * Useful for components that need custom error handling
  */
 export function useMutationError() {
-  const [error, setError] = useState<AppError | null>(null);
+  const [error, setError] = useState<ApplicationError | null>(null);
   const [errorContext, setErrorContext] = useState<string | undefined>();
   const [showModal, setShowModal] = useState(false);
 
@@ -145,11 +142,14 @@ export function useMutationError() {
     setShowModal(true);
   }, []);
 
-  const showErrorModal = useCallback((error: AppError, context?: string) => {
-    setError(error);
-    setErrorContext(context);
-    setShowModal(true);
-  }, []);
+  const showErrorModal = useCallback(
+    (error: ApplicationError, context?: string) => {
+      setError(error);
+      setErrorContext(context);
+      setShowModal(true);
+    },
+    [],
+  );
 
   const clearError = useCallback(() => {
     setError(null);
@@ -186,11 +186,11 @@ export function useDomainMutation<
   TData = unknown,
   TError = DefaultError,
   TVariables = void,
-  TContext = unknown
+  TContext = unknown,
 >(
   useService: () => TService,
 
-  options: DomainMutationOptions<TService, TData, TError, TVariables, TContext>
+  options: DomainMutationOptions<TService, TData, TError, TVariables, TContext>,
 ): UseMutationResult<TData, TError, TVariables, TContext> {
   const queryClient = useQueryClient();
   const service = useService();
@@ -220,7 +220,7 @@ export function useDomainMutation<
         { queryKey: options.queryKey, exact: false },
         (old: any) => {
           return options.updater ? options.updater(old, variables) : old;
-        }
+        },
       );
 
       return { previousData } as TContext;

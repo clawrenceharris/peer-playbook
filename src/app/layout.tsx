@@ -1,9 +1,16 @@
 import "./globals.css";
 
-import { ModalProvider, QueryProvider } from "@/app/providers";
+import {
+  AuthProvider,
+  ModalProvider,
+  QueryProvider,
+} from "@/components/providers";
 import { ReactNode } from "react";
 import { Outfit, Figtree } from "next/font/google";
 import { Metadata } from "next";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { prefetchAuthenticatedAppData } from "@/lib/queries/prefetchAuthenticatedAppData";
+import { User } from "@supabase/supabase-js";
 
 export const metadata: Metadata = {
   title: "PeerPlaybook",
@@ -14,20 +21,38 @@ export const metadata: Metadata = {
 const figtree = Figtree({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-figtree",
+  variable: "--font-heading",
 });
 const outfit = Outfit({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-outfit",
+  variable: "--font-body",
   weight: "500",
 });
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const queryClient = new QueryClient();
+  let initialUser: User | null | undefined;
+
+  try {
+    initialUser = await prefetchAuthenticatedAppData(queryClient);
+  } catch (error) {
+    console.error("[RootLayout] prefetchAuthenticatedAppData failed:", error);
+  }
+
+  const dehydratedState = dehydrate(queryClient);
   return (
     <html lang="en">
-      <body className={`${figtree.variable} ${outfit.variable} antialiased`}>
+      <body
+        className={`${figtree.variable} ${outfit.variable} font-body antialiased`}
+      >
         <QueryProvider>
-          <ModalProvider>{children}</ModalProvider>
+          <AuthProvider>
+            <ModalProvider>{children}</ModalProvider>
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>

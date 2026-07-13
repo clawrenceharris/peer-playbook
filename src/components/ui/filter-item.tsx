@@ -30,12 +30,12 @@ export function FilterItem({
       <DropdownMenuTrigger asChild>
         <Button
           className={cn(
-            "rounded-full text-md text-muted-foreground hover:text-accent-foreground hover:[&_path]:stroke-accent-foreground [&_path]:stroke-muted-foreground ",
+            "bg-surface text-muted-foreground hover:text-muted-foreground hover:[&_path]:stroke-muted-foreground [&_path]:stroke-muted-foreground rounded-full text-sm shadow-xs",
             className,
           )}
           variant="outline"
         >
-          {<Icon className="size-5 " />}
+          {<Icon className="size-5" />}
           <span>
             {`${label}${value ? ": " : ""}`}
 
@@ -45,12 +45,12 @@ export function FilterItem({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
-        className="bg-transparent  shadow-none border-none"
+        className="border-none bg-transparent shadow-none"
       >
         {options.map((option) => (
           <DropdownMenuItem
             className={cn(
-              "rounded-full shadow-md border mb-3 bg-primary-foreground",
+              "bg-primary-foreground mb-3 justify-between rounded-full border shadow-md",
               value === option.value ? "text-primary-400" : "",
             )}
             key={option.value}
@@ -58,7 +58,7 @@ export function FilterItem({
           >
             {option.label}
             {value === option.value && (
-              <X className="size-4 text-muted-foreground" />
+              <X className="text-muted-foreground size-4" />
             )}
           </DropdownMenuItem>
         ))}

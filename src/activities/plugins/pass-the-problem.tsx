@@ -1,5 +1,5 @@
 import { Button, Textarea } from "@/components/ui";
-import { PlaybookContext, PlaybookDefinition } from "@/types/playbook";
+import { PlaybookContext, PlaybookDefinition } from "@/types/playbook.types";
 import { CustomVideoEvent } from "@stream-io/video-react-sdk";
 import { useState } from "react";
 
@@ -26,7 +26,7 @@ function PassTheProblemUI({ ctx }: { ctx: PlaybookContext }) {
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           placeholder="Enter your solution step..."
-          className="w-full max-w-md mx-auto"
+          className="mx-auto w-full max-w-md"
         />
         <Button
           onClick={() => {
@@ -56,7 +56,7 @@ function PassTheProblemUI({ ctx }: { ctx: PlaybookContext }) {
         </p>
         <ul className="space-y-2">
           {Object.entries(ctx.state.steps).map(([, stepAnswer], i) => (
-            <li key={i} className="rounded-lg bg-muted p-3">
+            <li key={i} className="bg-muted rounded-lg p-3">
               <strong>Step {i + 1}:</strong> {String(stepAnswer)}
             </li>
           ))}

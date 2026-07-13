@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useUser } from "@/app/providers";
+import { useUser } from "@/components/providers";
 import { useSaveStrategy, useUnsaveStrategy } from "./use-strategy-mutations";
 
 export const useStrategyActions = () => {

@@ -15,7 +15,8 @@ import { useEffect, useState } from "react";
 
 import { PlaybookStrategy } from "@/features/playbooks/domain";
 import { Session } from "@/features/sessions/domain";
-import { usePlayfield, useSessionCall } from "@/app/providers";
+import { usePlayfield, useSessionCall } from "@/components/providers";
+import { PlaybookStrategyCardDTO } from "@/features/playbooks/application/dto";
 
 interface PlayfieldLayoutProps {
   session: Session;
@@ -36,7 +37,7 @@ export function PlayfieldLayout({ session }: PlayfieldLayoutProps) {
   } = usePlayfield();
 
   //When the strategy start button from the Playbook is clicked
-  const handleStrategyClick = (strategy: PlaybookStrategy) => {
+  const handleStrategyClick = (strategy: PlaybookStrategyCardDTO) => {
     startStrategy(strategy); //start the Playfield strategy
     setSidebarOpen(false);
   };
@@ -54,7 +55,7 @@ export function PlayfieldLayout({ session }: PlayfieldLayoutProps) {
   }, [reset, strategy]);
 
   return (
-    <div className="p-10 h-full w-full flex">
+    <div className="flex h-full w-full p-10">
       {myBreakoutRoom ? (
         <BreakoutRoomButton
           onLeave={() => leaveBreakoutRoom(activeCall)}
@@ -93,7 +94,7 @@ export function PlayfieldLayout({ session }: PlayfieldLayoutProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="w-full  h-full flex-col flex  items-center justify-center"
+            className="flex h-full w-full flex-col items-center justify-center"
           >
             <SIView />
           </motion.div>
@@ -106,7 +107,7 @@ export function PlayfieldLayout({ session }: PlayfieldLayoutProps) {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="flex  w-full h-full p-10 items-center flex-col justify-center gap-6"
+            className="flex h-full w-full flex-col items-center justify-center gap-6 p-10"
           >
             <PlayfieldExpanded />
             <ParticipantListView participants={participants} />

@@ -1,13 +1,24 @@
 import { EmptyState, LoadingState } from "@/components/states";
 import { Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import { usePlayfield } from "@/app/providers";
+import { usePlayfield } from "@/components/providers";
 import { getCardBackgroundColor, getCardIcon } from "@/utils";
 import { useCallStateHooks } from "@stream-io/video-react-sdk";
 import { AnimatePresence, motion } from "framer-motion";
 import { useStreamCall } from "@/features/stream/hooks";
 
 const emojis = ["❤️", "👍", "😎", "🤔"];
+
+function getReactionOffset(id: string) {
+  const seed = Array.from(id).reduce((total, char) => {
+    return total + char.charCodeAt(0);
+  }, 0);
+
+  return {
+    y: -120 - (seed % 80),
+    x: ((seed % 120) - 60) / 2,
+  };
+}
 
 export function PlayfieldExpanded() {
   const {
@@ -46,10 +57,9 @@ export function PlayfieldExpanded() {
                 key={id}
                 initial={{ y: 0, opacity: 1, scale: 1 }}
                 animate={{
-                  y: -120 - Math.random() * 80,
+                  ...getReactionOffset(id),
                   opacity: 0,
                   scale: 1.5,
-                  x: (Math.random() - 0.5) * 60,
                 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 2, ease: "easeOut" }}

@@ -1,0 +1,114 @@
+"use client";
+
+import React, { forwardRef } from "react";
+import {
+  FieldValues,
+  Path,
+  useController,
+  useFormContext,
+} from "react-hook-form";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+  FieldTitle,
+  RadioGroup,
+  RadioGroupItem,
+} from "../ui";
+import { cn } from "@/lib/utils";
+type RadioGroupOption = { value: string; label: string; description?: string };
+interface RadioGroupFieldProps<T extends FieldValues, U extends Path<T>> {
+  label: string;
+  name: U;
+  options: RadioGroupOption[];
+  description?: string;
+  showsDescription?: boolean;
+  showsLabel?: boolean;
+  required?: boolean;
+  className?: string;
+}
+
+function RadioGroupFieldInner<T extends FieldValues, U extends Path<T>>(
+  props: RadioGroupFieldProps<T, U>,
+  ref: React.ForwardedRef<HTMLDivElement>,
+) {
+  const {
+    label,
+    name,
+    options,
+    description,
+    showsDescription = true,
+    showsLabel = true,
+    required,
+    className,
+  } = props;
+  const { control } = useFormContext<T>();
+  const { field, fieldState } = useController({ control, name });
+
+  return (
+    <Field ref={ref} className={className}>
+      <FieldContent>
+        <FieldLabel
+          className={cn(
+            !showsLabel && "sr-only",
+            "font-body text-lg font-bold",
+          )}
+        >
+          {label}
+        </FieldLabel>
+        {description && (
+          <FieldDescription
+            className={cn("text-sm", !showsDescription && "sr-only")}
+          >
+            {description}
+          </FieldDescription>
+        )}
+      </FieldContent>
+
+      <RadioGroup
+        value={field.value ?? ""}
+        onValueChange={field.onChange}
+        aria-invalid={fieldState.invalid}
+        aria-required={required}
+        className="grid grid-cols-1 gap-2 md:grid-cols-2"
+      >
+        {options.map((option) => (
+          <FieldLabel
+            key={option.value}
+            htmlFor={`${field.name}-${option.value}`}
+            className={cn(
+              "cursor-pointer transition-colors",
+              field.value === option.value &&
+                "border-primary bg-primary/5 ring-primary/20 ring-1",
+            )}
+          >
+            <Field orientation="horizontal">
+              <FieldContent>
+                <FieldTitle>{option.label}</FieldTitle>
+                {option.description && (
+                  <FieldDescription>{option.description}</FieldDescription>
+                )}
+              </FieldContent>
+              <RadioGroupItem
+                checked={field.value === option.value}
+                value={option.value}
+                id={`${field.name}-${option.value}`}
+              />
+            </Field>
+          </FieldLabel>
+        ))}
+      </RadioGroup>
+
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </Field>
+  );
+}
+
+export const RadioGroupField = forwardRef(RadioGroupFieldInner) as <
+  T extends FieldValues,
+  U extends Path<T>,
+>(
+  props: RadioGroupFieldProps<T, U> & React.RefAttributes<HTMLDivElement>,
+) => React.ReactElement;

@@ -1,13 +1,17 @@
-import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { User } from "@supabase/supabase-js";
+import { NextResponse, type NextRequest } from "next/server";
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   });
 
+  // With Fluid compute, don't put this client in a global environment
+  // variable. Always create a new one on each request.
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
       cookies: {
         getAll() {
@@ -15,36 +19,53 @@ export async function updateSession(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
+            request.cookies.set(name, value),
           );
-          supabaseResponse = NextResponse.next({ request });
+          supabaseResponse = NextResponse.next({
+            request,
+          });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            supabaseResponse.cookies.set(name, value, options),
           );
         },
       },
-    }
+    },
   );
 
-  // Get the current authenticated user
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user: User | null = null;
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    if (!error) {
+      user = data.user;
+    }
+  } catch {
+    user = null;
+  }
 
-  // If no user, redirect to /login with `next` param so we can redirect back
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth") &&
-    !request.nextUrl.pathname.startsWith("/session") &&
-    !request.nextUrl.pathname.startsWith("/error")
+    ![
+      "/login",
+      "/sign-up",
+      "/forgot-password",
+      "/update-password",
+      "/confirm",
+    ].some((authPath) => request.nextUrl.pathname.startsWith(authPath))
+  ) {
+    // no user, potentially respond by redirecting the user to the login page
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+  if (
+    (user && request.nextUrl.pathname === "/login") ||
+    request.nextUrl.pathname === "/sign-up"
   ) {
     const url = request.nextUrl.clone();
-    url.pathname = "/auth/login";
-    url.searchParams.set("next", request.nextUrl.pathname);
+    url.pathname = "/home";
+    url.search = "";
     return NextResponse.redirect(url);
   }
 
-  // Return response with synced cookies
   return supabaseResponse;
 }

@@ -7,8 +7,8 @@ import {
   SessionUpdate,
 } from "../domain";
 import { useDomainMutation } from "@/lib/queries";
-import { playbookKeys } from "@/features/playbooks/domain/playbook.keys";
 import { sessionKeys } from "../domain/session.keys";
+import { playbookKeys } from "@/lib/queries/keys";
 
 export const useCreateSession = () =>
   useDomainMutation<
@@ -51,5 +51,5 @@ export const useDeleteSession = () =>
       invalidateFn: () => sessionKeys.all,
 
       invalidationOptions: { exact: false },
-    }
+    },
   );

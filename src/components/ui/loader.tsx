@@ -189,8 +189,8 @@ export const LoaderFive = ({
   return (
     <div
       className={cn(
-        "font-sans text-secondary-500 text-xl [--shadow-color:var(--color-secondary-500)]",
-        className
+        "text-secondary-500 text-xl [--shadow-color:var(--color-secondary-500)]",
+        className,
       )}
     >
       {text.split("").map((char, i) => (

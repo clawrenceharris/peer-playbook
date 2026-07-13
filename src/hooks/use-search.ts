@@ -74,7 +74,6 @@ export function useSearch<T>(opts: UseSearchOptions<T>): UseSearchResult<T> {
         setResults(filtered);
         setHasSearched(true);
         setLastDataError(null);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         setLastDataError(err);
         setError(err?.message ?? "An error occurred");
@@ -84,7 +83,7 @@ export function useSearch<T>(opts: UseSearchOptions<T>): UseSearchResult<T> {
         setIsLoading(false);
       }
     },
-    [getData, minQueryLength] // Stable dependencies
+    [getData, minQueryLength], // Stable dependencies
   );
 
   useEffect(() => {

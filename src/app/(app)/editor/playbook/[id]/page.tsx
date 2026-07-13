@@ -1,29 +1,12 @@
-import React from "react";
-// import PlaybookEditorPage from "./PlaybookEditorPage";
-import { createClient } from "@/lib/supabase/server";
-import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-async function fetchPlaybookTitle(id: string): Promise<string> {
-  const supabase = await createClient();
-  const { data: playbook } = await supabase
-    .from("playbooks")
-    .select("topic")
-    .eq("id", id)
-    .single();
+type Props = {
+  params: Promise<{
+    id: string;
+  }>;
+};
 
-  return playbook?.topic ?? null;
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: { id: string };
-}): Promise<Metadata> {
-  const topic = await fetchPlaybookTitle(params.id);
-  return {
-    title: `Edit Playbook${topic ? " - " + topic : ""}`,
-  };
-}
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
-  return <></>;
+export default async function Page({ params }: Props) {
+  const { id } = await params;
+  redirect(`/playbooks/${id}`);
 }

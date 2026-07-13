@@ -14,7 +14,7 @@ const normalizePosition = (value: number | PlaybookPhase): number =>
 export const getCardBackgroundColor = (position: number | PlaybookPhase) => {
   switch (normalizePosition(position)) {
     case 0:
-      return "bg-success-500";
+      return "bg-primary-500";
     case 1:
       return "bg-secondary-500";
     case 2:

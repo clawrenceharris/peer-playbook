@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Textarea } from "@/components/ui";
-import { PlaybookContext, PlaybookDefinition } from "@/types/playbook";
+import { PlaybookContext, PlaybookDefinition } from "@/types/playbook.types";
 import { CircleQuestionMark } from "lucide-react";
 
 function SnowballCard({ onClick }: { onClick: () => void }) {
@@ -8,7 +8,7 @@ function SnowballCard({ onClick }: { onClick: () => void }) {
     <button
       aria-label="Hidden question"
       onClick={onClick}
-      className="center-all rounded-full w-10 h-10 bg-white  shadow-md"
+      className="center-all h-10 w-10 rounded-full bg-white shadow-md"
     >
       <CircleQuestionMark />
     </button>
@@ -32,7 +32,7 @@ function SnowballUI({ ctx }: { ctx: PlaybookContext }) {
         <Textarea
           value={myQuestion}
           onChange={(e) => setMyQuestion(e.target.value)}
-          className="w-full border !bg-black/5 rounded p-2"
+          className="w-full rounded border !bg-black/5 p-2"
         />
         <Button
           onClick={() => {
@@ -58,8 +58,8 @@ function SnowballUI({ ctx }: { ctx: PlaybookContext }) {
     if (myChoiceId) {
       return (
         <div className="space-y-3">
-          <p className="font-medium ">You picked this question:</p>
-          <div className="p-3 rounded-xl bg-white">
+          <p className="font-medium">You picked this question:</p>
+          <div className="rounded-xl bg-white p-3">
             {originalPool[myChoiceId]}
           </div>
         </div>
@@ -68,9 +68,9 @@ function SnowballUI({ ctx }: { ctx: PlaybookContext }) {
 
     // Otherwise, show the pool to pick from
     return (
-      <div className="space-y-3 overflow-hidden w-full h-full">
+      <div className="h-full w-full space-y-3 overflow-hidden">
         <p className="font-medium">Pick a question to answer:</p>
-        <div className="faded-row grid grid-flow-col grid-rows-3 auto-cols-[minmax(40px,1fr)] gap-3 w-full mx-auto h-[200px] overflow-auto">
+        <div className="faded-row mx-auto grid h-[200px] w-full auto-cols-[minmax(40px,1fr)] grid-flow-col grid-rows-3 gap-3 overflow-auto">
           {Object.entries(pool).map(([id]) => (
             <SnowballCard
               key={id}
@@ -96,7 +96,7 @@ function SnowballUI({ ctx }: { ctx: PlaybookContext }) {
         {myChoiceId ? (
           <div className="space-y-2">
             <p className="italic">You’re answering:</p>
-            <div className="p-3 rounded-xl bg-white">
+            <div className="rounded-xl bg-white p-3">
               {originalPool[myChoiceId]}
             </div>
           </div>

@@ -1,132 +1,205 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 import { type ReactNode } from "react";
 import {
   FormProvider,
-  useForm,
-  type UseFormProps,
   type FieldValues,
-  type DefaultValues,
   type UseFormReturn,
 } from "react-hook-form";
-import { Button, FieldDescription, FieldError } from "@/components/ui";
+import {
+  Button,
+  DialogFooter,
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldTitle,
+} from "@/components/ui";
 import { Loader2 } from "lucide-react";
-import { getUserErrorMessage } from "@/utils/error";
 import { cn } from "@/lib/utils";
 import { BeforeUnload } from "@/components/form";
+import { getUserErrorMessage, normalizeError } from "@/shared/utils";
 
-export interface FormLayoutProps<T extends FieldValues>
-  extends UseFormProps<T> {
+export interface FormLayoutProps<T extends FieldValues> {
   children?: ((methods: UseFormReturn<T>) => ReactNode) | ReactNode;
   showsSubmitButton?: boolean;
   showsCancelButton?: boolean;
   submitText?: string;
+  form: UseFormReturn<T>;
   cancelText?: string;
-  onSubmit?: (data: T) => any | Promise<any>;
+  title?: string;
+  showsTitle?: boolean;
+  titleClassName?: string;
+  handleSubmit?: (data: T) => Promise<any> | any;
   onCancel?: () => void;
-  onSuccess?: (data: T, result: any) => void;
-  isLoading?: boolean;
-  error?: string | null;
+  onSubmitClick?: () => void;
+  disabled?: boolean;
   description?: string;
   descriptionClassName?: string;
-  defaultValues?: DefaultValues<T>;
   enableBeforeUnloadProtection?: boolean;
   submitButtonClassName?: string;
   className?: string;
   showsDescription?: boolean;
+  isDialog?: boolean;
   id?: string;
+  isLoading?: boolean;
+}
+type FormFooterProps = {
+  showsCancelButton?: boolean;
+  onCancel?: () => void;
+  onSubmitClick?: () => Promise<any> | any;
+  cancelText?: string;
+  submitText?: string;
+  showsSubmitButton?: boolean;
+  submitButtonClassName?: string;
+  isLoading?: boolean;
+  disabled?: boolean;
+};
+function FormFooter({
+  showsCancelButton,
+  submitText,
+  onCancel,
+  onSubmitClick,
+  cancelText,
+  showsSubmitButton,
+  submitButtonClassName,
+  isLoading,
+  disabled,
+}: FormFooterProps) {
+  return (
+    <Field orientation="horizontal">
+      {showsCancelButton && (
+        <Button variant="outline" type="button" onClick={onCancel}>
+          {cancelText}
+        </Button>
+      )}
+
+      {showsSubmitButton && (
+        <Button
+          variant="primary"
+          type="submit"
+          onClick={onSubmitClick}
+          className={cn("flex-1", submitButtonClassName)}
+          disabled={disabled}
+        >
+          {isLoading ? (
+            <Loader2 strokeWidth={3} className="size-7 animate-spin" />
+          ) : (
+            submitText
+          )}
+        </Button>
+      )}
+    </Field>
+  );
 }
 
 export function Form<T extends FieldValues>({
   children,
+  form,
   showsSubmitButton = true,
   showsCancelButton = false,
   submitText = "Done",
   cancelText = "Cancel",
-  onSubmit,
-  showsDescription,
+  title,
+  titleClassName,
+  showsTitle = true,
+  handleSubmit: handleSubmitProp,
   onCancel,
-  resolver,
+  onSubmitClick,
+  showsDescription = true,
   className,
-  onSuccess,
   submitButtonClassName,
-  isLoading = false,
-  mode = "onSubmit",
   description,
   descriptionClassName,
-  enableBeforeUnloadProtection = false,
+  enableBeforeUnloadProtection = true,
   id,
-  ...formProps
+  isLoading,
+  isDialog,
+  ...props
 }: FormLayoutProps<T>) {
-  const form = useForm<T>({
-    ...formProps,
-    resolver,
-    mode,
-  });
-
+  const {
+    clearErrors,
+    setError,
+    formState: { errors, disabled, isSubmitting, isDirty },
+  } = form;
+  const isDisabled = props.disabled || disabled || isLoading || isSubmitting;
   const handleSubmit = async (data: T) => {
+    console.log(data);
     try {
-      const r = await onSubmit?.(data);
-
-      onSuccess?.(data, r);
+      clearErrors();
+      return await handleSubmitProp?.(data);
     } catch (error) {
-      console.error(error);
-      form.setError("root", { message: getUserErrorMessage(error) });
+      console.log(error);
+      setError("root", { message: getUserErrorMessage(error) });
     }
   };
-
+  console.log(errors);
   return (
-    <BeforeUnload
-      disabled={!form.formState.isDirty || !enableBeforeUnloadProtection}
-    >
+    <BeforeUnload disabled={!isDirty || !enableBeforeUnloadProtection}>
       <FormProvider {...form}>
         <form
           id={id}
           onSubmit={form.handleSubmit(handleSubmit)}
-          className={cn("w-full h-full", className)}
+          className={cn("flex w-full flex-1 flex-col", className)}
           aria-describedby={description}
         >
-          <div className="relative h-full flex flex-col justify-between">
-            {description && showsDescription && (
-              <FieldDescription className={descriptionClassName}>
-                {description}
-              </FieldDescription>
-            )}
-            {typeof children === "function" ? children(form) : children}
-            {/* General Error */}
-            {form.formState.errors.root && (
-              <FieldError errors={[form.formState.errors.root]} />
-            )}
-            <div className="justify-end flex">
-              {showsCancelButton && (
-                <Button
-                  size={"lg"}
-                  variant={"link"}
-                  type="button"
-                  onClick={onCancel}
-                  disabled={isLoading}
-                >
-                  {cancelText}
-                </Button>
-              )}
-
-              {showsSubmitButton && (
-                <Button
-                  type="submit"
-                  className={cn("flex-1", submitButtonClassName)}
-                  size={"lg"}
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    submitText
+          <FieldGroup>
+            <FieldContent>
+              {title && (
+                <FieldTitle
+                  className={cn(
+                    "font-heading text-3xl font-bold",
+                    !showsTitle ? "sr-only" : "",
+                    titleClassName,
                   )}
-                </Button>
+                >
+                  {title}
+                </FieldTitle>
               )}
-            </div>
-          </div>
+              {description && showsDescription && (
+                <FieldDescription className={descriptionClassName}>
+                  {description}
+                </FieldDescription>
+              )}
+            </FieldContent>
+            {typeof children === "function" ? children(form) : children}
+
+            {/* General Error */}
+
+            {errors.root && (
+              <FieldError className="text-destructive">
+                {errors.root.message}
+              </FieldError>
+            )}
+
+            {isDialog ? (
+              <DialogFooter>
+                <FormFooter
+                  showsCancelButton={showsCancelButton}
+                  submitText={submitText}
+                  onCancel={onCancel}
+                  onSubmitClick={onSubmitClick}
+                  cancelText={cancelText}
+                  showsSubmitButton={showsSubmitButton}
+                  submitButtonClassName={submitButtonClassName}
+                  isLoading={isLoading || isSubmitting}
+                  disabled={isDisabled}
+                />
+              </DialogFooter>
+            ) : (
+              <FormFooter
+                showsCancelButton={showsCancelButton}
+                submitText={submitText}
+                onCancel={onCancel}
+                onSubmitClick={onSubmitClick}
+                cancelText={cancelText}
+                showsSubmitButton={showsSubmitButton}
+                submitButtonClassName={submitButtonClassName}
+                isLoading={isLoading || isSubmitting}
+                disabled={isDisabled}
+              />
+            )}
+          </FieldGroup>
         </form>
       </FormProvider>
     </BeforeUnload>

@@ -14,8 +14,8 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="input-group"
       role="group"
       className={cn(
-        "group/input-group border bg-input relative flex w-full items-center rounded-full shadow-xs transition-[color,box-shadow] outline-none",
-        "h-9 min-w-0 has-[>textarea]:h-auto",
+        "group/input-group bg-input relative flex w-full items-center rounded-full border shadow-xs transition-[color,box-shadow] outline-none",
+        "h-11 min-w-0 has-[>textarea]:h-auto",
 
         // Variants based on alignment.
         "has-[>[data-align=inline-start]]:[&>input]:pl-2",
@@ -24,10 +24,10 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
         "has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3",
 
         // Focus state.
-        "has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px]",
+        "focus-visible:ring-ring/50 focus-visible:ring-[3px]",
 
         // Error state.
-        "has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40",
+        "has-[[data-slot][aria-invalid=true]]:ring-destructive/20 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40",
         className,
       )}
       {...props}
@@ -83,6 +83,8 @@ const inputGroupButtonVariants = cva(
   {
     variants: {
       size: {
+        default: "h-10 px-3.5 gap-2 has-[>svg]:px-3",
+        lg: "h-12 px-4 gap-2 has-[>svg]:px-4",
         xs: "h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-3.5 has-[>svg]:px-2",
         sm: "h-8 px-2.5 gap-1.5 rounded-md has-[>svg]:px-2.5",
         "icon-xs":
@@ -91,7 +93,7 @@ const inputGroupButtonVariants = cva(
       },
     },
     defaultVariants: {
-      size: "xs",
+      size: "default",
     },
   },
 );
@@ -100,7 +102,7 @@ function InputGroupButton({
   className,
   type = "button",
   variant = "ghost",
-  size = "xs",
+  size = "default",
   ...props
 }: Omit<React.ComponentProps<typeof Button>, "size"> &
   VariantProps<typeof inputGroupButtonVariants>) {

@@ -19,13 +19,14 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
 import { LogOut, User } from "lucide-react";
-import { useAuth } from "@/features/auth/hooks";
-import { PROFILE_MODAL_TYPES } from "@/features/profile/components/modals";
-import { useUpdateProfile } from "@/features/profile/hooks/use-profile-mutations";
-import { useModal, useUser } from "@/app/providers";
+import { useAuth } from "@/features/auth/presentation/hooks";
+import { PROFILE_MODAL_TYPES } from "@/features/profile/presentation/components/modals";
+import { useUpdateProfileForm } from "@/features/profile/presentation/hooks";
+import { useModal, useUser } from "@/components/providers";
 import { Session } from "../icons/session";
 import { Playbook } from "../icons/playbook";
 import { Home } from "../icons/home";
+import { assets } from "@/lib/constants";
 
 const items: {
   title: string;
@@ -42,9 +43,9 @@ const items: {
 
   {
     title: "Library",
-    href: "/library/playbooks",
+    href: "/my-library/playbooks",
     icon: Playbook,
-    isActive: (pathname) => pathname.startsWith("/library"),
+    isActive: (pathname) => pathname.startsWith("/my-library"),
   },
   {
     title: "Sessions",
@@ -59,18 +60,16 @@ export function AppSidebar() {
   const { isMobile } = useSidebar();
   const { signOut } = useAuth();
   const { openModal } = useModal();
-  const { mutateAsync: handleUpdateProfile } = useUpdateProfile();
+  const { updateProfile } = useUpdateProfileForm(profile);
   const handleProfileClick = () => {
     if (!user?.id) return;
     openModal(PROFILE_MODAL_TYPES.UPDATE, {
       profileId: user.id,
       onConfirm: async (data) => {
-        await handleUpdateProfile({
+        await updateProfile({
           id: user.id,
-          data: {
-            firstName: data.firstName,
-            lastName: data.lastName,
-          },
+          email: user.email,
+          ...data,
         });
       },
     });
@@ -78,40 +77,40 @@ export function AppSidebar() {
   return (
     <Sidebar
       collapsible="none"
-      className="flex fixed left-0 top-0 flex-col h-screen border-none bg-gray-800 transition-all duration-300"
+      className="fixed top-0 left-0 flex h-screen flex-col border-none py-3 transition-all duration-300"
     >
       <SidebarHeader className="flex items-center">
         <Image
           onClick={() => {
             window.location.href = "/";
           }}
-          src="/images/logo.png"
+          src={assets.logo}
           priority
           alt="PeerPlaybook logo"
-          width={90}
-          height={90}
-          className="cursor-pointer"
+          width={833}
+          height={167}
+          className="h-auto w-full max-w-15 cursor-pointer"
         />
       </SidebarHeader>
 
       <SidebarContent className="justify-center">
-        <SidebarMenu className="flex flex-col gap-6 items-center">
+        <SidebarMenu className="flex flex-col items-center gap-6">
           {items.map(({ title, isActive, href, icon: Icon }) => {
             return (
               <SidebarMenuItem key={title}>
                 <SidebarMenuButton
                   asChild
                   className={cn(
-                    "flex justify-center flex-col text-white [&_path]:stroke-white  items-center gap-3 px-4 py-5 rounded-xl text-sm font-medium transition-all",
-                    "hover:bg-gray-700/40",
+                    "text-foreground/60 [&_path]:stroke-foreground/60 flex items-center justify-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all",
+                    "hover:bg-muted",
                     isMobile ? "size-15" : "size-24",
                     isActive(pathname)
-                      ? "bg-gray-700/40 text-primary-400 [&_path]:stroke-primary-400 font-semibold"
+                      ? "bg-surface text-primary-400 [&_path]:stroke-primary-400 border font-semibold shadow-sm"
                       : "",
                   )}
                 >
                   <Link href={href}>
-                    <Icon className="min-w-[25px] min-h-[25px] transition-transform" />
+                    <Icon className="min-h-[25px] min-w-[25px] transition-transform" />
                     {!isMobile && (
                       <span className="hidden md:inline">{title}</span>
                     )}
@@ -125,16 +124,9 @@ export function AppSidebar() {
 
       {/* Footer / Profile */}
 
-      <SidebarFooter className="px-3 py-5 flex items-center">
+      <SidebarFooter className="flex items-center px-3 py-5">
         <DropdownMenu>
-          <DropdownMenuTrigger
-            className="
-              flex items-center justify-center
-              transition-all duration-300
-               size-12 rounded-full bg-linear-to-tl to-primary-400 from-primary-800 text-white font-semibold shrink-0
-              border-primary-500 border shadow-md shadow-black/40 hover:scale-105
-            "
-          >
+          <DropdownMenuTrigger className="to-primary-400 from-primary-800 border-primary-500 flex size-12 shrink-0 items-center justify-center rounded-full border bg-linear-to-tl font-semibold text-white shadow-md shadow-black/40 transition-all duration-300 hover:scale-105">
             {`${profile.firstName?.charAt(0)}${profile.lastName?.charAt(0)}`}
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
@@ -155,7 +147,7 @@ export function AppSidebarSkeleton() {
   return (
     <Sidebar
       collapsible="none"
-      className="flex fixed left-0 top-0 flex-col h-screen border-none bg-gray-800 transition-all duration-300"
+      className="fixed top-0 left-0 flex h-screen flex-col border-none bg-gray-800 transition-all duration-300"
     ></Sidebar>
   );
 }

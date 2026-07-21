@@ -56,9 +56,7 @@ export default async function RootLayout({
         className={`${figtree.variable} ${outfit.variable} font-body relative antialiased`}
       >
         <QueryProvider dehydratedState={dehydratedState}>
-          <AuthProvider initialUser={initialUser}>
-            <ModalProvider>{children}</ModalProvider>
-          </AuthProvider>
+          <AuthProvider initialUser={initialUser}>{children}</AuthProvider>
         </QueryProvider>
       </body>
     </html>

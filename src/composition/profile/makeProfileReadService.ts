@@ -1,8 +1,8 @@
 import { PrismaProfileReadRepository } from "@/features/profile/infrastructure/repositories";
-import { db } from "@/db/client";
+import { client } from "@/lib/db/client";
 import { ProfileReadService } from "@/features/profile/application/services";
 
 export function makeProfileReadService() {
-  const profileReadRepository = new PrismaProfileReadRepository(db);
+  const profileReadRepository = new PrismaProfileReadRepository(client);
   return new ProfileReadService(profileReadRepository);
 }

@@ -23,6 +23,7 @@ const updatePlaybookPhasesActionSchema = z.object({
       title: z.string().min(1),
       intentKey: phaseIntentKeySchema,
       position: z.number().int().nonnegative(),
+      estimatedMinutes: z.number().int().nonnegative().nullable(),
     }),
   ),
 });

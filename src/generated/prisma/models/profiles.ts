@@ -230,8 +230,10 @@ export type profilesWhereInput = {
   playbooks?: Prisma.PlaybooksListRelationFilter
   users?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
   saved_playbooks?: Prisma.Saved_playbooksListRelationFilter
-  public_sessions?: Prisma.Public_sessionsListRelationFilter
+  saved_strategies?: Prisma.Saved_strategiesListRelationFilter
+  sessions?: Prisma.Public_sessionsListRelationFilter
   strategies?: Prisma.StrategiesListRelationFilter
+  user_strategies?: Prisma.User_strategiesListRelationFilter
 }
 
 export type profilesOrderByWithRelationInput = {
@@ -250,8 +252,10 @@ export type profilesOrderByWithRelationInput = {
   playbooks?: Prisma.playbooksOrderByRelationAggregateInput
   users?: Prisma.usersOrderByWithRelationInput
   saved_playbooks?: Prisma.saved_playbooksOrderByRelationAggregateInput
-  public_sessions?: Prisma.public_sessionsOrderByRelationAggregateInput
+  saved_strategies?: Prisma.saved_strategiesOrderByRelationAggregateInput
+  sessions?: Prisma.public_sessionsOrderByRelationAggregateInput
   strategies?: Prisma.strategiesOrderByRelationAggregateInput
+  user_strategies?: Prisma.user_strategiesOrderByRelationAggregateInput
 }
 
 export type profilesWhereUniqueInput = Prisma.AtLeast<{
@@ -273,8 +277,10 @@ export type profilesWhereUniqueInput = Prisma.AtLeast<{
   playbooks?: Prisma.PlaybooksListRelationFilter
   users?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
   saved_playbooks?: Prisma.Saved_playbooksListRelationFilter
-  public_sessions?: Prisma.Public_sessionsListRelationFilter
+  saved_strategies?: Prisma.Saved_strategiesListRelationFilter
+  sessions?: Prisma.Public_sessionsListRelationFilter
   strategies?: Prisma.StrategiesListRelationFilter
+  user_strategies?: Prisma.User_strategiesListRelationFilter
 }, "id">
 
 export type profilesOrderByWithAggregationInput = {
@@ -326,8 +332,10 @@ export type profilesCreateInput = {
   playbooks?: Prisma.playbooksCreateNestedManyWithoutProfilesInput
   users?: Prisma.usersCreateNestedOneWithoutProfilesInput
   saved_playbooks?: Prisma.saved_playbooksCreateNestedManyWithoutProfilesInput
-  public_sessions?: Prisma.public_sessionsCreateNestedManyWithoutUsersInput
+  saved_strategies?: Prisma.saved_strategiesCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsCreateNestedManyWithoutProfilesInput
   strategies?: Prisma.strategiesCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesCreateNestedManyWithoutProfilesInput
 }
 
 export type profilesUncheckedCreateInput = {
@@ -345,8 +353,10 @@ export type profilesUncheckedCreateInput = {
   activity_responses?: Prisma.activity_responsesUncheckedCreateNestedManyWithoutProfilesInput
   playbooks?: Prisma.playbooksUncheckedCreateNestedManyWithoutProfilesInput
   saved_playbooks?: Prisma.saved_playbooksUncheckedCreateNestedManyWithoutProfilesInput
-  public_sessions?: Prisma.public_sessionsUncheckedCreateNestedManyWithoutUsersInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsUncheckedCreateNestedManyWithoutProfilesInput
   strategies?: Prisma.strategiesUncheckedCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesUncheckedCreateNestedManyWithoutProfilesInput
 }
 
 export type profilesUpdateInput = {
@@ -364,8 +374,10 @@ export type profilesUpdateInput = {
   playbooks?: Prisma.playbooksUpdateManyWithoutProfilesNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutProfilesNestedInput
   saved_playbooks?: Prisma.saved_playbooksUpdateManyWithoutProfilesNestedInput
-  public_sessions?: Prisma.public_sessionsUpdateManyWithoutUsersNestedInput
+  saved_strategies?: Prisma.saved_strategiesUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUpdateManyWithoutProfilesNestedInput
   strategies?: Prisma.strategiesUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUpdateManyWithoutProfilesNestedInput
 }
 
 export type profilesUncheckedUpdateInput = {
@@ -383,8 +395,10 @@ export type profilesUncheckedUpdateInput = {
   activity_responses?: Prisma.activity_responsesUncheckedUpdateManyWithoutProfilesNestedInput
   playbooks?: Prisma.playbooksUncheckedUpdateManyWithoutProfilesNestedInput
   saved_playbooks?: Prisma.saved_playbooksUncheckedUpdateManyWithoutProfilesNestedInput
-  public_sessions?: Prisma.public_sessionsUncheckedUpdateManyWithoutUsersNestedInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUncheckedUpdateManyWithoutProfilesNestedInput
   strategies?: Prisma.strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
 }
 
 export type profilesCreateManyInput = {
@@ -565,20 +579,18 @@ export type profilesUpdateOneRequiredWithoutSaved_playbooksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.profilesUpdateToOneWithWhereWithoutSaved_playbooksInput, Prisma.profilesUpdateWithoutSaved_playbooksInput>, Prisma.profilesUncheckedUpdateWithoutSaved_playbooksInput>
 }
 
-export type profilesCreateNestedOneWithoutPublic_sessionsInput = {
-  create?: Prisma.XOR<Prisma.profilesCreateWithoutPublic_sessionsInput, Prisma.profilesUncheckedCreateWithoutPublic_sessionsInput>
-  connectOrCreate?: Prisma.profilesCreateOrConnectWithoutPublic_sessionsInput
+export type profilesCreateNestedOneWithoutSessionsInput = {
+  create?: Prisma.XOR<Prisma.profilesCreateWithoutSessionsInput, Prisma.profilesUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.profilesCreateOrConnectWithoutSessionsInput
   connect?: Prisma.profilesWhereUniqueInput
 }
 
-export type profilesUpdateOneWithoutPublic_sessionsNestedInput = {
-  create?: Prisma.XOR<Prisma.profilesCreateWithoutPublic_sessionsInput, Prisma.profilesUncheckedCreateWithoutPublic_sessionsInput>
-  connectOrCreate?: Prisma.profilesCreateOrConnectWithoutPublic_sessionsInput
-  upsert?: Prisma.profilesUpsertWithoutPublic_sessionsInput
-  disconnect?: Prisma.profilesWhereInput | boolean
-  delete?: Prisma.profilesWhereInput | boolean
+export type profilesUpdateOneRequiredWithoutSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.profilesCreateWithoutSessionsInput, Prisma.profilesUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.profilesCreateOrConnectWithoutSessionsInput
+  upsert?: Prisma.profilesUpsertWithoutSessionsInput
   connect?: Prisma.profilesWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.profilesUpdateToOneWithWhereWithoutPublic_sessionsInput, Prisma.profilesUpdateWithoutPublic_sessionsInput>, Prisma.profilesUncheckedUpdateWithoutPublic_sessionsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.profilesUpdateToOneWithWhereWithoutSessionsInput, Prisma.profilesUpdateWithoutSessionsInput>, Prisma.profilesUncheckedUpdateWithoutSessionsInput>
 }
 
 export type profilesCreateNestedOneWithoutStrategiesInput = {
@@ -597,6 +609,34 @@ export type profilesUpdateOneWithoutStrategiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.profilesUpdateToOneWithWhereWithoutStrategiesInput, Prisma.profilesUpdateWithoutStrategiesInput>, Prisma.profilesUncheckedUpdateWithoutStrategiesInput>
 }
 
+export type profilesCreateNestedOneWithoutSaved_strategiesInput = {
+  create?: Prisma.XOR<Prisma.profilesCreateWithoutSaved_strategiesInput, Prisma.profilesUncheckedCreateWithoutSaved_strategiesInput>
+  connectOrCreate?: Prisma.profilesCreateOrConnectWithoutSaved_strategiesInput
+  connect?: Prisma.profilesWhereUniqueInput
+}
+
+export type profilesUpdateOneRequiredWithoutSaved_strategiesNestedInput = {
+  create?: Prisma.XOR<Prisma.profilesCreateWithoutSaved_strategiesInput, Prisma.profilesUncheckedCreateWithoutSaved_strategiesInput>
+  connectOrCreate?: Prisma.profilesCreateOrConnectWithoutSaved_strategiesInput
+  upsert?: Prisma.profilesUpsertWithoutSaved_strategiesInput
+  connect?: Prisma.profilesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.profilesUpdateToOneWithWhereWithoutSaved_strategiesInput, Prisma.profilesUpdateWithoutSaved_strategiesInput>, Prisma.profilesUncheckedUpdateWithoutSaved_strategiesInput>
+}
+
+export type profilesCreateNestedOneWithoutUser_strategiesInput = {
+  create?: Prisma.XOR<Prisma.profilesCreateWithoutUser_strategiesInput, Prisma.profilesUncheckedCreateWithoutUser_strategiesInput>
+  connectOrCreate?: Prisma.profilesCreateOrConnectWithoutUser_strategiesInput
+  connect?: Prisma.profilesWhereUniqueInput
+}
+
+export type profilesUpdateOneRequiredWithoutUser_strategiesNestedInput = {
+  create?: Prisma.XOR<Prisma.profilesCreateWithoutUser_strategiesInput, Prisma.profilesUncheckedCreateWithoutUser_strategiesInput>
+  connectOrCreate?: Prisma.profilesCreateOrConnectWithoutUser_strategiesInput
+  upsert?: Prisma.profilesUpsertWithoutUser_strategiesInput
+  connect?: Prisma.profilesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.profilesUpdateToOneWithWhereWithoutUser_strategiesInput, Prisma.profilesUpdateWithoutUser_strategiesInput>, Prisma.profilesUncheckedUpdateWithoutUser_strategiesInput>
+}
+
 export type profilesCreateWithoutUsersInput = {
   email?: string | null
   first_name: string
@@ -611,8 +651,10 @@ export type profilesCreateWithoutUsersInput = {
   activity_responses?: Prisma.activity_responsesCreateNestedManyWithoutProfilesInput
   playbooks?: Prisma.playbooksCreateNestedManyWithoutProfilesInput
   saved_playbooks?: Prisma.saved_playbooksCreateNestedManyWithoutProfilesInput
-  public_sessions?: Prisma.public_sessionsCreateNestedManyWithoutUsersInput
+  saved_strategies?: Prisma.saved_strategiesCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsCreateNestedManyWithoutProfilesInput
   strategies?: Prisma.strategiesCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesCreateNestedManyWithoutProfilesInput
 }
 
 export type profilesUncheckedCreateWithoutUsersInput = {
@@ -629,8 +671,10 @@ export type profilesUncheckedCreateWithoutUsersInput = {
   activity_responses?: Prisma.activity_responsesUncheckedCreateNestedManyWithoutProfilesInput
   playbooks?: Prisma.playbooksUncheckedCreateNestedManyWithoutProfilesInput
   saved_playbooks?: Prisma.saved_playbooksUncheckedCreateNestedManyWithoutProfilesInput
-  public_sessions?: Prisma.public_sessionsUncheckedCreateNestedManyWithoutUsersInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsUncheckedCreateNestedManyWithoutProfilesInput
   strategies?: Prisma.strategiesUncheckedCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesUncheckedCreateNestedManyWithoutProfilesInput
 }
 
 export type profilesCreateOrConnectWithoutUsersInput = {
@@ -663,8 +707,10 @@ export type profilesUpdateWithoutUsersInput = {
   activity_responses?: Prisma.activity_responsesUpdateManyWithoutProfilesNestedInput
   playbooks?: Prisma.playbooksUpdateManyWithoutProfilesNestedInput
   saved_playbooks?: Prisma.saved_playbooksUpdateManyWithoutProfilesNestedInput
-  public_sessions?: Prisma.public_sessionsUpdateManyWithoutUsersNestedInput
+  saved_strategies?: Prisma.saved_strategiesUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUpdateManyWithoutProfilesNestedInput
   strategies?: Prisma.strategiesUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUpdateManyWithoutProfilesNestedInput
 }
 
 export type profilesUncheckedUpdateWithoutUsersInput = {
@@ -681,8 +727,10 @@ export type profilesUncheckedUpdateWithoutUsersInput = {
   activity_responses?: Prisma.activity_responsesUncheckedUpdateManyWithoutProfilesNestedInput
   playbooks?: Prisma.playbooksUncheckedUpdateManyWithoutProfilesNestedInput
   saved_playbooks?: Prisma.saved_playbooksUncheckedUpdateManyWithoutProfilesNestedInput
-  public_sessions?: Prisma.public_sessionsUncheckedUpdateManyWithoutUsersNestedInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUncheckedUpdateManyWithoutProfilesNestedInput
   strategies?: Prisma.strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
 }
 
 export type profilesCreateWithoutActivity_responsesInput = {
@@ -699,8 +747,10 @@ export type profilesCreateWithoutActivity_responsesInput = {
   playbooks?: Prisma.playbooksCreateNestedManyWithoutProfilesInput
   users?: Prisma.usersCreateNestedOneWithoutProfilesInput
   saved_playbooks?: Prisma.saved_playbooksCreateNestedManyWithoutProfilesInput
-  public_sessions?: Prisma.public_sessionsCreateNestedManyWithoutUsersInput
+  saved_strategies?: Prisma.saved_strategiesCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsCreateNestedManyWithoutProfilesInput
   strategies?: Prisma.strategiesCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesCreateNestedManyWithoutProfilesInput
 }
 
 export type profilesUncheckedCreateWithoutActivity_responsesInput = {
@@ -717,8 +767,10 @@ export type profilesUncheckedCreateWithoutActivity_responsesInput = {
   school?: string | null
   playbooks?: Prisma.playbooksUncheckedCreateNestedManyWithoutProfilesInput
   saved_playbooks?: Prisma.saved_playbooksUncheckedCreateNestedManyWithoutProfilesInput
-  public_sessions?: Prisma.public_sessionsUncheckedCreateNestedManyWithoutUsersInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsUncheckedCreateNestedManyWithoutProfilesInput
   strategies?: Prisma.strategiesUncheckedCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesUncheckedCreateNestedManyWithoutProfilesInput
 }
 
 export type profilesCreateOrConnectWithoutActivity_responsesInput = {
@@ -751,8 +803,10 @@ export type profilesUpdateWithoutActivity_responsesInput = {
   playbooks?: Prisma.playbooksUpdateManyWithoutProfilesNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutProfilesNestedInput
   saved_playbooks?: Prisma.saved_playbooksUpdateManyWithoutProfilesNestedInput
-  public_sessions?: Prisma.public_sessionsUpdateManyWithoutUsersNestedInput
+  saved_strategies?: Prisma.saved_strategiesUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUpdateManyWithoutProfilesNestedInput
   strategies?: Prisma.strategiesUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUpdateManyWithoutProfilesNestedInput
 }
 
 export type profilesUncheckedUpdateWithoutActivity_responsesInput = {
@@ -769,8 +823,10 @@ export type profilesUncheckedUpdateWithoutActivity_responsesInput = {
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   playbooks?: Prisma.playbooksUncheckedUpdateManyWithoutProfilesNestedInput
   saved_playbooks?: Prisma.saved_playbooksUncheckedUpdateManyWithoutProfilesNestedInput
-  public_sessions?: Prisma.public_sessionsUncheckedUpdateManyWithoutUsersNestedInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUncheckedUpdateManyWithoutProfilesNestedInput
   strategies?: Prisma.strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
 }
 
 export type profilesCreateWithoutPlaybooksInput = {
@@ -787,8 +843,10 @@ export type profilesCreateWithoutPlaybooksInput = {
   activity_responses?: Prisma.activity_responsesCreateNestedManyWithoutProfilesInput
   users?: Prisma.usersCreateNestedOneWithoutProfilesInput
   saved_playbooks?: Prisma.saved_playbooksCreateNestedManyWithoutProfilesInput
-  public_sessions?: Prisma.public_sessionsCreateNestedManyWithoutUsersInput
+  saved_strategies?: Prisma.saved_strategiesCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsCreateNestedManyWithoutProfilesInput
   strategies?: Prisma.strategiesCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesCreateNestedManyWithoutProfilesInput
 }
 
 export type profilesUncheckedCreateWithoutPlaybooksInput = {
@@ -805,8 +863,10 @@ export type profilesUncheckedCreateWithoutPlaybooksInput = {
   school?: string | null
   activity_responses?: Prisma.activity_responsesUncheckedCreateNestedManyWithoutProfilesInput
   saved_playbooks?: Prisma.saved_playbooksUncheckedCreateNestedManyWithoutProfilesInput
-  public_sessions?: Prisma.public_sessionsUncheckedCreateNestedManyWithoutUsersInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsUncheckedCreateNestedManyWithoutProfilesInput
   strategies?: Prisma.strategiesUncheckedCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesUncheckedCreateNestedManyWithoutProfilesInput
 }
 
 export type profilesCreateOrConnectWithoutPlaybooksInput = {
@@ -839,8 +899,10 @@ export type profilesUpdateWithoutPlaybooksInput = {
   activity_responses?: Prisma.activity_responsesUpdateManyWithoutProfilesNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutProfilesNestedInput
   saved_playbooks?: Prisma.saved_playbooksUpdateManyWithoutProfilesNestedInput
-  public_sessions?: Prisma.public_sessionsUpdateManyWithoutUsersNestedInput
+  saved_strategies?: Prisma.saved_strategiesUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUpdateManyWithoutProfilesNestedInput
   strategies?: Prisma.strategiesUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUpdateManyWithoutProfilesNestedInput
 }
 
 export type profilesUncheckedUpdateWithoutPlaybooksInput = {
@@ -857,8 +919,10 @@ export type profilesUncheckedUpdateWithoutPlaybooksInput = {
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activity_responses?: Prisma.activity_responsesUncheckedUpdateManyWithoutProfilesNestedInput
   saved_playbooks?: Prisma.saved_playbooksUncheckedUpdateManyWithoutProfilesNestedInput
-  public_sessions?: Prisma.public_sessionsUncheckedUpdateManyWithoutUsersNestedInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUncheckedUpdateManyWithoutProfilesNestedInput
   strategies?: Prisma.strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
 }
 
 export type profilesCreateWithoutSaved_playbooksInput = {
@@ -875,8 +939,10 @@ export type profilesCreateWithoutSaved_playbooksInput = {
   activity_responses?: Prisma.activity_responsesCreateNestedManyWithoutProfilesInput
   playbooks?: Prisma.playbooksCreateNestedManyWithoutProfilesInput
   users?: Prisma.usersCreateNestedOneWithoutProfilesInput
-  public_sessions?: Prisma.public_sessionsCreateNestedManyWithoutUsersInput
+  saved_strategies?: Prisma.saved_strategiesCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsCreateNestedManyWithoutProfilesInput
   strategies?: Prisma.strategiesCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesCreateNestedManyWithoutProfilesInput
 }
 
 export type profilesUncheckedCreateWithoutSaved_playbooksInput = {
@@ -893,8 +959,10 @@ export type profilesUncheckedCreateWithoutSaved_playbooksInput = {
   school?: string | null
   activity_responses?: Prisma.activity_responsesUncheckedCreateNestedManyWithoutProfilesInput
   playbooks?: Prisma.playbooksUncheckedCreateNestedManyWithoutProfilesInput
-  public_sessions?: Prisma.public_sessionsUncheckedCreateNestedManyWithoutUsersInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsUncheckedCreateNestedManyWithoutProfilesInput
   strategies?: Prisma.strategiesUncheckedCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesUncheckedCreateNestedManyWithoutProfilesInput
 }
 
 export type profilesCreateOrConnectWithoutSaved_playbooksInput = {
@@ -927,8 +995,10 @@ export type profilesUpdateWithoutSaved_playbooksInput = {
   activity_responses?: Prisma.activity_responsesUpdateManyWithoutProfilesNestedInput
   playbooks?: Prisma.playbooksUpdateManyWithoutProfilesNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutProfilesNestedInput
-  public_sessions?: Prisma.public_sessionsUpdateManyWithoutUsersNestedInput
+  saved_strategies?: Prisma.saved_strategiesUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUpdateManyWithoutProfilesNestedInput
   strategies?: Prisma.strategiesUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUpdateManyWithoutProfilesNestedInput
 }
 
 export type profilesUncheckedUpdateWithoutSaved_playbooksInput = {
@@ -945,11 +1015,13 @@ export type profilesUncheckedUpdateWithoutSaved_playbooksInput = {
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activity_responses?: Prisma.activity_responsesUncheckedUpdateManyWithoutProfilesNestedInput
   playbooks?: Prisma.playbooksUncheckedUpdateManyWithoutProfilesNestedInput
-  public_sessions?: Prisma.public_sessionsUncheckedUpdateManyWithoutUsersNestedInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUncheckedUpdateManyWithoutProfilesNestedInput
   strategies?: Prisma.strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
 }
 
-export type profilesCreateWithoutPublic_sessionsInput = {
+export type profilesCreateWithoutSessionsInput = {
   email?: string | null
   first_name: string
   avatar_url?: string | null
@@ -964,10 +1036,12 @@ export type profilesCreateWithoutPublic_sessionsInput = {
   playbooks?: Prisma.playbooksCreateNestedManyWithoutProfilesInput
   users?: Prisma.usersCreateNestedOneWithoutProfilesInput
   saved_playbooks?: Prisma.saved_playbooksCreateNestedManyWithoutProfilesInput
+  saved_strategies?: Prisma.saved_strategiesCreateNestedManyWithoutProfilesInput
   strategies?: Prisma.strategiesCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesCreateNestedManyWithoutProfilesInput
 }
 
-export type profilesUncheckedCreateWithoutPublic_sessionsInput = {
+export type profilesUncheckedCreateWithoutSessionsInput = {
   id?: string
   email?: string | null
   first_name: string
@@ -982,26 +1056,28 @@ export type profilesUncheckedCreateWithoutPublic_sessionsInput = {
   activity_responses?: Prisma.activity_responsesUncheckedCreateNestedManyWithoutProfilesInput
   playbooks?: Prisma.playbooksUncheckedCreateNestedManyWithoutProfilesInput
   saved_playbooks?: Prisma.saved_playbooksUncheckedCreateNestedManyWithoutProfilesInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedCreateNestedManyWithoutProfilesInput
   strategies?: Prisma.strategiesUncheckedCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesUncheckedCreateNestedManyWithoutProfilesInput
 }
 
-export type profilesCreateOrConnectWithoutPublic_sessionsInput = {
+export type profilesCreateOrConnectWithoutSessionsInput = {
   where: Prisma.profilesWhereUniqueInput
-  create: Prisma.XOR<Prisma.profilesCreateWithoutPublic_sessionsInput, Prisma.profilesUncheckedCreateWithoutPublic_sessionsInput>
+  create: Prisma.XOR<Prisma.profilesCreateWithoutSessionsInput, Prisma.profilesUncheckedCreateWithoutSessionsInput>
 }
 
-export type profilesUpsertWithoutPublic_sessionsInput = {
-  update: Prisma.XOR<Prisma.profilesUpdateWithoutPublic_sessionsInput, Prisma.profilesUncheckedUpdateWithoutPublic_sessionsInput>
-  create: Prisma.XOR<Prisma.profilesCreateWithoutPublic_sessionsInput, Prisma.profilesUncheckedCreateWithoutPublic_sessionsInput>
+export type profilesUpsertWithoutSessionsInput = {
+  update: Prisma.XOR<Prisma.profilesUpdateWithoutSessionsInput, Prisma.profilesUncheckedUpdateWithoutSessionsInput>
+  create: Prisma.XOR<Prisma.profilesCreateWithoutSessionsInput, Prisma.profilesUncheckedCreateWithoutSessionsInput>
   where?: Prisma.profilesWhereInput
 }
 
-export type profilesUpdateToOneWithWhereWithoutPublic_sessionsInput = {
+export type profilesUpdateToOneWithWhereWithoutSessionsInput = {
   where?: Prisma.profilesWhereInput
-  data: Prisma.XOR<Prisma.profilesUpdateWithoutPublic_sessionsInput, Prisma.profilesUncheckedUpdateWithoutPublic_sessionsInput>
+  data: Prisma.XOR<Prisma.profilesUpdateWithoutSessionsInput, Prisma.profilesUncheckedUpdateWithoutSessionsInput>
 }
 
-export type profilesUpdateWithoutPublic_sessionsInput = {
+export type profilesUpdateWithoutSessionsInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   first_name?: Prisma.StringFieldUpdateOperationsInput | string
   avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1016,10 +1092,12 @@ export type profilesUpdateWithoutPublic_sessionsInput = {
   playbooks?: Prisma.playbooksUpdateManyWithoutProfilesNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutProfilesNestedInput
   saved_playbooks?: Prisma.saved_playbooksUpdateManyWithoutProfilesNestedInput
+  saved_strategies?: Prisma.saved_strategiesUpdateManyWithoutProfilesNestedInput
   strategies?: Prisma.strategiesUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUpdateManyWithoutProfilesNestedInput
 }
 
-export type profilesUncheckedUpdateWithoutPublic_sessionsInput = {
+export type profilesUncheckedUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   first_name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1034,7 +1112,9 @@ export type profilesUncheckedUpdateWithoutPublic_sessionsInput = {
   activity_responses?: Prisma.activity_responsesUncheckedUpdateManyWithoutProfilesNestedInput
   playbooks?: Prisma.playbooksUncheckedUpdateManyWithoutProfilesNestedInput
   saved_playbooks?: Prisma.saved_playbooksUncheckedUpdateManyWithoutProfilesNestedInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
   strategies?: Prisma.strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
 }
 
 export type profilesCreateWithoutStrategiesInput = {
@@ -1052,7 +1132,9 @@ export type profilesCreateWithoutStrategiesInput = {
   playbooks?: Prisma.playbooksCreateNestedManyWithoutProfilesInput
   users?: Prisma.usersCreateNestedOneWithoutProfilesInput
   saved_playbooks?: Prisma.saved_playbooksCreateNestedManyWithoutProfilesInput
-  public_sessions?: Prisma.public_sessionsCreateNestedManyWithoutUsersInput
+  saved_strategies?: Prisma.saved_strategiesCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesCreateNestedManyWithoutProfilesInput
 }
 
 export type profilesUncheckedCreateWithoutStrategiesInput = {
@@ -1070,7 +1152,9 @@ export type profilesUncheckedCreateWithoutStrategiesInput = {
   activity_responses?: Prisma.activity_responsesUncheckedCreateNestedManyWithoutProfilesInput
   playbooks?: Prisma.playbooksUncheckedCreateNestedManyWithoutProfilesInput
   saved_playbooks?: Prisma.saved_playbooksUncheckedCreateNestedManyWithoutProfilesInput
-  public_sessions?: Prisma.public_sessionsUncheckedCreateNestedManyWithoutUsersInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsUncheckedCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesUncheckedCreateNestedManyWithoutProfilesInput
 }
 
 export type profilesCreateOrConnectWithoutStrategiesInput = {
@@ -1104,7 +1188,9 @@ export type profilesUpdateWithoutStrategiesInput = {
   playbooks?: Prisma.playbooksUpdateManyWithoutProfilesNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutProfilesNestedInput
   saved_playbooks?: Prisma.saved_playbooksUpdateManyWithoutProfilesNestedInput
-  public_sessions?: Prisma.public_sessionsUpdateManyWithoutUsersNestedInput
+  saved_strategies?: Prisma.saved_strategiesUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUpdateManyWithoutProfilesNestedInput
 }
 
 export type profilesUncheckedUpdateWithoutStrategiesInput = {
@@ -1122,7 +1208,201 @@ export type profilesUncheckedUpdateWithoutStrategiesInput = {
   activity_responses?: Prisma.activity_responsesUncheckedUpdateManyWithoutProfilesNestedInput
   playbooks?: Prisma.playbooksUncheckedUpdateManyWithoutProfilesNestedInput
   saved_playbooks?: Prisma.saved_playbooksUncheckedUpdateManyWithoutProfilesNestedInput
-  public_sessions?: Prisma.public_sessionsUncheckedUpdateManyWithoutUsersNestedInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUncheckedUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+}
+
+export type profilesCreateWithoutSaved_strategiesInput = {
+  email?: string | null
+  first_name: string
+  avatar_url?: string | null
+  created_at?: Date | string
+  courses?: Prisma.profilesCreatecoursesInput | string[]
+  role?: $Enums.user_role | null
+  updated_at?: Date | string | null
+  last_name?: string | null
+  onboarding_completed_at?: Date | string | null
+  school?: string | null
+  activity_responses?: Prisma.activity_responsesCreateNestedManyWithoutProfilesInput
+  playbooks?: Prisma.playbooksCreateNestedManyWithoutProfilesInput
+  users?: Prisma.usersCreateNestedOneWithoutProfilesInput
+  saved_playbooks?: Prisma.saved_playbooksCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsCreateNestedManyWithoutProfilesInput
+  strategies?: Prisma.strategiesCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesCreateNestedManyWithoutProfilesInput
+}
+
+export type profilesUncheckedCreateWithoutSaved_strategiesInput = {
+  id?: string
+  email?: string | null
+  first_name: string
+  avatar_url?: string | null
+  created_at?: Date | string
+  courses?: Prisma.profilesCreatecoursesInput | string[]
+  role?: $Enums.user_role | null
+  updated_at?: Date | string | null
+  last_name?: string | null
+  onboarding_completed_at?: Date | string | null
+  school?: string | null
+  activity_responses?: Prisma.activity_responsesUncheckedCreateNestedManyWithoutProfilesInput
+  playbooks?: Prisma.playbooksUncheckedCreateNestedManyWithoutProfilesInput
+  saved_playbooks?: Prisma.saved_playbooksUncheckedCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsUncheckedCreateNestedManyWithoutProfilesInput
+  strategies?: Prisma.strategiesUncheckedCreateNestedManyWithoutProfilesInput
+  user_strategies?: Prisma.user_strategiesUncheckedCreateNestedManyWithoutProfilesInput
+}
+
+export type profilesCreateOrConnectWithoutSaved_strategiesInput = {
+  where: Prisma.profilesWhereUniqueInput
+  create: Prisma.XOR<Prisma.profilesCreateWithoutSaved_strategiesInput, Prisma.profilesUncheckedCreateWithoutSaved_strategiesInput>
+}
+
+export type profilesUpsertWithoutSaved_strategiesInput = {
+  update: Prisma.XOR<Prisma.profilesUpdateWithoutSaved_strategiesInput, Prisma.profilesUncheckedUpdateWithoutSaved_strategiesInput>
+  create: Prisma.XOR<Prisma.profilesCreateWithoutSaved_strategiesInput, Prisma.profilesUncheckedCreateWithoutSaved_strategiesInput>
+  where?: Prisma.profilesWhereInput
+}
+
+export type profilesUpdateToOneWithWhereWithoutSaved_strategiesInput = {
+  where?: Prisma.profilesWhereInput
+  data: Prisma.XOR<Prisma.profilesUpdateWithoutSaved_strategiesInput, Prisma.profilesUncheckedUpdateWithoutSaved_strategiesInput>
+}
+
+export type profilesUpdateWithoutSaved_strategiesInput = {
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courses?: Prisma.profilesUpdatecoursesInput | string[]
+  role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboarding_completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activity_responses?: Prisma.activity_responsesUpdateManyWithoutProfilesNestedInput
+  playbooks?: Prisma.playbooksUpdateManyWithoutProfilesNestedInput
+  users?: Prisma.usersUpdateOneRequiredWithoutProfilesNestedInput
+  saved_playbooks?: Prisma.saved_playbooksUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUpdateManyWithoutProfilesNestedInput
+  strategies?: Prisma.strategiesUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUpdateManyWithoutProfilesNestedInput
+}
+
+export type profilesUncheckedUpdateWithoutSaved_strategiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courses?: Prisma.profilesUpdatecoursesInput | string[]
+  role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboarding_completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activity_responses?: Prisma.activity_responsesUncheckedUpdateManyWithoutProfilesNestedInput
+  playbooks?: Prisma.playbooksUncheckedUpdateManyWithoutProfilesNestedInput
+  saved_playbooks?: Prisma.saved_playbooksUncheckedUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUncheckedUpdateManyWithoutProfilesNestedInput
+  strategies?: Prisma.strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+  user_strategies?: Prisma.user_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+}
+
+export type profilesCreateWithoutUser_strategiesInput = {
+  email?: string | null
+  first_name: string
+  avatar_url?: string | null
+  created_at?: Date | string
+  courses?: Prisma.profilesCreatecoursesInput | string[]
+  role?: $Enums.user_role | null
+  updated_at?: Date | string | null
+  last_name?: string | null
+  onboarding_completed_at?: Date | string | null
+  school?: string | null
+  activity_responses?: Prisma.activity_responsesCreateNestedManyWithoutProfilesInput
+  playbooks?: Prisma.playbooksCreateNestedManyWithoutProfilesInput
+  users?: Prisma.usersCreateNestedOneWithoutProfilesInput
+  saved_playbooks?: Prisma.saved_playbooksCreateNestedManyWithoutProfilesInput
+  saved_strategies?: Prisma.saved_strategiesCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsCreateNestedManyWithoutProfilesInput
+  strategies?: Prisma.strategiesCreateNestedManyWithoutProfilesInput
+}
+
+export type profilesUncheckedCreateWithoutUser_strategiesInput = {
+  id?: string
+  email?: string | null
+  first_name: string
+  avatar_url?: string | null
+  created_at?: Date | string
+  courses?: Prisma.profilesCreatecoursesInput | string[]
+  role?: $Enums.user_role | null
+  updated_at?: Date | string | null
+  last_name?: string | null
+  onboarding_completed_at?: Date | string | null
+  school?: string | null
+  activity_responses?: Prisma.activity_responsesUncheckedCreateNestedManyWithoutProfilesInput
+  playbooks?: Prisma.playbooksUncheckedCreateNestedManyWithoutProfilesInput
+  saved_playbooks?: Prisma.saved_playbooksUncheckedCreateNestedManyWithoutProfilesInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedCreateNestedManyWithoutProfilesInput
+  sessions?: Prisma.public_sessionsUncheckedCreateNestedManyWithoutProfilesInput
+  strategies?: Prisma.strategiesUncheckedCreateNestedManyWithoutProfilesInput
+}
+
+export type profilesCreateOrConnectWithoutUser_strategiesInput = {
+  where: Prisma.profilesWhereUniqueInput
+  create: Prisma.XOR<Prisma.profilesCreateWithoutUser_strategiesInput, Prisma.profilesUncheckedCreateWithoutUser_strategiesInput>
+}
+
+export type profilesUpsertWithoutUser_strategiesInput = {
+  update: Prisma.XOR<Prisma.profilesUpdateWithoutUser_strategiesInput, Prisma.profilesUncheckedUpdateWithoutUser_strategiesInput>
+  create: Prisma.XOR<Prisma.profilesCreateWithoutUser_strategiesInput, Prisma.profilesUncheckedCreateWithoutUser_strategiesInput>
+  where?: Prisma.profilesWhereInput
+}
+
+export type profilesUpdateToOneWithWhereWithoutUser_strategiesInput = {
+  where?: Prisma.profilesWhereInput
+  data: Prisma.XOR<Prisma.profilesUpdateWithoutUser_strategiesInput, Prisma.profilesUncheckedUpdateWithoutUser_strategiesInput>
+}
+
+export type profilesUpdateWithoutUser_strategiesInput = {
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courses?: Prisma.profilesUpdatecoursesInput | string[]
+  role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboarding_completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activity_responses?: Prisma.activity_responsesUpdateManyWithoutProfilesNestedInput
+  playbooks?: Prisma.playbooksUpdateManyWithoutProfilesNestedInput
+  users?: Prisma.usersUpdateOneRequiredWithoutProfilesNestedInput
+  saved_playbooks?: Prisma.saved_playbooksUpdateManyWithoutProfilesNestedInput
+  saved_strategies?: Prisma.saved_strategiesUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUpdateManyWithoutProfilesNestedInput
+  strategies?: Prisma.strategiesUpdateManyWithoutProfilesNestedInput
+}
+
+export type profilesUncheckedUpdateWithoutUser_strategiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  courses?: Prisma.profilesUpdatecoursesInput | string[]
+  role?: Prisma.NullableEnumuser_roleFieldUpdateOperationsInput | $Enums.user_role | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboarding_completed_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activity_responses?: Prisma.activity_responsesUncheckedUpdateManyWithoutProfilesNestedInput
+  playbooks?: Prisma.playbooksUncheckedUpdateManyWithoutProfilesNestedInput
+  saved_playbooks?: Prisma.saved_playbooksUncheckedUpdateManyWithoutProfilesNestedInput
+  saved_strategies?: Prisma.saved_strategiesUncheckedUpdateManyWithoutProfilesNestedInput
+  sessions?: Prisma.public_sessionsUncheckedUpdateManyWithoutProfilesNestedInput
+  strategies?: Prisma.strategiesUncheckedUpdateManyWithoutProfilesNestedInput
 }
 
 
@@ -1134,16 +1414,20 @@ export type ProfilesCountOutputType = {
   activity_responses: number
   playbooks: number
   saved_playbooks: number
-  public_sessions: number
+  saved_strategies: number
+  sessions: number
   strategies: number
+  user_strategies: number
 }
 
 export type ProfilesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   activity_responses?: boolean | ProfilesCountOutputTypeCountActivity_responsesArgs
   playbooks?: boolean | ProfilesCountOutputTypeCountPlaybooksArgs
   saved_playbooks?: boolean | ProfilesCountOutputTypeCountSaved_playbooksArgs
-  public_sessions?: boolean | ProfilesCountOutputTypeCountPublic_sessionsArgs
+  saved_strategies?: boolean | ProfilesCountOutputTypeCountSaved_strategiesArgs
+  sessions?: boolean | ProfilesCountOutputTypeCountSessionsArgs
   strategies?: boolean | ProfilesCountOutputTypeCountStrategiesArgs
+  user_strategies?: boolean | ProfilesCountOutputTypeCountUser_strategiesArgs
 }
 
 /**
@@ -1180,7 +1464,14 @@ export type ProfilesCountOutputTypeCountSaved_playbooksArgs<ExtArgs extends runt
 /**
  * ProfilesCountOutputType without action
  */
-export type ProfilesCountOutputTypeCountPublic_sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ProfilesCountOutputTypeCountSaved_strategiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.saved_strategiesWhereInput
+}
+
+/**
+ * ProfilesCountOutputType without action
+ */
+export type ProfilesCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.public_sessionsWhereInput
 }
 
@@ -1189,6 +1480,13 @@ export type ProfilesCountOutputTypeCountPublic_sessionsArgs<ExtArgs extends runt
  */
 export type ProfilesCountOutputTypeCountStrategiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.strategiesWhereInput
+}
+
+/**
+ * ProfilesCountOutputType without action
+ */
+export type ProfilesCountOutputTypeCountUser_strategiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.user_strategiesWhereInput
 }
 
 
@@ -1208,8 +1506,10 @@ export type profilesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   playbooks?: boolean | Prisma.profiles$playbooksArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   saved_playbooks?: boolean | Prisma.profiles$saved_playbooksArgs<ExtArgs>
-  public_sessions?: boolean | Prisma.profiles$public_sessionsArgs<ExtArgs>
+  saved_strategies?: boolean | Prisma.profiles$saved_strategiesArgs<ExtArgs>
+  sessions?: boolean | Prisma.profiles$sessionsArgs<ExtArgs>
   strategies?: boolean | Prisma.profiles$strategiesArgs<ExtArgs>
+  user_strategies?: boolean | Prisma.profiles$user_strategiesArgs<ExtArgs>
   _count?: boolean | Prisma.ProfilesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["profiles"]>
 
@@ -1263,8 +1563,10 @@ export type profilesInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   playbooks?: boolean | Prisma.profiles$playbooksArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   saved_playbooks?: boolean | Prisma.profiles$saved_playbooksArgs<ExtArgs>
-  public_sessions?: boolean | Prisma.profiles$public_sessionsArgs<ExtArgs>
+  saved_strategies?: boolean | Prisma.profiles$saved_strategiesArgs<ExtArgs>
+  sessions?: boolean | Prisma.profiles$sessionsArgs<ExtArgs>
   strategies?: boolean | Prisma.profiles$strategiesArgs<ExtArgs>
+  user_strategies?: boolean | Prisma.profiles$user_strategiesArgs<ExtArgs>
   _count?: boolean | Prisma.ProfilesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type profilesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1281,8 +1583,10 @@ export type $profilesPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     playbooks: Prisma.$playbooksPayload<ExtArgs>[]
     users: Prisma.$usersPayload<ExtArgs>
     saved_playbooks: Prisma.$saved_playbooksPayload<ExtArgs>[]
-    public_sessions: Prisma.$public_sessionsPayload<ExtArgs>[]
+    saved_strategies: Prisma.$saved_strategiesPayload<ExtArgs>[]
+    sessions: Prisma.$public_sessionsPayload<ExtArgs>[]
     strategies: Prisma.$strategiesPayload<ExtArgs>[]
+    user_strategies: Prisma.$user_strategiesPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1694,8 +1998,10 @@ export interface Prisma__profilesClient<T, Null = never, ExtArgs extends runtime
   playbooks<T extends Prisma.profiles$playbooksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.profiles$playbooksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$playbooksPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.usersDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.usersDefaultArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   saved_playbooks<T extends Prisma.profiles$saved_playbooksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.profiles$saved_playbooksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$saved_playbooksPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  public_sessions<T extends Prisma.profiles$public_sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.profiles$public_sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$public_sessionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  saved_strategies<T extends Prisma.profiles$saved_strategiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.profiles$saved_strategiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$saved_strategiesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sessions<T extends Prisma.profiles$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.profiles$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$public_sessionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   strategies<T extends Prisma.profiles$strategiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.profiles$strategiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$strategiesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  user_strategies<T extends Prisma.profiles$user_strategiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.profiles$user_strategiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$user_strategiesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2209,9 +2515,33 @@ export type profiles$saved_playbooksArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
- * profiles.public_sessions
+ * profiles.saved_strategies
  */
-export type profiles$public_sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type profiles$saved_strategiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the saved_strategies
+   */
+  select?: Prisma.saved_strategiesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the saved_strategies
+   */
+  omit?: Prisma.saved_strategiesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.saved_strategiesInclude<ExtArgs> | null
+  where?: Prisma.saved_strategiesWhereInput
+  orderBy?: Prisma.saved_strategiesOrderByWithRelationInput | Prisma.saved_strategiesOrderByWithRelationInput[]
+  cursor?: Prisma.saved_strategiesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Saved_strategiesScalarFieldEnum | Prisma.Saved_strategiesScalarFieldEnum[]
+}
+
+/**
+ * profiles.sessions
+ */
+export type profiles$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the public_sessions
    */
@@ -2254,6 +2584,30 @@ export type profiles$strategiesArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.StrategiesScalarFieldEnum | Prisma.StrategiesScalarFieldEnum[]
+}
+
+/**
+ * profiles.user_strategies
+ */
+export type profiles$user_strategiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the user_strategies
+   */
+  select?: Prisma.user_strategiesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the user_strategies
+   */
+  omit?: Prisma.user_strategiesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.user_strategiesInclude<ExtArgs> | null
+  where?: Prisma.user_strategiesWhereInput
+  orderBy?: Prisma.user_strategiesOrderByWithRelationInput | Prisma.user_strategiesOrderByWithRelationInput[]
+  cursor?: Prisma.user_strategiesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.User_strategiesScalarFieldEnum | Prisma.User_strategiesScalarFieldEnum[]
 }
 
 /**

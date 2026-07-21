@@ -4,50 +4,51 @@ import {
   PlaybookCardRecord,
   PlaybookDetailRecord,
 } from "../selection/playbook.selections";
+import { PlaybookPhaseMapper } from "./PlaybookPhaseMapper";
 import { PlaybookStrategyMapper } from "./PlaybookStrategyMapper";
 
 export class PlaybookMapper {
-  static toCard(data: PlaybookCardRecord): PlaybookCardDTO {
+  static toCard(record: PlaybookCardRecord): PlaybookCardDTO {
     return {
-      id: data.id,
-      title: data.title,
-      topic: data.topic,
-      courseName: data.course_name,
-      subject: data.subject,
-      createdBy: data.created_by,
-      createdAt: data.created_at,
-      published: data.published ?? false,
-      updatedAt: data.updated_at ?? null,
+      id: record.id,
+      title: record.title,
+      topic: record.topic,
+      courseName: record.course_name,
+      subject: record.subject,
+      createdBy: record.created_by,
+      createdAt: record.created_at,
+      published: record.published ?? false,
+      updatedAt: record.updated_at ?? null,
     };
   }
-  static toDomain(data: PlaybookDetailRecord): Playbook {
+  static toDomain(record: PlaybookDetailRecord): Playbook {
     return new Playbook({
-      id: data.id,
-      title: data.title,
-      topic: data.topic,
-      courseName: data.course_name,
-      subject: data.subject,
-      createdBy: data.created_by,
-      createdAt: data.created_at,
-      strategies: data.playbook_strategies.map(PlaybookStrategyMapper.toCard),
+      id: record.id,
+      title: record.title,
+      topic: record.topic,
+      courseName: record.course_name,
+      subject: record.subject,
+      createdBy: record.created_by,
+      createdAt: record.created_at,
+      strategies: record.playbook_strategies.map(PlaybookStrategyMapper.toCard),
     });
   }
 
-  static toDetail(data: PlaybookDetailRecord): PlaybookDetailDTO {
+  static toDetail(record: PlaybookDetailRecord): PlaybookDetailDTO {
     return {
-      id: data.id,
-      title: data.title,
-      topic: data.topic,
-      courseName: data.course_name,
-      subject: data.subject,
-      createdBy: data.created_by,
+      id: record.id,
+      title: record.title,
+      topic: record.topic,
+      courseName: record.course_name,
+      subject: record.subject,
+      createdBy: record.created_by,
       methodology: null,
-      createdAt: data.created_at,
-      updatedAt: data.updated_at,
-      published: data.published ?? false,
-      strategies: data.playbook_strategies.map((s) => ({
+      createdAt: record.created_at,
+      updatedAt: record.updated_at,
+      published: record.published ?? false,
+      strategies: record.playbook_strategies.map((s) => ({
         id: s.id,
-        slug: s.card_slug,
+        slug: s.slug,
         title: s.title,
         phase: s.phase,
         playbookPhaseId: s.playbook_phase_id ?? null,
@@ -56,6 +57,7 @@ export class PlaybookMapper {
         sourceType: s.source_type,
         position: s.position,
       })),
+      phases: record.playbook_phases.map(PlaybookPhaseMapper.toDetail),
     };
   }
 }

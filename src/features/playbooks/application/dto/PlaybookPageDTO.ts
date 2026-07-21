@@ -30,15 +30,11 @@ export type GetPlaybookPageOutput = {
 export type PlaybookPagePhaseDTO = {
   id: string;
   title: string;
-  description: string | null;
   position: number;
   intent: {
     id: string;
-    key: string;
-    label: string;
-    colorToken: string;
-    iconName: string | null;
-    description: string;
+    key: "activate" | "explore" | "apply" | "reflect";
+    title: string;
     sortOrder: number;
   };
   estimatedMinutes: number | null;

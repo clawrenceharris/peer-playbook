@@ -19,7 +19,7 @@ describe("playbook strategy use cases", () => {
       playbookId: "playbook-1",
       playbookPhaseId: "phase-1",
       title: "Think-Pair-Share",
-      cardSlug: "think-pair-share",
+      slug: "think-pair-share",
       category: "discussion",
       steps: ["Think", "Pair", "Share"],
       description: "A short structured discussion sequence.",
@@ -33,7 +33,7 @@ describe("playbook strategy use cases", () => {
     expect(createPlaybookStrategy).toHaveBeenCalledWith({
       playbookId: "playbook-1",
       playbookPhaseId: "phase-1",
-      cardSlug: "think-pair-share",
+      slug: "think-pair-share",
       category: "discussion",
       title: "Think-Pair-Share",
       description: "A short structured discussion sequence.",
@@ -78,7 +78,7 @@ describe("playbook strategy use cases", () => {
       strategyId: "playbook-strategy-1",
       playbookId: "playbook-1",
       title: "Updated title",
-      cardSlug: "updated-title",
+      slug: "updated-title",
       category: "reflection",
       steps: ["One", "Two"],
       description: "Updated description",
@@ -89,7 +89,7 @@ describe("playbook strategy use cases", () => {
     expect(result.success).toBe(true);
     expect(updatePlaybookStrategy).toHaveBeenCalledWith("playbook-strategy-1", {
       title: "Updated title",
-      cardSlug: "updated-title",
+      slug: "updated-title",
       category: "reflection",
       steps: ["One", "Two"],
       description: "Updated description",

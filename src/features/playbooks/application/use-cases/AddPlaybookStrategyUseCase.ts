@@ -1,10 +1,7 @@
 import { fail, ok, Result } from "@/shared/application";
 import { ApplicationError } from "@/shared/utils";
 import { PlaybookWriteRepository } from "../../domain";
-import {
-  AddPlaybookStrategyInput,
-  PlaybookStrategyCardDTO,
-} from "../dto";
+import { AddPlaybookStrategyInput, PlaybookStrategyCardDTO } from "../dto";
 
 export class AddPlaybookStrategyUseCase {
   constructor(private readonly playbookRepository: PlaybookWriteRepository) {}
@@ -16,7 +13,7 @@ export class AddPlaybookStrategyUseCase {
       const result = await this.playbookRepository.createPlaybookStrategy({
         playbookId: input.playbookId,
         playbookPhaseId: input.playbookPhaseId,
-        cardSlug: input.cardSlug,
+        slug: input.slug,
         category: input.category,
         title: input.title,
         description: input.description,
@@ -25,6 +22,8 @@ export class AddPlaybookStrategyUseCase {
         position: input.position,
         sourceId: input.sourceId,
         sourceType: input.sourceType,
+        facilitatorNotes: input.facilitatorNotes ?? null,
+        estimatedMinutes: input.estimatedMinutes ?? null,
       });
       return ok(result);
     } catch (error) {
@@ -34,4 +33,3 @@ export class AddPlaybookStrategyUseCase {
     }
   }
 }
-

@@ -25,7 +25,6 @@ export function CreateProfileForm({
       isLoading={isLoading}
       form={form}
       enableBeforeUnloadProtection={false}
-      isDialog
       id="create-profile-form"
       showsCancelButton={false}
       onCancel={() => createProfile(getValues())}

@@ -13,6 +13,8 @@ const updatePlaybookPhasesSchema = z.object({
       title: z.string().min(1),
       intentKey: phaseIntentKeySchema,
       position: z.number().int().nonnegative(),
+      estimatedMinutes: z.number().int().nonnegative().nullable(),
+      objective: z.string().nullable(),
     }),
   ),
 });
@@ -45,10 +47,7 @@ export async function PATCH(
   });
 
   if (!result.success) {
-    return NextResponse.json(
-      { error: result.error.message },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: result.error.message }, { status: 500 });
   }
 
   return NextResponse.json(result.data);

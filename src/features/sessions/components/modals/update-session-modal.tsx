@@ -2,11 +2,7 @@
 
 import { DialogContent } from "@/components/ui";
 import { Form } from "@/components/form";
-import {
-  createSessionSchema,
-  UpdateSessionFormValues,
-  updateSessionSchema,
-} from "@/features/sessions/domain";
+import { UpdateSessionFormValues, updateSessionSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UpdateSessionModalProps } from "@/lib/modals/types";
 import { useModal } from "@/components/providers";
@@ -16,11 +12,7 @@ import { CreateSessionForm } from "..";
 import { usePendingMutations } from "@/hooks";
 import { useForm } from "react-hook-form";
 
-export function UpdateSessionModal({
-  sessionId,
-  onSubmit,
-  onUpdateStatus,
-}: UpdateSessionModalProps) {
+export function UpdateSessionModal({ sessionId }: UpdateSessionModalProps) {
   const { closeModal } = useModal();
   const { data: session } = useSession(sessionId);
   const { pending: isLoading } = usePendingMutations({
@@ -29,7 +21,6 @@ export function UpdateSessionModal({
   const form = useForm<UpdateSessionFormValues>({
     resolver: zodResolver(updateSessionSchema),
     defaultValues: {
-      status: "scheduled",
       topic: session?.topic ?? "",
       courseName: session?.courseName || "",
       scheduledStart: session?.scheduledStart
@@ -38,12 +29,6 @@ export function UpdateSessionModal({
       mode: session?.mode ?? "virtual",
     },
   });
-  const handleSubmit = async (data: UpdateSessionFormValues) => {
-    await onSubmit(sessionId, data);
-    if (onUpdateStatus) {
-      onUpdateStatus(sessionId, "scheduled");
-    }
-  };
 
   if (!session) {
     return (
@@ -64,7 +49,7 @@ export function UpdateSessionModal({
         form={form}
         isLoading={isLoading}
         onCancel={closeModal}
-        handleSubmit={handleSubmit}
+        handleSubmit={() => {}}
       >
         <CreateSessionForm />
       </Form>

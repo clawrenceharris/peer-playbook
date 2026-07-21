@@ -1,5 +1,5 @@
 import { AppErrorCode } from "@/types/error.types";
-import { AuthError } from "@supabase/supabase-js";
+
 export class ApplicationError extends Error {
   constructor(
     public readonly details: {
@@ -71,7 +71,8 @@ export const errorMessages: Record<AppErrorCode, string> = {
   [AppErrorCode.AUTH_UNAUTHENTICATED]: "You need to sign in before doing that.",
   [AppErrorCode.AUTH_PASSWORD_ALREADY_USED]:
     "This password looks familiar. Try using a different one.",
-  [AppErrorCode.AUTH_PROVIDER_ERROR]: "Authentication failed.",
+  [AppErrorCode.AUTH_PROVIDER_ERROR]:
+    "Authentication failed. Please try again later.",
   [AppErrorCode.USERNAME_ALREADY_EXISTS]:
     "This username already exists. Try a different one.",
 
@@ -108,8 +109,7 @@ export const errorMessages: Record<AppErrorCode, string> = {
   // Generic
   [AppErrorCode.UNKNOWN_ERROR]:
     "Something went wrong on our side. Please stand by while we fix it.",
-  [AppErrorCode.NOTEBOOK_TIMEOUT]:
-    "That notebook took too long to load. Please try again.",
+
   [AppErrorCode.INTERNAL_SERVER_ERROR]:
     "Something went wrong on our side. Please try again in a moment.",
 };

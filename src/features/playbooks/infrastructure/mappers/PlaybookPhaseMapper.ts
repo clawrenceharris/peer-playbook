@@ -1,8 +1,24 @@
-import { PlaybookPagePhaseDTO } from "../../application/dto";
+import { PlaybookPhaseDTO } from "../../application/dto";
 import { PlaybookPhaseRecord } from "../selection/playbook.selections";
 
 export class PlaybookPhaseMapper {
-  static toPagePhase(record: PlaybookPhaseRecord): PlaybookPagePhaseDTO {
+  static toIntentKey(
+    key: string,
+  ): "activate" | "explore" | "apply" | "reflect" {
+    switch (key) {
+      case "activate":
+        return "activate";
+      case "explore":
+        return "explore";
+      case "apply":
+        return "apply";
+      case "reflect":
+        return "reflect";
+      default:
+        throw new Error(`Invalid phase intent key: ${key}`);
+    }
+  }
+  static toDetail(record: PlaybookPhaseRecord): PlaybookPhaseDTO {
     return {
       id: record.id,
       title: record.title,
@@ -12,10 +28,8 @@ export class PlaybookPhaseMapper {
       position: record.position,
       intent: {
         id: record.phase_intents.id,
-        key: record.phase_intents.key,
-        label: record.phase_intents.label,
-        colorToken: record.phase_intents.color_token,
-        iconName: record.phase_intents.icon_name,
+        key: PlaybookPhaseMapper.toIntentKey(record.phase_intents.key),
+        title: record.phase_intents.label,
         description: record.phase_intents.description,
         sortOrder: record.phase_intents.sort_order,
       },

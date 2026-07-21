@@ -1,10 +1,7 @@
 import { fail, ok, Result } from "@/shared/application";
 import { ApplicationError } from "@/shared/utils";
 import { PlaybookWriteRepository } from "../../domain";
-import {
-  PlaybookStrategyCardDTO,
-  UpdatePlaybookStrategyInput,
-} from "../dto";
+import { PlaybookStrategyCardDTO, UpdatePlaybookStrategyInput } from "../dto";
 
 export class UpdatePlaybookStrategyUseCase {
   constructor(private readonly playbookRepository: PlaybookWriteRepository) {}
@@ -16,7 +13,7 @@ export class UpdatePlaybookStrategyUseCase {
     const data = {
       ...(input.steps !== undefined && { steps: input.steps }),
       ...(input.title !== undefined && { title: input.title }),
-      ...(input.cardSlug !== undefined && { cardSlug: input.cardSlug }),
+      ...(input.slug !== undefined && { slug: input.slug }),
       ...(input.category !== undefined && { category: input.category }),
       ...(input.phase !== undefined && { phase: input.phase }),
       ...(input.position !== undefined && { position: input.position }),
@@ -25,6 +22,12 @@ export class UpdatePlaybookStrategyUseCase {
       }),
       ...(input.sourceId !== undefined && { sourceId: input.sourceId }),
       ...(input.sourceType !== undefined && { sourceType: input.sourceType }),
+      ...(input.facilitatorNotes !== undefined && {
+        facilitatorNotes: input.facilitatorNotes,
+      }),
+      ...(input.estimatedMinutes !== undefined && {
+        estimatedMinutes: input.estimatedMinutes,
+      }),
     };
 
     try {

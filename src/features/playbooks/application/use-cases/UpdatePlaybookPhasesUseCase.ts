@@ -1,10 +1,7 @@
 import { fail, ok, Result } from "@/shared/application";
 import { ApplicationError } from "@/shared/utils";
 import { PlaybookWriteRepository } from "../../domain";
-import {
-  UpdatePlaybookPhasesInput,
-  UpdatePlaybookPhasesResult,
-} from "../dto";
+import { UpdatePlaybookPhasesInput, UpdatePlaybookPhasesResult } from "../dto";
 
 export class UpdatePlaybookPhasesUseCase {
   constructor(private readonly playbookRepository: PlaybookWriteRepository) {}
@@ -13,6 +10,7 @@ export class UpdatePlaybookPhasesUseCase {
     input: UpdatePlaybookPhasesInput,
   ): Promise<Result<UpdatePlaybookPhasesResult>> {
     try {
+      console.log(input.phases);
       await this.playbookRepository.updatePlaybookPhases({
         playbookId: input.playbookId,
         phases: input.phases.map((phase, position) => ({
@@ -24,6 +22,7 @@ export class UpdatePlaybookPhasesUseCase {
 
       return ok({ playbookId: input.playbookId });
     } catch (error) {
+      console.error(error);
       return fail(
         ApplicationError.unexpected(error, "Failed to update playbook phases"),
       );

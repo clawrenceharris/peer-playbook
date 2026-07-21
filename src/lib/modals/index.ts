@@ -7,6 +7,5 @@ export type {
   UpdateSessionModalProps,
   UpdateProfileModalProps,
   UpdatePlaybookModalProps,
-  ReplaceStrategyModalProps,
   GeneratePlaybookModalProps,
 } from "./types";

@@ -57,25 +57,21 @@ The playbook feature has moved substantially onto the Prisma/server-action path.
 - [x] Wire remove-strategy from the playbook page.
 - [x] Ensure strategy replacement persists all fields that should carry over, not just title/steps/phase metadata.
 - [x] Scope reordering explicitly by `playbook_phase_id` instead of only by the current page list order.
-- [ ] Fix the strategy reorder interaction so drag-and-drop works reliably in the playbook page.
-- [ ] Make strategy steps editable inline from the playbook details experience.
-- [ ] Make strategy steps removable from the playbook details experience.
-- [ ] Add a reset control that lets users erase their local step edits and restore the strategy to its saved/generated baseline.
-- [ ] Add editable facilitator notes for each strategy.
-- [ ] Show supplies in each strategy details view.
-- [ ] Show the supplies objective/purpose in each strategy details view.
-- [ ] Show the duration of each strategy in the strategy details view.
-- [ ] Show the duration of each phase in the strategy details view.
-- [ ] Make strategy duration editable and persist it through the server-action/use-case path.
-- [ ] Make phase duration editable and persist it through the server-action/use-case path.
+- [x] Fix the strategy reorder interaction so drag-and-drop works reliably in the playbook page.
+- [x] Make strategy steps editable inline from the playbook details experience.
+- [x] Make strategy steps removable from the playbook details experience.
+- [x] Add a reset control that lets users erase their local step edits and restore the strategy to its saved/generated baseline.
+- [x] Add editable facilitator notes for each strategy.
+- [x] Show the duration of each strategy in the strategy details view.
+- [x] Show the duration of each phase in the strategy details view.
+- [x] Make strategy duration editable and persist it through the server-action/use-case path.
+- [x] Make phase duration editable and persist it through the server-action/use-case path.
 - [ ] Extend the playbook page so resources can be added to a playbook through file upload.
 - [ ] Design resource uploads with future metadata needs in mind, including filename, type, size, storage key/url, owner, and attachment context.
 - [ ] Model playbook edits as document-style changes that can be undone instead of one-off form mutations.
 - [ ] Add an undo-ready edit history abstraction for playbook page changes so future version history can reuse the same concepts.
 - [ ] Keep strategy, phase, resource, and note edits granular enough to support future version history and AI-assisted edits.
-- [ ] Preserve a word-document-like editing feel on the playbook page: clear editable regions, visible saved/dirty/reset states, and changes that feel part of a document history.
-- [ ] Finish phase editing if phase intent/title changes need better inline validation or feedback.
-- [x] Decide whether `/editor/playbook/[id]` should remain a redirect shim or be removed entirely.
+- [x] Finish phase editing if phase intent/title changes need better inline validation or feedback.
 
 ### Creation Flow
 
@@ -85,6 +81,7 @@ The playbook feature has moved substantially onto the Prisma/server-action path.
 - [ ] Pass playbook duration in minutes through `CreatePlaybookUseCase` and `GeneratePlaybookUseCase`.
 - [ ] Persist playbook duration in minutes in the playbook data model and read it back on list/detail pages.
 - [ ] Include playbook duration in minutes in AI generation planning so generated phase/strategy durations can fit the requested lesson length.
+- [ ] Add playbook duration in minutes to each phase block in the manual plabook builder.
 
 ### AI Expansion
 

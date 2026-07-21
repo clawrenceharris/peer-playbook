@@ -10,7 +10,7 @@ export function useUpdatePlaybookPhases() {
     mutationFn: async (input: UpdatePlaybookPhasesInput) => {
       const result = await updatePlaybookPhasesAction(input);
       if (!result.success) {
-        throw result.error.message;
+        throw result.error;
       }
       return result.data;
     },

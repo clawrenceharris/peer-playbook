@@ -87,13 +87,15 @@ export const playbookStrategySchema = z.object({
   // Subject remains required to avoid invalid playbooks (adjust if you prefer optional).
   steps: z.array(z.string()),
   title: z.string(),
-  cardSlug: z.string().optional(),
+  slug: z.string().optional(),
   category: z.string().optional(),
   phase: z.enum(["warmup", "workout", "closer"]).optional(),
   position: z.number().int().nonnegative().optional(),
   description: z.string().optional(),
   sourceId: z.string().uuid().optional(),
   sourceType: z.string().optional(),
+  facilitatorNotes: z.string().nullable().optional(),
+  estimatedMinutes: z.number().int().nonnegative().nullable().optional(),
   resources: z
     .array(
       z.object({

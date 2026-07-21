@@ -7,4 +7,5 @@ export * from "./before-unload";
 export * from "./search-input";
 export * from "./textarea-field";
 export * from "./combobox-field";
+export * from "./select-field";
 export * from "./submit-button";

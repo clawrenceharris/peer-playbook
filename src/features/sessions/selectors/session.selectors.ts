@@ -46,9 +46,9 @@ export const selectSortedByTopic = (sessions: Session[]): Session[] =>
  * Filters sessions by leader ID
  */
 export const selectSessionsByLeader =
-  (leaderId: string) =>
+  (instructorId: string) =>
   (sessions: Session[]): Session[] =>
-    sessions.filter((s) => s.leaderId === leaderId);
+    sessions.filter((s) => s.instructorId === instructorId);
 
 /**
  * Filters sessions by status
@@ -160,11 +160,11 @@ export const selectSessionsByLeaderGroup = (
 ): Record<string, Session[]> =>
   sessions.reduce(
     (acc, session) => {
-      const leaderId = session.leaderId || "unknown";
-      if (!acc[leaderId]) {
-        acc[leaderId] = [];
+      const instructorId = session.instructorId || "unknown";
+      if (!acc[instructorId]) {
+        acc[instructorId] = [];
       }
-      acc[leaderId].push(session);
+      acc[instructorId].push(session);
       return acc;
     },
     {} as Record<string, Session[]>,

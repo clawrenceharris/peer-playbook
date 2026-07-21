@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { Playbook } from "@/features/playbooks/domain";
 import { PlaybookFilterState } from "../components";
 import { useUser } from "@/components/providers";
 import { useMyFavoritePlaybooks } from "./use-playbooks";
@@ -23,6 +22,14 @@ export function usePlaybookFilters(playbooks: PlaybookCardDTO[]) {
         return false;
       }
 
+      // Subject filter
+      if (filters.subject && !playbook.subject) {
+        return false;
+      }
+      if (filters.subject && filters.subject !== playbook.subject) {
+        return false;
+      }
+
       // Recent filter
       if (filters.recent && playbook.createdAt) {
         const sessionDate = new Date(playbook.createdAt);
@@ -39,6 +46,7 @@ export function usePlaybookFilters(playbooks: PlaybookCardDTO[]) {
     playbooks,
     filters.favorite,
     filters.course,
+    filters.subject,
     filters.recent,
     favoritePlaybooks,
   ]);
@@ -53,10 +61,21 @@ export function usePlaybookFilters(playbooks: PlaybookCardDTO[]) {
     return Array.from(courses).sort();
   }, [playbooks]);
 
+  const availableSubjects = useMemo(() => {
+    const subjects = new Set<string>();
+    playbooks.forEach((playbook) => {
+      if (playbook.subject) {
+        subjects.add(playbook.subject);
+      }
+    });
+    return Array.from(subjects).sort();
+  }, [playbooks]);
+
   return {
     filters,
     setFilters,
     filteredPlaybooks,
     availableCourses,
+    availableSubjects,
   };
 }

@@ -10,7 +10,7 @@ import { sessionKeys } from "@/features/sessions/domain";
  * @returns React Query result with transformed data
  */
 export const useSessions = <TSelected = Session[]>(
-  select?: (sessions: Session[]) => TSelected
+  select?: (sessions: Session[]) => TSelected,
 ) => {
   const sessionService = useSessionService();
   return useQuery({
@@ -25,7 +25,7 @@ export const useSessions = <TSelected = Session[]>(
  * @param select - Optional additional selector to chain after sorting
  */
 export const useSortedSessions = <TSelected = Session[]>(
-  select?: (sessions: Session[]) => TSelected
+  select?: (sessions: Session[]) => TSelected,
 ) => {
   return useSessions((s) => {
     const sorted = selectSortedSessions(s);
@@ -37,7 +37,7 @@ export const useSortedSessions = <TSelected = Session[]>(
  * Hook to get all sessions with created with the give playbook ID
  * @param playbookId - The playbook ID
  */
-export const usePlaybookSessions = (playbookId: string) =>
+export const usePlaybookSessions = (playbookId: string | null) =>
   useSessions((sessions) =>
-    sessions.filter((s) => s.playbookId === playbookId)
+    sessions.filter((s) => s.playbookId === playbookId),
   );

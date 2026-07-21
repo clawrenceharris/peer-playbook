@@ -43,6 +43,8 @@ export type UpdatePlaybookPhaseCommand = {
   title: string;
   intentKey: "activate" | "explore" | "apply" | "reflect";
   position: number;
+  objective: string | null;
+  estimatedMinutes: number | null;
 };
 
 export type UpdatePlaybookPhasesCommand = {

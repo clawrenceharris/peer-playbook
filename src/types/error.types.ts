@@ -56,7 +56,6 @@ enum AppErrorCode {
   UNKNOWN_ERROR = "unknown_error",
   AUTH_PROVIDER_ERROR = "auth_provider_error",
   USERNAME_ALREADY_EXISTS = "username_already_exists",
-  NOTEBOOK_TIMEOUT = "notebook_timeout",
   INTERNAL_SERVER_ERROR = "internal_server_error",
 }
 

@@ -1,4 +1,4 @@
-import { Delete, PencilEdit, Session as SessionIcon } from "@/components/icons";
+import { Delete, Session as SessionIcon } from "@/components/icons";
 import {
   Button,
   Card,
@@ -15,6 +15,8 @@ import { useSessionActions } from "@/features/sessions/hooks";
 import { Session } from "@/features/sessions/domain";
 import { Ban, Loader2, MoreVertical } from "lucide-react";
 import { useState } from "react";
+import { Icon } from "@/components/shared";
+import { assets } from "@/lib/constants";
 
 interface SessionCardProps {
   session: Session;
@@ -59,17 +61,17 @@ export const SessionCard = ({ session }: SessionCardProps) => {
   };
 
   return (
-    <Card className="overflow-hidden  shadow-md flex border-1 hover:shadow-none justify-between w-full flex-col transition-shadow duration-200">
+    <Card className="flex w-full flex-col justify-between overflow-hidden border shadow-md transition-shadow duration-200 hover:shadow-none">
       <CardHeader>
-        <div className="flex items-center mb-3 justify-between">
-          <CardTitle className="text-md gap-1 flex items-center font-semibold">
+        <div className="mb-3 flex items-center justify-between">
+          <CardTitle className="text-md flex items-center gap-1 font-semibold">
             {session.courseName && <span>{session.courseName + ":"}</span>}
             <span className="text-muted-foreground font-normal">
               {session.topic}
             </span>
           </CardTitle>
           <span
-            className={`text-xs max-w-20 flex items-center justify-center px-2 py-1 rounded-full font-medium capitalize ${
+            className={`flex max-w-20 items-center justify-center rounded-full px-2 py-1 text-xs font-medium capitalize ${
               statusColor[session.status]
             }`}
           >
@@ -77,14 +79,14 @@ export const SessionCard = ({ session }: SessionCardProps) => {
           </span>
         </div>
         {session.scheduledStart && (
-          <div className="text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-sm">
             {new Date(session.scheduledStart).toDateString()}
           </div>
         )}
       </CardHeader>
 
-      <CardFooter className="flex gap-4 justify-end">
-        <div className="flex gap-0.5 items-center">
+      <CardFooter className="flex justify-end gap-4">
+        <div className="flex items-center gap-0.5">
           <Button
             variant={session.status === "active" ? "destructive" : "primary"}
             disabled={session.status === "canceled"}
@@ -113,7 +115,7 @@ export const SessionCard = ({ session }: SessionCardProps) => {
             {session.status !== "canceled" && session.status != "completed" && (
               <>
                 <DropdownMenuItem onClick={handleUpdateSessionClick}>
-                  <PencilEdit /> Update
+                  <Icon src={assets.pencilEdit} alt="Edit" /> Update
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
 

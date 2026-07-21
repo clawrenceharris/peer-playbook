@@ -14,11 +14,11 @@ import {
   FieldError,
   FieldGroup,
   FieldTitle,
+  Spinner,
 } from "@/components/ui";
-import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BeforeUnload } from "@/components/form";
-import { getUserErrorMessage, normalizeError } from "@/shared/utils";
+import { getUserErrorMessage } from "@/shared/utils";
 
 export interface FormLayoutProps<T extends FieldValues> {
   children?: ((methods: UseFormReturn<T>) => ReactNode) | ReactNode;
@@ -34,68 +34,21 @@ export interface FormLayoutProps<T extends FieldValues> {
   onCancel?: () => void;
   onSubmitClick?: () => void;
   disabled?: boolean;
+  loadingText?: string;
   description?: string;
   descriptionClassName?: string;
   enableBeforeUnloadProtection?: boolean;
   submitButtonClassName?: string;
   className?: string;
   showsDescription?: boolean;
-  isDialog?: boolean;
   id?: string;
   isLoading?: boolean;
-}
-type FormFooterProps = {
-  showsCancelButton?: boolean;
-  onCancel?: () => void;
-  onSubmitClick?: () => Promise<any> | any;
-  cancelText?: string;
-  submitText?: string;
-  showsSubmitButton?: boolean;
-  submitButtonClassName?: string;
-  isLoading?: boolean;
-  disabled?: boolean;
-};
-function FormFooter({
-  showsCancelButton,
-  submitText,
-  onCancel,
-  onSubmitClick,
-  cancelText,
-  showsSubmitButton,
-  submitButtonClassName,
-  isLoading,
-  disabled,
-}: FormFooterProps) {
-  return (
-    <Field orientation="horizontal">
-      {showsCancelButton && (
-        <Button variant="outline" type="button" onClick={onCancel}>
-          {cancelText}
-        </Button>
-      )}
-
-      {showsSubmitButton && (
-        <Button
-          variant="primary"
-          type="submit"
-          onClick={onSubmitClick}
-          className={cn("flex-1", submitButtonClassName)}
-          disabled={disabled}
-        >
-          {isLoading ? (
-            <Loader2 strokeWidth={3} className="size-7 animate-spin" />
-          ) : (
-            submitText
-          )}
-        </Button>
-      )}
-    </Field>
-  );
 }
 
 export function Form<T extends FieldValues>({
   children,
   form,
+  loadingText = "Working on it...",
   showsSubmitButton = true,
   showsCancelButton = false,
   submitText = "Done",
@@ -114,7 +67,6 @@ export function Form<T extends FieldValues>({
   enableBeforeUnloadProtection = true,
   id,
   isLoading,
-  isDialog,
   ...props
 }: FormLayoutProps<T>) {
   const {
@@ -172,33 +124,41 @@ export function Form<T extends FieldValues>({
               </FieldError>
             )}
 
-            {isDialog ? (
-              <DialogFooter>
-                <FormFooter
-                  showsCancelButton={showsCancelButton}
-                  submitText={submitText}
-                  onCancel={onCancel}
-                  onSubmitClick={onSubmitClick}
-                  cancelText={cancelText}
-                  showsSubmitButton={showsSubmitButton}
-                  submitButtonClassName={submitButtonClassName}
-                  isLoading={isLoading || isSubmitting}
+            <Field orientation="horizontal" className="w-full justify-end">
+              {showsCancelButton && (
+                <Button
                   disabled={isDisabled}
-                />
-              </DialogFooter>
-            ) : (
-              <FormFooter
-                showsCancelButton={showsCancelButton}
-                submitText={submitText}
-                onCancel={onCancel}
-                onSubmitClick={onSubmitClick}
-                cancelText={cancelText}
-                showsSubmitButton={showsSubmitButton}
-                submitButtonClassName={submitButtonClassName}
-                isLoading={isLoading || isSubmitting}
-                disabled={isDisabled}
-              />
-            )}
+                  variant="outline"
+                  type="button"
+                  onClick={onCancel}
+                >
+                  {cancelText}
+                </Button>
+              )}
+
+              {showsSubmitButton && (
+                <Button
+                  variant="primary"
+                  type="submit"
+                  onClick={onSubmitClick}
+                  className={cn("flex-1", submitButtonClassName)}
+                  disabled={isDisabled}
+                >
+                  {isLoading ? (
+                    <span className="flex items-center gap-2">
+                      {loadingText}
+                      <Spinner
+                        data-icon="inline-start"
+                        strokeWidth={2.5}
+                        className="size-5 animate-spin"
+                      />
+                    </span>
+                  ) : (
+                    submitText
+                  )}
+                </Button>
+              )}
+            </Field>
           </FieldGroup>
         </form>
       </FormProvider>

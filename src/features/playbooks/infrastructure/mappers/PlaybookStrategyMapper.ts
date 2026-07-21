@@ -12,7 +12,7 @@ export class PlaybookStrategyMapper {
     return {
       id: data.id,
       title: data.title,
-      slug: data.card_slug,
+      slug: data.slug,
       phase: data.phase,
       playbookPhaseId: data.playbook_phase_id,
       category: data.category,
@@ -25,7 +25,7 @@ export class PlaybookStrategyMapper {
     record: PlaybookStrategyDetailRecord,
   ): PlaybookStrategyDetailDTO {
     return {
-      slug: record.card_slug,
+      slug: record.slug,
       id: record.id,
       title: record.title,
       phase: record.phase,
@@ -35,6 +35,8 @@ export class PlaybookStrategyMapper {
       sourceType: record.source_type,
       position: record.position,
       steps: record.steps,
+      facilitatorNotes: record.facilitator_notes,
+      estimatedMinutes: record.estimated_minutes,
       createdAt: record.created_at,
       updatedAt: record.updated_at,
       resources: [],

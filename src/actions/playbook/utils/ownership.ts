@@ -1,4 +1,4 @@
-import { db } from "@/db/client";
+import { client } from "@/lib/db/client";
 import { ApplicationError } from "@/shared/utils";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
@@ -19,7 +19,7 @@ export async function assertPlaybookOwnership(
   playbookId: string,
   userId: string,
 ): Promise<void> {
-  const playbook = await db.playbooks.findUnique({
+  const playbook = await client.playbooks.findUnique({
     where: { id: playbookId },
     select: { created_by: true },
   });
@@ -33,7 +33,7 @@ export async function assertStrategyOwnership(
   strategyId: string,
   userId: string,
 ): Promise<void> {
-  const strategy = await db.playbook_strategies.findUnique({
+  const strategy = await client.playbook_strategies.findUnique({
     where: { id: strategyId },
     select: {
       playbooks: { select: { created_by: true } },

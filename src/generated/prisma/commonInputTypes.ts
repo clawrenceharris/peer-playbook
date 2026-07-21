@@ -629,11 +629,11 @@ export type Enumuser_roleNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumuser_roleNullableFilter<$PrismaModel>
 }
 
-export type Enumsession_statusFilter<$PrismaModel = never> = {
-  equals?: $Enums.session_status | Prisma.Enumsession_statusFieldRefInput<$PrismaModel>
-  in?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumsession_statusFilter<$PrismaModel> | $Enums.session_status
+export type Enumsession_statusNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.session_status | Prisma.Enumsession_statusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumsession_statusNullableFilter<$PrismaModel> | $Enums.session_status | null
 }
 
 export type Enumsession_modeFilter<$PrismaModel = never> = {
@@ -643,14 +643,14 @@ export type Enumsession_modeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumsession_modeFilter<$PrismaModel> | $Enums.session_mode
 }
 
-export type Enumsession_statusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.session_status | Prisma.Enumsession_statusFieldRefInput<$PrismaModel>
-  in?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumsession_statusWithAggregatesFilter<$PrismaModel> | $Enums.session_status
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumsession_statusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumsession_statusFilter<$PrismaModel>
+export type Enumsession_statusNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.session_status | Prisma.Enumsession_statusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumsession_statusNullableWithAggregatesFilter<$PrismaModel> | $Enums.session_status | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumsession_statusNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumsession_statusNullableFilter<$PrismaModel>
 }
 
 export type Enumsession_modeWithAggregatesFilter<$PrismaModel = never> = {
@@ -1250,11 +1250,11 @@ export type NestedEnumuser_roleNullableWithAggregatesFilter<$PrismaModel = never
   _max?: Prisma.NestedEnumuser_roleNullableFilter<$PrismaModel>
 }
 
-export type NestedEnumsession_statusFilter<$PrismaModel = never> = {
-  equals?: $Enums.session_status | Prisma.Enumsession_statusFieldRefInput<$PrismaModel>
-  in?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumsession_statusFilter<$PrismaModel> | $Enums.session_status
+export type NestedEnumsession_statusNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.session_status | Prisma.Enumsession_statusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumsession_statusNullableFilter<$PrismaModel> | $Enums.session_status | null
 }
 
 export type NestedEnumsession_modeFilter<$PrismaModel = never> = {
@@ -1264,14 +1264,14 @@ export type NestedEnumsession_modeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumsession_modeFilter<$PrismaModel> | $Enums.session_mode
 }
 
-export type NestedEnumsession_statusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.session_status | Prisma.Enumsession_statusFieldRefInput<$PrismaModel>
-  in?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumsession_statusWithAggregatesFilter<$PrismaModel> | $Enums.session_status
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumsession_statusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumsession_statusFilter<$PrismaModel>
+export type NestedEnumsession_statusNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.session_status | Prisma.Enumsession_statusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.session_status[] | Prisma.ListEnumsession_statusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumsession_statusNullableWithAggregatesFilter<$PrismaModel> | $Enums.session_status | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumsession_statusNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumsession_statusNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumsession_modeWithAggregatesFilter<$PrismaModel = never> = {

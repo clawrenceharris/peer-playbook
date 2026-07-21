@@ -1,11 +1,11 @@
-import { Prisma } from "@/db/client";
+import { Prisma } from "@/lib/db/client";
 
 export const playbookStrategyCardArgs = {
   select: {
     id: true,
     title: true,
     category: true,
-    card_slug: true,
+    slug: true,
     steps: true,
     description: true,
     created_at: true,
@@ -20,7 +20,7 @@ export const playbookStrategyCardArgs = {
 export const playbookStrategyDetailArgs = {
   select: {
     id: true,
-    card_slug: true,
+    slug: true,
     category: true,
     playbook_phase_id: true,
     playbook_id: true,
@@ -31,6 +31,8 @@ export const playbookStrategyDetailArgs = {
     source_type: true,
     steps: true,
     description: true,
+    facilitator_notes: true,
+    estimated_minutes: true,
     created_at: true,
     updated_at: true,
   },

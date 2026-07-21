@@ -1,5 +1,4 @@
 "use client";
-import { cn } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -7,15 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui";
-import Link from "next/link";
 import { Form, InputField } from "@/components/form";
-import {
-  forgotPasswordSchema,
-  type ForgotPasswordFormValues,
-} from "@/lib/validation";
+import { type ForgotPasswordFormValues } from "@/lib/validation";
 import { useRequestPasswordResetForm } from "../../hooks";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle, Send } from "lucide-react";
+import { Send } from "lucide-react";
 
 export function ForgotPasswordForm() {
   const { form, requestPasswordReset, isLoading, success } =
@@ -24,9 +18,9 @@ export function ForgotPasswordForm() {
   return (
     <>
       {success ? (
-        <Card className="border-0 bg-transparent shadow-none">
+        <Card className="rounded-lg border px-6 py-5 shadow-xs">
           <CardHeader className="space-y-2">
-            <p className="bg-success-100 text-success-500 inline-flex items-center gap-2 rounded-full py-2 pr-4 pl-2 text-sm">
+            <p className="bg-success-100 text-success-500 inline-flex w-fit items-center gap-2 rounded-full py-2 pr-4 pl-2 text-sm">
               <Send className="h-4 w-4" />
               Password reset instructions sent
             </p>
@@ -45,6 +39,7 @@ export function ForgotPasswordForm() {
           title="Reset Your Password"
           description="Type in your email and we'll send you a link to reset your password"
           form={form}
+          className="bg-surface rounded-lg border px-6 py-5 shadow-xs"
           isLoading={isLoading}
           handleSubmit={requestPasswordReset}
           showsCancelButton={false}

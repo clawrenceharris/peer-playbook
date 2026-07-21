@@ -3,16 +3,19 @@ import React from "react";
 import { FilterItem, Toggle } from "@/components/ui";
 import { ValueOf } from "next/dist/shared/lib/constants";
 import { Playbook, Star } from "@/components/icons";
+import { Book } from "lucide-react";
 
 interface PlaybookFiltersProps {
   onFilterChange: (filters: PlaybookFilterState) => void;
   filters: PlaybookFilterState;
   availableCourses?: string[];
+  availableSubjects?: string[];
 }
 
 export interface PlaybookFilterState {
   recent?: boolean;
   course?: string;
+  subject?: string;
   favorite?: boolean;
   published?: boolean;
 }
@@ -21,6 +24,7 @@ export const PlaybookFilters = ({
   onFilterChange,
   filters,
   availableCourses = [],
+  availableSubjects = [],
 }: PlaybookFiltersProps) => {
   const handleToggle = (
     key: keyof PlaybookFilterState,
@@ -49,6 +53,16 @@ export const PlaybookFilters = ({
           options={availableCourses.map((c) => ({ label: c, value: c }))}
           onToggle={(value) => handleToggle("course", value)}
           value={filters.course}
+        />
+      )}
+
+      {availableSubjects.length > 0 && (
+        <FilterItem
+          label="Subjects"
+          icon={Book}
+          options={availableSubjects.map((s) => ({ label: s, value: s }))}
+          onToggle={(value) => handleToggle("subject", value)}
+          value={filters.subject}
         />
       )}
     </div>

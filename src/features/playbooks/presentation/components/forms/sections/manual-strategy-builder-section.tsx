@@ -50,12 +50,6 @@ import type {
   StrategyRef,
 } from "@/lib/validation";
 
-import {
-  useMySavedStrategiesWithDetails,
-  useMyUserStrategies,
-  useStrategies,
-} from "@/features/strategies/hooks";
-import { useUser } from "@/components/providers";
 import { cn } from "@/lib/utils";
 import { InstructionalModelDTO } from "@/features/reference-data/instructional-models/application/dto/InstructionalModelDTO";
 import { SelectField } from "@/components/form/select-field";
@@ -213,7 +207,7 @@ function PhaseRow({
       variant="outline"
       style={style}
       className={cn(
-        "relative w-full min-w-[445px] overflow-hidden",
+        "relative w-full min-w-111.25 overflow-hidden",
         isDragging && "ring-primary-400 bg-background z-10 shadow-lg ring-2",
       )}
     >
@@ -421,7 +415,6 @@ export function ManualStrategyBuilderSection({
   instructionalModels,
   mode = "all",
 }: ManualStrategyBuilderSectionProps) {
-  const { user } = useUser();
   const form = useFormContext<BuildPlaybookFormValues>();
   const phases = useFieldArray({ control: form.control, name: "phases" });
   const sensors = useSensors(
@@ -443,11 +436,9 @@ export function ManualStrategyBuilderSection({
     instructionalModels.find((model) => model.id === selectedModelId) ??
     instructionalModels[0];
 
-  const { data: systemStrategies = [] } = useStrategies();
-  const { data: savedStrategies = [] } = useMySavedStrategiesWithDetails(
-    user.id,
-  );
-  const { data: userStrategies = [] } = useMyUserStrategies(user.id);
+  const { data: systemStrategies = [] } = { data: [] };
+  const { data: savedStrategies = [] } = { data: [] };
+  const { data: userStrategies = [] } = { data: [] };
 
   function buildPhasesFromModel(
     id: string,
@@ -506,7 +497,7 @@ export function ManualStrategyBuilderSection({
 
   const systemItems: StrategyPickerItem[] = useMemo(
     () =>
-      systemStrategies.map((strategy) => ({
+      systemStrategies.map((strategy: { id: string; title: string }) => ({
         sourceType: "system",
         sourceId: strategy.id,
         title: strategy.title,
@@ -516,7 +507,7 @@ export function ManualStrategyBuilderSection({
 
   const savedItems: StrategyPickerItem[] = useMemo(
     () =>
-      savedStrategies.map((strategy) => ({
+      savedStrategies.map((strategy: { id: string; title: string }) => ({
         sourceType: "system",
         sourceId: strategy.id,
         title: strategy.title,
@@ -526,7 +517,7 @@ export function ManualStrategyBuilderSection({
 
   const userItems: StrategyPickerItem[] = useMemo(
     () =>
-      userStrategies.map((strategy) => ({
+      userStrategies.map((strategy: { id: string; title: string }) => ({
         sourceType: "user",
         sourceId: strategy.id,
         title: strategy.title,

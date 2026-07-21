@@ -230,3 +230,13 @@ export type strategy_contexts = Prisma.strategy_contextsModel
  * This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
  */
 export type strategy_phase_intents = Prisma.strategy_phase_intentsModel
+/**
+ * Model saved_strategies
+ * This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+ */
+export type saved_strategies = Prisma.saved_strategiesModel
+/**
+ * Model user_strategies
+ * This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+ */
+export type user_strategies = Prisma.user_strategiesModel

@@ -2,6 +2,7 @@ import {
   PlaybookCardDTO,
   PlaybookStrategyCardDTO,
   CreatePlaybookResult,
+  PlaybookPhaseDTO,
 } from "../../application/dto";
 import {
   CreatePlaybookCommand,
@@ -11,9 +12,14 @@ import {
   UpdatePlaybookCommand,
   UpdatePlaybookStrategyCommand,
   RemovePlaybookStrategyCommand,
+  CreatePlaybookPhaseCommand,
 } from "../types";
 
 export interface PlaybookWriteRepository {
+  createPlaybookPhase(
+    playbookId: string,
+    data: CreatePlaybookPhaseCommand,
+  ): Promise<PlaybookPhaseDTO>;
   createPlaybook(data: CreatePlaybookCommand): Promise<CreatePlaybookResult>;
   generatePlaybook(
     data: GeneratePlaybookCommand,

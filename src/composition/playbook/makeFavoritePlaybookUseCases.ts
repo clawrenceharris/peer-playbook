@@ -1,4 +1,4 @@
-import { db } from "@/db/client";
+import { client } from "@/lib/db/client";
 import {
   AddFavoritePlaybookUseCase,
   RemoveFavoritePlaybookUseCase,
@@ -6,11 +6,11 @@ import {
 import { PrismaPlaybookWriteRepository } from "@/features/playbooks/infrastructure/repositories";
 
 export function makeAddFavoritePlaybookUseCase() {
-  const playbookRepository = new PrismaPlaybookWriteRepository(db);
+  const playbookRepository = new PrismaPlaybookWriteRepository(client);
   return new AddFavoritePlaybookUseCase(playbookRepository);
 }
 
 export function makeRemoveFavoritePlaybookUseCase() {
-  const playbookRepository = new PrismaPlaybookWriteRepository(db);
+  const playbookRepository = new PrismaPlaybookWriteRepository(client);
   return new RemoveFavoritePlaybookUseCase(playbookRepository);
 }

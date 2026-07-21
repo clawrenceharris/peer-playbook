@@ -1,8 +1,8 @@
-import { prisma, type PrismaClient } from "@/db/client";
+import { client, type PrismaClient } from "@/lib/db/client";
 import { AiStrategyCatalogItem, StrategyCatalogRepository } from "../../domain";
 
 export class PrismaStrategyCatalogRepository implements StrategyCatalogRepository {
-  constructor(private readonly client: PrismaClient = prisma) {}
+  constructor(private readonly client: PrismaClient = client) {}
 
   async listForPlaybookGeneration(
     contextKeys: string[],

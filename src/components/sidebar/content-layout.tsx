@@ -18,6 +18,9 @@ type ContentLayoutProps = {
   headerClassName?: string;
   showSearch?: boolean;
   showUserNav?: boolean;
+  secondaryHeader?: React.ReactNode;
+  secondaryHeaderClassName?: string;
+  scrollable?: boolean;
 } & Omit<React.HTMLAttributes<HTMLDivElement>, "title">;
 
 export const ContentLayout = React.forwardRef<
@@ -35,48 +38,51 @@ export const ContentLayout = React.forwardRef<
       showHeader = true,
       contentContainerClassName,
       headerRight,
+      scrollable = true,
       headerClassName,
       scrollAreaClassName,
       showThemeToggle = true,
       showUserNav = true,
+      secondaryHeader,
+      secondaryHeaderClassName,
       ...props
     }: ContentLayoutProps,
     ref,
   ) => {
     return (
       <div
-        className={cn("flex h-full w-full flex-1 flex-col", className)}
         {...props}
+        ref={ref}
+        className={cn(
+          "flex h-full w-full flex-1 flex-col overflow-hidden",
+          className,
+        )}
       >
         {showHeader && (
           <ContentHeader
+            secondaryHeader={secondaryHeader}
             showSearch={showSearch}
             title={title}
             showUserNav={showUserNav}
             canGoBack={canGoBack}
             onBack={onBack}
+            secondaryHeaderClassName={secondaryHeaderClassName}
+
             headerRight={headerRight}
             className={headerClassName}
             showThemeToggle={showThemeToggle}
           />
         )}
 
-        <ScrollArea
-          ref={ref}
+        <div
           className={cn(
-            "mx-auto flex h-full min-h-0 w-full max-w-[1200px]",
-            scrollAreaClassName,
+            "container mx-auto flex flex-1 flex-col px-5 pt-20 pb-5",
+            scrollable ? "overflow-y-auto" : "overflow-hidden",
+            contentContainerClassName,
           )}
         >
-          <div
-            className={cn(
-              "flex min-h-full flex-1 flex-col p-5",
-              contentContainerClassName,
-            )}
-          >
-            {children}
-          </div>
-        </ScrollArea>
+          {children}
+        </div>
       </div>
     );
   },

@@ -86,7 +86,9 @@ export const ModelName = {
   public_sessions: 'public_sessions',
   strategies: 'strategies',
   strategy_contexts: 'strategy_contexts',
-  strategy_phase_intents: 'strategy_phase_intents'
+  strategy_phase_intents: 'strategy_phase_intents',
+  saved_strategies: 'saved_strategies',
+  user_strategies: 'user_strategies'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -541,7 +543,7 @@ export type Playbook_phasesScalarFieldEnum = (typeof Playbook_phasesScalarFieldE
 export const Playbook_strategiesScalarFieldEnum = {
   id: 'id',
   playbook_id: 'playbook_id',
-  card_slug: 'card_slug',
+  slug: 'slug',
   title: 'title',
   category: 'category',
   steps: 'steps',
@@ -553,7 +555,9 @@ export const Playbook_strategiesScalarFieldEnum = {
   updated_at: 'updated_at',
   source_id: 'source_id',
   source_type: 'source_type',
-  playbook_phase_id: 'playbook_phase_id'
+  playbook_phase_id: 'playbook_phase_id',
+  estimated_minutes: 'estimated_minutes',
+  facilitator_notes: 'facilitator_notes'
 } as const
 
 export type Playbook_strategiesScalarFieldEnum = (typeof Playbook_strategiesScalarFieldEnum)[keyof typeof Playbook_strategiesScalarFieldEnum]
@@ -617,7 +621,7 @@ export const Public_sessionsScalarFieldEnum = {
   description: 'description',
   course_name: 'course_name',
   topic: 'topic',
-  leader_id: 'leader_id',
+  instructor_id: 'instructor_id',
   session_code: 'session_code',
   status: 'status',
   scheduled_start: 'scheduled_start',
@@ -626,7 +630,9 @@ export const Public_sessionsScalarFieldEnum = {
   playbook_id: 'playbook_id',
   virtual: 'virtual',
   call_id: 'call_id',
-  mode: 'mode'
+  mode: 'mode',
+  subject: 'subject',
+  title: 'title'
 } as const
 
 export type Public_sessionsScalarFieldEnum = (typeof Public_sessionsScalarFieldEnum)[keyof typeof Public_sessionsScalarFieldEnum]
@@ -668,6 +674,31 @@ export const Strategy_phase_intentsScalarFieldEnum = {
 } as const
 
 export type Strategy_phase_intentsScalarFieldEnum = (typeof Strategy_phase_intentsScalarFieldEnum)[keyof typeof Strategy_phase_intentsScalarFieldEnum]
+
+
+export const Saved_strategiesScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  source_type: 'source_type',
+  source_id: 'source_id',
+  title: 'title',
+  strategy_id: 'strategy_id',
+  user_id: 'user_id'
+} as const
+
+export type Saved_strategiesScalarFieldEnum = (typeof Saved_strategiesScalarFieldEnum)[keyof typeof Saved_strategiesScalarFieldEnum]
+
+
+export const User_strategiesScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  source_id: 'source_id',
+  source_type: 'source_type',
+  title: 'title',
+  owner_id: 'owner_id'
+} as const
+
+export type User_strategiesScalarFieldEnum = (typeof User_strategiesScalarFieldEnum)[keyof typeof User_strategiesScalarFieldEnum]
 
 
 export const SortOrder = {

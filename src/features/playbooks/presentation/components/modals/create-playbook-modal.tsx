@@ -25,7 +25,6 @@ export function CreatePlaybookModal({
         form={form}
         isLoading={isLoading}
         id="form-create-playbook"
-        isDialog
         handleSubmit={createPlaybook}
         onCancel={onCancel}
         submitText="Create Playbook"

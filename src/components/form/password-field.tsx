@@ -7,6 +7,10 @@ import {
   FieldError,
   FieldLabel,
   Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
 } from "../ui";
 import {
   FieldValues,
@@ -16,14 +20,16 @@ import {
 } from "react-hook-form";
 import { InputFieldProps } from "@/types";
 import { Eye, EyeOff } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function PasswordField<T extends FieldValues, U extends Path<T>>({
   name,
   label,
   showsLabel = true,
-  description,
+  showsRequired = true,
+  showsOptional = true,
   placeholder = "Enter your password",
-  required,
+  required = true,
   inputId: inputIdProp,
   ...inputProps
 }: InputFieldProps<T, U>) {
@@ -35,13 +41,26 @@ export function PasswordField<T extends FieldValues, U extends Path<T>>({
   return (
     <Field>
       <FieldLabel
-        className={!showsLabel ? "sr-only" : "gap-0.5"}
+        className={cn("gap-0", !showsLabel && "sr-only", "")}
         htmlFor={field.name}
       >
         {label}
+        {required && showsRequired ? (
+          <span aria-hidden="true" className="text-destructive">
+            *
+          </span>
+        ) : (
+          showsOptional &&
+          !required && (
+            <span className="text-muted-foreground text-sm font-normal">
+              {" "}
+              (Optional)
+            </span>
+          )
+        )}
       </FieldLabel>
-      <div className="relative">
-        <Input
+      <InputGroup>
+        <InputGroupInput
           {...field}
           {...inputProps}
           id={inputId}
@@ -51,22 +70,26 @@ export function PasswordField<T extends FieldValues, U extends Path<T>>({
           aria-invalid={fieldState.invalid}
           aria-required={required}
         />
-
-        <Button
-          type="button"
-          variant="link"
-          size="icon"
-          aria-label={showPassword ? "Hide password" : "Show password"}
-          onClick={() => setShowPassword((s) => !s)}
-          className="absolute top-1/2 right-0 flex -translate-y-1/2 items-center pr-3 text-gray-400 hover:text-gray-600 active:-translate-y-1/2!"
-        >
-          {showPassword ? (
-            <EyeOff className="h-4 w-4" />
-          ) : (
-            <Eye className="h-4 w-4" />
-          )}
-        </Button>
-      </div>
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            onClick={() => setShowPassword((s) => !s)}
+          >
+            {showPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
+            {showPassword ? (
+              <span className="sr-only">Hide password</span>
+            ) : (
+              <span className="sr-only">Show password</span>
+            )}
+          </InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
       <FieldError errors={[fieldState.error]} />
     </Field>
   );

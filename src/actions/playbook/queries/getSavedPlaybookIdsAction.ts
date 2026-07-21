@@ -1,6 +1,6 @@
 "use server";
 
-import { db } from "@/db/client";
+import { client } from "@/lib/db/client";
 import { PrismaPlaybookReadRepository } from "@/features/playbooks/infrastructure/repositories";
 import { ActionResult, toActionError } from "@/shared/action";
 import { fail, ok } from "@/shared/application";
@@ -20,7 +20,7 @@ export async function getSavedPlaybookIdsAction(
       return fail(toActionError(ApplicationError.validation(error.message)));
     }
 
-    const repository = new PrismaPlaybookReadRepository(db);
+    const repository = new PrismaPlaybookReadRepository(client);
     const ids = await repository.listSavedPlaybookIdsByUserId(userId);
     return ok(ids);
   } catch (error) {

@@ -38,10 +38,12 @@ describe("updateSession", () => {
   it("allows unauthenticated users on auth routes", async () => {
     mocks.getUser.mockResolvedValue({ data: { user: null }, error: null });
 
-    const response = await updateSession(makeRequest("/login"));
+    for (const path of ["/login", "/sign-up", "/forgot-password"]) {
+      const response = await updateSession(makeRequest(path));
 
-    expect(response.status).toBe(200);
-    expect(response.headers.get("location")).toBeNull();
+      expect(response.status).toBe(200);
+      expect(response.headers.get("location")).toBeNull();
+    }
   });
 
   it("redirects authenticated users away from auth routes", async () => {
@@ -50,10 +52,12 @@ describe("updateSession", () => {
       error: null,
     });
 
-    const response = await updateSession(makeRequest("/login?next=/"));
+    for (const path of ["/login?next=/", "/sign-up"]) {
+      const response = await updateSession(makeRequest(path));
 
-    expect(response.status).toBe(307);
-    expect(response.headers.get("location")).toBe("http://localhost/home");
+      expect(response.status).toBe(307);
+      expect(response.headers.get("location")).toBe("http://localhost/home");
+    }
   });
 
   it("allows authenticated users on protected routes", async () => {

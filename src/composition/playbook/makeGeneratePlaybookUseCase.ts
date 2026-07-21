@@ -1,5 +1,5 @@
 import { PrismaPlaybookWriteRepository } from "@/features/playbooks/infrastructure/repositories";
-import { db } from "@/db/client";
+import { client } from "@/lib/db/client";
 import { GeneratePlaybookUseCase } from "@/features/playbooks/application/use-cases";
 import {
   OpenAIJsonCompletionAdapter,
@@ -8,8 +8,8 @@ import {
 } from "@/features/ai";
 
 export const makeGeneratePlaybookUseCase = () => {
-  const playbookWriteRepository = new PrismaPlaybookWriteRepository(db);
-  const strategyCatalogRepository = new PrismaStrategyCatalogRepository(db);
+  const playbookWriteRepository = new PrismaPlaybookWriteRepository(client);
+  const strategyCatalogRepository = new PrismaStrategyCatalogRepository(client);
   const jsonCompletion = new OpenAIJsonCompletionAdapter();
   const planner = new PlaybookGenerationPlanner(
     strategyCatalogRepository,

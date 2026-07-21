@@ -8,7 +8,7 @@ export const createSessionService = (client: SupabaseClient) => {
   const getAll = () => repository.getAll();
   const getById = (id: string) => repository.getById(id);
   const getAllByUser = (userId: string) =>
-    repository.getAllBy("leaderId", userId);
+    repository.getAllBy("instructorId", userId);
 
   const createSession = (data: SessionInsert): Promise<Session> =>
     repository.create(data);

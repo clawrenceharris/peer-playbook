@@ -1,4 +1,5 @@
 export * from "./PlaybookDTO";
+export * from "./AddPlaybookPhaseInput";
 export * from "./PlaybookStrategyDTO";
 export * from "./UpdatePlaybookDTO";
 export * from "./UpdatePlaybookPhasesDTO";
@@ -12,3 +13,4 @@ export * from "./GeneratePlaybookDTO";
 export * from "./PlaybookPageDTO";
 export * from "./PlaybookCreationPageDTO";
 export * from "./SessionContextDTO";
+export * from "./PlaybookPhaseDTO";

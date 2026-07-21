@@ -1,7 +1,5 @@
 "use client";
 import React from "react";
-
-import { Card, CardContent, CardFooter } from "@/components/ui";
 import Link from "next/link";
 
 interface AuthLayoutProps {

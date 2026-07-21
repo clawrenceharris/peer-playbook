@@ -243,6 +243,7 @@ export type strategiesWhereInput = {
   description?: Prisma.StringFilter<"strategies"> | string
   created_by?: Prisma.UuidNullableFilter<"strategies"> | string | null
   published?: Prisma.BoolFilter<"strategies"> | boolean
+  saved_strategies?: Prisma.Saved_strategiesListRelationFilter
   profiles?: Prisma.XOR<Prisma.ProfilesNullableScalarRelationFilter, Prisma.profilesWhereInput> | null
   strategy_contexts?: Prisma.Strategy_contextsListRelationFilter
   strategy_phase_intents?: Prisma.Strategy_phase_intentsListRelationFilter
@@ -263,6 +264,7 @@ export type strategiesOrderByWithRelationInput = {
   description?: Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   published?: Prisma.SortOrder
+  saved_strategies?: Prisma.saved_strategiesOrderByRelationAggregateInput
   profiles?: Prisma.profilesOrderByWithRelationInput
   strategy_contexts?: Prisma.strategy_contextsOrderByRelationAggregateInput
   strategy_phase_intents?: Prisma.strategy_phase_intentsOrderByRelationAggregateInput
@@ -286,6 +288,7 @@ export type strategiesWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringFilter<"strategies"> | string
   created_by?: Prisma.UuidNullableFilter<"strategies"> | string | null
   published?: Prisma.BoolFilter<"strategies"> | boolean
+  saved_strategies?: Prisma.Saved_strategiesListRelationFilter
   profiles?: Prisma.XOR<Prisma.ProfilesNullableScalarRelationFilter, Prisma.profilesWhereInput> | null
   strategy_contexts?: Prisma.Strategy_contextsListRelationFilter
   strategy_phase_intents?: Prisma.Strategy_phase_intentsListRelationFilter
@@ -345,6 +348,7 @@ export type strategiesCreateInput = {
   virtualized?: boolean | null
   description?: string
   published?: boolean
+  saved_strategies?: Prisma.saved_strategiesCreateNestedManyWithoutStrategiesInput
   profiles?: Prisma.profilesCreateNestedOneWithoutStrategiesInput
   strategy_contexts?: Prisma.strategy_contextsCreateNestedManyWithoutStrategiesInput
   strategy_phase_intents?: Prisma.strategy_phase_intentsCreateNestedManyWithoutStrategiesInput
@@ -365,6 +369,7 @@ export type strategiesUncheckedCreateInput = {
   description?: string
   created_by?: string | null
   published?: boolean
+  saved_strategies?: Prisma.saved_strategiesUncheckedCreateNestedManyWithoutStrategiesInput
   strategy_contexts?: Prisma.strategy_contextsUncheckedCreateNestedManyWithoutStrategiesInput
   strategy_phase_intents?: Prisma.strategy_phase_intentsUncheckedCreateNestedManyWithoutStrategiesInput
 }
@@ -383,6 +388,7 @@ export type strategiesUpdateInput = {
   virtualized?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  saved_strategies?: Prisma.saved_strategiesUpdateManyWithoutStrategiesNestedInput
   profiles?: Prisma.profilesUpdateOneWithoutStrategiesNestedInput
   strategy_contexts?: Prisma.strategy_contextsUpdateManyWithoutStrategiesNestedInput
   strategy_phase_intents?: Prisma.strategy_phase_intentsUpdateManyWithoutStrategiesNestedInput
@@ -403,6 +409,7 @@ export type strategiesUncheckedUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  saved_strategies?: Prisma.saved_strategiesUncheckedUpdateManyWithoutStrategiesNestedInput
   strategy_contexts?: Prisma.strategy_contextsUncheckedUpdateManyWithoutStrategiesNestedInput
   strategy_phase_intents?: Prisma.strategy_phase_intentsUncheckedUpdateManyWithoutStrategiesNestedInput
 }
@@ -618,6 +625,20 @@ export type strategiesUpdateOneRequiredWithoutStrategy_phase_intentsNestedInput 
   update?: Prisma.XOR<Prisma.XOR<Prisma.strategiesUpdateToOneWithWhereWithoutStrategy_phase_intentsInput, Prisma.strategiesUpdateWithoutStrategy_phase_intentsInput>, Prisma.strategiesUncheckedUpdateWithoutStrategy_phase_intentsInput>
 }
 
+export type strategiesCreateNestedOneWithoutSaved_strategiesInput = {
+  create?: Prisma.XOR<Prisma.strategiesCreateWithoutSaved_strategiesInput, Prisma.strategiesUncheckedCreateWithoutSaved_strategiesInput>
+  connectOrCreate?: Prisma.strategiesCreateOrConnectWithoutSaved_strategiesInput
+  connect?: Prisma.strategiesWhereUniqueInput
+}
+
+export type strategiesUpdateOneRequiredWithoutSaved_strategiesNestedInput = {
+  create?: Prisma.XOR<Prisma.strategiesCreateWithoutSaved_strategiesInput, Prisma.strategiesUncheckedCreateWithoutSaved_strategiesInput>
+  connectOrCreate?: Prisma.strategiesCreateOrConnectWithoutSaved_strategiesInput
+  upsert?: Prisma.strategiesUpsertWithoutSaved_strategiesInput
+  connect?: Prisma.strategiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.strategiesUpdateToOneWithWhereWithoutSaved_strategiesInput, Prisma.strategiesUpdateWithoutSaved_strategiesInput>, Prisma.strategiesUncheckedUpdateWithoutSaved_strategiesInput>
+}
+
 export type strategiesCreateWithoutProfilesInput = {
   id?: string
   slug?: string
@@ -632,6 +653,7 @@ export type strategiesCreateWithoutProfilesInput = {
   virtualized?: boolean | null
   description?: string
   published?: boolean
+  saved_strategies?: Prisma.saved_strategiesCreateNestedManyWithoutStrategiesInput
   strategy_contexts?: Prisma.strategy_contextsCreateNestedManyWithoutStrategiesInput
   strategy_phase_intents?: Prisma.strategy_phase_intentsCreateNestedManyWithoutStrategiesInput
 }
@@ -650,6 +672,7 @@ export type strategiesUncheckedCreateWithoutProfilesInput = {
   virtualized?: boolean | null
   description?: string
   published?: boolean
+  saved_strategies?: Prisma.saved_strategiesUncheckedCreateNestedManyWithoutStrategiesInput
   strategy_contexts?: Prisma.strategy_contextsUncheckedCreateNestedManyWithoutStrategiesInput
   strategy_phase_intents?: Prisma.strategy_phase_intentsUncheckedCreateNestedManyWithoutStrategiesInput
 }
@@ -714,6 +737,7 @@ export type strategiesCreateWithoutStrategy_contextsInput = {
   virtualized?: boolean | null
   description?: string
   published?: boolean
+  saved_strategies?: Prisma.saved_strategiesCreateNestedManyWithoutStrategiesInput
   profiles?: Prisma.profilesCreateNestedOneWithoutStrategiesInput
   strategy_phase_intents?: Prisma.strategy_phase_intentsCreateNestedManyWithoutStrategiesInput
 }
@@ -733,6 +757,7 @@ export type strategiesUncheckedCreateWithoutStrategy_contextsInput = {
   description?: string
   created_by?: string | null
   published?: boolean
+  saved_strategies?: Prisma.saved_strategiesUncheckedCreateNestedManyWithoutStrategiesInput
   strategy_phase_intents?: Prisma.strategy_phase_intentsUncheckedCreateNestedManyWithoutStrategiesInput
 }
 
@@ -766,6 +791,7 @@ export type strategiesUpdateWithoutStrategy_contextsInput = {
   virtualized?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  saved_strategies?: Prisma.saved_strategiesUpdateManyWithoutStrategiesNestedInput
   profiles?: Prisma.profilesUpdateOneWithoutStrategiesNestedInput
   strategy_phase_intents?: Prisma.strategy_phase_intentsUpdateManyWithoutStrategiesNestedInput
 }
@@ -785,6 +811,7 @@ export type strategiesUncheckedUpdateWithoutStrategy_contextsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  saved_strategies?: Prisma.saved_strategiesUncheckedUpdateManyWithoutStrategiesNestedInput
   strategy_phase_intents?: Prisma.strategy_phase_intentsUncheckedUpdateManyWithoutStrategiesNestedInput
 }
 
@@ -802,6 +829,7 @@ export type strategiesCreateWithoutStrategy_phase_intentsInput = {
   virtualized?: boolean | null
   description?: string
   published?: boolean
+  saved_strategies?: Prisma.saved_strategiesCreateNestedManyWithoutStrategiesInput
   profiles?: Prisma.profilesCreateNestedOneWithoutStrategiesInput
   strategy_contexts?: Prisma.strategy_contextsCreateNestedManyWithoutStrategiesInput
 }
@@ -821,6 +849,7 @@ export type strategiesUncheckedCreateWithoutStrategy_phase_intentsInput = {
   description?: string
   created_by?: string | null
   published?: boolean
+  saved_strategies?: Prisma.saved_strategiesUncheckedCreateNestedManyWithoutStrategiesInput
   strategy_contexts?: Prisma.strategy_contextsUncheckedCreateNestedManyWithoutStrategiesInput
 }
 
@@ -854,6 +883,7 @@ export type strategiesUpdateWithoutStrategy_phase_intentsInput = {
   virtualized?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  saved_strategies?: Prisma.saved_strategiesUpdateManyWithoutStrategiesNestedInput
   profiles?: Prisma.profilesUpdateOneWithoutStrategiesNestedInput
   strategy_contexts?: Prisma.strategy_contextsUpdateManyWithoutStrategiesNestedInput
 }
@@ -873,7 +903,100 @@ export type strategiesUncheckedUpdateWithoutStrategy_phase_intentsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  saved_strategies?: Prisma.saved_strategiesUncheckedUpdateManyWithoutStrategiesNestedInput
   strategy_contexts?: Prisma.strategy_contextsUncheckedUpdateManyWithoutStrategiesNestedInput
+}
+
+export type strategiesCreateWithoutSaved_strategiesInput = {
+  id?: string
+  slug?: string
+  title: string
+  category?: string | null
+  steps?: Prisma.strategiesCreatestepsInput | string[]
+  good_for?: Prisma.strategiesCreategood_forInput | string[]
+  created_at?: Date | string | null
+  course_tags?: Prisma.strategiesCreatecourse_tagsInput | string[]
+  session_size?: $Enums.session_size
+  virtual_friendly?: boolean
+  virtualized?: boolean | null
+  description?: string
+  published?: boolean
+  profiles?: Prisma.profilesCreateNestedOneWithoutStrategiesInput
+  strategy_contexts?: Prisma.strategy_contextsCreateNestedManyWithoutStrategiesInput
+  strategy_phase_intents?: Prisma.strategy_phase_intentsCreateNestedManyWithoutStrategiesInput
+}
+
+export type strategiesUncheckedCreateWithoutSaved_strategiesInput = {
+  id?: string
+  slug?: string
+  title: string
+  category?: string | null
+  steps?: Prisma.strategiesCreatestepsInput | string[]
+  good_for?: Prisma.strategiesCreategood_forInput | string[]
+  created_at?: Date | string | null
+  course_tags?: Prisma.strategiesCreatecourse_tagsInput | string[]
+  session_size?: $Enums.session_size
+  virtual_friendly?: boolean
+  virtualized?: boolean | null
+  description?: string
+  created_by?: string | null
+  published?: boolean
+  strategy_contexts?: Prisma.strategy_contextsUncheckedCreateNestedManyWithoutStrategiesInput
+  strategy_phase_intents?: Prisma.strategy_phase_intentsUncheckedCreateNestedManyWithoutStrategiesInput
+}
+
+export type strategiesCreateOrConnectWithoutSaved_strategiesInput = {
+  where: Prisma.strategiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.strategiesCreateWithoutSaved_strategiesInput, Prisma.strategiesUncheckedCreateWithoutSaved_strategiesInput>
+}
+
+export type strategiesUpsertWithoutSaved_strategiesInput = {
+  update: Prisma.XOR<Prisma.strategiesUpdateWithoutSaved_strategiesInput, Prisma.strategiesUncheckedUpdateWithoutSaved_strategiesInput>
+  create: Prisma.XOR<Prisma.strategiesCreateWithoutSaved_strategiesInput, Prisma.strategiesUncheckedCreateWithoutSaved_strategiesInput>
+  where?: Prisma.strategiesWhereInput
+}
+
+export type strategiesUpdateToOneWithWhereWithoutSaved_strategiesInput = {
+  where?: Prisma.strategiesWhereInput
+  data: Prisma.XOR<Prisma.strategiesUpdateWithoutSaved_strategiesInput, Prisma.strategiesUncheckedUpdateWithoutSaved_strategiesInput>
+}
+
+export type strategiesUpdateWithoutSaved_strategiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  steps?: Prisma.strategiesUpdatestepsInput | string[]
+  good_for?: Prisma.strategiesUpdategood_forInput | string[]
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  course_tags?: Prisma.strategiesUpdatecourse_tagsInput | string[]
+  session_size?: Prisma.Enumsession_sizeFieldUpdateOperationsInput | $Enums.session_size
+  virtual_friendly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  virtualized?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profiles?: Prisma.profilesUpdateOneWithoutStrategiesNestedInput
+  strategy_contexts?: Prisma.strategy_contextsUpdateManyWithoutStrategiesNestedInput
+  strategy_phase_intents?: Prisma.strategy_phase_intentsUpdateManyWithoutStrategiesNestedInput
+}
+
+export type strategiesUncheckedUpdateWithoutSaved_strategiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  steps?: Prisma.strategiesUpdatestepsInput | string[]
+  good_for?: Prisma.strategiesUpdategood_forInput | string[]
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  course_tags?: Prisma.strategiesUpdatecourse_tagsInput | string[]
+  session_size?: Prisma.Enumsession_sizeFieldUpdateOperationsInput | $Enums.session_size
+  virtual_friendly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  virtualized?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  strategy_contexts?: Prisma.strategy_contextsUncheckedUpdateManyWithoutStrategiesNestedInput
+  strategy_phase_intents?: Prisma.strategy_phase_intentsUncheckedUpdateManyWithoutStrategiesNestedInput
 }
 
 export type strategiesCreateManyProfilesInput = {
@@ -906,6 +1029,7 @@ export type strategiesUpdateWithoutProfilesInput = {
   virtualized?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  saved_strategies?: Prisma.saved_strategiesUpdateManyWithoutStrategiesNestedInput
   strategy_contexts?: Prisma.strategy_contextsUpdateManyWithoutStrategiesNestedInput
   strategy_phase_intents?: Prisma.strategy_phase_intentsUpdateManyWithoutStrategiesNestedInput
 }
@@ -924,6 +1048,7 @@ export type strategiesUncheckedUpdateWithoutProfilesInput = {
   virtualized?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   description?: Prisma.StringFieldUpdateOperationsInput | string
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  saved_strategies?: Prisma.saved_strategiesUncheckedUpdateManyWithoutStrategiesNestedInput
   strategy_contexts?: Prisma.strategy_contextsUncheckedUpdateManyWithoutStrategiesNestedInput
   strategy_phase_intents?: Prisma.strategy_phase_intentsUncheckedUpdateManyWithoutStrategiesNestedInput
 }
@@ -950,11 +1075,13 @@ export type strategiesUncheckedUpdateManyWithoutProfilesInput = {
  */
 
 export type StrategiesCountOutputType = {
+  saved_strategies: number
   strategy_contexts: number
   strategy_phase_intents: number
 }
 
 export type StrategiesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  saved_strategies?: boolean | StrategiesCountOutputTypeCountSaved_strategiesArgs
   strategy_contexts?: boolean | StrategiesCountOutputTypeCountStrategy_contextsArgs
   strategy_phase_intents?: boolean | StrategiesCountOutputTypeCountStrategy_phase_intentsArgs
 }
@@ -967,6 +1094,13 @@ export type StrategiesCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.E
    * Select specific fields to fetch from the StrategiesCountOutputType
    */
   select?: Prisma.StrategiesCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * StrategiesCountOutputType without action
+ */
+export type StrategiesCountOutputTypeCountSaved_strategiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.saved_strategiesWhereInput
 }
 
 /**
@@ -999,6 +1133,7 @@ export type strategiesSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   description?: boolean
   created_by?: boolean
   published?: boolean
+  saved_strategies?: boolean | Prisma.strategies$saved_strategiesArgs<ExtArgs>
   profiles?: boolean | Prisma.strategies$profilesArgs<ExtArgs>
   strategy_contexts?: boolean | Prisma.strategies$strategy_contextsArgs<ExtArgs>
   strategy_phase_intents?: boolean | Prisma.strategies$strategy_phase_intentsArgs<ExtArgs>
@@ -1060,6 +1195,7 @@ export type strategiesSelectScalar = {
 
 export type strategiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "category" | "steps" | "good_for" | "created_at" | "course_tags" | "session_size" | "virtual_friendly" | "virtualized" | "description" | "created_by" | "published", ExtArgs["result"]["strategies"]>
 export type strategiesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  saved_strategies?: boolean | Prisma.strategies$saved_strategiesArgs<ExtArgs>
   profiles?: boolean | Prisma.strategies$profilesArgs<ExtArgs>
   strategy_contexts?: boolean | Prisma.strategies$strategy_contextsArgs<ExtArgs>
   strategy_phase_intents?: boolean | Prisma.strategies$strategy_phase_intentsArgs<ExtArgs>
@@ -1075,6 +1211,7 @@ export type strategiesIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.E
 export type $strategiesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "strategies"
   objects: {
+    saved_strategies: Prisma.$saved_strategiesPayload<ExtArgs>[]
     profiles: Prisma.$profilesPayload<ExtArgs> | null
     strategy_contexts: Prisma.$strategy_contextsPayload<ExtArgs>[]
     strategy_phase_intents: Prisma.$strategy_phase_intentsPayload<ExtArgs>[]
@@ -1488,6 +1625,7 @@ readonly fields: strategiesFieldRefs;
  */
 export interface Prisma__strategiesClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  saved_strategies<T extends Prisma.strategies$saved_strategiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.strategies$saved_strategiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$saved_strategiesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   profiles<T extends Prisma.strategies$profilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.strategies$profilesArgs<ExtArgs>>): Prisma.Prisma__profilesClient<runtime.Types.Result.GetResult<Prisma.$profilesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   strategy_contexts<T extends Prisma.strategies$strategy_contextsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.strategies$strategy_contextsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$strategy_contextsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   strategy_phase_intents<T extends Prisma.strategies$strategy_phase_intentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.strategies$strategy_phase_intentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$strategy_phase_intentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1932,6 +2070,30 @@ export type strategiesDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many strategies to delete.
    */
   limit?: number
+}
+
+/**
+ * strategies.saved_strategies
+ */
+export type strategies$saved_strategiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the saved_strategies
+   */
+  select?: Prisma.saved_strategiesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the saved_strategies
+   */
+  omit?: Prisma.saved_strategiesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.saved_strategiesInclude<ExtArgs> | null
+  where?: Prisma.saved_strategiesWhereInput
+  orderBy?: Prisma.saved_strategiesOrderByWithRelationInput | Prisma.saved_strategiesOrderByWithRelationInput[]
+  cursor?: Prisma.saved_strategiesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Saved_strategiesScalarFieldEnum | Prisma.Saved_strategiesScalarFieldEnum[]
 }
 
 /**

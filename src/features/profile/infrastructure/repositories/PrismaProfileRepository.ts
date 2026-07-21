@@ -2,10 +2,10 @@ import { ProfileRepository } from "../../domain/repositories";
 import { UserProfile } from "../../domain/entities";
 import { ProfileMapper } from "../mappers";
 import { CreateProfileCommand, UpdateProfileCommand } from "../../domain/types";
-import { prisma, type PrismaClient } from "@/db/client";
+import { client, type PrismaClient } from "@/lib/db/client";
 
 export class PrismaProfileRepository implements ProfileRepository {
-  constructor(private readonly client: PrismaClient = prisma) {}
+  constructor(private readonly client: PrismaClient = client) {}
 
   async updateProfile(
     id: string,

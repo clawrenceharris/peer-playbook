@@ -1,19 +1,21 @@
 export type UpdatePlaybookStrategyCommand = {
   steps?: string[];
   title?: string;
-  cardSlug?: string;
+  slug?: string;
   category?: string;
   phase?: string;
   position?: number;
   description?: string;
   sourceId?: string;
   sourceType?: string;
+  facilitatorNotes?: string | null;
+  estimatedMinutes?: number | null;
 };
 
 export type CreatePlaybookStrategyCommand = {
   playbookId: string;
   playbookPhaseId: string;
-  cardSlug: string;
+  slug: string;
   category: string;
   title: string;
   description: string;
@@ -22,6 +24,8 @@ export type CreatePlaybookStrategyCommand = {
   position: number;
   sourceId: string;
   sourceType: "system" | "user";
+  facilitatorNotes?: string | null;
+  estimatedMinutes?: number | null;
 };
 
 export type RemovePlaybookStrategyCommand = {

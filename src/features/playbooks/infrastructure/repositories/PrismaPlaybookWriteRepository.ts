@@ -1,8 +1,9 @@
 import { PlaybookWriteRepository } from "../../domain/repositories/PlaybookWriteRepository";
-import { prisma, type PrismaClient } from "@/db/client";
+import { client, type PrismaClient } from "@/lib/db/client";
 import {
   PlaybookCardDTO,
   PlaybookDetailDTO,
+  PlaybookPhaseDTO,
   PlaybookStrategyCardDTO,
 } from "../../application/dto";
 import {
@@ -15,12 +16,17 @@ import {
   RemovePlaybookStrategyCommand,
 } from "../../domain/types";
 import { UpdatePlaybookStrategyCommand } from "../../domain/types/playbook-strategy.types";
-import { PlaybookMapper, PlaybookStrategyMapper } from "../mappers";
+import {
+  PlaybookMapper,
+  PlaybookPhaseMapper,
+  PlaybookStrategyMapper,
+} from "../mappers";
 import { CreatePlaybookResult } from "../../application/dto";
-import type { lesson_phase } from "@/db/client";
+import type { lesson_phase } from "@/lib/db/client";
 import {
   playbookCardArgs,
   playbookDetailArgs,
+  playbookPhaseArgs,
 } from "../selection/playbook.selections";
 import { playbookStrategyCardArgs } from "../selection/playbook-strategy.seletions";
 
@@ -29,7 +35,7 @@ type PrismaTransactionClient = Parameters<
 >[0];
 
 export class PrismaPlaybookWriteRepository implements PlaybookWriteRepository {
-  constructor(private readonly client: PrismaClient = prisma) {}
+  constructor(private readonly client: PrismaClient = client) {}
   async generatePlaybook(
     data: GeneratePlaybookCommand,
   ): Promise<CreatePlaybookResult> {
@@ -162,6 +168,7 @@ export class PrismaPlaybookWriteRepository implements PlaybookWriteRepository {
             title: phase.title,
             phase_intent_id: phaseIntentId,
             position: phase.position,
+            estimated_minutes: phase.estimatedMinutes,
             updated_at: new Date(),
           },
         });
@@ -176,19 +183,49 @@ export class PrismaPlaybookWriteRepository implements PlaybookWriteRepository {
       data: {
         playbook_id: data.playbookId,
         playbook_phase_id: data.playbookPhaseId,
-        card_slug: data.cardSlug,
+        slug: data.slug,
         title: data.title,
         category: data.category,
         steps: data.steps,
         phase: data.phase as lesson_phase,
         position: data.position,
         description: data.description,
+        facilitator_notes: data.facilitatorNotes,
+        estimated_minutes: data.estimatedMinutes,
         source_id: data.sourceId,
         source_type: data.sourceType,
       },
       ...playbookStrategyCardArgs,
     });
     return PlaybookStrategyMapper.toCard(record);
+  }
+
+  async createPlaybookPhase(
+    playbookId: string,
+    data: CreatePlaybookPhaseCommand,
+  ): Promise<PlaybookPhaseDTO> {
+    // phase_intent_id is a UUID FK — resolve from the stable intent key first.
+    const intentRecord = await this.client.phase_intents.findUnique({
+      where: { key: data.intentKey },
+      select: { id: true },
+    });
+    if (!intentRecord) {
+      throw new Error(`Missing phase intent: ${data.intentKey}`);
+    }
+
+    const record = await this.client.playbook_phases.create({
+      data: {
+        playbook_id: playbookId,
+        title: data.title,
+        phase_intent_id: intentRecord.id,
+        position: data.position,
+        estimated_minutes: null,
+        description: null,
+        objective: null,
+      },
+      ...playbookPhaseArgs,
+    });
+    return PlaybookPhaseMapper.toDetail(record);
   }
 
   private async createPlaybookStrategies(
@@ -246,13 +283,15 @@ export class PrismaPlaybookWriteRepository implements PlaybookWriteRepository {
       return {
         playbook_id: playbookId,
         playbook_phase_id: playbookPhaseId,
-        card_slug: strategy.slug,
+        slug: strategy.slug,
         title: strategy.title,
         category: strategy.category || "strategy",
         steps: strategy.steps,
         phase: ref.legacyPhase as lesson_phase,
         position: ref.position,
         description: strategy.description,
+        facilitator_notes: null,
+        estimated_minutes: null,
         source_id: strategy.id,
         source_type: ref.sourceType,
       };
@@ -321,7 +360,7 @@ export class PrismaPlaybookWriteRepository implements PlaybookWriteRepository {
       data: {
         ...(data.steps !== undefined && { steps: data.steps }),
         ...(data.title !== undefined && { title: data.title }),
-        ...(data.cardSlug !== undefined && { card_slug: data.cardSlug }),
+        ...(data.slug !== undefined && { slug: data.slug }),
         ...(data.category !== undefined && { category: data.category }),
         ...(data.phase !== undefined && {
           phase: data.phase as lesson_phase,
@@ -329,6 +368,12 @@ export class PrismaPlaybookWriteRepository implements PlaybookWriteRepository {
         ...(data.position !== undefined && { position: data.position }),
         ...(data.description !== undefined && {
           description: data.description,
+        }),
+        ...(data.facilitatorNotes !== undefined && {
+          facilitator_notes: data.facilitatorNotes,
+        }),
+        ...(data.estimatedMinutes !== undefined && {
+          estimated_minutes: data.estimatedMinutes,
         }),
         ...(data.sourceId !== undefined && { source_id: data.sourceId }),
         ...(data.sourceType !== undefined && {

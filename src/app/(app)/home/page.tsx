@@ -11,7 +11,7 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { FormEvent, ReactNode } from "react";
 import { useMemo, useState } from "react";
-import { ContentLayout } from "@/components/sidebar";
+import { ContentLayout, UserNav } from "@/components/sidebar";
 import { SearchInput } from "@/components/form";
 import { InputGroupAddon, InputGroupButton } from "@/components/ui/input-group";
 import Image from "next/image";
@@ -81,9 +81,8 @@ export default function Dashboard() {
   }
 
   return (
-    <ContentLayout
-      headerClassName="bg-secondary/70 border-b-0 z-0 relative"
-      title={
+    <ContentLayout contentContainerClassName="p-0" showHeader={false}>
+      <header className="header bg-secondary/70 relative z-0 border-b-0 px-3 py-4">
         <Image
           src={assets.wordmark}
           alt="PeerPlaybook logo"
@@ -92,8 +91,8 @@ export default function Dashboard() {
           width={833}
           height={167}
         />
-      }
-    >
+        <UserNav />
+      </header>
       <section className="from-secondary/70 to-surface relative bg-linear-to-b pb-15">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 px-4 py-8 sm:px-6 xl:grid-cols-[minmax(0,1fr)_minmax(20rem,0.72fr)] xl:px-8 xl:py-10">
           <div className="max-w-3xl space-y-7">

@@ -29,16 +29,18 @@ export type AggregatePlaybook_strategies = {
 
 export type Playbook_strategiesAvgAggregateOutputType = {
   position: number | null
+  estimated_minutes: number | null
 }
 
 export type Playbook_strategiesSumAggregateOutputType = {
   position: number | null
+  estimated_minutes: number | null
 }
 
 export type Playbook_strategiesMinAggregateOutputType = {
   id: string | null
   playbook_id: string | null
-  card_slug: string | null
+  slug: string | null
   title: string | null
   category: string | null
   phase: $Enums.lesson_phase | null
@@ -50,12 +52,14 @@ export type Playbook_strategiesMinAggregateOutputType = {
   source_id: string | null
   source_type: string | null
   playbook_phase_id: string | null
+  estimated_minutes: number | null
+  facilitator_notes: string | null
 }
 
 export type Playbook_strategiesMaxAggregateOutputType = {
   id: string | null
   playbook_id: string | null
-  card_slug: string | null
+  slug: string | null
   title: string | null
   category: string | null
   phase: $Enums.lesson_phase | null
@@ -67,12 +71,14 @@ export type Playbook_strategiesMaxAggregateOutputType = {
   source_id: string | null
   source_type: string | null
   playbook_phase_id: string | null
+  estimated_minutes: number | null
+  facilitator_notes: string | null
 }
 
 export type Playbook_strategiesCountAggregateOutputType = {
   id: number
   playbook_id: number
-  card_slug: number
+  slug: number
   title: number
   category: number
   steps: number
@@ -85,22 +91,26 @@ export type Playbook_strategiesCountAggregateOutputType = {
   source_id: number
   source_type: number
   playbook_phase_id: number
+  estimated_minutes: number
+  facilitator_notes: number
   _all: number
 }
 
 
 export type Playbook_strategiesAvgAggregateInputType = {
   position?: true
+  estimated_minutes?: true
 }
 
 export type Playbook_strategiesSumAggregateInputType = {
   position?: true
+  estimated_minutes?: true
 }
 
 export type Playbook_strategiesMinAggregateInputType = {
   id?: true
   playbook_id?: true
-  card_slug?: true
+  slug?: true
   title?: true
   category?: true
   phase?: true
@@ -112,12 +122,14 @@ export type Playbook_strategiesMinAggregateInputType = {
   source_id?: true
   source_type?: true
   playbook_phase_id?: true
+  estimated_minutes?: true
+  facilitator_notes?: true
 }
 
 export type Playbook_strategiesMaxAggregateInputType = {
   id?: true
   playbook_id?: true
-  card_slug?: true
+  slug?: true
   title?: true
   category?: true
   phase?: true
@@ -129,12 +141,14 @@ export type Playbook_strategiesMaxAggregateInputType = {
   source_id?: true
   source_type?: true
   playbook_phase_id?: true
+  estimated_minutes?: true
+  facilitator_notes?: true
 }
 
 export type Playbook_strategiesCountAggregateInputType = {
   id?: true
   playbook_id?: true
-  card_slug?: true
+  slug?: true
   title?: true
   category?: true
   steps?: true
@@ -147,6 +161,8 @@ export type Playbook_strategiesCountAggregateInputType = {
   source_id?: true
   source_type?: true
   playbook_phase_id?: true
+  estimated_minutes?: true
+  facilitator_notes?: true
   _all?: true
 }
 
@@ -239,7 +255,7 @@ export type playbook_strategiesGroupByArgs<ExtArgs extends runtime.Types.Extensi
 export type Playbook_strategiesGroupByOutputType = {
   id: string
   playbook_id: string
-  card_slug: string
+  slug: string
   title: string
   category: string
   steps: string[]
@@ -252,6 +268,8 @@ export type Playbook_strategiesGroupByOutputType = {
   source_id: string | null
   source_type: string | null
   playbook_phase_id: string | null
+  estimated_minutes: number | null
+  facilitator_notes: string | null
   _count: Playbook_strategiesCountAggregateOutputType | null
   _avg: Playbook_strategiesAvgAggregateOutputType | null
   _sum: Playbook_strategiesSumAggregateOutputType | null
@@ -280,7 +298,7 @@ export type playbook_strategiesWhereInput = {
   NOT?: Prisma.playbook_strategiesWhereInput | Prisma.playbook_strategiesWhereInput[]
   id?: Prisma.UuidFilter<"playbook_strategies"> | string
   playbook_id?: Prisma.UuidFilter<"playbook_strategies"> | string
-  card_slug?: Prisma.StringFilter<"playbook_strategies"> | string
+  slug?: Prisma.StringFilter<"playbook_strategies"> | string
   title?: Prisma.StringFilter<"playbook_strategies"> | string
   category?: Prisma.StringFilter<"playbook_strategies"> | string
   steps?: Prisma.StringNullableListFilter<"playbook_strategies">
@@ -293,6 +311,8 @@ export type playbook_strategiesWhereInput = {
   source_id?: Prisma.UuidNullableFilter<"playbook_strategies"> | string | null
   source_type?: Prisma.StringNullableFilter<"playbook_strategies"> | string | null
   playbook_phase_id?: Prisma.UuidNullableFilter<"playbook_strategies"> | string | null
+  estimated_minutes?: Prisma.IntNullableFilter<"playbook_strategies"> | number | null
+  facilitator_notes?: Prisma.StringNullableFilter<"playbook_strategies"> | string | null
   playbooks?: Prisma.XOR<Prisma.PlaybooksScalarRelationFilter, Prisma.playbooksWhereInput>
   playbook_phases?: Prisma.XOR<Prisma.Playbook_phasesNullableScalarRelationFilter, Prisma.playbook_phasesWhereInput> | null
 }
@@ -300,7 +320,7 @@ export type playbook_strategiesWhereInput = {
 export type playbook_strategiesOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   playbook_id?: Prisma.SortOrder
-  card_slug?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
   steps?: Prisma.SortOrder
@@ -313,6 +333,8 @@ export type playbook_strategiesOrderByWithRelationInput = {
   source_id?: Prisma.SortOrderInput | Prisma.SortOrder
   source_type?: Prisma.SortOrderInput | Prisma.SortOrder
   playbook_phase_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  estimated_minutes?: Prisma.SortOrderInput | Prisma.SortOrder
+  facilitator_notes?: Prisma.SortOrderInput | Prisma.SortOrder
   playbooks?: Prisma.playbooksOrderByWithRelationInput
   playbook_phases?: Prisma.playbook_phasesOrderByWithRelationInput
 }
@@ -323,7 +345,7 @@ export type playbook_strategiesWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.playbook_strategiesWhereInput[]
   NOT?: Prisma.playbook_strategiesWhereInput | Prisma.playbook_strategiesWhereInput[]
   playbook_id?: Prisma.UuidFilter<"playbook_strategies"> | string
-  card_slug?: Prisma.StringFilter<"playbook_strategies"> | string
+  slug?: Prisma.StringFilter<"playbook_strategies"> | string
   title?: Prisma.StringFilter<"playbook_strategies"> | string
   category?: Prisma.StringFilter<"playbook_strategies"> | string
   steps?: Prisma.StringNullableListFilter<"playbook_strategies">
@@ -336,6 +358,8 @@ export type playbook_strategiesWhereUniqueInput = Prisma.AtLeast<{
   source_id?: Prisma.UuidNullableFilter<"playbook_strategies"> | string | null
   source_type?: Prisma.StringNullableFilter<"playbook_strategies"> | string | null
   playbook_phase_id?: Prisma.UuidNullableFilter<"playbook_strategies"> | string | null
+  estimated_minutes?: Prisma.IntNullableFilter<"playbook_strategies"> | number | null
+  facilitator_notes?: Prisma.StringNullableFilter<"playbook_strategies"> | string | null
   playbooks?: Prisma.XOR<Prisma.PlaybooksScalarRelationFilter, Prisma.playbooksWhereInput>
   playbook_phases?: Prisma.XOR<Prisma.Playbook_phasesNullableScalarRelationFilter, Prisma.playbook_phasesWhereInput> | null
 }, "id">
@@ -343,7 +367,7 @@ export type playbook_strategiesWhereUniqueInput = Prisma.AtLeast<{
 export type playbook_strategiesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   playbook_id?: Prisma.SortOrder
-  card_slug?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
   steps?: Prisma.SortOrder
@@ -356,6 +380,8 @@ export type playbook_strategiesOrderByWithAggregationInput = {
   source_id?: Prisma.SortOrderInput | Prisma.SortOrder
   source_type?: Prisma.SortOrderInput | Prisma.SortOrder
   playbook_phase_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  estimated_minutes?: Prisma.SortOrderInput | Prisma.SortOrder
+  facilitator_notes?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.playbook_strategiesCountOrderByAggregateInput
   _avg?: Prisma.playbook_strategiesAvgOrderByAggregateInput
   _max?: Prisma.playbook_strategiesMaxOrderByAggregateInput
@@ -369,7 +395,7 @@ export type playbook_strategiesScalarWhereWithAggregatesInput = {
   NOT?: Prisma.playbook_strategiesScalarWhereWithAggregatesInput | Prisma.playbook_strategiesScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"playbook_strategies"> | string
   playbook_id?: Prisma.UuidWithAggregatesFilter<"playbook_strategies"> | string
-  card_slug?: Prisma.StringWithAggregatesFilter<"playbook_strategies"> | string
+  slug?: Prisma.StringWithAggregatesFilter<"playbook_strategies"> | string
   title?: Prisma.StringWithAggregatesFilter<"playbook_strategies"> | string
   category?: Prisma.StringWithAggregatesFilter<"playbook_strategies"> | string
   steps?: Prisma.StringNullableListFilter<"playbook_strategies">
@@ -382,11 +408,13 @@ export type playbook_strategiesScalarWhereWithAggregatesInput = {
   source_id?: Prisma.UuidNullableWithAggregatesFilter<"playbook_strategies"> | string | null
   source_type?: Prisma.StringNullableWithAggregatesFilter<"playbook_strategies"> | string | null
   playbook_phase_id?: Prisma.UuidNullableWithAggregatesFilter<"playbook_strategies"> | string | null
+  estimated_minutes?: Prisma.IntNullableWithAggregatesFilter<"playbook_strategies"> | number | null
+  facilitator_notes?: Prisma.StringNullableWithAggregatesFilter<"playbook_strategies"> | string | null
 }
 
 export type playbook_strategiesCreateInput = {
   id?: string
-  card_slug?: string
+  slug?: string
   title: string
   category: string
   steps?: Prisma.playbook_strategiesCreatestepsInput | string[]
@@ -398,6 +426,8 @@ export type playbook_strategiesCreateInput = {
   updated_at?: Date | string | null
   source_id?: string | null
   source_type?: string | null
+  estimated_minutes?: number | null
+  facilitator_notes?: string | null
   playbooks: Prisma.playbooksCreateNestedOneWithoutPlaybook_strategiesInput
   playbook_phases?: Prisma.playbook_phasesCreateNestedOneWithoutPlaybook_strategiesInput
 }
@@ -405,7 +435,7 @@ export type playbook_strategiesCreateInput = {
 export type playbook_strategiesUncheckedCreateInput = {
   id?: string
   playbook_id: string
-  card_slug?: string
+  slug?: string
   title: string
   category: string
   steps?: Prisma.playbook_strategiesCreatestepsInput | string[]
@@ -418,11 +448,13 @@ export type playbook_strategiesUncheckedCreateInput = {
   source_id?: string | null
   source_type?: string | null
   playbook_phase_id?: string | null
+  estimated_minutes?: number | null
+  facilitator_notes?: string | null
 }
 
 export type playbook_strategiesUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  card_slug?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   steps?: Prisma.playbook_strategiesUpdatestepsInput | string[]
@@ -434,6 +466,8 @@ export type playbook_strategiesUpdateInput = {
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facilitator_notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   playbooks?: Prisma.playbooksUpdateOneRequiredWithoutPlaybook_strategiesNestedInput
   playbook_phases?: Prisma.playbook_phasesUpdateOneWithoutPlaybook_strategiesNestedInput
 }
@@ -441,7 +475,7 @@ export type playbook_strategiesUpdateInput = {
 export type playbook_strategiesUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   playbook_id?: Prisma.StringFieldUpdateOperationsInput | string
-  card_slug?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   steps?: Prisma.playbook_strategiesUpdatestepsInput | string[]
@@ -454,12 +488,14 @@ export type playbook_strategiesUncheckedUpdateInput = {
   source_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   playbook_phase_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facilitator_notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type playbook_strategiesCreateManyInput = {
   id?: string
   playbook_id: string
-  card_slug?: string
+  slug?: string
   title: string
   category: string
   steps?: Prisma.playbook_strategiesCreatestepsInput | string[]
@@ -472,11 +508,13 @@ export type playbook_strategiesCreateManyInput = {
   source_id?: string | null
   source_type?: string | null
   playbook_phase_id?: string | null
+  estimated_minutes?: number | null
+  facilitator_notes?: string | null
 }
 
 export type playbook_strategiesUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  card_slug?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   steps?: Prisma.playbook_strategiesUpdatestepsInput | string[]
@@ -488,12 +526,14 @@ export type playbook_strategiesUpdateManyMutationInput = {
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facilitator_notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type playbook_strategiesUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   playbook_id?: Prisma.StringFieldUpdateOperationsInput | string
-  card_slug?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   steps?: Prisma.playbook_strategiesUpdatestepsInput | string[]
@@ -506,6 +546,8 @@ export type playbook_strategiesUncheckedUpdateManyInput = {
   source_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   playbook_phase_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facilitator_notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type Playbook_strategiesListRelationFilter = {
@@ -521,7 +563,7 @@ export type playbook_strategiesOrderByRelationAggregateInput = {
 export type playbook_strategiesCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   playbook_id?: Prisma.SortOrder
-  card_slug?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
   steps?: Prisma.SortOrder
@@ -534,16 +576,19 @@ export type playbook_strategiesCountOrderByAggregateInput = {
   source_id?: Prisma.SortOrder
   source_type?: Prisma.SortOrder
   playbook_phase_id?: Prisma.SortOrder
+  estimated_minutes?: Prisma.SortOrder
+  facilitator_notes?: Prisma.SortOrder
 }
 
 export type playbook_strategiesAvgOrderByAggregateInput = {
   position?: Prisma.SortOrder
+  estimated_minutes?: Prisma.SortOrder
 }
 
 export type playbook_strategiesMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   playbook_id?: Prisma.SortOrder
-  card_slug?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
   phase?: Prisma.SortOrder
@@ -555,12 +600,14 @@ export type playbook_strategiesMaxOrderByAggregateInput = {
   source_id?: Prisma.SortOrder
   source_type?: Prisma.SortOrder
   playbook_phase_id?: Prisma.SortOrder
+  estimated_minutes?: Prisma.SortOrder
+  facilitator_notes?: Prisma.SortOrder
 }
 
 export type playbook_strategiesMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   playbook_id?: Prisma.SortOrder
-  card_slug?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
   phase?: Prisma.SortOrder
@@ -572,10 +619,13 @@ export type playbook_strategiesMinOrderByAggregateInput = {
   source_id?: Prisma.SortOrder
   source_type?: Prisma.SortOrder
   playbook_phase_id?: Prisma.SortOrder
+  estimated_minutes?: Prisma.SortOrder
+  facilitator_notes?: Prisma.SortOrder
 }
 
 export type playbook_strategiesSumOrderByAggregateInput = {
   position?: Prisma.SortOrder
+  estimated_minutes?: Prisma.SortOrder
 }
 
 export type playbook_strategiesCreateNestedManyWithoutPlaybook_phasesInput = {
@@ -677,7 +727,7 @@ export type playbook_strategiesUncheckedUpdateManyWithoutPlaybooksNestedInput = 
 
 export type playbook_strategiesCreateWithoutPlaybook_phasesInput = {
   id?: string
-  card_slug?: string
+  slug?: string
   title: string
   category: string
   steps?: Prisma.playbook_strategiesCreatestepsInput | string[]
@@ -689,13 +739,15 @@ export type playbook_strategiesCreateWithoutPlaybook_phasesInput = {
   updated_at?: Date | string | null
   source_id?: string | null
   source_type?: string | null
+  estimated_minutes?: number | null
+  facilitator_notes?: string | null
   playbooks: Prisma.playbooksCreateNestedOneWithoutPlaybook_strategiesInput
 }
 
 export type playbook_strategiesUncheckedCreateWithoutPlaybook_phasesInput = {
   id?: string
   playbook_id: string
-  card_slug?: string
+  slug?: string
   title: string
   category: string
   steps?: Prisma.playbook_strategiesCreatestepsInput | string[]
@@ -707,6 +759,8 @@ export type playbook_strategiesUncheckedCreateWithoutPlaybook_phasesInput = {
   updated_at?: Date | string | null
   source_id?: string | null
   source_type?: string | null
+  estimated_minutes?: number | null
+  facilitator_notes?: string | null
 }
 
 export type playbook_strategiesCreateOrConnectWithoutPlaybook_phasesInput = {
@@ -741,7 +795,7 @@ export type playbook_strategiesScalarWhereInput = {
   NOT?: Prisma.playbook_strategiesScalarWhereInput | Prisma.playbook_strategiesScalarWhereInput[]
   id?: Prisma.UuidFilter<"playbook_strategies"> | string
   playbook_id?: Prisma.UuidFilter<"playbook_strategies"> | string
-  card_slug?: Prisma.StringFilter<"playbook_strategies"> | string
+  slug?: Prisma.StringFilter<"playbook_strategies"> | string
   title?: Prisma.StringFilter<"playbook_strategies"> | string
   category?: Prisma.StringFilter<"playbook_strategies"> | string
   steps?: Prisma.StringNullableListFilter<"playbook_strategies">
@@ -754,11 +808,13 @@ export type playbook_strategiesScalarWhereInput = {
   source_id?: Prisma.UuidNullableFilter<"playbook_strategies"> | string | null
   source_type?: Prisma.StringNullableFilter<"playbook_strategies"> | string | null
   playbook_phase_id?: Prisma.UuidNullableFilter<"playbook_strategies"> | string | null
+  estimated_minutes?: Prisma.IntNullableFilter<"playbook_strategies"> | number | null
+  facilitator_notes?: Prisma.StringNullableFilter<"playbook_strategies"> | string | null
 }
 
 export type playbook_strategiesCreateWithoutPlaybooksInput = {
   id?: string
-  card_slug?: string
+  slug?: string
   title: string
   category: string
   steps?: Prisma.playbook_strategiesCreatestepsInput | string[]
@@ -770,12 +826,14 @@ export type playbook_strategiesCreateWithoutPlaybooksInput = {
   updated_at?: Date | string | null
   source_id?: string | null
   source_type?: string | null
+  estimated_minutes?: number | null
+  facilitator_notes?: string | null
   playbook_phases?: Prisma.playbook_phasesCreateNestedOneWithoutPlaybook_strategiesInput
 }
 
 export type playbook_strategiesUncheckedCreateWithoutPlaybooksInput = {
   id?: string
-  card_slug?: string
+  slug?: string
   title: string
   category: string
   steps?: Prisma.playbook_strategiesCreatestepsInput | string[]
@@ -788,6 +846,8 @@ export type playbook_strategiesUncheckedCreateWithoutPlaybooksInput = {
   source_id?: string | null
   source_type?: string | null
   playbook_phase_id?: string | null
+  estimated_minutes?: number | null
+  facilitator_notes?: string | null
 }
 
 export type playbook_strategiesCreateOrConnectWithoutPlaybooksInput = {
@@ -819,7 +879,7 @@ export type playbook_strategiesUpdateManyWithWhereWithoutPlaybooksInput = {
 export type playbook_strategiesCreateManyPlaybook_phasesInput = {
   id?: string
   playbook_id: string
-  card_slug?: string
+  slug?: string
   title: string
   category: string
   steps?: Prisma.playbook_strategiesCreatestepsInput | string[]
@@ -831,11 +891,13 @@ export type playbook_strategiesCreateManyPlaybook_phasesInput = {
   updated_at?: Date | string | null
   source_id?: string | null
   source_type?: string | null
+  estimated_minutes?: number | null
+  facilitator_notes?: string | null
 }
 
 export type playbook_strategiesUpdateWithoutPlaybook_phasesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  card_slug?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   steps?: Prisma.playbook_strategiesUpdatestepsInput | string[]
@@ -847,13 +909,15 @@ export type playbook_strategiesUpdateWithoutPlaybook_phasesInput = {
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facilitator_notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   playbooks?: Prisma.playbooksUpdateOneRequiredWithoutPlaybook_strategiesNestedInput
 }
 
 export type playbook_strategiesUncheckedUpdateWithoutPlaybook_phasesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   playbook_id?: Prisma.StringFieldUpdateOperationsInput | string
-  card_slug?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   steps?: Prisma.playbook_strategiesUpdatestepsInput | string[]
@@ -865,12 +929,14 @@ export type playbook_strategiesUncheckedUpdateWithoutPlaybook_phasesInput = {
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facilitator_notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type playbook_strategiesUncheckedUpdateManyWithoutPlaybook_phasesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   playbook_id?: Prisma.StringFieldUpdateOperationsInput | string
-  card_slug?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   steps?: Prisma.playbook_strategiesUpdatestepsInput | string[]
@@ -882,11 +948,13 @@ export type playbook_strategiesUncheckedUpdateManyWithoutPlaybook_phasesInput = 
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facilitator_notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type playbook_strategiesCreateManyPlaybooksInput = {
   id?: string
-  card_slug?: string
+  slug?: string
   title: string
   category: string
   steps?: Prisma.playbook_strategiesCreatestepsInput | string[]
@@ -899,11 +967,13 @@ export type playbook_strategiesCreateManyPlaybooksInput = {
   source_id?: string | null
   source_type?: string | null
   playbook_phase_id?: string | null
+  estimated_minutes?: number | null
+  facilitator_notes?: string | null
 }
 
 export type playbook_strategiesUpdateWithoutPlaybooksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  card_slug?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   steps?: Prisma.playbook_strategiesUpdatestepsInput | string[]
@@ -915,12 +985,14 @@ export type playbook_strategiesUpdateWithoutPlaybooksInput = {
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facilitator_notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   playbook_phases?: Prisma.playbook_phasesUpdateOneWithoutPlaybook_strategiesNestedInput
 }
 
 export type playbook_strategiesUncheckedUpdateWithoutPlaybooksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  card_slug?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   steps?: Prisma.playbook_strategiesUpdatestepsInput | string[]
@@ -933,11 +1005,13 @@ export type playbook_strategiesUncheckedUpdateWithoutPlaybooksInput = {
   source_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   playbook_phase_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facilitator_notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type playbook_strategiesUncheckedUpdateManyWithoutPlaybooksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  card_slug?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   steps?: Prisma.playbook_strategiesUpdatestepsInput | string[]
@@ -950,6 +1024,8 @@ export type playbook_strategiesUncheckedUpdateManyWithoutPlaybooksInput = {
   source_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   playbook_phase_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimated_minutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facilitator_notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -957,7 +1033,7 @@ export type playbook_strategiesUncheckedUpdateManyWithoutPlaybooksInput = {
 export type playbook_strategiesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   playbook_id?: boolean
-  card_slug?: boolean
+  slug?: boolean
   title?: boolean
   category?: boolean
   steps?: boolean
@@ -970,6 +1046,8 @@ export type playbook_strategiesSelect<ExtArgs extends runtime.Types.Extensions.I
   source_id?: boolean
   source_type?: boolean
   playbook_phase_id?: boolean
+  estimated_minutes?: boolean
+  facilitator_notes?: boolean
   playbooks?: boolean | Prisma.playbooksDefaultArgs<ExtArgs>
   playbook_phases?: boolean | Prisma.playbook_strategies$playbook_phasesArgs<ExtArgs>
 }, ExtArgs["result"]["playbook_strategies"]>
@@ -977,7 +1055,7 @@ export type playbook_strategiesSelect<ExtArgs extends runtime.Types.Extensions.I
 export type playbook_strategiesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   playbook_id?: boolean
-  card_slug?: boolean
+  slug?: boolean
   title?: boolean
   category?: boolean
   steps?: boolean
@@ -990,6 +1068,8 @@ export type playbook_strategiesSelectCreateManyAndReturn<ExtArgs extends runtime
   source_id?: boolean
   source_type?: boolean
   playbook_phase_id?: boolean
+  estimated_minutes?: boolean
+  facilitator_notes?: boolean
   playbooks?: boolean | Prisma.playbooksDefaultArgs<ExtArgs>
   playbook_phases?: boolean | Prisma.playbook_strategies$playbook_phasesArgs<ExtArgs>
 }, ExtArgs["result"]["playbook_strategies"]>
@@ -997,7 +1077,7 @@ export type playbook_strategiesSelectCreateManyAndReturn<ExtArgs extends runtime
 export type playbook_strategiesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   playbook_id?: boolean
-  card_slug?: boolean
+  slug?: boolean
   title?: boolean
   category?: boolean
   steps?: boolean
@@ -1010,6 +1090,8 @@ export type playbook_strategiesSelectUpdateManyAndReturn<ExtArgs extends runtime
   source_id?: boolean
   source_type?: boolean
   playbook_phase_id?: boolean
+  estimated_minutes?: boolean
+  facilitator_notes?: boolean
   playbooks?: boolean | Prisma.playbooksDefaultArgs<ExtArgs>
   playbook_phases?: boolean | Prisma.playbook_strategies$playbook_phasesArgs<ExtArgs>
 }, ExtArgs["result"]["playbook_strategies"]>
@@ -1017,7 +1099,7 @@ export type playbook_strategiesSelectUpdateManyAndReturn<ExtArgs extends runtime
 export type playbook_strategiesSelectScalar = {
   id?: boolean
   playbook_id?: boolean
-  card_slug?: boolean
+  slug?: boolean
   title?: boolean
   category?: boolean
   steps?: boolean
@@ -1030,9 +1112,11 @@ export type playbook_strategiesSelectScalar = {
   source_id?: boolean
   source_type?: boolean
   playbook_phase_id?: boolean
+  estimated_minutes?: boolean
+  facilitator_notes?: boolean
 }
 
-export type playbook_strategiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "playbook_id" | "card_slug" | "title" | "category" | "steps" | "phase" | "position" | "created_at" | "virtualized" | "description" | "updated_at" | "source_id" | "source_type" | "playbook_phase_id", ExtArgs["result"]["playbook_strategies"]>
+export type playbook_strategiesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "playbook_id" | "slug" | "title" | "category" | "steps" | "phase" | "position" | "created_at" | "virtualized" | "description" | "updated_at" | "source_id" | "source_type" | "playbook_phase_id" | "estimated_minutes" | "facilitator_notes", ExtArgs["result"]["playbook_strategies"]>
 export type playbook_strategiesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   playbooks?: boolean | Prisma.playbooksDefaultArgs<ExtArgs>
   playbook_phases?: boolean | Prisma.playbook_strategies$playbook_phasesArgs<ExtArgs>
@@ -1055,7 +1139,7 @@ export type $playbook_strategiesPayload<ExtArgs extends runtime.Types.Extensions
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     playbook_id: string
-    card_slug: string
+    slug: string
     title: string
     category: string
     steps: string[]
@@ -1068,6 +1152,8 @@ export type $playbook_strategiesPayload<ExtArgs extends runtime.Types.Extensions
     source_id: string | null
     source_type: string | null
     playbook_phase_id: string | null
+    estimated_minutes: number | null
+    facilitator_notes: string | null
   }, ExtArgs["result"]["playbook_strategies"]>
   composites: {}
 }
@@ -1495,7 +1581,7 @@ export interface Prisma__playbook_strategiesClient<T, Null = never, ExtArgs exte
 export interface playbook_strategiesFieldRefs {
   readonly id: Prisma.FieldRef<"playbook_strategies", 'String'>
   readonly playbook_id: Prisma.FieldRef<"playbook_strategies", 'String'>
-  readonly card_slug: Prisma.FieldRef<"playbook_strategies", 'String'>
+  readonly slug: Prisma.FieldRef<"playbook_strategies", 'String'>
   readonly title: Prisma.FieldRef<"playbook_strategies", 'String'>
   readonly category: Prisma.FieldRef<"playbook_strategies", 'String'>
   readonly steps: Prisma.FieldRef<"playbook_strategies", 'String[]'>
@@ -1508,6 +1594,8 @@ export interface playbook_strategiesFieldRefs {
   readonly source_id: Prisma.FieldRef<"playbook_strategies", 'String'>
   readonly source_type: Prisma.FieldRef<"playbook_strategies", 'String'>
   readonly playbook_phase_id: Prisma.FieldRef<"playbook_strategies", 'String'>
+  readonly estimated_minutes: Prisma.FieldRef<"playbook_strategies", 'Int'>
+  readonly facilitator_notes: Prisma.FieldRef<"playbook_strategies", 'String'>
 }
     
 

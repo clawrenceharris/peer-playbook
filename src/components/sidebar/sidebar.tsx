@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { assets } from "@/lib/constants";
 import { useSidebar as useLibrarySidebar } from "@/components/ui";
-import { useEffect } from "react";
+
 export function Sidebar() {
   const sidebar = useStore(useSidebar, (x) => x);
   const { open: isLibraryOpen } = useLibrarySidebar();

@@ -1,11 +1,9 @@
-import type {
-  Session,
-  UpdateSessionFormValues,
-} from "@/features/sessions/domain";
-import type { Playbook, PlaybookStrategy } from "@/features/playbooks/domain";
-import type { Strategy } from "@/features/strategies/domain";
+import type { Playbook } from "@/features/playbooks/domain";
 import type { ProfileDetailDTO } from "@/features/profile/application/dto";
-import { GeneratePlaybookFormValues, UpdatePlaybookFormValues } from "../validation";
+import {
+  GeneratePlaybookFormValues,
+  UpdatePlaybookFormValues,
+} from "../validation";
 import {
   PlaybookCardDTO,
   UpdatePlaybookResult,
@@ -50,16 +48,11 @@ export interface ModalProps {
 // ============================================================================
 
 export interface CreateSessionModalProps extends ModalProps {
-  playbook?: PlaybookCardDTO | null;
+  playbook: PlaybookCardDTO | null;
 }
 
 export interface UpdateSessionModalProps extends ModalProps {
   sessionId: string;
-  onSubmit: (
-    sessionId: string,
-    data: UpdateSessionFormValues,
-  ) => Promise<Session>;
-  onUpdateStatus?: (sessionId: string, status: Session["status"]) => void;
 }
 
 // ============================================================================
@@ -83,15 +76,6 @@ export interface CreatePlaybookModalProps extends ModalProps {
 export interface UpdatePlaybookModalProps extends ModalProps {
   playbookId: string;
   onSubmit: (data: UpdatePlaybookFormValues) => Promise<UpdatePlaybookResult>;
-}
-
-export interface ReplaceStrategyModalProps extends ModalProps {
-  strategyToReplace: PlaybookStrategy;
-  playbookId: string;
-  onSubmit: (
-    strategyToReplace: PlaybookStrategy,
-    newStrategy: Strategy,
-  ) => Promise<void>;
 }
 
 export interface GeneratePlaybookModalProps extends ModalProps {

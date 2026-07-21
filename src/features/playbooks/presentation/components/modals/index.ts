@@ -1,6 +1,5 @@
 import { modalRegistry, ModalType } from "@/lib/modals";
 import { UpdatePlaybookModal } from "./update-playbook-modal";
-import { ReplaceStrategyModal } from "./replace-strategy-modal";
 import { CreatePlaybookModal } from "./create-playbook-modal";
 
 /**
@@ -19,8 +18,4 @@ export const PLAYBOOK_MODAL_TYPES = {
 export function registerPlaybookModals() {
   modalRegistry.register(PLAYBOOK_MODAL_TYPES.CREATE, CreatePlaybookModal);
   modalRegistry.register(PLAYBOOK_MODAL_TYPES.UPDATE, UpdatePlaybookModal);
-  modalRegistry.register(
-    PLAYBOOK_MODAL_TYPES.REPLACE_STRATEGY,
-    ReplaceStrategyModal,
-  );
 }

@@ -21,6 +21,8 @@ export type PlaybookStrategyDetailDTO = {
   sourceType?: string | null;
   position?: number;
   steps: string[];
+  facilitatorNotes: string | null;
+  estimatedMinutes: number | null;
   resources: string[];
   createdAt: Date;
   updatedAt: Date | null;

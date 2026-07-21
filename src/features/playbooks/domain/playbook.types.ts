@@ -29,7 +29,6 @@ export type PlaybookStrategyResource = {
 
 export type PlaybookStrategy = DomainModel<PlaybookStrategies> & {
   slug?: string;
-  cardSlug?: string;
   position?: number;
   resources?: PlaybookStrategyResource[] | null;
   detailsRich?: unknown | null;
@@ -42,8 +41,9 @@ export type PlaybookStrategyUpdate = DomainUpdate<PlaybookStrategiesUpdate> & {
   phase?: string;
   sourceId?: string;
   sourceType?: string;
+  facilitatorNotes?: string | null;
+  estimatedMinutes?: number | null;
   slug?: string;
-  cardSlug?: string;
   position?: number;
   resources?: PlaybookStrategyResource[] | null;
   detailsRich?: unknown | null;

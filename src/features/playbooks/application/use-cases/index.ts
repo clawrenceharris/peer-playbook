@@ -8,3 +8,4 @@ export * from "./DeletePlaybookUseCase";
 export * from "./FavoritePlaybookUseCase";
 export * from "./AddPlaybookStrategyUseCase";
 export * from "./RemovePlaybookStrategyUseCase";
+export * from "./AddPlaybookPhaseUseCase";

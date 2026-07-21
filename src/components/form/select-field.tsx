@@ -32,9 +32,8 @@ interface SelectFieldProps<
     label: string;
     description?: string;
   }[];
-  value?: string;
-  defaultValue?: string;
   onValueSelect?: (value: string) => void;
+  emptyValue?: string;
 }
 
 export function SelectField<T extends FieldValues, U extends Path<T>>({
@@ -43,15 +42,13 @@ export function SelectField<T extends FieldValues, U extends Path<T>>({
   description,
   showsLabel = true,
   required,
-  value,
-  defaultValue,
   placeholder,
   inputId: inputIdProp,
   items,
   orientation = "vertical",
   className,
   onValueSelect,
-  ...inputProps
+  emptyValue,
 }: SelectFieldProps<T, U>) {
   const { control } = useFormContext<T>();
   const { field, fieldState } = useController({ control, name });
@@ -59,8 +56,9 @@ export function SelectField<T extends FieldValues, U extends Path<T>>({
   const selectedItem = items.find((item) => item.value === field.value);
   const hasItemDescriptions = items.some((item) => item.description);
   function handleValueSelect(value: string) {
-    field.onChange(value);
-    onValueSelect?.(value);
+    const nextValue = value === emptyValue ? undefined : value;
+    field.onChange(nextValue);
+    onValueSelect?.(nextValue ?? "");
   }
   return (
     <Field className={className} orientation={orientation}>
@@ -74,8 +72,8 @@ export function SelectField<T extends FieldValues, U extends Path<T>>({
         {description && <FieldDescription>{description}</FieldDescription>}
       </FieldContent>
       <Select
-        {...inputProps}
-        {...field}
+        name={field.name}
+        value={field.value}
         onValueChange={handleValueSelect}
         dir="ltr"
       >
@@ -86,7 +84,7 @@ export function SelectField<T extends FieldValues, U extends Path<T>>({
           className={cn(
             "border-border border shadow-xs",
             hasItemDescriptions &&
-              "h-auto min-h-17 w-full items-center py-2 *:data-[slot=select-value]:line-clamp-none",
+              "h-auto min-h-15 w-full items-center py-2 *:data-[slot=select-value]:line-clamp-none",
           )}
         >
           {selectedItem?.description ? (

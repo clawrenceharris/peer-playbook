@@ -1,8 +1,8 @@
 import { CompleteOnboardingUseCase } from "@/features/onboarding/application/use-cases";
 import { PrismaProfileRepository } from "@/features/profile/infrastructure/repositories";
-import { db } from "@/db/client";
+import { client } from "@/lib/db/client";
 
 export function makeCompleteOnboardingUseCase() {
-  const profileRepository = new PrismaProfileRepository(db);
+  const profileRepository = new PrismaProfileRepository(client);
   return new CompleteOnboardingUseCase(profileRepository);
 }

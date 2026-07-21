@@ -119,6 +119,7 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
     }
     router.push("/login");
     router.refresh();
+    setIsLoading(false);
     setUser(null);
   }, [router]);
 

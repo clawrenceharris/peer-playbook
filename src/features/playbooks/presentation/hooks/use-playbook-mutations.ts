@@ -18,17 +18,28 @@ import {
 } from "@/lib/validation";
 import { playbookKeys } from "@/lib/queries/keys";
 import { useUser } from "@/components/providers";
-import { PlaybookStrategyCardDTO } from "../../application/dto";
 import { PlaybookStrategyUpdate } from "../../domain";
 import { ActionResult } from "@/shared/action";
+import {
+  applyOptimisticAddPlaybookPhaseCaches,
+  applyOptimisticAddStrategyCaches,
+  applyOptimisticRemoveStrategyCaches,
+  applyOptimisticReorderStrategyCaches,
+  invalidatePlaybookCaches,
+  replaceOptimisticAddedPhase,
+  replaceOptimisticAddedStrategy,
+  restorePlaybookStrategyCaches,
+  snapshotPlaybookCaches,
+} from "./playbook-optimistic-updaters";
+import { type ReorderMutationStrategy } from "./playbook-cache-updaters";
+import { unwrapActionResult } from "@/shared/action/unwrapActionResult";
+import { addPlaybookPhaseAction } from "@/actions/playbook/commands/addPlaybookPhaseAction";
 
-function unwrapActionResult<T>(result: ActionResult<T>): T {
-  if (!result.success) {
-    throw result.error;
-  }
-
-  return result.data;
-}
+type ReorderMutationInput = {
+  playbookId: string;
+  phaseId: string;
+  strategies: ReorderMutationStrategy[];
+};
 
 export const useDeletePlaybook = () => {
   const queryClient = useQueryClient();
@@ -182,12 +193,18 @@ export const useUpdatePlaybookStrategy = () => {
         strategyId,
         ...(data.steps !== undefined && { steps: data.steps }),
         ...(data.title !== undefined && { title: data.title }),
-        ...(data.cardSlug !== undefined && { cardSlug: data.cardSlug }),
+        ...(data.slug !== undefined && { slug: data.slug }),
         ...(data.category !== undefined && { category: data.category }),
         ...(phase !== undefined && { phase }),
         ...(data.position !== undefined && { position: data.position }),
         ...(data.description !== undefined && {
           description: data.description,
+        }),
+        ...(data.facilitatorNotes !== undefined && {
+          facilitatorNotes: data.facilitatorNotes,
+        }),
+        ...(data.estimatedMinutes !== undefined && {
+          estimatedMinutes: data.estimatedMinutes,
         }),
         ...(data.sourceId != null && { sourceId: data.sourceId }),
         ...(data.sourceType != null && { sourceType: data.sourceType }),
@@ -203,23 +220,80 @@ export const useUpdatePlaybookStrategy = () => {
   });
 };
 
+export const useAddPlaybookPhase = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["add-playbook-phase"],
+    mutationFn: async (input: Parameters<typeof addPlaybookPhaseAction>[0]) => {
+      const result = await addPlaybookPhaseAction(input);
+      return unwrapActionResult(result);
+    },
+    onMutate: async (input) => {
+      const snapshot = await snapshotPlaybookCaches(
+        queryClient,
+        input.playbookId,
+      );
+      const tempId = applyOptimisticAddPlaybookPhaseCaches(queryClient, input);
+
+      return { ...snapshot, tempId };
+    },
+    onSuccess: (result, input, context) => {
+      if (context?.tempId) {
+        replaceOptimisticAddedPhase(
+          queryClient,
+          input.playbookId,
+          context.tempId,
+          result,
+        );
+      }
+    },
+    onError: (_error, input, context) => {
+      if (!context) return;
+      restorePlaybookStrategyCaches(queryClient, input.playbookId, context);
+    },
+    onSettled: (_data, _error, input) => {
+      invalidatePlaybookCaches(queryClient, input.playbookId);
+    },
+  });
+};
+
 export const useAddPlaybookStrategy = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ["add-playbook-strategy"],
-    mutationFn: async (input: Parameters<typeof addPlaybookStrategyAction>[0]) => {
+    mutationFn: async (
+      input: Parameters<typeof addPlaybookStrategyAction>[0],
+    ) => {
       const result = await addPlaybookStrategyAction(input);
       return unwrapActionResult(result);
     },
-    onSuccess: (_, input) => {
-      queryClient.invalidateQueries({ queryKey: playbookKeys.all });
-      queryClient.invalidateQueries({
-        queryKey: playbookKeys.detail(input.playbookId),
-      });
-      queryClient.invalidateQueries({
-        queryKey: playbookKeys.page(input.playbookId),
-      });
+    onMutate: async (input) => {
+      const snapshot = await snapshotPlaybookCaches(
+        queryClient,
+        input.playbookId,
+      );
+      const tempId = applyOptimisticAddStrategyCaches(queryClient, input);
+
+      return { ...snapshot, tempId };
+    },
+    onSuccess: (result, input, context) => {
+      if (context?.tempId) {
+        replaceOptimisticAddedStrategy(
+          queryClient,
+          input.playbookId,
+          context.tempId,
+          result,
+        );
+      }
+    },
+    onError: (_error, input, context) => {
+      if (!context) return;
+      restorePlaybookStrategyCaches(queryClient, input.playbookId, context);
+    },
+    onSettled: (_data, _error, input) => {
+      invalidatePlaybookCaches(queryClient, input.playbookId);
     },
   });
 };
@@ -229,18 +303,32 @@ export const useRemovePlaybookStrategy = () => {
 
   return useMutation({
     mutationKey: ["remove-playbook-strategy"],
-    mutationFn: async (input: Parameters<typeof removePlaybookStrategyAction>[0]) => {
+    mutationFn: async (
+      input: Parameters<typeof removePlaybookStrategyAction>[0],
+    ) => {
       const result = await removePlaybookStrategyAction(input);
       return unwrapActionResult(result);
     },
-    onSuccess: (_, input) => {
-      queryClient.invalidateQueries({ queryKey: playbookKeys.all });
-      queryClient.invalidateQueries({
-        queryKey: playbookKeys.detail(input.playbookId),
-      });
-      queryClient.invalidateQueries({
-        queryKey: playbookKeys.page(input.playbookId),
-      });
+    onMutate: async (input) => {
+      const snapshot = await snapshotPlaybookCaches(
+        queryClient,
+        input.playbookId,
+      );
+
+      applyOptimisticRemoveStrategyCaches(
+        queryClient,
+        input.playbookId,
+        input.strategyId,
+      );
+
+      return snapshot;
+    },
+    onError: (_error, input, context) => {
+      if (!context) return;
+      restorePlaybookStrategyCaches(queryClient, input.playbookId, context);
+    },
+    onSettled: (_data, _error, input) => {
+      invalidatePlaybookCaches(queryClient, input.playbookId);
     },
   });
 };
@@ -257,16 +345,7 @@ export const useReorderStrategies = () => {
       playbookId,
       phaseId,
       strategies,
-    }: {
-      playbookId: string;
-      phaseId: string;
-      strategies: Array<{
-        id: string;
-        title: string;
-        phase: PlaybookStrategyCardDTO["phase"];
-        playbookPhaseId?: string | null;
-      }>;
-    }) => {
+    }: ReorderMutationInput) => {
       if (
         strategies.some(
           (strategy) =>
@@ -295,13 +374,19 @@ export const useReorderStrategies = () => {
         }),
       );
     },
-    onSuccess: (_, { playbookId }) => {
-      queryClient.invalidateQueries({
-        queryKey: playbookKeys.detail(playbookId),
-      });
-      queryClient.invalidateQueries({
-        queryKey: playbookKeys.page(playbookId),
-      });
+    onMutate: async ({ playbookId, strategies }) => {
+      const snapshot = await snapshotPlaybookCaches(queryClient, playbookId);
+
+      applyOptimisticReorderStrategyCaches(queryClient, playbookId, strategies);
+
+      return snapshot;
+    },
+    onError: (_error, { playbookId }, context) => {
+      if (!context) return;
+      restorePlaybookStrategyCaches(queryClient, playbookId, context);
+    },
+    onSettled: (_data, _error, { playbookId }) => {
+      invalidatePlaybookCaches(queryClient, playbookId);
     },
   });
 };

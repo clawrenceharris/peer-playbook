@@ -43,11 +43,7 @@ function InputFieldInner<T extends FieldValues, U extends Path<T>>(
   const inputId = inputIdProp ?? field.name;
 
   return (
-    <Field
-      ref={ref}
-      orientation={orientation}
-      // className={cn(orientation === "responsive" && "@container/field-group")}
-    >
+    <Field ref={ref} orientation={orientation}>
       <FieldContent>
         <FieldLabel
           className={cn("gap-0", !showsLabel && "sr-only", "")}
@@ -55,18 +51,11 @@ function InputFieldInner<T extends FieldValues, U extends Path<T>>(
         >
           <span>
             {label}
-            {required && showsRequired ? (
-              <span aria-hidden="true" className="text-destructive">
-                *
-              </span>
-            ) : (
-              showsOptional &&
-              !required && (
-                <span className="text-muted-foreground text-sm font-normal">
-                  {" "}
-                  (Optional)
-                </span>
-              )
+            {required && showsRequired && (
+              <span className="text-destructive">*</span>
+            )}
+            {!required && showsOptional && (
+              <span className="text-muted-foreground text-sm"> (Optional)</span>
             )}
           </span>
         </FieldLabel>

@@ -2,3 +2,4 @@ export * from "./auth.validation";
 export * from "./profile.validation";
 export * from "./onboarding.validation";
 export * from "./playbook.validation";
+export * from "./session.validation";

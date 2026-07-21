@@ -1,4 +1,4 @@
-import { PlaybookStrategyCardDTO } from "./PlaybookStrategyDTO";
+import { PlaybookPhaseDTO, PlaybookStrategyCardDTO } from "./";
 
 export type PlaybookDetailDTO = {
   id: string;
@@ -7,6 +7,7 @@ export type PlaybookDetailDTO = {
   courseName: string | null;
   subject: string | null;
   title: string;
+  phases: PlaybookPhaseDTO[];
   topic: string;
   published: boolean;
   updatedAt: Date | null;

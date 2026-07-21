@@ -25,14 +25,16 @@ import {
   restrictToFirstScrollableAncestor,
   restrictToWindowEdges,
 } from "@dnd-kit/modifiers";
-import { CardGhost } from "@/features/strategies/components";
 import { PhaseIntent } from "@/features/reference-data/phase-intents/domain/types/PhaseIntent";
+import { PHASE_STYLES } from "@/features/reference-data/phase-intents/domain/constants/phase-intents.constants";
+import { cn } from "@/lib/utils";
 
 type StrategyItem = {
   id: string;
   playbookPhaseId: string;
   title: string;
-  duration: string;
+  duration: string | null;
+  steps: string[];
   phase: PhaseIntent;
   Icon: React.ComponentType<LucideProps>;
 };
@@ -49,7 +51,6 @@ type StrategyListPanelProps = {
       Pick<StrategyItem, "id" | "title" | "phase" | "playbookPhaseId">
     >,
   ) => void;
-  onReplaceStrategyClick?: (strategyId: string) => void;
   onRemoveStrategyClick?: (strategyId: string) => void;
 };
 export function StrategyListPanel({
@@ -59,7 +60,6 @@ export function StrategyListPanel({
   onStrategyClick,
   selectedStrategyId,
   onReorder,
-  onReplaceStrategyClick,
   onRemoveStrategyClick,
 }: StrategyListPanelProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -74,7 +74,7 @@ export function StrategyListPanel({
   }, [strategies]);
 
   return (
-    <aside className="bg-surface flex min-h-0 w-69 flex-col overflow-hidden rounded-2xl border shadow-xs">
+    <div className="bg-surface flex min-h-0 w-69 flex-col overflow-hidden rounded-2xl border shadow-xs">
       <header className="flex items-center justify-between border-b px-5 py-4">
         <h2 className="text-foreground text-lg font-semibold">Strategies</h2>
 
@@ -128,11 +128,6 @@ export function StrategyListPanel({
                 isSelected={selectedStrategyId === strategy.id}
                 strategy={strategy}
                 onClick={() => onStrategyClick(strategy.id)}
-                onReplaceClick={
-                  onReplaceStrategyClick
-                    ? () => onReplaceStrategyClick(strategy.id)
-                    : undefined
-                }
                 onRemoveClick={() => onRemoveStrategyClick?.(strategy.id)}
               />
             ))}
@@ -143,25 +138,23 @@ export function StrategyListPanel({
         <DragOverlay dropAnimation={{ duration: 150 }}>
           {activeId ? (
             <CardGhost
-              phase={
-                displayStrategies.find((c) => c.id === activeId)!
-                  .phase as unknown as "warmup" | "workout" | "closer"
-              }
+              phase={displayStrategies.find((c) => c.id === activeId)!.phase}
             />
           ) : null}
         </DragOverlay>
       </DndContext>
+    </div>
+  );
+}
 
-      <div className="p-3">
-        <Button
-          variant="outline"
-          className="text-muted-foreground hover:text-primary h-20 w-full gap-2 border-dashed"
-          onClick={onAddStrategyClick}
-        >
-          <Plus className="size-5" />
-          Add Strategy
-        </Button>
-      </div>
-    </aside>
+function CardGhost({ phase }: { phase: PhaseIntent }) {
+  // Simple CardGhost for dragging a strategy card
+  return (
+    <div
+      className={cn(
+        "rounded-md border-2 border-dashed bg-white px-4 py-3 font-semibold text-gray-700 opacity-90 shadow-lg select-none",
+        PHASE_STYLES[phase].icon,
+      )}
+    ></div>
   );
 }

@@ -11,7 +11,10 @@ import { useForm } from "react-hook-form";
 import { PlaybookDetailDTO } from "@/features/playbooks/application/dto";
 
 type UpdatePlaybookFormProps = {
-  playbook: Pick<PlaybookDetailDTO, "title" | "subject" | "topic" | "courseName">;
+  playbook: Pick<
+    PlaybookDetailDTO,
+    "title" | "subject" | "topic" | "courseName"
+  >;
   onSubmit: (data: UpdatePlaybookFormValues) => Promise<unknown>;
   onSuccess?: () => void;
   isLoading?: boolean;
@@ -40,7 +43,6 @@ export function UpdatePlaybookForm({
         onSuccess?.();
       }}
       isLoading={isLoading}
-      isDialog
       submitText="Done"
       showsCancelButton={false}
     >

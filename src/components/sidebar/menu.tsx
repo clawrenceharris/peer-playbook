@@ -45,7 +45,7 @@ export function Menu({ isOpen }: MenuProps) {
                     className={cn("mb-5 flex flex-col items-center gap-1.5")}
                   >
                     <TooltipProvider disableHoverableContent>
-                      <Tooltip delayDuration={100}>
+                      <Tooltip delayDuration={300}>
                         <TooltipTrigger asChild>
                           <Button
                             size="sm"

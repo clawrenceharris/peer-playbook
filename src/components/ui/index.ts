@@ -10,6 +10,7 @@ export * from "./tabs";
 export * from "./sidebar";
 export * from "./navigation-menu";
 export * from "./switch";
+export * from "./spinner";
 export * from "./context-menu";
 export * from "./tooltip";
 export * from "./alert-dialog";

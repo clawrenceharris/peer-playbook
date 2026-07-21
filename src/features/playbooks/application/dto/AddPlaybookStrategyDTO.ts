@@ -2,7 +2,7 @@ export type AddPlaybookStrategyInput = {
   playbookId: string;
   playbookPhaseId: string;
   title: string;
-  cardSlug: string;
+  slug: string;
   category: string;
   steps: string[];
   description: string;
@@ -10,5 +10,6 @@ export type AddPlaybookStrategyInput = {
   position: number;
   sourceId: string;
   sourceType: "system" | "user";
+  facilitatorNotes?: string | null;
+  estimatedMinutes?: number | null;
 };
-

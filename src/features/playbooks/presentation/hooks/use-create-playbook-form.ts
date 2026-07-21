@@ -1,12 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
-  BuildPlaybookFormValues,
   CreatePlaybookFromScratchFormValues,
   createPlaybookFromScratchSchema,
-  playbookDetailsSchema,
 } from "@/lib/validation";
-import { buildPlaybookSchema } from "@/lib/validation";
 import { useMutation } from "@tanstack/react-query";
 import { createPlaybookAction } from "@/actions/playbook";
 import { useCallback } from "react";
@@ -26,7 +23,7 @@ export function useCreatePlaybookForm({ userId }: UseCreatePlaybookFormProps) {
       topic: "",
     },
   });
-  const createPlaybookMutation = useMutation({
+  const { mutateAsync: createPlaybook, isPending: isLoading } = useMutation({
     mutationFn: async (data: CreatePlaybookFromScratchFormValues) => {
       const result = await createPlaybookAction({
         ...data,
@@ -44,16 +41,11 @@ export function useCreatePlaybookForm({ userId }: UseCreatePlaybookFormProps) {
       }
       return result.data;
     },
+    throwOnError: true,
     onSuccess: (playbook) => {
       router.push(`/playbooks/${playbook.id}`);
     },
   });
 
-  const createPlaybook = useCallback(
-    async (data: CreatePlaybookFromScratchFormValues) => {
-      return await createPlaybookMutation.mutateAsync(data);
-    },
-    [createPlaybookMutation],
-  );
-  return { form, createPlaybook, isLoading: createPlaybookMutation.isPending };
+  return { form, createPlaybook, isLoading };
 }

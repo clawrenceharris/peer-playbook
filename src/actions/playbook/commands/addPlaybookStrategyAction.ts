@@ -15,17 +15,19 @@ import {
 } from "../utils/ownership";
 
 const addPlaybookStrategyActionSchema = z.object({
-  playbookId: z.string().uuid(),
-  playbookPhaseId: z.string().uuid(),
+  playbookId: z.uuid(),
+  playbookPhaseId: z.uuid(),
   title: z.string().min(1),
-  cardSlug: z.string().min(1),
+  slug: z.string().min(1),
   category: z.string().min(1),
   steps: z.array(z.string()),
   description: z.string(),
   phase: z.enum(["warmup", "workout", "closer"]),
   position: z.number().int().nonnegative(),
-  sourceId: z.string().uuid(),
+  sourceId: z.uuid(),
   sourceType: z.enum(["system", "user"]),
+  facilitatorNotes: z.string().nullable().optional(),
+  estimatedMinutes: z.number().int().nonnegative().nullable().optional(),
 });
 
 export async function addPlaybookStrategyAction(
@@ -57,4 +59,3 @@ export async function addPlaybookStrategyAction(
     );
   }
 }
-

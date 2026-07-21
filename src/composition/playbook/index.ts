@@ -10,3 +10,4 @@ export * from "./makeDeletePlaybookUseCase";
 export * from "./makeFavoritePlaybookUseCases";
 export * from "./makeGetPlaybookCreationPageUseCase";
 export * from "./makeGetPlaybooksPageUseCase";
+export * from "./makeAddPlaybookPhaseUseCase";

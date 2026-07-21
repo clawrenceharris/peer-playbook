@@ -1,20 +1,13 @@
 import { useCallback } from "react";
-import { Session, SessionInsert } from "../domain";
-import { useCreateSession, useUpdateSession, useDeleteSession } from "./";
-import { useModal, useUser } from "@/components/providers";
+import { Session } from "../domain";
+import { useUpdateSession, useDeleteSession } from "./";
+import { useModal } from "@/components/providers";
 import { SESSION_MODAL_TYPES } from "../components/modals";
-import type { CreateSessionFormValues } from "../domain";
-import {
-  CreateSessionModalProps,
-  UpdateSessionModalProps,
-} from "@/lib/modals/types";
-import { DefaultValues } from "react-hook-form";
+import { UpdateSessionModalProps } from "@/lib/modals/types";
 
 export const useSessionActions = () => {
-  const { user } = useUser();
   const { mutateAsync: handleUpdateSession } = useUpdateSession();
   const { mutateAsync: handleDeleteSession } = useDeleteSession();
-  const { mutateAsync: handleCreateSession } = useCreateSession();
 
   const { openModal } = useModal();
 
@@ -25,25 +18,6 @@ export const useSessionActions = () => {
     [handleUpdateSession],
   );
 
-  const createSession = useCallback(
-    (options?: { defaultValues: DefaultValues<SessionInsert> }) => {
-      const handleConfirm = async (data: CreateSessionFormValues) => {
-        return await handleCreateSession({
-          data: {
-            ...data,
-            leaderId: user.id,
-            mode: "virtual",
-          },
-        });
-      };
-
-      openModal<CreateSessionModalProps>(SESSION_MODAL_TYPES.CREATE, {
-        onSuccess: handleConfirm,
-        defaultValues: options?.defaultValues,
-      });
-    },
-    [handleCreateSession, openModal, user.id],
-  );
   /**
    * @deprecated
    */
@@ -84,7 +58,6 @@ export const useSessionActions = () => {
     endSession,
     updateSessionStatus,
     updateSession,
-    createSession,
     deleteSession,
   };
 };

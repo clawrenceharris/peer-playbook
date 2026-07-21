@@ -4,94 +4,135 @@ import {
   PlaybookList,
 } from "@/features/playbooks/presentation/components";
 import { EmptyState } from "@/components/states";
-import { Button } from "@/components/ui";
 import { usePlaybookFilters } from "@/features/playbooks/presentation/hooks";
-import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSearch } from "@/hooks/use-search";
 import { PlaybookCardDTO } from "@/features/playbooks/application/dto";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { PlaybooksPageOutput } from "@/features/playbooks/application/dto/PlaybooksPageDTO";
 import { ContentLayout } from "@/components/sidebar";
 import { SearchInput } from "@/components/form";
+
 type PlaybooksPageProps = {
   page: PlaybooksPageOutput;
 };
+
 export default function PlaybooksPage({ page }: PlaybooksPageProps) {
   const router = useRouter();
+  const {
+    filters,
+    setFilters,
+    filteredPlaybooks,
+    availableCourses,
+    availableSubjects,
+  } = usePlaybookFilters(page.playbooks);
 
   const filterPlaybooks = useCallback(
     (item: PlaybookCardDTO, query: string): boolean => {
+      const q = query.toLowerCase();
       return (
-        (item?.title?.toLowerCase().includes(query.toLowerCase()) ||
-          item?.topic?.toLowerCase().includes(query.toLowerCase()) ||
-          item?.courseName?.toLowerCase().includes(query.toLowerCase()) ||
-          item?.subject?.toLowerCase().includes(query.toLowerCase())) ??
+        item.title?.toLowerCase().includes(q) ||
+        item.topic?.toLowerCase().includes(q) ||
+        item.courseName?.toLowerCase().includes(q) ||
+        item.subject?.toLowerCase().includes(q) ||
         false
       );
     },
     [],
   );
+
   const { query, search, clearResults } = useSearch<PlaybookCardDTO>({
     data: page.playbooks,
     filter: filterPlaybooks,
-    minQueryLength: 3,
-    debounceMs: 250,
+    minQueryLength: 1,
+    debounceMs: 0,
   });
 
-  const { filters, setFilters, filteredPlaybooks, availableCourses } =
-    usePlaybookFilters(page.playbooks);
+  const hasQuery = query.trim().length > 0;
+  const hasActiveFilters = Boolean(
+    filters.favorite ||
+    filters.course ||
+    filters.subject ||
+    filters.recent ||
+    filters.published,
+  );
+
+  const playbooks = useMemo(() => {
+    if (!hasQuery) return filteredPlaybooks;
+    return filteredPlaybooks.filter((item) => filterPlaybooks(item, query));
+  }, [filteredPlaybooks, filterPlaybooks, hasQuery, query]);
+
   function handlePlaybookClick(id: string) {
     router.push(`/playbooks/${id}`);
   }
 
-  if (!page.playbooks.length) {
+  function renderEmptyState() {
+    if (hasQuery) {
+      return (
+        <EmptyState
+          variant="item"
+          itemVariant="outline"
+          className="bg-surface"
+          message="0 playbooks were found. Try using a different keyword."
+          actionLabel="Clear search"
+          onAction={() => {
+            clearResults();
+            setFilters({});
+          }}
+        />
+      );
+    }
+
+    if (hasActiveFilters) {
+      return (
+        <EmptyState
+          variant="item"
+          itemVariant="outline"
+          className="bg-surface"
+          message="0 playbooks were found with these filters."
+          actionLabel="Clear filters"
+          onAction={() => setFilters({})}
+        />
+      );
+    }
+
     return (
-      <>
-        <header className="header">
-          <h1>My Playbooks</h1>
-          <Button
-            variant="secondary"
-            onClick={() => router.push("/playbooks/create")}
-          >
-            <Plus strokeWidth={3} />
-            Create Playbook
-          </Button>
-        </header>
-        <div className="container flex items-center justify-center">
-          <EmptyState
-            className="bg-background border-0 shadow-none"
-            variant="card"
-            message="You don't have any playbooks at the moment."
-          />
-        </div>
-      </>
+      <EmptyState
+        variant="item"
+        itemVariant="outline"
+        className="bg-surface"
+        message="You don't have any playbooks yet."
+        actionLabel="Create Playbook"
+        onAction={() => {
+          router.push("/playbooks/create");
+        }}
+      />
     );
   }
+
   return (
     <ContentLayout
-      contentContainerClassName="p-0"
       title={
         <SearchInput value={query} onChange={search} onClear={clearResults} />
       }
-    >
-      <div className="secondary-header z-2 flex-col items-start gap-7 pt-6 pb-4">
-        <h1>My Playbooks</h1>
-        <PlaybookFilters
-          filters={filters}
-          onFilterChange={setFilters}
-          availableCourses={availableCourses}
-        />
-      </div>
-      <div className="container">
-        {filteredPlaybooks.length > 0 ? (
-          <PlaybookList
-            playbooks={filteredPlaybooks}
-            onPlaybookClick={handlePlaybookClick}
+      secondaryHeader={
+        <div className="space-y-4">
+          <h1>My Playbooks</h1>
+          <PlaybookFilters
+            filters={filters}
+            onFilterChange={setFilters}
+            availableCourses={availableCourses}
+            availableSubjects={availableSubjects}
           />
+        </div>
+      }
+    >
+      <div className="p-5 pt-30">
+        {playbooks.length === 0 ? (
+          renderEmptyState()
         ) : (
           <PlaybookList
-            playbooks={page.playbooks}
+            playbooks={playbooks}
             onPlaybookClick={handlePlaybookClick}
           />
         )}

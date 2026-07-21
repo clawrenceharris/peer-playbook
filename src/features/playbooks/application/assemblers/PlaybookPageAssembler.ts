@@ -31,6 +31,8 @@ export class PlaybookPageAssembler {
         sourceType: strategy.sourceType,
         position: strategy.position,
         steps: strategy.steps,
+        facilitatorNotes: strategy.facilitatorNotes,
+        estimatedMinutes: strategy.estimatedMinutes,
         resources: strategy.resources,
         createdAt: strategy.createdAt,
         updatedAt: strategy.updatedAt,

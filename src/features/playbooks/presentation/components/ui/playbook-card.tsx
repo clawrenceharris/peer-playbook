@@ -1,4 +1,4 @@
-import { Delete, PencilEdit } from "@/components/icons";
+import { Delete } from "@/components/icons";
 import {
   Button,
   DropdownMenu,
@@ -25,6 +25,8 @@ import { usePlaybookSessions } from "@/features/sessions/hooks";
 import { useUser } from "@/components/providers";
 import { useRouter } from "next/navigation";
 import { useModals } from "@/hooks";
+import { Icon } from "@/components/shared";
+import { assets } from "@/lib/constants";
 
 interface PlaybookCardProps {
   playbook: {
@@ -81,7 +83,7 @@ export const PlaybookCard = ({
       onConfirm: () => mutate(playbook.id),
     });
   }
-  const handleFavorite = async (e: React.MouseEvent) => {
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (isFavorite) {
       setIsFavorite(false);
@@ -94,7 +96,7 @@ export const PlaybookCard = ({
   return (
     <Item
       className={cn(
-        "bg-card relative w-full min-w-[330px] cursor-pointer overflow-hidden rounded-lg",
+        "bg-card relative w-full min-w-[330px] cursor-pointer overflow-hidden rounded-md",
         className,
       )}
       variant="outline"
@@ -107,7 +109,7 @@ export const PlaybookCard = ({
       <span
         aria-hidden
         className={cn(
-          "bg-primary-300/80 absolute bottom-0 left-0 h-[4.5px] w-full opacity-0",
+          "bg-primary-300/80 absolute bottom-0 left-0 h-[5px] w-full opacity-0",
           isHovering && "opacity-100",
         )}
       />
@@ -138,7 +140,7 @@ export const PlaybookCard = ({
             </span>
           )}
           {isFavorite && (
-            <StarIcon className="fill-accent-400 stroke-accent-400 size-4" />
+            <StarIcon className="[svg]:stroke-star [svg]:fill-star size-4" />
           )}
         </div>
       </ItemHeader>
@@ -157,7 +159,7 @@ export const PlaybookCard = ({
             className="bg-primary-foreground border shadow-sm"
             variant="outline"
           >
-            <PencilEdit />
+            <Icon src={assets.pencilEdit} alt="Edit" />
             Edit
           </Button>
         )}
@@ -178,12 +180,12 @@ export const PlaybookCard = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent onMouseEnter={() => setIsHovering(false)}>
             <DropdownMenuItem
-              onClick={handleFavorite}
+              onClick={handleFavoriteClick}
               disabled={isFavoriting || isUnfavoriting}
             >
               <StarIcon
                 className={
-                  isFavorite ? "fill-accent-400 [&_path]:stroke-accent-400" : ""
+                  isFavorite ? "[svg]:stroke-star [svg]:fill-star" : ""
                 }
               />
               {isFavorite ? "Unfavorite" : "Favorite"}

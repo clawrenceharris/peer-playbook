@@ -16,7 +16,7 @@ const buttonVariants = cva(
         muted: "bg-muted text-muted-foreground hover:text-muted-foreground/80",
         default: "text-foreground hover:text-muted-foreground",
         outline:
-          "border shadow-xs bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
+          "border shadow-xs bg-background hover:bg-muted/60 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground  bg-secondary hover:bg-secondary/70",
         ghost: "hover:bg-muted aria-expanded:bg-muted text-muted-foreground",
@@ -32,7 +32,7 @@ const buttonVariants = cva(
         lg: "h-13 gap-1.5 px-6 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3 [&_svg:not([class*='size-'])]:size-5",
         icon: "size-10",
         "icon-xs": "size-7 [&_svg:not([class*='size-'])]:size-3",
-        "icon-sm": "size-8",
+        "icon-sm": "size-8 [&_svg:not([class*='size-'])]:size-4",
         "icon-lg": "size-11 [&_svg:not([class*='size-'])]:size-6",
       },
     },

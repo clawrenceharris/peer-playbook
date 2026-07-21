@@ -3,7 +3,6 @@
 import { useUser } from "@/components/providers";
 import { Button } from "@/components/ui";
 import { useRecentPlaybooks } from "@/features/playbooks/presentation/hooks";
-import { useSessionActions } from "@/features/sessions/hooks";
 import { useMyUpcomingSessions } from "@/features/sessions/hooks/use-user-sessions";
 import { cn, timeAgo } from "@/lib/utils";
 import type { PlaybookCardDTO } from "@/features/playbooks/application/dto";
@@ -43,7 +42,6 @@ const learningPrompts = [
 export default function Dashboard() {
   const router = useRouter();
   const { user, profile } = useUser();
-  const { createSession } = useSessionActions();
   const [searchQuery, setSearchQuery] = useState("");
   const { data: recentPlaybooks = [], isLoading: playbooksLoading } =
     useRecentPlaybooks(6);
@@ -73,7 +71,6 @@ export default function Dashboard() {
     return matchingPlaybooks.slice(0, 4);
   }, [normalizedSearchQuery, recentPlaybooks]);
 
-  const nextSession = sortedUpcomingSessions[0];
   const firstName = profile?.firstName || "there";
 
   function handleHeroSearchSubmit(event: FormEvent<HTMLFormElement>) {
@@ -85,8 +82,7 @@ export default function Dashboard() {
 
   return (
     <ContentLayout
-      headerClassName="bg-secondary/70 border-b-0 relative"
-      contentContainerClassName="p-0"
+      headerClassName="bg-secondary/70 border-b-0 z-0 relative"
       title={
         <Image
           src={assets.wordmark}
@@ -166,7 +162,7 @@ export default function Dashboard() {
             title="Schedule a session"
             description="Set the time, gather the group, and keep your next peer-learning session organized."
             actionLabel="Plan session"
-            onClick={() => createSession()}
+            onClick={() => {}}
             artwork={<ScheduleSessionArtwork />}
             tone="secondary"
           />
@@ -209,7 +205,7 @@ export default function Dashboard() {
                 title="No sessions scheduled"
                 message="Pick a playbook or start fresh, then put the next practice on the calendar."
                 actionLabel="Schedule session"
-                onAction={() => createSession()}
+                onAction={() => {}}
               />
             )}
           </section>
@@ -545,7 +541,7 @@ export function ScheduleTimelineCard() {
     <div className="w-full max-w-sm rounded-3xl p-6">
       <div className="relative space-y-7">
         {/* vertical line */}
-        <div className="absolute top-2 bottom-12 left-[7px] w-px bg-slate-200" />
+        <div className="absolute top-2 bottom-12 left-1.75 w-px bg-slate-200" />
 
         {scheduleItems.map((item) => {
           const styles = colorStyles[item.color];

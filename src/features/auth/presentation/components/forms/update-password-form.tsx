@@ -20,6 +20,7 @@ import {
 import { useResetPasswordForm } from "../../hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { PasswordField } from "@/components/form/password-field";
 
 export function UpdatePasswordForm({
   className,
@@ -31,30 +32,28 @@ export function UpdatePasswordForm({
   return (
     <>
       {success ? (
-        <>
-          <Card className="w-full border-0 shadow-none">
-            <CardHeader className="space-y-2">
-              <CardTitle className="text-2xl">All Done!</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription className="text-muted-foreground text-sm">
-                Your password was successfully updated.
-              </CardDescription>
-            </CardContent>
+        <Card className="rounded-lg border px-6 py-5 shadow-xs">
+          <CardHeader className="space-y-2">
+            <CardTitle className="text-2xl">All Done!</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CardDescription className="text-muted-foreground text-sm">
+              Your password was successfully updated.
+            </CardDescription>
+          </CardContent>
 
-            <CardFooter className="justify-start">
-              <CardAction>
-                <Button
-                  className="w-full"
-                  variant="primary"
-                  onClick={() => router.push("/login")}
-                >
-                  Log in
-                </Button>
-              </CardAction>
-            </CardFooter>
-          </Card>
-        </>
+          <CardFooter className="justify-start">
+            <CardAction>
+              <Button
+                className="w-full"
+                variant="primary"
+                onClick={() => router.push("/login")}
+              >
+                Log in
+              </Button>
+            </CardAction>
+          </CardFooter>
+        </Card>
       ) : (
         <Form<UpdatePasswordFormValues>
           form={form}
@@ -62,11 +61,12 @@ export function UpdatePasswordForm({
           title="Reset Your Password"
           description="Please enter your new password below."
           showsCancelButton={false}
+          className="bg-surface rounded-lg border px-6 py-5 shadow-xs"
           handleSubmit={resetPassword}
           isLoading={isLoading}
         >
           <div className="space-y-2">
-            <InputField<UpdatePasswordFormValues, "password">
+            <PasswordField<UpdatePasswordFormValues, "password">
               label="New password"
               name="password"
               required

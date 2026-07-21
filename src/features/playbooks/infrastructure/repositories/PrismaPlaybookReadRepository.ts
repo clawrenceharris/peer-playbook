@@ -1,4 +1,4 @@
-import { prisma, type PrismaClient } from "@/db/client";
+import { client, type PrismaClient } from "@/lib/db/client";
 import {
   PlaybookCardDTO,
   PlaybookDetailDTO,
@@ -24,7 +24,7 @@ import {
 } from "../selection/playbook-strategy.seletions";
 
 export class PrismaPlaybookReadRepository implements PlaybookReadRepository {
-  constructor(private readonly client: PrismaClient = prisma) {}
+  constructor(private readonly client: PrismaClient = client) {}
   async listPlaybookContexts(): Promise<SessionContextDTO[]> {
     const records = await this.client.session_contexts.findMany({
       select: { id: true, context: true, key: true },
@@ -43,7 +43,7 @@ export class PrismaPlaybookReadRepository implements PlaybookReadRepository {
       ...playbookPhaseArgs,
     });
 
-    return records.map(PlaybookPhaseMapper.toPagePhase);
+    return records.map(PlaybookPhaseMapper.toDetail);
   }
   async findPlaybookDetailById(id: string): Promise<PlaybookDetailDTO | null> {
     const record = await this.client.playbooks.findUnique({

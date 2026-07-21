@@ -17,6 +17,7 @@ import {
   ItemTitle,
 } from "@/components/ui";
 import Image from "next/image";
+import { Folder, Inbox } from "lucide-react";
 
 /**
  * Available variants for empty state display
@@ -60,27 +61,29 @@ export function EmptyState({
     if (!onAction && !onSecondaryAction) return null;
 
     return (
-      <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        {onAction && actionLabel && (
-          <Button onClick={onAction}>{actionLabel}</Button>
-        )}
+      <div className="flex flex-col justify-center gap-3 sm:flex-row">
         {onSecondaryAction && secondaryActionLabel && (
           <Button onClick={onSecondaryAction} variant="outline">
             {secondaryActionLabel}
+          </Button>
+        )}
+        {onAction && actionLabel && (
+          <Button variant="primary" onClick={onAction}>
+            {actionLabel}
           </Button>
         )}
       </div>
     );
   };
   const renderPage = () => (
-    <div className="h-screen flex justify-center gradient-background w-full items-center">
+    <div className="gradient-background flex h-screen w-full items-center justify-center">
       {renderCard()}
     </div>
   );
   const renderItem = () => (
     <Item
       variant={itemVariant}
-      className={cn("max-w-md w-full mx-auto", className)}
+      className={cn("mx-auto w-full max-w-md", className)}
     >
       {icon && <ItemMedia>{icon}</ItemMedia>}
       <ItemContent>
@@ -88,12 +91,14 @@ export function EmptyState({
         {message && <ItemDescription>{message}</ItemDescription>}
       </ItemContent>
       <ItemActions>
-        {onAction && actionLabel && (
-          <Button onClick={onAction}>{actionLabel}</Button>
-        )}
         {onSecondaryAction && secondaryActionLabel && (
           <Button variant="outline" onClick={onSecondaryAction}>
             {secondaryActionLabel}
+          </Button>
+        )}
+        {onAction && actionLabel && (
+          <Button variant="primary" onClick={onAction}>
+            {actionLabel}
           </Button>
         )}
       </ItemActions>
@@ -103,18 +108,12 @@ export function EmptyState({
   const renderCard = () => (
     <Card
       className={cn(
-        "shadow-sm border max-w-sm w-full  flex flex-col justify-center text-center",
+        "flex w-full max-w-sm flex-col justify-center border py-4 text-center shadow-sm",
         className,
       )}
     >
       <CardHeader>
-        <Image
-          width={510}
-          height={510}
-          className="w-full max-w-[200px] mx-auto"
-          alt="Sad Notebook"
-          src="/images/error.png"
-        />
+        <Inbox className="text-muted-foreground mx-auto mb-4 size-10" />
         <CardTitle className="text-2xl">{title}</CardTitle>
       </CardHeader>
       <CardContent>
@@ -128,9 +127,9 @@ export function EmptyState({
 
   const renderDefault = () => (
     <div className={className}>
-      <div className="flex flex-col w-full items-center justify-center px-4 text-center">
+      <div className="flex w-full flex-col items-center justify-center px-4 text-center">
         {icon && <div className="mb-4">{icon}</div>}
-        <h3 className="text-xl font-semibold text-foreground mb-2">{title}</h3>
+        <h3 className="text-foreground mb-2 text-xl font-semibold">{title}</h3>
         {message && (
           <p className="text-muted-foreground mb-6 max-w-md">{message}</p>
         )}

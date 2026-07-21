@@ -18,6 +18,7 @@ export class SignupUserUseCase {
       }
       return ok(user);
     } catch (error) {
+      console.error("Error signing up user", error);
       return fail(normalizeError(error));
     }
   }

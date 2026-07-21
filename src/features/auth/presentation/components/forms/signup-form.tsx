@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema, type SignUpFormValues } from "@/lib/validation";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useForm } from "react-hook-form";
+import { PasswordField } from "@/components/form/password-field";
 
 export function SignupForm() {
   const { signup, isLoading } = useAuth();
@@ -40,12 +41,10 @@ export function SignupForm() {
         />
 
         {/* Password */}
-        <InputField<SignUpFormValues, "password">
+        <PasswordField<SignUpFormValues, "password">
           name="password"
           label="Password"
-          placeholder={"Enter your password"}
           autoComplete="new-password"
-          type="password"
           required
         />
       </FieldGroup>

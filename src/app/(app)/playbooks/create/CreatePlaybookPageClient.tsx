@@ -7,11 +7,15 @@ import {
 import { useRouter } from "next/navigation";
 import { AIGeneratingState } from "@/components/states";
 import {
-  Button,
   FieldContent,
   FieldLegend,
   FieldSet,
-  ScrollArea,
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
   Tabs,
   TabsContent,
   TabsList,
@@ -40,7 +44,7 @@ import {
 } from "@/features/playbooks/presentation/components/forms/sections";
 import { InstructionalModelDTO } from "@/features/reference-data/instructional-models/application/dto/InstructionalModelDTO";
 import { ContentLayout } from "@/components/sidebar";
-import { useModals } from "@/hooks";
+import { useIsMobile, useModals } from "@/hooks";
 import { useUser } from "@/components/providers";
 import { cn } from "@/lib/utils";
 
@@ -75,7 +79,32 @@ const buildSteps: {
     description: "Add learning activities to each phase",
   },
 ];
-
+const tabItems: {
+  id: string;
+  label: string;
+  icon: React.ReactNode;
+}[] = [
+  {
+    id: "upload",
+    label: "Upload a document",
+    icon: <Image src={assets.paperClip} alt="Book" width={25} height={25} />,
+  },
+  {
+    id: "generate",
+    label: "Generate with AI",
+    icon: <Image src={assets.sparkle} alt="Sparkles" width={25} height={25} />,
+  },
+  {
+    id: "build",
+    label: "Build your playbook",
+    icon: <Image src={assets.puzzle} alt="Puzzle" width={25} height={25} />,
+  },
+  {
+    id: "scratch",
+    label: "Start from scratch",
+    icon: <Image src={assets.pencil} alt="Pencil" width={25} height={25} />,
+  },
+];
 function mapLegacyPhase(intentKey: string): "warmup" | "workout" | "closer" {
   if (intentKey === "activate") return "warmup";
   if (intentKey === "reflect") return "closer";
@@ -112,6 +141,8 @@ export default function CreatePlaybookPageClient({
   const {
     modals: { "playbook:create": createPlaybookModal },
   } = useModals();
+  const [activeTab, setActiveTab] = useState<string>("generate");
+  const isMobile = useIsMobile();
   const [buildStep, setBuildStep] = useState<BuildStep>("basics");
   const createPlaybookForm = useForm<BuildPlaybookFormValues>({
     resolver: zodResolver(buildPlaybookSchema),
@@ -205,173 +236,171 @@ export default function CreatePlaybookPageClient({
       userId: user.id,
     });
   }
+  function handleTabChange(value: string) {
+    if (value === "scratch") {
+      handleScratchClick();
+      return;
+    }
+    setActiveTab(value);
+  }
   return (
-    <ContentLayout title="Create Playbook" showUserNav={false} canGoBack={true}>
-      <Tabs defaultValue="generate" className="h-full w-full flex-1">
-        <div className="relative flex min-h-full flex-col gap-4 lg:flex-row">
-          <TabsList
-            asChild
-            className="bg-card sticky top-4 h-full w-full flex-row justify-baseline gap-4 rounded-2xl border px-3 py-2 lg:w-auto lg:flex-col"
-          >
-            <div className="flex h-full flex-row lg:flex-col">
-              <TabsTrigger
-                className="data-[state=active]:bg-primary-400/15 data-[state=active]:border-primary-400/20 border-border not:[data-[state=active]]:order-border data-[state=active]:text-primary-400 hover:bg-muted w-full flex-1 rounded-md border-0 lg:min-h-20"
-                value="upload"
-              >
-                <Image
-                  src={assets.paperClip}
-                  alt="Book"
-                  width={25}
-                  height={25}
-                />
-                Upload a document
-              </TabsTrigger>
+    <ContentLayout
+      contentContainerClassName="max-w-[1000px]"
+      title="Create Playbook"
+      showUserNav={false}
+      canGoBack={true}
+    >
+      <Tabs
+        orientation="vertical"
+        value={activeTab}
+        onValueChange={handleTabChange}
+        defaultValue="generate"
+      >
+        <div className="relative flex w-full flex-col gap-4 lg:flex-row">
+          {!isMobile ? (
+            <TabsList className="bg-card sticky top-0 flex h-20 w-full flex-row justify-baseline gap-4 rounded-2xl border px-3 py-2 lg:h-full lg:max-h-90 lg:w-auto lg:flex-col">
+              {tabItems.map((item) => (
+                <TabsTrigger
+                  key={item.id}
 
-              <TabsTrigger
-                className="data-[state=active]:bg-primary-400/15 data-[state=active]:border-primary-400/20 border-border not:[data-[state=active]]:order-border data-[state=active]:text-primary-400 hover:bg-muted w-full flex-1 rounded-md border-0 lg:min-h-20"
-                value="generate"
-              >
-                <Image
-                  src={assets.sparkle}
-                  alt="Sparkles"
-                  width={30}
-                  height={30}
-                />
-                Generate with AI
-              </TabsTrigger>
-              <TabsTrigger
-                className="data-[state=active]:bg-primary-400/15 data-[state=active]:border-primary-400/20 border-border not:[data-[state=active]]:order-border data-[state=active]:text-primary-400 hover:bg-muted w-full flex-1 rounded-md border-0 lg:min-h-20"
-                value="build"
-              >
-                <Image
-                  src={assets.puzzle}
-                  alt="Puzzle"
-                  width={25}
-                  height={25}
-                />
-                Playbook Builder
-              </TabsTrigger>
-              <Button
-                onClick={handleScratchClick}
-                className="border-border hover:text-foreground hover:bg-muted w-full flex-1 rounded-md border-0 lg:min-h-20"
-              >
-                <Image
-                  src={assets.pencil}
-                  alt="Pencil"
-                  width={25}
-                  height={25}
-                />
-                Start from scratch
-              </Button>
-            </div>
-          </TabsList>
+                  className="data-[state=active]:bg-primary-400/15 data-[state=active]:border-primary-400/20 border-border not:[data-[state=active]]:order-border data-[state=active]:text-primary-400 hover:bg-muted h-full w-full flex-1 flex-col rounded-md border-0 md:flex-row"
+                  value={item.id}
+                >
+                  {item.icon}
+                  {item.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          ) : (
+            <NavigationMenu delayDuration={100}>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="rounded-md border shadow-xs">
+                    {tabItems.find((item) => item.id === activeTab)?.icon}
+                    {tabItems.find((item) => item.id === activeTab)?.label}
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    {tabItems.map((item) => (
+                      <NavigationMenuLink
+                        onClick={() => handleTabChange(item.id)}
+                        id={item.id}
+                        key={item.id}
+                      >
+                        {item.icon}
+                        {item.label}
+                      </NavigationMenuLink>
+                    ))}
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+          )}
+
           <TabsContent
             value="build"
-            className="bg-surface flex h-full min-h-0 w-full flex-1 rounded-2xl border"
+            className="bg-surface h-full w-full rounded-2xl border"
           >
-            <ScrollArea className="h-full w-full flex-1">
-              <Form<BuildPlaybookFormValues>
-                id="form-build-playbook"
-                form={createPlaybookForm}
-                isLoading={isCreating}
-                className="p-5"
-                titleClassName="text-lg"
-                onSubmitClick={() =>
-                  handleNextBuildStep(createPlaybookForm.getValues())
-                }
-                submitButtonClassName="max-w-47 ml-auto"
-                submitText={isLastBuildStep ? "Create Playbook" : "Continue"}
-                showsCancelButton={!isFirstBuildStep}
-                onCancel={goToPreviousBuildStep}
-                cancelText="Back"
+            <Form<BuildPlaybookFormValues>
+              id="form-build-playbook"
+              form={createPlaybookForm}
+              isLoading={isCreating}
+              className="mx-auto max-w-[800px] p-5"
+              titleClassName="text-lg"
+              onSubmitClick={() =>
+                handleNextBuildStep(createPlaybookForm.getValues())
+              }
+              submitButtonClassName="max-w-47 ml-auto"
+              submitText={isLastBuildStep ? "Create Playbook" : "Continue"}
+              showsCancelButton={!isFirstBuildStep}
+              onCancel={goToPreviousBuildStep}
+              cancelText="Back"
+            >
+              <div className="flex flex-col gap-2">
+                <h1 className="text-lg font-bold">Build your playbook</h1>
+                <p className="text-muted-foreground text-sm">
+                  Already have a lesson in mind? Set the basics, choose a
+                  structure, then add strategies.
+                </p>
+              </div>
+              <nav
+                aria-label="Create playbook progress"
+                className="relative rounded-lg"
               >
-                <div className="flex flex-col gap-2">
-                  <h1 className="text-lg font-bold">Build your playbook</h1>
-                  <p className="text-muted-foreground text-sm">
-                    Already have a lesson in mind? Set the basics, choose a
-                    structure, then add strategies.
-                  </p>
-                </div>
-                <nav
-                  aria-label="Create playbook progress"
-                  className="relative rounded-lg"
-                >
-                  {/* vertical line */}
-                  <div className="absolute top-[13px] left-0 h-px w-full bg-slate-200" />
-                  <div className="grid w-full grid-cols-3 justify-items-center">
-                    {buildSteps.map((step) => {
-                      const isActive = step.id === buildStep;
-                      return (
+                {/* vertical line */}
+                <div className="absolute top-[13px] left-0 h-px w-full bg-slate-200" />
+                <div className="grid w-full grid-cols-3 justify-items-center">
+                  {buildSteps.map((step) => {
+                    const isActive = step.id === buildStep;
+                    return (
+                      <div
+                        key={step.id}
+                        className="relative flex flex-col items-center"
+                      >
+                        {/* dot */}
                         <div
-                          key={step.id}
-                          className="relative flex flex-col items-center"
-                        >
-                          {/* dot */}
-                          <div
-                            className={cn(
-                              "bg-primary relative z-10 mt-1 size-[20px] shrink-0 rounded-full ring-[6px] ring-white",
-                              buildSteps.indexOf(step) < buildStepIndex ||
-                                isActive
-                                ? "bg-primary-400"
-                                : "bg-slate-200",
-                            )}
-                          />
+                          className={cn(
+                            "bg-primary relative z-10 mt-1 size-[20px] shrink-0 rounded-full ring-[6px] ring-white",
+                            buildSteps.indexOf(step) < buildStepIndex ||
+                              isActive
+                              ? "bg-primary-400"
+                              : "bg-slate-200",
+                          )}
+                        />
 
-                          {/* content */}
-                          <div className="mt-3 min-w-0 flex-1">
-                            <div className="mt-1 flex items-start justify-between gap-3">
-                              <div className="min-w-0">
-                                <h3 className="truncate text-base font-bold text-[#171341]">
-                                  {step.label}
-                                </h3>
-                              </div>
+                        {/* content */}
+                        <div className="mt-3 min-w-0 flex-1">
+                          <div className="mt-1 flex items-start justify-between gap-3">
+                            <div className="min-w-0">
+                              <h3 className="truncate text-base font-bold text-[#171341]">
+                                {step.label}
+                              </h3>
                             </div>
                           </div>
                         </div>
-                      );
-                    })}
-                  </div>
-                </nav>
+                      </div>
+                    );
+                  })}
+                </div>
+              </nav>
 
-                <FieldSet
-                  aria-labelledby={`build-step-${buildStep}`}
-                  className="grid gap-5"
-                >
-                  <FieldContent>
-                    <FieldLegend
-                      id={`build-step-${buildStep}`}
-                      className="font-heading text-xl font-bold"
-                    >
-                      {buildSteps[buildStepIndex]?.title}
-                    </FieldLegend>
-                    <FieldDescription>
-                      {buildSteps[buildStepIndex]?.description}
-                    </FieldDescription>
-                  </FieldContent>
+              <FieldSet
+                aria-labelledby={`build-step-${buildStep}`}
+                className="grid gap-5"
+              >
+                <FieldContent>
+                  <FieldLegend
+                    id={`build-step-${buildStep}`}
+                    className="font-heading text-xl font-bold"
+                  >
+                    {buildSteps[buildStepIndex]?.title}
+                  </FieldLegend>
+                  <FieldDescription>
+                    {buildSteps[buildStepIndex]?.description}
+                  </FieldDescription>
+                </FieldContent>
 
-                  {buildStep === "basics" && (
-                    <>
-                      <LessonDetailsSection />
-                      <ModesSection />
-                    </>
-                  )}
+                {buildStep === "basics" && (
+                  <>
+                    <LessonDetailsSection />
+                    <ModesSection />
+                  </>
+                )}
 
-                  {buildStep === "structure" && (
-                    <ManualStrategyBuilderSection
-                      instructionalModels={instructionalModels}
-                      mode="structure"
-                    />
-                  )}
+                {buildStep === "structure" && (
+                  <ManualStrategyBuilderSection
+                    instructionalModels={instructionalModels}
+                    mode="structure"
+                  />
+                )}
 
-                  {buildStep === "strategies" && (
-                    <ManualStrategyBuilderSection
-                      instructionalModels={instructionalModels}
-                      mode="strategies"
-                    />
-                  )}
-                </FieldSet>
-              </Form>
-            </ScrollArea>
+                {buildStep === "strategies" && (
+                  <ManualStrategyBuilderSection
+                    instructionalModels={instructionalModels}
+                    mode="strategies"
+                  />
+                )}
+              </FieldSet>
+            </Form>
           </TabsContent>
           <TabsContent
             value="generate"
@@ -382,31 +411,29 @@ export default function CreatePlaybookPageClient({
                 <AIGeneratingState />
               </div>
             ) : (
-              <ScrollArea className="h-full w-full">
-                <Form<GeneratePlaybookFormValues>
-                  form={generatePlaybookForm}
-                  title="Generate a Playbook with AI"
-                  description="Describe your lesson below and let AI generate a playbook for you."
-                  id="form-generate-playbook"
-                  isLoading={isGenerating}
-                  className="p-5"
-                  titleClassName="text-lg"
-                  handleSubmit={handleGeneratePlaybook}
-                  submitText="Generate Playbook"
-                  submitButtonClassName="bg-gradient-to-r from-primary-400 max-w-47 ml-auto to-secondary-500 hover:from-primary-400/90 hover:to-secondary-500/90 text-white border-0 shadow-md hover:-translate-y-1 hover:shadow-lg transition-all duration-200 p-6"
-                  showsCancelButton={false}
-                >
-                  <LessonDetailsSection />
-                  <TextareaField
-                    name="instructions"
-                    placeholder="Add instructions or more details here: Describe the lesson topic, expected group size, or specific requirements."
-                    label="Instructions"
-                    required={false}
-                  />
-                  <ContextsSection contexts={contexts} />
-                  <ModesSection />
-                </Form>
-              </ScrollArea>
+              <Form<GeneratePlaybookFormValues>
+                form={generatePlaybookForm}
+                title="Generate a Playbook with AI"
+                description="Describe your lesson below and let AI generate a playbook for you."
+                id="form-generate-playbook"
+                isLoading={isGenerating}
+                className="p-5"
+                titleClassName="text-lg"
+                handleSubmit={handleGeneratePlaybook}
+                submitText="Generate Playbook"
+                submitButtonClassName="bg-gradient-to-r from-primary-400 max-w-47 ml-auto to-secondary-500 hover:from-primary-400/90 hover:to-secondary-500/90 text-white border-0 shadow-md hover:-translate-y-1 hover:shadow-lg transition-all duration-200 p-6"
+                showsCancelButton={false}
+              >
+                <LessonDetailsSection />
+                <TextareaField
+                  name="instructions"
+                  placeholder="Add instructions or more details here: Describe the lesson topic, expected group size, or specific requirements."
+                  label="Instructions"
+                  required={false}
+                />
+                <ContextsSection contexts={contexts} />
+                <ModesSection />
+              </Form>
             )}
           </TabsContent>
         </div>

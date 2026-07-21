@@ -1,11 +1,12 @@
-import React from "react";
-import { UserProvider } from "@/components/providers";
+import { UserProvider, ModalProvider } from "@/components/providers";
 import { SidebarLayout } from "@/components/sidebar";
 
 export default function AppLayout({ children }) {
   return (
     <UserProvider>
-      <SidebarLayout>{children}</SidebarLayout>
+      <ModalProvider>
+        <SidebarLayout>{children}</SidebarLayout>
+      </ModalProvider>
     </UserProvider>
   );
 }

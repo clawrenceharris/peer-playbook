@@ -4,7 +4,7 @@ import { AuthError } from "@supabase/supabase-js";
 
 export function mapSupabaseAuthError(error: unknown): ApplicationError {
   if (error instanceof AuthError) {
-    console.log("error code:", error.code);
+    console.log("auth error:", error);
 
     switch (error.code) {
       case "email_exists":

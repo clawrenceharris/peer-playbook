@@ -52,14 +52,28 @@ export async function updateSession(request: NextRequest) {
       "/confirm",
     ].some((authPath) => request.nextUrl.pathname.startsWith(authPath))
   ) {
+    console.log("no user, redirecting to login");
+    console.log(request.nextUrl.pathname);
+    console.log("user", user);
+    console.log(
+      "auth paths",
+      [
+        "/login",
+        "/sign-up",
+        "/forgot-password",
+        "/update-password",
+        "/confirm",
+      ].some((authPath) => request.nextUrl.pathname.startsWith(authPath)),
+    );
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
   if (
-    (user && request.nextUrl.pathname === "/login") ||
-    request.nextUrl.pathname === "/sign-up"
+    user &&
+    (request.nextUrl.pathname === "/login" ||
+      request.nextUrl.pathname === "/sign-up")
   ) {
     const url = request.nextUrl.clone();
     url.pathname = "/home";

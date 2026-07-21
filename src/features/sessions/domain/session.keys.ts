@@ -11,12 +11,12 @@ export const sessionKeys = {
   paginatedList: (
     page: number,
     limit: number,
-    filters?: Record<string, unknown>
+    filters?: Record<string, unknown>,
   ) => [...sessionKeys.paginated(), { page, limit, filters }] as const,
   details: () => [...sessionKeys.all, "detail"] as const,
   detail: (id: string) => [...sessionKeys.details(), id] as const,
-  byLeader: (leaderId: string) =>
-    [...sessionKeys.all, "leader", leaderId] as const,
+  byLeader: (instructorId: string) =>
+    [...sessionKeys.all, "instructor", instructorId] as const,
   byStatus: (status: string) => [...sessionKeys.all, "status", status] as const,
   contexts: (sessionId: string) =>
     [...sessionKeys.detail(sessionId), "contexts"] as const,

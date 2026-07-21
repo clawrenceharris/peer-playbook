@@ -57,7 +57,7 @@ export function Menu({ isOpen }: MenuProps) {
                                 : "ghost"
                             }
                             className={cn(
-                              "hover:bg-muted-foreground/8 text-sidebar-foreground [&_svg]:stroke-sidebar-foreground w-full justify-start overflow-visible py-5 font-semibold transition-none [&_svg]:stroke-[2.4px]",
+                              "hover:bg-muted-foreground/8 text-sidebar-foreground [&_svg]:stroke-sidebar-foreground w-full justify-start overflow-visible py-5 font-semibold transition-none",
                               isOpen
                                 ? "flex-row"
                                 : "size-8 flex-col items-center justify-center rounded-[8px] p-0",

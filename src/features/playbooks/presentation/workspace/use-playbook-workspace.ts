@@ -40,6 +40,11 @@ type UsePlaybookWorkspaceArgs = {
   onBackClick?: () => void;
 };
 
+/**
+ * Main playbook detail/workspace orchestrator. It merges server-backed page
+ * data, local reducer drafts, React Query mutations, favorite/session state,
+ * and modal actions into a single editing surface for the page components.
+ */
 export function usePlaybookWorkspace({
   playbookId,
   onBackClick,
@@ -170,6 +175,8 @@ export function usePlaybookWorkspace({
       return;
     }
 
+    // Treat the newly selected strategy as the fresh editing baseline so
+    // unsaved edits do not bleed across strategy selection changes.
     dispatch({
       type: "setStrategyDraftSnapshot",
       draft: buildStrategyDraft(activeStrategy),

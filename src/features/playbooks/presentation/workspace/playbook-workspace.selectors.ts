@@ -21,6 +21,10 @@ import type {
   PlaybookWorkspaceStrategyDraft,
 } from "./playbook-workspace.types";
 
+/**
+ * Compatibility map between the newer phase-intent vocabulary and the legacy
+ * strings still found on some strategy rows.
+ */
 const legacyPhaseIntentMap: Record<string, PhaseIntent> = {
   warmup: PhaseIntentEnum.ACTIVATE,
   workout: PhaseIntentEnum.APPLY,
@@ -98,6 +102,9 @@ export function buildPlaybookWorkspaceModel(
 ): PlaybookWorkspacePhase[] {
   if (!page) return [];
 
+  // Newer rows link strategies directly to a playbook phase. Older rows still
+  // need to be grouped via the legacy phase string until the migration is
+  // complete, so the selector supports both shapes.
   const strategiesHavePhaseLinks = page.strategies.some(
     (strategy) => strategy.playbookPhaseId,
   );
@@ -211,6 +218,9 @@ export function selectStrategySourceMap(
   savedStrategies: PlaybookWorkspaceSource[],
   userStrategies: PlaybookWorkspaceSource[],
 ): PlaybookWorkspaceSourceMap {
+  // Saved strategies still reuse the system prefix because they resolve from
+  // the same catalog table today; user-authored strategies get their own key
+  // space to avoid collisions.
   const entries = [
     ...systemStrategies.map(
       (strategy) => [`system:${strategy.id}`, strategy] as const,

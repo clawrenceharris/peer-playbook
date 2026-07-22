@@ -1,5 +1,5 @@
 import { PlaybookWriteRepository } from "../../domain/repositories/PlaybookWriteRepository";
-import { client, type PrismaClient } from "@/lib/db/client";
+import { client as prismaClient, type PrismaClient } from "@/lib/db/client";
 import {
   PlaybookCardDTO,
   PlaybookDetailDTO,
@@ -34,8 +34,13 @@ type PrismaTransactionClient = Parameters<
   Parameters<PrismaClient["$transaction"]>[0]
 >[0];
 
+/**
+ * Primary write repository for migrated playbook flows. It is responsible for
+ * coordinating playbooks, phases, and strategy copies inside Prisma-backed
+ * transactions so the UI can treat a playbook as a single editing unit.
+ */
 export class PrismaPlaybookWriteRepository implements PlaybookWriteRepository {
-  constructor(private readonly client: PrismaClient = client) {}
+  constructor(private readonly client: PrismaClient = prismaClient) {}
   async generatePlaybook(
     data: GeneratePlaybookCommand,
   ): Promise<CreatePlaybookResult> {
@@ -65,6 +70,8 @@ export class PrismaPlaybookWriteRepository implements PlaybookWriteRepository {
     data: CreatePlaybookCommand,
   ): Promise<CreatePlaybookResult> {
     return this.client.$transaction(async (tx) => {
+      // Create the playbook first, then resolve phase-intent foreign keys, then
+      // attach copied strategy rows to the created phase IDs by position.
       const playbook = await tx.playbooks.create({
         data: {
           topic: data.topic,
@@ -234,6 +241,8 @@ export class PrismaPlaybookWriteRepository implements PlaybookWriteRepository {
     phases: CreatePlaybookPhaseCommand[],
     phaseIdByPosition: Map<number, string>,
   ): Promise<void> {
+    // Strategies are copied from the source catalog into playbook-specific rows
+    // so later edits do not mutate the shared catalog entry.
     const refs = phases.flatMap((phase) =>
       phase.strategies.map((strategy, position) => ({
         ...strategy,

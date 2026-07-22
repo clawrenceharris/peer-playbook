@@ -2,6 +2,11 @@ import { createServerClient } from "@supabase/ssr";
 import { User } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 
+/**
+ * Request-level auth gate. It refreshes Supabase session cookies, redirects
+ * anonymous users away from protected app routes, and keeps signed-in users out
+ * of the login/signup screens.
+ */
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,

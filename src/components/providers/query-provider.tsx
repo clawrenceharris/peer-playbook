@@ -15,6 +15,11 @@ const isDevelopment = process.env.NODE_ENV === "development";
 const queryStaleTime = isDevelopment ? 30 * 60 * 1000 : 5 * 60 * 1000;
 const queryGcTime = isDevelopment ? 60 * 60 * 1000 : 10 * 60 * 1000;
 
+/**
+ * Owns the app-wide QueryClient configuration and rehydrates any server-side
+ * prefetched data. The defaults intentionally reduce noisy refetches during
+ * development because many queries ultimately hit server actions and the DB.
+ */
 export function QueryProvider({
   children,
   dehydratedState,
@@ -56,7 +61,8 @@ export function QueryProvider({
             // Show toast with "See More" action
             showErrorToast(normalizedError, {
               onShowDetails: () => {
-                // Access error modal handler via window
+                // Mutation errors can originate outside the component tree that
+                // rendered the toast, so the modal bridge is exposed globally.
                 if (typeof window !== "undefined") {
                   const errorHandler = (
                     window as {

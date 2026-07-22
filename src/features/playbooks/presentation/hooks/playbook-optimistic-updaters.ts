@@ -24,6 +24,11 @@ export type PlaybookStrategyCacheSnapshot = {
   previousPlaybookDetail: PlaybookDetailDTO | undefined;
 };
 
+/**
+ * Add/remove/reorder mutations touch multiple playbook cache shapes. Snapshot
+ * them together so a failed optimistic update can roll back the page payload
+ * and both detail variants in one step.
+ */
 export async function snapshotPlaybookCaches(
   queryClient: QueryClient,
   playbookId: string,
@@ -258,6 +263,9 @@ export function replaceOptimisticAddedStrategy(
       return {
         ...current,
         strategies: replaceById(current.strategies, tempId, {
+          // Preserve draftable fields from the optimistic row because the add
+          // mutation response does not necessarily echo every locally known
+          // field in the same shape.
           ...optimisticStrategy,
           ...result,
           playbookPhaseId:

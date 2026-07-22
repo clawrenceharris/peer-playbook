@@ -1,27 +1,12 @@
 "use client";
-import React, { useEffect } from "react";
-import { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { useAuth } from "@/components/providers";
 import { ErrorState, LoadingState } from "@/components/states";
-// import { useProfileDetail } from "@/features/profile/presentation/hooks";
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui";
-import {
-  useProfile,
-  useProfileDetail,
-} from "@/features/profile/presentation/hooks";
+import { Dialog } from "../ui";
+import { useProfileDetail } from "@/features/profile/presentation/hooks";
 import { CreateProfileModal } from "@/features/profile/presentation/components/modals";
-// import { CreateProfileModal } from "@/features/profile/presentation/components/modals";
-// import { ProfileDetailResult } from "@/features/profile/application/dto";
 
 type UserContextType = {
   user: User;
@@ -36,6 +21,11 @@ type UserProviderProps = {
   children: React.ReactNode;
 };
 
+/**
+ * Bridges auth state to a fully usable in-app user context. A signed-in user is
+ * not considered ready for the main app until their profile and onboarding
+ * state have been resolved.
+ */
 export function UserProvider({ children }: UserProviderProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -54,6 +44,8 @@ export function UserProvider({ children }: UserProviderProps) {
   useEffect(() => {
     if (!profile || isLoadingProfile) return;
 
+    // Onboarding is enforced here so the rest of the app can assume profile
+    // completion once UserContext is available.
     if (needsOnboarding && !isOnboardingRoute) {
       router.replace("/onboarding");
       return;
@@ -118,6 +110,8 @@ export function UserProvider({ children }: UserProviderProps) {
   }
 
   if (isOnboardingRoute) {
+    // The onboarding experience uses auth and profile state, but it does not
+    // need the full UserContext contract.
     return <>{children}</>;
   }
 

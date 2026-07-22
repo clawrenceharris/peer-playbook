@@ -1,10 +1,6 @@
 import "./globals.css";
 
-import {
-  AuthProvider,
-  ModalProvider,
-  QueryProvider,
-} from "@/components/providers";
+import { AuthProvider, QueryProvider } from "@/components/providers";
 import { ReactNode } from "react";
 import { Outfit, Figtree } from "next/font/google";
 import { Metadata } from "next";

@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient, createServerSupabaseClient } from "@/lib/supabase/server";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { StreamClient } from "@stream-io/node-sdk";
 import { UserRequest } from "@stream-io/video-react-sdk";
 
@@ -54,8 +54,9 @@ export async function updateUserCustomData({
   ]);
 }
 /**
- *
- * @returns Generates a new token for the Stream Video API
+ * Generates a Stream token for the current request. Unauthenticated callers
+ * fall back to a random UUID so the video client can still initialize in flows
+ * that have not fully enforced session requirements yet.
  */
 export async function getToken() {
   const supabase = await createServerSupabaseClient();

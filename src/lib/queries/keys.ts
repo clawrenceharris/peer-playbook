@@ -31,9 +31,22 @@ export const playbookKeys = {
   list: (filters?: Record<string, unknown>) =>
     [...playbookKeys.lists(), { filters }] as const,
   details: () => [...playbookKeys.all, "detail"] as const,
+  /**
+   * The same playbook can be cached in multiple shapes. `"base"` and
+   * `"detail"` should be treated as separate entries when doing optimistic
+   * updates or targeted invalidation.
+   */
   detail: (id: string, shape: "base" | "detail" | "card" = "base") =>
     [...playbookKeys.details(), id, shape] as const,
+  /**
+   * Page data is broader than a detail record: it contains the assembled
+   * playbook page payload, including top-level strategies and nested phases.
+   */
   page: (id: string) => [...playbookKeys.all, "page", id] as const,
+  /**
+   * User-scoped library/home queries should use this key instead of
+   * `playbookKeys.all` so prefetching and invalidation stay targeted.
+   */
   byUserId: (userId: string) => [...playbookKeys.all, "user", userId] as const,
   favorite: () => [...playbookKeys.all, "favorite"],
 } as const;

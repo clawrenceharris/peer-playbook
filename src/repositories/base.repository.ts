@@ -2,6 +2,11 @@
 import { camelizeKeys, snakeizeKeys, toSnakeCase } from "@/lib/data/naming";
 import { SupabaseClient } from "@supabase/supabase-js";
 
+/**
+ * Shared Supabase CRUD base for older repository paths. It hides the
+ * snake_case table shape from callers so domain and UI layers can keep using
+ * camelCase models while those flows are gradually migrated.
+ */
 export abstract class BaseRepository<
   TDbRow,
   TDomain,

@@ -134,6 +134,11 @@ function intentFromKey(
   }
 }
 
+/**
+ * Central command factory for the playbook workspace. Some actions are purely
+ * local reducer updates, while others persist immediately through server
+ * actions and optimistic cache updates.
+ */
 export function createPlaybookWorkspaceCommands({
   playbook,
   userId,
@@ -347,6 +352,8 @@ export function createPlaybookWorkspaceCommands({
       );
       if (!source) return;
 
+      // The workspace stores a playbook-specific copy of the selected strategy
+      // so titles, steps, notes, and timing can diverge from the source catalog.
       await addPlaybookStrategy({
         playbookId: playbook.id,
         playbookPhaseId: activePhase.id,
@@ -391,6 +398,8 @@ export function createPlaybookWorkspaceCommands({
         (item) => item.id !== strategyId,
       );
       if (remaining.length > 0) {
+        // Removing a strategy leaves a gap in the phase-local ordering, so the
+        // remaining strategies are immediately compacted back to 0..n-1.
         await reorderStrategies({
           playbookId: playbook.id,
           phaseId: activePhase.id,

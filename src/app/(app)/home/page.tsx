@@ -39,6 +39,11 @@ const learningPrompts = [
   "Reflection",
 ];
 
+/**
+ * The home page mixes live data (recent playbooks and upcoming sessions) with a
+ * few placeholder or aspirational affordances while the broader dashboard UX is
+ * still being filled in.
+ */
 export default function Dashboard() {
   const router = useRouter();
   const { user, profile } = useUser();
@@ -75,6 +80,8 @@ export default function Dashboard() {
 
   function handleHeroSearchSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    // The hero search currently narrows only the on-page recent-playbooks
+    // section; it does not perform a global server search.
     document
       .getElementById("discover-playbooks")
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -489,6 +496,8 @@ type ScheduleItem = {
   status?: string;
 };
 
+// Static agenda content used for the dashboard visual until the "today" panel
+// is wired to real session/playbook activity.
 const scheduleItems: ScheduleItem[] = [
   {
     id: "1",
@@ -831,6 +840,8 @@ function EmptyPlaybookGraphic() {
 }
 
 function getDateTime(value: Date | string | null | undefined) {
+  // Missing or invalid dates sort to the end of lists instead of breaking the
+  // dashboard ordering logic.
   if (!value) return Number.POSITIVE_INFINITY;
   const date = new Date(value);
   const time = date.getTime();

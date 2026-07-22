@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FormProvider } from "react-hook-form";
-import { Loader2 } from "lucide-react";
-import { Button, FieldError, Progress, ScrollArea } from "@/components/ui";
-import { ChitterGuide } from "./chitter-guide";
+import { Progress, ScrollArea } from "@/components/ui";
+import { PeerPlaybookGuide } from "./peer-playbook-guide";
 import { OnboardingSlideShell } from "./onboarding-slide-shell";
 import { OnboardingFieldRenderer } from "./onboarding-field-renderer";
 import { useCompleteOnboarding, useOnboardingFlow } from "../hooks";
@@ -92,11 +90,11 @@ export function OnboardingFlow({ userId }: OnboardingFlowProps) {
           </div>
 
           <div className="lg:hidden">
-            <ChitterGuide message={slide.message ?? ""} />
+            <PeerPlaybookGuide message={slide.message ?? ""} />
           </div>
         </Form>
         <div className="hidden lg:block">
-          <ChitterGuide message={slide.message ?? ""} />
+          <PeerPlaybookGuide message={slide.message ?? ""} />
         </div>
       </div>
     </>

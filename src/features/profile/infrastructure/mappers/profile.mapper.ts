@@ -1,8 +1,10 @@
 import {
   ProfileCardDTO,
   ProfileDetailDTO,
+  ProfileDTO,
 } from "../../application/dto";
 import { UserProfile } from "../../domain/entities";
+import { profiles } from "@/generated/prisma/client";
 
 export type ProfileDetailRecord = {
   id: string;
@@ -22,6 +24,17 @@ export type ProfileCardRecord = Pick<
 >;
 
 export class ProfileMapper {
+  static toDTO(record: profiles | null): ProfileDTO | null {
+    if (!record) return null;
+    return {
+      id: record.id,
+      firstName: record.first_name,
+      lastName: record.last_name,
+      displayName: `${record.first_name} ${record.last_name ?? ""}`.trim(),
+      avatarUrl: record.avatar_url,
+      onboardingCompletedAt: record.onboarding_completed_at,
+    };
+  }
   static toDomain(profile: ProfileDetailRecord): UserProfile {
     return new UserProfile({
       id: profile.id,

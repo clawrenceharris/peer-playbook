@@ -1,6 +1,6 @@
 import { SessionContextRepository } from "../../domain/repositories/SessionContextRepository";
 import { SessionContextDTO } from "../../application/dto/SessionContextDTO";
-import { client, type PrismaClient } from "@/lib/db/client";
+import { type PrismaClient } from "@/lib/db/client";
 
 export class PrismaSessionContextRepository implements SessionContextRepository {
   constructor(private readonly client: PrismaClient = client) {}

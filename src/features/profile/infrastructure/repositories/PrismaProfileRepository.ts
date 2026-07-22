@@ -2,7 +2,7 @@ import { ProfileRepository } from "../../domain/repositories";
 import { UserProfile } from "../../domain/entities";
 import { ProfileMapper } from "../mappers";
 import { CreateProfileCommand, UpdateProfileCommand } from "../../domain/types";
-import { client, type PrismaClient } from "@/lib/db/client";
+import { type PrismaClient } from "@/lib/db/client";
 
 export class PrismaProfileRepository implements ProfileRepository {
   constructor(private readonly client: PrismaClient = client) {}

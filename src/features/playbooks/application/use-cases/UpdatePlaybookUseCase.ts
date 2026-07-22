@@ -1,4 +1,3 @@
-import { updatePlaybookSchema } from "@/lib/validation";
 import { PlaybookWriteRepository } from "../../domain";
 import { fail, ok, Result } from "@/shared/application";
 import { UpdatePlaybookInput, UpdatePlaybookResult } from "../dto";

@@ -8,7 +8,6 @@ import {
   SessionContextDTO,
 } from "../dto";
 import { normalizeError } from "@/shared/utils";
-import { Playbook } from "../../domain";
 
 export class PlaybookReadService {
   constructor(

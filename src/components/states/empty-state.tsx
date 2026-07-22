@@ -16,8 +16,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui";
-import Image from "next/image";
-import { Folder, Inbox } from "lucide-react";
+import { Inbox } from "lucide-react";
 
 /**
  * Available variants for empty state display

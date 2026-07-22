@@ -1,5 +1,4 @@
 import { fail, ok, Result } from "@/shared/application";
-import { PlaybookWriteRepository } from "../../domain";
 import { PlaybookReadRepository } from "../../domain/repositories";
 import { PlaybookPageAssembler } from "../assemblers/PlaybookPageAssembler";
 import { GetPlaybookPageOutput } from "../dto/PlaybookPageDTO";

@@ -6,13 +6,14 @@ import { fail, ok } from "@/shared/application";
 import {
   ProfileDetailDTO,
   ProfileCardDTO,
+  ProfileDTO,
 } from "@/features/profile/application/dto";
 
 export async function getProfile(
   userId: string,
-): Promise<ActionResult<ProfileCardDTO | null>> {
+): Promise<ActionResult<ProfileDTO | null>> {
   const service = makeProfileReadService();
-  const result = await service.getProfileCard(userId);
+  const result = await service.getProfile(userId);
   if (!result.success) return fail(toActionError(result.error));
 
   return ok(result.data);

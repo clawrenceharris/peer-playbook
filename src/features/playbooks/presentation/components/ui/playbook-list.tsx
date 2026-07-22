@@ -1,9 +1,7 @@
 import React from "react";
-import { Playbook } from "@/features/playbooks/domain";
 import { Loader2 } from "lucide-react";
 import { PlaybookCard } from "@/features/playbooks/presentation/components";
 import { EmptyState } from "@/components/states";
-import { PlaybookCardDTO } from "@/features/playbooks/application/dto";
 
 interface PlaybookListProps {
   playbooks: {

@@ -8,7 +8,6 @@ import { ErrorState } from "@/components/states";
 import { AppSkeleton } from "@/components/ui";
 import { StrategyDetails } from "./strategy-details";
 import { StrategyListPanel } from "./strategy-list-panel";
-import { PlaybookPhaseHeader } from "./playbook-phase-header";
 import { PlaybookPhaseRail } from "./playbook-phase-rail";
 import { PlaybookWorkspaceHeader } from "./playbook-workspace-header";
 import { PlaybookWorkspaceShell } from "./playbook-workspace-shell";

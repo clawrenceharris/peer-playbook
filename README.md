@@ -1,6 +1,6 @@
 # PeerPlaybook
 
-PeerPlaybook is a planning tool for Supplemental Instruction leaders. It helps facilitators build playbooks, organize phases and strategies, and prepare sessions for student-led peer learning.
+PeerPlaybook is a planning tool for students. It helps facilitators build playbooks, organize phases and strategies, and prepare sessions for student-led peer learning.
 
 ## What To Read First
 
@@ -52,13 +52,13 @@ Minimum local setup:
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - `DATABASE_URL`
+- `OPENAI_API_KEY`
+- `OPENAI_PROJECT_ID`
 
 Common optional integrations:
 
 - `NEXT_PUBLIC_SUPABASE_AVATAR_BUCKET`
 - `NEXT_PUBLIC_SITE_URL`
-- `OPENAI_API_KEY`
-- `OPENAI_PROJECT_ID`
 - `OPENAI_PLAYBOOK_MODEL`
 - `NEXT_PUBLIC_STREAM_VIDEO_API_KEY`
 - `STREAM_VIDEO_API_SECRET`
@@ -68,18 +68,17 @@ See `.env.example` for the full list of supported variables and placeholder valu
 
 ## Scripts
 
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Start the Next.js dev server with Turbopack |
-| `npm run build` | Build the production app |
-| `npm run start` | Run the production server |
-| `npm run lint` | Run ESLint |
-| `npm run types:check` | Run TypeScript without emitting files |
-| `npm run test` | Start Vitest in watch mode |
-| `npm run test:unit` | Run Vitest once |
-| `npm run test:integration` | Currently the same as `test:unit` |
-| `npm run test:e2e` | Run Playwright tests |
-| `npm run gen:db` | Regenerate Supabase TypeScript types |
+| Command                    | Purpose                                     |
+| -------------------------- | ------------------------------------------- |
+| `npm run dev`              | Start the Next.js dev server with Turbopack |
+| `npm run build`            | Build the production app                    |
+| `npm run start`            | Run the production server                   |
+| `npm run lint`             | Run ESLint                                  |
+| `npm run types:check`      | Run TypeScript without emitting files       |
+| `npm run test`             | Start Vitest in watch mode                  |
+| `npm run test:unit`        | Run Vitest once                             |
+| `npm run test:integration` | Currently the same as `test:unit`           |
+| `npm run test:e2e`         | Run Playwright tests                        |
 
 ## Repository Map
 

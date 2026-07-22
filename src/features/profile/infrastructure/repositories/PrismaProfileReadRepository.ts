@@ -1,10 +1,21 @@
 import { ProfileReadRepository } from "../../domain/repositories";
 import { ProfileMapper } from "../mappers";
-import { ProfileCardDTO, ProfileDetailDTO } from "../../application/dto";
-import { client, type PrismaClient } from "@/lib/db/client";
+import {
+  ProfileCardDTO,
+  ProfileDetailDTO,
+  ProfileDTO,
+} from "../../application/dto";
+import { type PrismaClient } from "@/lib/db/client";
 
 export class PrismaProfileReadRepository implements ProfileReadRepository {
   constructor(private readonly client: PrismaClient = client) {}
+
+  async findProfileById(userId: string): Promise<ProfileDTO | null> {
+    const record = await this.client.profiles.findUnique({
+      where: { id: userId },
+    });
+    return ProfileMapper.toDTO(record);
+  }
   async findProfileDetailById(id: string): Promise<ProfileDetailDTO | null> {
     const record = await this.client.profiles.findUnique({
       where: { id },

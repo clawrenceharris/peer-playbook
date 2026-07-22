@@ -1,22 +1,12 @@
 "use client";
-
-import React, { useMemo, useState } from "react";
 import {
-  Button,
   Field,
   FieldContent,
   FieldDescription,
   FieldError,
   FieldLabel,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Toggle,
 } from "@/components/ui";
-import { EmptyState, LoadingState } from "@/components/states";
-import { Plus, RefreshCw, X } from "lucide-react";
 import { Controller, useFormContext } from "react-hook-form";
-import { usePlaybookContexts } from "@/features/playbooks/presentation/hooks/use-playbook-contexts";
 import { SessionContextDTO } from "@/features/playbooks/application/dto";
 import { ComboboxMultiple } from "@/components/ui/combobox-multiple";
 

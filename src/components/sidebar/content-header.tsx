@@ -1,17 +1,10 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { ChevronLeft, Plus } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useIsMobile } from "@/hooks";
 import { SheetMenu, UserNav } from "./";
-import {
-  DropdownMenuTrigger,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "../ui";
-import { Playbook, Session } from "../icons";
 import { useStore } from "zustand";
 import { useSidebar } from "@/store";
 import { useSidebar as useLibrarySidebar } from "@/components/ui";

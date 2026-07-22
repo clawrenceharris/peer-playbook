@@ -1,15 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-  FieldGroup,
-  FieldLegend,
-  FieldSet,
-} from "@/components/ui";
+import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui";
 import { ComboboxField, InputField } from "@/components/form";
 import { subjects } from "@/features/playbooks/application/assemblers";
 

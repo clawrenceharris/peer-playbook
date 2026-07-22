@@ -5,7 +5,7 @@ import { User } from "@supabase/supabase-js";
 import { useAuth } from "@/components/providers";
 import { ErrorState, LoadingState } from "@/components/states";
 import { Dialog } from "../ui";
-import { useProfileDetail } from "@/features/profile/presentation/hooks";
+import { useProfile } from "@/features/profile/presentation/hooks";
 import { CreateProfileModal } from "@/features/profile/presentation/components/modals";
 
 type UserContextType = {
@@ -37,7 +37,7 @@ export function UserProvider({ children }: UserProviderProps) {
     refetch,
     isLoading: isLoadingProfile,
     error,
-  } = useProfileDetail(user?.id ?? null);
+  } = useProfile(user?.id ?? null);
 
   const needsOnboarding = Boolean(profile && !profile.onboardingCompletedAt);
 
@@ -107,12 +107,6 @@ export function UserProvider({ children }: UserProviderProps) {
 
   if (needsOnboarding && !isOnboardingRoute) {
     return <LoadingState variant="page" />;
-  }
-
-  if (isOnboardingRoute) {
-    // The onboarding experience uses auth and profile state, but it does not
-    // need the full UserContext contract.
-    return <>{children}</>;
   }
 
   return (

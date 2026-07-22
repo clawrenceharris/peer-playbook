@@ -7,6 +7,7 @@ import { ErrorState, LoadingState } from "@/components/states";
 import { Dialog } from "../ui";
 import { useProfile } from "@/features/profile/presentation/hooks";
 import { CreateProfileModal } from "@/features/profile/presentation/components/modals";
+import { SidebarLayout } from "../sidebar";
 
 type UserContextType = {
   user: User;
@@ -29,7 +30,7 @@ type UserProviderProps = {
 export function UserProvider({ children }: UserProviderProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, isAuthReady } = useAuth();
+  const { user, isAuthReady, signOut } = useAuth();
   const isOnboardingRoute = pathname.startsWith("/onboarding");
   const isAuthRoute = pathname.startsWith("/auth");
   const {
@@ -82,16 +83,19 @@ export function UserProvider({ children }: UserProviderProps) {
   }
   if (error) {
     return (
-      <div className="centered">
-        <ErrorState
-          variant="card"
-          title="Error loading profile"
-          message={error.message}
-          onAction={() => window.location.reload()}
-          actionLabel="Refresh"
-          onRetry={refetch}
-        />
-      </div>
+      <SidebarLayout>
+        <div className="centered">
+          <ErrorState
+            variant="card"
+            title="Error loading profile"
+            message={error.message}
+            onAction={refetch}
+            actionLabel="Try again"
+            retryLabel="Sign Out"
+            onRetry={signOut}
+          />
+        </div>
+      </SidebarLayout>
     );
   }
   if (!profile) {

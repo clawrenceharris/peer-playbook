@@ -7,7 +7,7 @@ import { useCallback, useMemo } from "react";
 import { ContentLayout } from "@/components/sidebar";
 import { SearchInput } from "@/components/form";
 import { useSessionFilters } from "@/features/sessions/hooks";
-import { SessionCardDTO } from "@/features/sessions/application/dto";
+import { SessionListItemDTO } from "@/features/sessions/application/dto";
 import { SessionList } from "@/features/sessions/components/ui/session-list";
 import { useUserSessions } from "@/features/sessions/hooks/use-user-sessions";
 import { useUser } from "@/components/providers";
@@ -20,7 +20,7 @@ export default function SessionsPage() {
     useSessionFilters(data);
 
   const filterSessions = useCallback(
-    (item: SessionCardDTO, query: string): boolean => {
+    (item: SessionListItemDTO, query: string): boolean => {
       const q = query.toLowerCase();
       return (
         item.title?.toLowerCase().includes(q) ||
@@ -33,7 +33,7 @@ export default function SessionsPage() {
     [],
   );
 
-  const { query, search, clearResults } = useSearch<SessionCardDTO>({
+  const { query, search, clearResults } = useSearch<SessionListItemDTO>({
     data,
     filter: filterSessions,
     minQueryLength: 1,

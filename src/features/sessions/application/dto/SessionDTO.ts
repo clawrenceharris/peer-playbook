@@ -15,7 +15,7 @@ export type SessionDetailDTO = {
   createdAt: string;
 };
 
-export type SessionCardDTO = {
+export type SessionListItemDTO = {
   id: string;
   sessionCode: string | null;
   playbookId: string | null;

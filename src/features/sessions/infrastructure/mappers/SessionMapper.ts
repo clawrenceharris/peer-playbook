@@ -1,10 +1,10 @@
-import { SessionCardDTO, SessionDetailDTO } from "../../application/dto";
+import { SessionDetailDTO, SessionListItemDTO } from "../../application/dto";
 import { Session } from "../../domain/entities/Session";
 import { SessionMode } from "../../domain/value-objects";
 import { SessionStatus } from "../../domain/value-objects/SessionStatus";
 import {
-  SessionCardRecord,
   SessionDetailRecord,
+  SessionListItemRecord,
 } from "../selection/session.selections";
 
 export class SessionMapper {
@@ -25,7 +25,7 @@ export class SessionMapper {
     });
   }
 
-  static toCard(session: SessionCardRecord): SessionCardDTO {
+  static toListItem(session: SessionListItemRecord): SessionListItemDTO {
     return {
       id: session.id,
       sessionCode: session.session_code,

@@ -19,7 +19,7 @@ import type {
   PlaybookWorkspaceStrategy,
   PlaybookWorkspaceStrategyDraft,
 } from "./playbook-workspace.types";
-import { SessionCardDTO } from "@/features/sessions/application/dto";
+import { SessionListItemDTO } from "@/features/sessions/application/dto";
 
 /**
  * Compatibility map between the newer phase-intent vocabulary and the legacy
@@ -245,7 +245,7 @@ export function selectIsFavorite(
 
 export function selectHasSession(
   playbookId: string | undefined,
-  sessions: SessionCardDTO[],
+  sessions: SessionListItemDTO[],
 ): boolean {
   return Boolean(
     playbookId && sessions.some((session) => session.id === playbookId),

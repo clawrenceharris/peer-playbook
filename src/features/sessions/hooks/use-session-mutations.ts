@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateSessionStatusAction } from "@/actions/session/commands/updateSessionStatusAction";
 import { deleteSessionAction } from "@/actions/session/commands/deleteSessionAction";
 import { toast } from "sonner";
-import { SessionCardDTO } from "../application/dto";
+import { SessionListItemDTO } from "../application/dto";
 import { sessionKeys } from "@/lib/queries/keys";
 import { createSessionAction } from "@/actions/session/commands/createSessionAction";
 import { unwrapActionResult } from "@/shared/action/unwrapActionResult";
@@ -50,7 +50,7 @@ export const useUpdateSessionStatus = () => {
       }
       queryClient.setQueryData(
         sessionKeys.byUserId(input.instructorId),
-        (old: SessionCardDTO[]) => {
+        (old: SessionListItemDTO[]) => {
           return old.map((session) =>
             session.id === input.sessionId
               ? { ...session, status: input.status }
@@ -125,7 +125,7 @@ export const useDeleteSession = () => {
       }
       queryClient.setQueryData(
         sessionKeys.byUserId(sessionId),
-        (old: SessionCardDTO[]) => {
+        (old: SessionListItemDTO[]) => {
           return old.filter((session) => session.id !== sessionId);
         },
       );

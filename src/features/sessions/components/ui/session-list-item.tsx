@@ -17,7 +17,7 @@ import { useState } from "react";
 import { Icon } from "@/components/shared";
 import { assets } from "@/lib/constants";
 import { cn, timeAgo } from "@/lib/utils";
-import { SessionCardDTO } from "../../application/dto";
+import { SessionListItemDTO } from "../../application/dto";
 import { useRouter } from "next/navigation";
 import { Ban, MoreVertical, PieChart } from "lucide-react";
 import {
@@ -31,7 +31,7 @@ import { useUser } from "@/components/providers";
 import { SessionStatus } from "../../domain/value-objects";
 
 interface SessionCardProps {
-  session: SessionCardDTO;
+  session: SessionListItemDTO;
   className?: string;
   onClick?: () => void;
 }

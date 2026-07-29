@@ -1,12 +1,5 @@
-import { InputField, RadioGroupField, SelectField } from "@/components/form";
-import {
-  Button,
-  Field,
-  FieldContent,
-  FieldGroup,
-  FieldLegend,
-  FieldSet,
-} from "@/components/ui";
+import { InputField, SelectField } from "@/components/form";
+import { Button, FieldGroup, FieldLegend, FieldSet } from "@/components/ui";
 import { CreateSessionFormValues } from "@/lib/validation";
 import { PlaybookCardDTO } from "@/features/playbooks/application/dto";
 import { SessionDetailsSection } from "./sections/SessionDetailsSection";

@@ -14,6 +14,10 @@ export type StrategyCacheShape = {
   playbookPhaseId?: string | null;
 };
 
+/**
+ * Newer data can scope ordering by `playbookPhaseId`. Older rows may still lack
+ * that foreign key, so reordering falls back to the legacy phase string.
+ */
 function isSamePhase<TStrategy extends StrategyCacheShape>(
   left: TStrategy,
   right: TStrategy,
@@ -55,6 +59,8 @@ export function reorderStrategyList<TStrategy extends StrategyCacheShape>(
 
   let reorderedIndex = 0;
 
+  // Preserve untouched strategies exactly where they were; only the provided
+  // phase-local subset receives new positions.
   return current.map((strategy) => {
     if (!reorderedIds.has(strategy.id)) {
       return strategy;

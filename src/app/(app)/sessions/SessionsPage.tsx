@@ -1,61 +1,127 @@
 "use client";
-
-import { SessionCard } from "@/features/sessions/components";
-import { EmptyState, ErrorState, LoadingState } from "@/components/states";
-import { useUserSessions } from "@/features/sessions/hooks";
-import { useUser } from "@/components/providers";
+import { PlaybookFilters } from "@/features/playbooks/presentation/components";
+import { EmptyState } from "@/components/states";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui";
+import { useSearch } from "@/hooks/use-search";
+import { useCallback, useMemo } from "react";
 import { ContentLayout } from "@/components/sidebar";
-import { useModals } from "@/hooks";
+import { SearchInput } from "@/components/form";
+import { useSessionFilters } from "@/features/sessions/hooks";
+import { SessionCardDTO } from "@/features/sessions/application/dto";
+import { SessionList } from "@/features/sessions/components/ui/session-list";
+import { useUserSessions } from "@/features/sessions/hooks/use-user-sessions";
+import { useUser } from "@/components/providers";
 
 export default function SessionsPage() {
-  const { user } = useUser();
-  const { data: sessions = [], isLoading, error } = useUserSessions(user.id);
   const router = useRouter();
-  const {
-    modals: { "session:create": createSessionModal },
-  } = useModals();
-  function handleCreateSession() {
-    createSessionModal.open({ playbook: null });
+  const { user } = useUser();
+  const { data = [] } = useUserSessions(user.id);
+  const { filters, setFilters, filteredSessions, availableCourses } =
+    useSessionFilters(data);
+
+  const filterSessions = useCallback(
+    (item: SessionCardDTO, query: string): boolean => {
+      const q = query.toLowerCase();
+      return (
+        item.title?.toLowerCase().includes(q) ||
+        item.topic?.toLowerCase().includes(q) ||
+        item.courseName?.toLowerCase().includes(q) ||
+        item.subject?.toLowerCase().includes(q) ||
+        false
+      );
+    },
+    [],
+  );
+
+  const { query, search, clearResults } = useSearch<SessionCardDTO>({
+    data,
+    filter: filterSessions,
+    minQueryLength: 1,
+    debounceMs: 0,
+  });
+
+  const hasQuery = query.trim().length > 0;
+  const hasActiveFilters = Boolean(filters.course || filters.timeRange);
+
+  const sessions = useMemo(() => {
+    if (!hasQuery) return filteredSessions;
+    return filteredSessions.filter((item) => filterSessions(item, query));
+  }, [filteredSessions, filterSessions, hasQuery, query]);
+
+  function handleSessionClick(id: string) {
+    router.push(`/sessions/${id}`);
   }
-  if (isLoading) {
-    return <LoadingState />;
-  }
-  if (error) {
+
+  function renderEmptyState() {
+    if (hasQuery) {
+      return (
+        <EmptyState
+          variant="item"
+          itemVariant="outline"
+          className="bg-surface"
+          message="0 sessions were found. Try using a different keyword."
+          actionLabel="Clear search"
+          onAction={() => {
+            clearResults();
+            setFilters({});
+          }}
+        />
+      );
+    }
+
+    if (hasActiveFilters) {
+      return (
+        <EmptyState
+          variant="item"
+          itemVariant="outline"
+          className="bg-surface"
+          message="0 sessions were found with these filters."
+          actionLabel="Clear filters"
+          onAction={() => setFilters({})}
+        />
+      );
+    }
+
     return (
-      <ErrorState
-        variant="card"
-        onRetry={router.refresh}
-        message="There was an error loading your sessions. Come back later and try again."
+      <EmptyState
+        variant="item"
+        itemVariant="outline"
+        className="bg-surface"
+        message="You don't have any sessions yet."
+        actionLabel="Create Session"
+        onAction={() => {
+          router.push("/playbooks/create");
+        }}
       />
     );
   }
+
   return (
     <ContentLayout
-      title="My Sessions"
-      headerRight={
-        <Button variant="primary" onClick={handleCreateSession}>
-          Create Session
-        </Button>
+      title={
+        <SearchInput value={query} onChange={search} onClear={clearResults} />
       }
-    >
-      {sessions.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {sessions.map((session) => (
-            <SessionCard key={session.id} session={session} />
-          ))}
-        </div>
-      ) : (
-        <div className="flex h-full w-full flex-1 items-center justify-center">
-          <EmptyState
-            variant="card"
-            message="You don't have any sessions at the moment."
-            onAction={handleCreateSession}
-            actionLabel="Create Session"
+      secondaryHeader={
+        <div className="space-y-4">
+          <h1>My Sessions</h1>
+          <PlaybookFilters
+            filters={filters}
+            onFilterChange={setFilters}
+            availableCourses={availableCourses}
           />
         </div>
-      )}
+      }
+    >
+      <div className="p-5 pt-30">
+        {sessions.length === 0 ? (
+          renderEmptyState()
+        ) : (
+          <SessionList
+            sessions={sessions}
+            onSessionClick={handleSessionClick}
+          />
+        )}
+      </div>
     </ContentLayout>
   );
 }

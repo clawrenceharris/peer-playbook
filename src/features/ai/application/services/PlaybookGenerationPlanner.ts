@@ -25,6 +25,11 @@ const generatedPlanSchema = z.object({
 
 const requiredPhases = ["warmup", "workout", "closer"] as const;
 
+/**
+ * Coordinates the AI planning boundary: load candidate strategies, build the
+ * prompt, demand JSON, validate the response, and reject plans that do not
+ * satisfy the app's structural rules before anything is persisted.
+ */
 export class PlaybookGenerationPlanner {
   constructor(
     private readonly catalogRepository: StrategyCatalogRepository,
@@ -38,6 +43,8 @@ export class PlaybookGenerationPlanner {
     plan: GeneratedPlaybookPlan;
     catalog: AiStrategyCatalogItem[];
   }> {
+    // The generator still targets the legacy three-phase model, so it must have
+    // enough candidates to choose exactly one warmup, workout, and closer.
     const catalog = await this.catalogRepository.listForPlaybookGeneration(
       request.contexts,
     );

@@ -1,5 +1,5 @@
 import { fail, ok, Result } from "@/shared/application";
-import { PlaybookReadRepository } from "../../domain/repositories";
+import { PlaybookReadPort } from "../ports";
 import {
   PlaybookCardDTO,
   PlaybookDetailDTO,
@@ -8,11 +8,10 @@ import {
   SessionContextDTO,
 } from "../dto";
 import { normalizeError } from "@/shared/utils";
-import { Playbook } from "../../domain";
 
 export class PlaybookReadService {
   constructor(
-    private readonly playbookReadRepository: PlaybookReadRepository,
+    private readonly playbookReadRepository: PlaybookReadPort,
   ) {}
   async listPlaybooksByUserId(
     userId: string,

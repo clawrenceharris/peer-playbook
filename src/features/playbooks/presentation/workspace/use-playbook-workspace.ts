@@ -16,7 +16,6 @@ import {
   useUpdatePlaybookPhases,
   useUpdatePlaybookStrategy,
 } from "../hooks";
-import { usePlaybookSessions } from "@/features/sessions/hooks";
 
 import { createPlaybookWorkspaceCommands } from "./playbook-workspace.commands";
 import {
@@ -28,7 +27,6 @@ import {
   buildStrategyDraft,
   selectActivePhase,
   selectActiveStrategy,
-  selectHasSession,
   selectHeaderMetadata,
   selectIsFavorite,
   selectStrategySourceMap,
@@ -40,6 +38,11 @@ type UsePlaybookWorkspaceArgs = {
   onBackClick?: () => void;
 };
 
+/**
+ * Main playbook detail/workspace orchestrator. It merges server-backed page
+ * data, local reducer drafts, React Query mutations, favorite/session state,
+ * and modal actions into a single editing surface for the page components.
+ */
 export function usePlaybookWorkspace({
   playbookId,
   onBackClick,
@@ -72,7 +75,8 @@ export function usePlaybookWorkspace({
   const { data: systemStrategies = [] } = { data: [] };
   const { data: savedStrategies = [] } = { data: [] };
   const { data: userStrategies = [] } = { data: [] };
-  const { data: sessions = [] } = usePlaybookSessions(playbook?.id ?? null);
+  // TODO: Add playbook sessions so we can show the playbook's session status in the workspace
+  // const { data: sessions = [] } = usePlaybookSessions(playbook?.id ?? null);
   const { data: favoritePlaybooks = [] } = useMyFavoritePlaybooks(user.id);
 
   const {
@@ -109,10 +113,10 @@ export function usePlaybookWorkspace({
       ),
     [savedStrategies, systemStrategies, userStrategies],
   );
-  const hasSession = useMemo(
-    () => selectHasSession(playbook?.id, sessions),
-    [playbook?.id, sessions],
-  );
+  // const hasSession = useMemo(
+  //   () => selectHasSession(playbook?.id, sessions),
+  //   [playbook?.id, sessions],
+  // );
   const favorite = useMemo(
     () => selectIsFavorite(playbook?.id, favoritePlaybooks),
     [favoritePlaybooks, playbook?.id],
@@ -170,6 +174,8 @@ export function usePlaybookWorkspace({
       return;
     }
 
+    // Treat the newly selected strategy as the fresh editing baseline so
+    // unsaved edits do not bleed across strategy selection changes.
     dispatch({
       type: "setStrategyDraftSnapshot",
       draft: buildStrategyDraft(activeStrategy),
@@ -220,7 +226,7 @@ export function usePlaybookWorkspace({
     userStrategies,
     state,
     commands,
-    hasSession,
+    hasSession: false,
     isFavorite: state.isFavorite,
     isFavoriting,
     isUnfavoriting,

@@ -1,10 +1,6 @@
 import "./globals.css";
 
-import {
-  AuthProvider,
-  ModalProvider,
-  QueryProvider,
-} from "@/components/providers";
+import { AuthProvider, QueryProvider } from "@/components/providers";
 import { ReactNode } from "react";
 import { Outfit, Figtree } from "next/font/google";
 import { Metadata } from "next";
@@ -12,6 +8,7 @@ import { connection } from "next/server";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { prefetchAuthenticatedAppData } from "@/lib/queries/prefetchAuthenticatedAppData";
 import { User } from "@supabase/supabase-js";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "PeerPlaybook",
@@ -56,10 +53,9 @@ export default async function RootLayout({
         className={`${figtree.variable} ${outfit.variable} font-body relative antialiased`}
       >
         <QueryProvider dehydratedState={dehydratedState}>
-          <AuthProvider initialUser={initialUser}>
-            <ModalProvider>{children}</ModalProvider>
-          </AuthProvider>
+          <AuthProvider initialUser={initialUser}>{children}</AuthProvider>
         </QueryProvider>
+        <Toaster />
       </body>
     </html>
   );

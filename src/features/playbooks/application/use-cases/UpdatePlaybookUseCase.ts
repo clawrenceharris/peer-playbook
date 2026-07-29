@@ -1,11 +1,10 @@
-import { updatePlaybookSchema } from "@/lib/validation";
-import { PlaybookWriteRepository } from "../../domain";
+import { PlaybookWritePort } from "../ports";
 import { fail, ok, Result } from "@/shared/application";
 import { UpdatePlaybookInput, UpdatePlaybookResult } from "../dto";
 import { ApplicationError } from "@/shared/utils";
 
 export class UpdatePlaybookUseCase {
-  constructor(private readonly playbookRepository: PlaybookWriteRepository) {}
+  constructor(private readonly playbookRepository: PlaybookWritePort) {}
 
   async execute(
     input: UpdatePlaybookInput,

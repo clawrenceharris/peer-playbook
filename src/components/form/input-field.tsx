@@ -1,8 +1,6 @@
 "use client";
 import React, { forwardRef } from "react";
 import {
-  ControllerFieldState,
-  ControllerRenderProps,
   FieldValues,
   Path,
   useController,

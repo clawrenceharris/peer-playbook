@@ -1,6 +1,6 @@
 import { fail, ok, Result } from "@/shared/application";
 import { ApplicationError } from "@/shared/utils";
-import { PlaybookWriteRepository } from "../../domain";
+import { PlaybookWritePort } from "../ports";
 import {
   toLegacyPhase,
   toPhaseIntentKey,
@@ -8,7 +8,7 @@ import {
 import { AddPlaybookPhaseInput, PlaybookPhaseDTO } from "../dto";
 
 export class AddPlaybookPhaseUseCase {
-  constructor(private readonly playbookRepository: PlaybookWriteRepository) {}
+  constructor(private readonly playbookRepository: PlaybookWritePort) {}
 
   async execute(
     input: AddPlaybookPhaseInput,

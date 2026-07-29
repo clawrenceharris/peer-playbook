@@ -1,4 +1,3 @@
-import type { Session } from "@/features/sessions/domain";
 import type { PhaseIntent } from "@/features/reference-data/phase-intents/domain/types/PhaseIntent";
 import { PHASE_INTENT_ICONS } from "@/features/reference-data/phase-intents/domain/constants/phase-intents.constants";
 import { PhaseIntent as PhaseIntentEnum } from "@/features/reference-data/phase-intents/domain/types/PhaseIntent";
@@ -20,7 +19,12 @@ import type {
   PlaybookWorkspaceStrategy,
   PlaybookWorkspaceStrategyDraft,
 } from "./playbook-workspace.types";
+import { SessionCardDTO } from "@/features/sessions/application/dto";
 
+/**
+ * Compatibility map between the newer phase-intent vocabulary and the legacy
+ * strings still found on some strategy rows.
+ */
 const legacyPhaseIntentMap: Record<string, PhaseIntent> = {
   warmup: PhaseIntentEnum.ACTIVATE,
   workout: PhaseIntentEnum.APPLY,
@@ -98,6 +102,9 @@ export function buildPlaybookWorkspaceModel(
 ): PlaybookWorkspacePhase[] {
   if (!page) return [];
 
+  // Newer rows link strategies directly to a playbook phase. Older rows still
+  // need to be grouped via the legacy phase string until the migration is
+  // complete, so the selector supports both shapes.
   const strategiesHavePhaseLinks = page.strategies.some(
     (strategy) => strategy.playbookPhaseId,
   );
@@ -211,6 +218,9 @@ export function selectStrategySourceMap(
   savedStrategies: PlaybookWorkspaceSource[],
   userStrategies: PlaybookWorkspaceSource[],
 ): PlaybookWorkspaceSourceMap {
+  // Saved strategies still reuse the system prefix because they resolve from
+  // the same catalog table today; user-authored strategies get their own key
+  // space to avoid collisions.
   const entries = [
     ...systemStrategies.map(
       (strategy) => [`system:${strategy.id}`, strategy] as const,
@@ -235,7 +245,7 @@ export function selectIsFavorite(
 
 export function selectHasSession(
   playbookId: string | undefined,
-  sessions: Session[],
+  sessions: SessionCardDTO[],
 ): boolean {
   return Boolean(
     playbookId && sessions.some((session) => session.id === playbookId),

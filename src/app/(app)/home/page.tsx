@@ -1,21 +1,32 @@
 "use client";
 
 import { useUser } from "@/components/providers";
-import { Button } from "@/components/ui";
+import {
+  Button,
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui";
 import { useRecentPlaybooks } from "@/features/playbooks/presentation/hooks";
-import { useMyUpcomingSessions } from "@/features/sessions/hooks/use-user-sessions";
+// import { useMyUpcomingSessions } from "@/features/sessions/hooks/use-user-sessions";
 import { cn, timeAgo } from "@/lib/utils";
 import type { PlaybookCardDTO } from "@/features/playbooks/application/dto";
-import type { Session } from "@/features/sessions/domain";
-import { ArrowRight, Loader2 } from "lucide-react";
+// import type { Session } from "@/features/sessions/domain";
+import { ArrowRight, Book, Clock, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { FormEvent, ReactNode } from "react";
 import { useMemo, useState } from "react";
 import { ContentLayout, UserNav } from "@/components/sidebar";
 import { SearchInput } from "@/components/form";
 import { InputGroupAddon, InputGroupButton } from "@/components/ui/input-group";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { assets } from "@/lib/constants";
+import { SessionStatus } from "@/features/sessions/domain/value-objects";
+import { SessionCardDTO } from "@/features/sessions/application/dto";
+import { useUserSessions } from "@/features/sessions/hooks";
 
 const sessionDateFormatter = new Intl.DateTimeFormat(undefined, {
   weekday: "short",
@@ -25,11 +36,11 @@ const sessionDateFormatter = new Intl.DateTimeFormat(undefined, {
   minute: "2-digit",
 });
 
-const statusStyles: Record<Session["status"], string> = {
-  active: "bg-success-100 text-success-700",
-  canceled: "bg-destructive-100 text-destructive-700",
+const statusStyles: Record<SessionStatus, string> = {
+  active: "bg-success-100 text-success",
+  canceled: "bg-destructive-100 text-destructive",
   completed: "bg-muted text-muted-foreground",
-  scheduled: "bg-primary-50 text-primary-700",
+  scheduled: "bg-primary-50 text-primary",
 };
 
 const learningPrompts = [
@@ -39,14 +50,21 @@ const learningPrompts = [
   "Reflection",
 ];
 
+/**
+ * The home page mixes live data (recent playbooks and upcoming sessions) with a
+ * few placeholder or aspirational affordances while the broader dashboard UX is
+ * still being filled in.
+ */
 export default function Dashboard() {
   const router = useRouter();
   const { user, profile } = useUser();
   const [searchQuery, setSearchQuery] = useState("");
   const { data: recentPlaybooks = [], isLoading: playbooksLoading } =
     useRecentPlaybooks(6);
+
+  // TODO: Add upcoming sessions so we can show the user's upcoming sessions in the home page
   const { data: upcomingSessions = [], isLoading: sessionsLoading } =
-    useMyUpcomingSessions(user.id);
+    useUserSessions(user.id);
 
   const sortedUpcomingSessions = useMemo(
     () =>
@@ -56,25 +74,12 @@ export default function Dashboard() {
     [upcomingSessions],
   );
 
-  const normalizedSearchQuery = searchQuery.trim().toLowerCase();
-  const visiblePlaybooks = useMemo(() => {
-    const matchingPlaybooks = normalizedSearchQuery
-      ? recentPlaybooks.filter((playbook) =>
-          [playbook.topic, playbook.courseName, playbook.subject]
-            .filter(Boolean)
-            .some((value) =>
-              value?.toLowerCase().includes(normalizedSearchQuery),
-            ),
-        )
-      : recentPlaybooks;
-
-    return matchingPlaybooks.slice(0, 4);
-  }, [normalizedSearchQuery, recentPlaybooks]);
-
   const firstName = profile?.firstName || "there";
 
   function handleHeroSearchSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    // The hero search currently narrows only the on-page recent-playbooks
+    // section; it does not perform a global server search.
     document
       .getElementById("discover-playbooks")
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -150,19 +155,19 @@ export default function Dashboard() {
       <div className="bg-surface w-full space-y-8 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
         <section className="grid gap-4 pt-10 md:grid-cols-2">
           <ActionTile
-            title="Create a playbook"
+            imageSrc={assets.playbookCardHero}
+            title="Playbooks"
             description="Build a game-ready plan with activities, prompts, and phases that fit the way students learn together."
             actionLabel="Start building"
             onClick={() => router.push("/playbooks/create")}
-            artwork={<CreatePlaybookArtwork />}
             tone="primary"
           />
           <ActionTile
-            title="Schedule a session"
+            title="Sessions"
             description="Set the time, gather the group, and keep your next peer-learning session organized."
             actionLabel="Plan session"
             onClick={() => {}}
-            artwork={<ScheduleSessionArtwork />}
+            imageSrc={assets.sessionCardHero}
             tone="secondary"
           />
         </section>
@@ -213,9 +218,7 @@ export default function Dashboard() {
             <SectionHeader
               title="Discover your playbooks"
               description={
-                normalizedSearchQuery
-                  ? `Showing matches for "${searchQuery.trim()}".`
-                  : "Recent plans, review games, and activity ideas worth revisiting."
+                "Recent plans, review games, and activity ideas worth revisiting."
               }
               action={
                 <Button
@@ -231,9 +234,9 @@ export default function Dashboard() {
 
             {playbooksLoading ? (
               <LoadingPanel label="Loading playbooks" />
-            ) : visiblePlaybooks.length > 0 ? (
+            ) : recentPlaybooks.length > 0 ? (
               <div className="grid gap-3 sm:grid-cols-2">
-                {visiblePlaybooks.map((playbook) => (
+                {recentPlaybooks.map((playbook) => (
                   <RecentPlaybookCard
                     key={playbook.id}
                     playbook={playbook}
@@ -244,24 +247,12 @@ export default function Dashboard() {
             ) : (
               <HomeEmptyState
                 artwork={<EmptyPlaybookGraphic />}
-                title={
-                  normalizedSearchQuery
-                    ? "No matching playbooks"
-                    : "No playbooks yet"
-                }
+                title={"No playbooks yet"}
                 message={
-                  normalizedSearchQuery
-                    ? "Try a course, topic, or activity style from your library."
-                    : "Your first playbook can be a game plan for the next topic students need to practice."
+                  "Your first playbook can be a game plan for the next topic students need to practice."
                 }
-                actionLabel={
-                  normalizedSearchQuery ? "Clear search" : "Create playbook"
-                }
-                onAction={() =>
-                  normalizedSearchQuery
-                    ? setSearchQuery("")
-                    : router.push("/playbooks/create")
-                }
+                actionLabel={"Create playbook"}
+                onAction={() => router.push("/playbooks/create")}
               />
             )}
           </section>
@@ -275,8 +266,8 @@ interface ActionTileProps {
   title: string;
   description: string;
   actionLabel: string;
+  imageSrc: StaticImageData;
   onClick: () => void;
-  artwork: ReactNode;
   tone: "primary" | "secondary";
 }
 
@@ -284,27 +275,26 @@ function ActionTile({
   title,
   description,
   actionLabel,
+  imageSrc,
   onClick,
-  artwork,
   tone,
 }: ActionTileProps) {
   return (
     <article
       className={cn(
-        "flex min-h-64 flex-col overflow-hidden rounded-lg border shadow-sm lg:flex-row",
-        tone === "primary"
-          ? "bg-primary-400 text-primary-900"
-          : "bg-secondary-400 text-secondary-800",
+        "text-foreground flex min-h-64 flex-col overflow-hidden rounded-lg border bg-white shadow-sm lg:flex-row",
+        tone === "primary" ? "border-primary/50" : "border-secondary/30",
       )}
     >
       <div className="flex flex-1 flex-col justify-between gap-6 p-5 sm:p-6">
         <div className="space-y-3">
           <h2 className="text-2xl leading-tight font-bold">{title}</h2>
-          <p className="max-w-md text-sm leading-6">{description}</p>
+          <p className="text-muted-foreground max-w-md text-sm leading-6">
+            {description}
+          </p>
         </div>
         <Button
           type="button"
-          className={tone === "primary" ? "bg-primary-900" : "bg-secondary-800"}
           variant={tone === "primary" ? "primary" : "secondary"}
           onClick={onClick}
         >
@@ -314,11 +304,18 @@ function ActionTile({
       </div>
       <div
         className={cn(
-          "flex min-h-34 flex-1 items-center justify-center p-4 md:border-t-0",
+          "flex min-h-34 flex-1 items-center justify-center md:border-t-0",
           tone === "primary" ? "bg-primary-100" : "bg-secondary-300",
         )}
       >
-        {artwork}
+        <Image
+          src={imageSrc}
+          alt={title}
+          className="size-full object-cover"
+          loading="eager"
+          width={1254}
+          height={1254}
+        />
       </div>
     </article>
   );
@@ -347,27 +344,29 @@ function SectionHeader({ title, description, action }: SectionHeaderProps) {
 }
 
 interface UpcomingSessionCardProps {
-  session: Session;
+  session: SessionCardDTO;
   onOpen: () => void;
 }
 
 function UpcomingSessionCard({ session, onOpen }: UpcomingSessionCardProps) {
   return (
-    <article className="rounded-lg border bg-white p-4 shadow-sm">
-      <div className="flex items-start justify-between gap-4">
+    <Card>
+      <CardContent className="px-6 py-4">
         <div className="min-w-0 space-y-2">
           <div className="flex flex-wrap items-center gap-2">
             {session.courseName && (
-              <span className="bg-muted text-muted-foreground rounded-md px-2 py-1 text-xs font-bold">
+              <span className="bg-muted text-muted-foreground flex items-center gap-1 rounded-md px-2 py-1 text-xs font-bold">
+                <Book className="size-3" />
                 {session.courseName}
               </span>
             )}
             <span
               className={cn(
-                "rounded-md px-2 py-1 text-xs font-bold capitalize",
+                "flex items-center gap-1 rounded-md px-2 py-1 text-xs font-bold capitalize",
                 statusStyles[session.status],
               )}
             >
+              <Clock className="size-3" />
               {session.status}
             </span>
           </div>
@@ -378,16 +377,17 @@ function UpcomingSessionCard({ session, onOpen }: UpcomingSessionCardProps) {
             {formatSessionDate(session.scheduledStart)}
           </p>
         </div>
-        <MiniSessionMark />
-      </div>
+      </CardContent>
 
-      <div className="mt-5 flex justify-end">
-        <Button size="sm" variant="primary" onClick={onOpen}>
-          Open room
-          <ArrowRight />
-        </Button>
-      </div>
-    </article>
+      <CardFooter>
+        <CardAction>
+          <Button size="sm" variant="primary" onClick={onOpen}>
+            Open room
+            <ArrowRight />
+          </Button>
+        </CardAction>
+      </CardFooter>
+    </Card>
   );
 }
 
@@ -489,6 +489,8 @@ type ScheduleItem = {
   status?: string;
 };
 
+// Static agenda content used for the dashboard visual until the "today" panel
+// is wired to real session/playbook activity.
 const scheduleItems: ScheduleItem[] = [
   {
     id: "1",
@@ -599,67 +601,6 @@ export function ScheduleTimelineCard() {
   );
 }
 
-function CreatePlaybookArtwork({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 420 260"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      role="img"
-      aria-label="Abstract playbook with colored strategy tabs"
-    >
-      {/* Soft background blob */}
-      <rect x="0" y="0" width="420" height="260" rx="28" fill="#ECFBFF" />
-
-      {/* Colored playbook tabs */}
-      <rect x="54" y="58" width="92" height="46" rx="16" fill="#21C866" />
-      <rect x="164" y="58" width="92" height="46" rx="16" fill="#A855F7" />
-      <rect x="274" y="58" width="92" height="46" rx="16" fill="#F99A0A" />
-
-      {/* Tab inner highlight pills */}
-      <rect x="76" y="75" width="48" height="8" rx="4" fill="#BDF8D2" />
-      <rect x="186" y="75" width="48" height="8" rx="4" fill="#E9D5FF" />
-      <rect x="296" y="75" width="48" height="8" rx="4" fill="#FFE1B2" />
-
-      {/* Main playbook page */}
-      <rect
-        x="42"
-        y="96"
-        width="336"
-        height="120"
-        rx="22"
-        fill="white"
-        stroke="#DDE7F0"
-        strokeWidth="2"
-      />
-
-      {/* Page content dots */}
-      <circle cx="78" cy="128" r="6" fill="#21C866" />
-      <circle cx="78" cy="158" r="6" fill="#A855F7" />
-      <circle cx="78" cy="188" r="6" fill="#F99A0A" />
-
-      {/* Page content text pills */}
-      <rect x="96" y="121" width="174" height="12" rx="6" fill="#DCE3EA" />
-      <rect x="286" y="121" width="50" height="12" rx="6" fill="#EEF2F6" />
-
-      <rect x="96" y="151" width="210" height="12" rx="6" fill="#DCE3EA" />
-      <rect x="318" y="151" width="28" height="12" rx="6" fill="#EEF2F6" />
-
-      <rect x="96" y="181" width="132" height="12" rx="6" fill="#DCE3EA" />
-      <rect x="244" y="181" width="84" height="12" rx="6" fill="#EEF2F6" />
-
-      {/* Subtle page shadow */}
-      <path
-        d="M66 216H354"
-        stroke="#D8E4EC"
-        strokeWidth="10"
-        strokeLinecap="round"
-        opacity="0.45"
-      />
-    </svg>
-  );
-}
 export function ScheduleSessionArtwork({ className }: { className?: string }) {
   return (
     <svg
@@ -831,6 +772,8 @@ function EmptyPlaybookGraphic() {
 }
 
 function getDateTime(value: Date | string | null | undefined) {
+  // Missing or invalid dates sort to the end of lists instead of breaking the
+  // dashboard ordering logic.
   if (!value) return Number.POSITIVE_INFINITY;
   const date = new Date(value);
   const time = date.getTime();

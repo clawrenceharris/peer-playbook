@@ -6,6 +6,7 @@ import {
   ConfirmationModalProps,
   CreatePlaybookModalProps,
   CreateSessionModalProps,
+  UpdateSessionModalProps,
 } from "@/lib/modals/types";
 import { useMemo } from "react";
 
@@ -34,6 +35,14 @@ export function useModals() {
       [PLAYBOOK_MODAL_TYPES.CREATE]: {
         open: (props: CreatePlaybookModalProps) => {
           openModal<CreatePlaybookModalProps>(PLAYBOOK_MODAL_TYPES.CREATE, {
+            ...props,
+            onCancel: closeModal,
+          });
+        },
+      },
+      [SESSION_MODAL_TYPES.UPDATE]: {
+        open: (props: UpdateSessionModalProps) => {
+          openModal<UpdateSessionModalProps>(SESSION_MODAL_TYPES.UPDATE, {
             ...props,
             onCancel: closeModal,
           });

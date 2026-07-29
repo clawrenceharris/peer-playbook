@@ -1,8 +1,15 @@
-import { UpdatePlaybookStrategyFormValues } from "@/lib/validation";
-
 export type UpdatePlaybookStrategyInput = {
   strategyId: string;
   playbookId?: string;
   slug?: string;
   category?: string;
-} & UpdatePlaybookStrategyFormValues;
+  steps?: string[];
+  title?: string;
+  phase?: "warmup" | "workout" | "closer";
+  position?: number;
+  description?: string;
+  sourceId?: string;
+  sourceType?: string;
+  facilitatorNotes?: string | null;
+  estimatedMinutes?: number | null;
+};

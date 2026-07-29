@@ -15,7 +15,7 @@ import { usePathname } from "next/navigation";
 import PlaybooksPage from "./_components/PlaybooksPage";
 import { PlaybooksPageOutput } from "@/features/playbooks/application/dto/PlaybooksPageDTO";
 import { PlaybooksPageSkeleton } from "@/features/playbooks/presentation/components";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const menuItems: {
   id: string;
@@ -93,7 +93,7 @@ export function LibraryPageClient({ playbooksPage }: LibraryPageClientProps) {
                     )}
                   >
                     <Link href={href}>
-                      <Icon className="min-h-[25px] min-w-[25px] transition-transform" />
+                      <Icon className="min-h-6.25 min-w-6.25 transition-transform" />
                       <span className="hidden md:inline">{label}</span>
                     </Link>
                   </SidebarMenuButton>

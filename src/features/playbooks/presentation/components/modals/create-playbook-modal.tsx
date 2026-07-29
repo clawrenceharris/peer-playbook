@@ -1,9 +1,6 @@
 import { Form } from "@/components/form";
 import { DialogContent } from "@/components/ui";
-import {
-  BuildPlaybookFormValues,
-  CreatePlaybookFromScratchFormValues,
-} from "@/lib/validation";
+import { CreatePlaybookFromScratchFormValues } from "@/lib/validation";
 import { useCreatePlaybookForm } from "../../hooks";
 import { LessonDetailsSection } from "../forms/sections";
 import { CreatePlaybookModalProps } from "@/lib/modals/types";

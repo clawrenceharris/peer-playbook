@@ -1,9 +1,7 @@
 import React from "react";
-import { Playbook } from "@/features/playbooks/domain";
 import { Loader2 } from "lucide-react";
-import { PlaybookCard } from "@/features/playbooks/presentation/components";
+import { PlaybookListItem } from "@/features/playbooks/presentation/components";
 import { EmptyState } from "@/components/states";
-import { PlaybookCardDTO } from "@/features/playbooks/application/dto";
 
 interface PlaybookListProps {
   playbooks: {
@@ -58,7 +56,7 @@ export function PlaybookList({
         };
 
         return (
-          <PlaybookCard
+          <PlaybookListItem
             key={playbook.id}
             playbook={cardPlaybook}
             onNavigate={() => onPlaybookClick?.(playbook.id)}

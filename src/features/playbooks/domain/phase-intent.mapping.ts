@@ -2,7 +2,9 @@ import { PhaseIntent } from "@/features/reference-data/phase-intents/domain/type
 
 /**
  * Maps workspace PhaseIntent values to the persisted intent key used by
- * playbook_phases / phase_intents. Transition is not a creatable phase intent yet.
+ * playbook_phases / phase_intents. Unknown values fall back to `apply` so
+ * older UI callers do not write an invalid intent key during the migration.
+ * Transition is not a creatable phase intent yet.
  */
 export function toPhaseIntentKey(
   intent: PhaseIntent | string,
@@ -21,7 +23,9 @@ export function toPhaseIntentKey(
 
 /**
  * Legacy lesson_phase values still stored on playbook_strategies.phase.
- * Kept for backward compatibility with older strategy rows.
+ * Kept for backward compatibility with older strategy rows. Unknown values
+ * intentionally collapse to `workout`, which is the closest legacy bucket to
+ * the newer `apply` intent.
  */
 export function toLegacyPhase(
   intent: PhaseIntent | string,

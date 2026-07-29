@@ -78,6 +78,7 @@
   --color-destructive-500: var(--destructive-500);
   --color-destructive-700: var(--destructive-700);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-star: var(--star);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -116,7 +117,7 @@
 
   /* Muted */
   --muted: #f6f7fb;
-  --muted-foreground: #979da8;
+  --muted-foreground: #9aa1ad;
 
   /* Core Palette */
 
@@ -203,7 +204,7 @@
 
   /* Popover */
   --popover: #ffffff;
-  --popover-foreground: #777b84;
+  --popover-foreground: #5a637e;
 
   /* Sidebar */
   --sidebar-width: 14rem;
@@ -377,6 +378,9 @@
   }
   .faded-top {
     @apply mask-[linear-gradient(to_bottom,transparent,black_10%,black)];
+  }
+  .centered {
+    @apply flex h-full w-full flex-1 items-center justify-center;
   }
   .faded-col {
     @apply mask-[linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)];

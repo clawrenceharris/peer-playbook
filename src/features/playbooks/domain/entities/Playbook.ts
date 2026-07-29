@@ -1,4 +1,4 @@
-import { PlaybookStrategyCardDTO } from "../../application/dto";
+import { PlaybookStrategy } from "../types";
 
 export type PlaybookProps = {
   id: string;
@@ -8,7 +8,7 @@ export type PlaybookProps = {
   subject: string | null;
   createdBy: string | null;
   createdAt: Date;
-  strategies: PlaybookStrategyCardDTO[];
+  strategies: PlaybookStrategy[];
 };
 
 export class Playbook {
@@ -45,7 +45,7 @@ export class Playbook {
     return this.props.strategies;
   }
 
-  withStrategies(strategies: PlaybookStrategyCardDTO[]) {
+  withStrategies(strategies: PlaybookStrategy[]) {
     return new Playbook({
       ...this.props,
       strategies,

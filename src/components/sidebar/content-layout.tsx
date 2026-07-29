@@ -2,7 +2,6 @@
 import { cn } from "@/lib/utils";
 import { ContentHeader } from "./content-header";
 import React from "react";
-import { ScrollArea, ScrollBar } from "../ui";
 
 type ContentLayoutProps = {
   title?: string | React.ReactNode;
@@ -12,7 +11,6 @@ type ContentLayoutProps = {
   className?: string;
   showHeader?: boolean;
   contentContainerClassName?: string;
-  scrollAreaClassName?: string;
   showThemeToggle?: boolean;
   headerRight?: React.ReactNode;
   headerClassName?: string;
@@ -40,7 +38,6 @@ export const ContentLayout = React.forwardRef<
       headerRight,
       scrollable = true,
       headerClassName,
-      scrollAreaClassName,
       showThemeToggle = true,
       showUserNav = true,
       secondaryHeader,
@@ -76,7 +73,7 @@ export const ContentLayout = React.forwardRef<
 
         <div
           className={cn(
-            "container mx-auto flex flex-1 flex-col px-5 pt-20 pb-5",
+            "flex flex-1 flex-col px-5 pt-20 pb-5",
             scrollable ? "overflow-y-auto" : "overflow-hidden",
             contentContainerClassName,
           )}

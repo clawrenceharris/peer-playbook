@@ -12,6 +12,7 @@ type SessionProps = {
   description: string | null;
   status: SessionStatus;
   instructorId: string;
+  createdAt: string;
 };
 
 export class Session {
@@ -58,6 +59,10 @@ export class Session {
 
   get status(): SessionStatus {
     return this.props.status;
+  }
+
+  get createdAt(): string {
+    return this.props.createdAt;
   }
 
   markAsCompleted(): void {

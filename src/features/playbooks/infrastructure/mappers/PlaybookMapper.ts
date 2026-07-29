@@ -30,7 +30,9 @@ export class PlaybookMapper {
       subject: record.subject,
       createdBy: record.created_by,
       createdAt: record.created_at,
-      strategies: record.playbook_strategies.map(PlaybookStrategyMapper.toCard),
+      strategies: record.playbook_strategies.map(
+        PlaybookStrategyMapper.toDomain,
+      ),
     });
   }
 

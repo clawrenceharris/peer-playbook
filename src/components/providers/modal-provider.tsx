@@ -28,6 +28,10 @@ interface ModalProviderProps {
   children: React.ReactNode;
 }
 
+/**
+ * Central modal registry/provider. Feature areas register modal components by
+ * key and the provider renders exactly one active modal instance at a time.
+ */
 export function ModalProvider({ children }: ModalProviderProps) {
   const [modalState, setModalState] = useState<ModalState>({
     type: null,
@@ -111,6 +115,8 @@ export function useModal() {
  */
 export function ModalRegistration() {
   useEffect(() => {
+    // Registration happens once near the app root so feature hooks can open
+    // modals without importing the concrete component tree.
     modalRegistry.register("confirmation", ConfirmationModal);
     registerSessionModals();
     registerPlaybookModals();

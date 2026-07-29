@@ -3,14 +3,14 @@ import {
   CreateSessionInput,
   CreateSessionResult,
 } from "../dto/CreateSessionDTO";
-import { SessionWriteRepository } from "../../domain/repositories/SessionWriteRepository";
+import { SessionWritePort } from "../ports";
 import { SessionMode, SessionStatus } from "../../domain/value-objects";
 import { Session } from "../../domain/entities/Session";
 import { ApplicationError } from "@/shared/utils";
 
 type CreateSessionUseCaseResult = Result<CreateSessionResult>;
 export class CreateSessionUseCase {
-  constructor(private readonly sessionRepository: SessionWriteRepository) {}
+  constructor(private readonly sessionRepository: SessionWritePort) {}
 
   async execute(
     input: CreateSessionInput,
@@ -28,6 +28,7 @@ export class CreateSessionUseCase {
         courseName: input.courseName ?? null,
         description: input.description ?? null,
         status: SessionStatus.SCHEDULED,
+        createdAt: new Date().toISOString(),
       });
       const result = await this.sessionRepository.createSession({
         playbookId: session.playbookId,

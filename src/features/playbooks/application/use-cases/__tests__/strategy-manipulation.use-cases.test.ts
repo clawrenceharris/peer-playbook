@@ -27,6 +27,8 @@ describe("playbook strategy use cases", () => {
       position: 2,
       sourceId: "strategy-1",
       sourceType: "system",
+      facilitatorNotes: null,
+      estimatedMinutes: null,
     });
 
     expect(result.success).toBe(true);
@@ -42,6 +44,8 @@ describe("playbook strategy use cases", () => {
       position: 2,
       sourceId: "strategy-1",
       sourceType: "system",
+      facilitatorNotes: null,
+      estimatedMinutes: null,
     });
   });
 
@@ -98,4 +102,3 @@ describe("playbook strategy use cases", () => {
     });
   });
 });
-

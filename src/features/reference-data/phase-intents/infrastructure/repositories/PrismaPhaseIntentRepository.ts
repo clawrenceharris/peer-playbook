@@ -1,7 +1,7 @@
 import { PhaseIntent } from "../../domain/types/PhaseIntent";
 import { PhaseIntentRepository } from "../../domain/repositories/PhaseIntentRepository";
 import { PhaseIntentMapper } from "../mappers/PhaseIntentMapper";
-import { client, type PrismaClient } from "@/lib/db/client";
+import { type PrismaClient } from "@/lib/db/client";
 
 export class PrismaPhaseIntentRepository implements PhaseIntentRepository {
   constructor(private readonly client: PrismaClient = client) {}

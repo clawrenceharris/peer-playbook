@@ -1,11 +1,17 @@
 import { NextRequest } from "next/server";
 import { updateSession } from "./lib/supabase/middleware";
 
+/**
+ * Delegates all matched requests to the Supabase session guard. Keeping the
+ * matcher here makes it easier to see which route groups participate in the
+ * authenticated app shell.
+ */
 export async function proxy(request: NextRequest) {
   return await updateSession(request);
 }
 export const config = {
   matcher: [
+    "/",
     "/home",
     "/sign-up",
     "/login",

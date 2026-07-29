@@ -6,7 +6,6 @@ import {
   Atom,
   Beaker,
   BookOpen,
-  BookPlus,
   Code,
   Divide,
   Earth,

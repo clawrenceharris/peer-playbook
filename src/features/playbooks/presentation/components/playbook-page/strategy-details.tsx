@@ -1,13 +1,7 @@
 import { Icon } from "@/components/shared";
 import { Item, ItemActions, ItemContent } from "@/components/ui";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   InputGroup,

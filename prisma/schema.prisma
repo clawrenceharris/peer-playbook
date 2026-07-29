@@ -688,6 +688,8 @@ model public_sessions {
   mode                session_mode
   subject             String?
   title               String
+  actual_start        DateTime?             @db.Timestamptz(6)
+  ended_at            DateTime?             @db.Timestamptz(6)
   activity_executions activity_executions[]
   profiles            profiles              @relation(fields: [instructor_id], references: [id], onDelete: Cascade, map: "sessions_leader_id_fkey1")
   playbooks           playbooks?            @relation(fields: [playbook_id], references: [id])

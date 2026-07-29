@@ -7,7 +7,9 @@ import { getPlaybooksByUserAction } from "@/actions/playbook";
 
 /**
  * Warms the TanStack Query cache for the current session on the server so the
- * client can render without an extra round-trip (and with fewer DB hits on first paint).
+ * client can render without an extra round-trip (and with fewer DB hits on
+ * first paint). This currently prefetches only the signed-in profile detail
+ * and user-scoped playbook list, not every playbook query shape in the app.
  */
 export async function prefetchAuthenticatedAppData(
   queryClient: QueryClient,

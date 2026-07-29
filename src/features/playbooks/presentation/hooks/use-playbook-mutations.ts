@@ -19,7 +19,6 @@ import {
 import { playbookKeys } from "@/lib/queries/keys";
 import { useUser } from "@/components/providers";
 import { PlaybookStrategyUpdate } from "../../domain";
-import { ActionResult } from "@/shared/action";
 import {
   applyOptimisticAddPlaybookPhaseCaches,
   applyOptimisticAddStrategyCaches,
@@ -355,6 +354,9 @@ export const useReorderStrategies = () => {
       ) {
         throw new Error("Strategies must belong to the same phase");
       }
+      // Reorder currently persists as one update per strategy instead of a
+      // dedicated batch endpoint, so the optimistic cache patch keeps the UI
+      // responsive while these writes complete.
       await Promise.all(
         strategies.map(async (strategy, index) => {
           const phase =

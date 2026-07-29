@@ -1,27 +1,14 @@
 "use client";
-import React, { useEffect } from "react";
-import { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { useAuth } from "@/components/providers";
 import { ErrorState, LoadingState } from "@/components/states";
-// import { useProfileDetail } from "@/features/profile/presentation/hooks";
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui";
-import {
-  useProfile,
-  useProfileDetail,
-} from "@/features/profile/presentation/hooks";
+import { Dialog } from "../ui";
+import { useProfile } from "@/features/profile/presentation/hooks";
 import { CreateProfileModal } from "@/features/profile/presentation/components/modals";
-// import { CreateProfileModal } from "@/features/profile/presentation/components/modals";
-// import { ProfileDetailResult } from "@/features/profile/application/dto";
+import { SidebarLayout } from "../sidebar";
+import { getUserErrorMessage } from "@/shared/utils";
 
 type UserContextType = {
   user: User;
@@ -36,10 +23,15 @@ type UserProviderProps = {
   children: React.ReactNode;
 };
 
+/**
+ * Bridges auth state to a fully usable in-app user context. A signed-in user is
+ * not considered ready for the main app until their profile and onboarding
+ * state have been resolved.
+ */
 export function UserProvider({ children }: UserProviderProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, isAuthReady } = useAuth();
+  const { user, isAuthReady, signOut } = useAuth();
   const isOnboardingRoute = pathname.startsWith("/onboarding");
   const isAuthRoute = pathname.startsWith("/auth");
   const {
@@ -47,13 +39,15 @@ export function UserProvider({ children }: UserProviderProps) {
     refetch,
     isLoading: isLoadingProfile,
     error,
-  } = useProfileDetail(user?.id ?? null);
+  } = useProfile(user?.id ?? null);
 
   const needsOnboarding = Boolean(profile && !profile.onboardingCompletedAt);
 
   useEffect(() => {
     if (!profile || isLoadingProfile) return;
 
+    // Onboarding is enforced here so the rest of the app can assume profile
+    // completion once UserContext is available.
     if (needsOnboarding && !isOnboardingRoute) {
       router.replace("/onboarding");
       return;
@@ -90,14 +84,15 @@ export function UserProvider({ children }: UserProviderProps) {
   }
   if (error) {
     return (
-      <div className="centered">
+      <div className="centered h-screen w-screen">
         <ErrorState
           variant="card"
           title="Error loading profile"
-          message={error.message}
-          onAction={() => window.location.reload()}
-          actionLabel="Refresh"
-          onRetry={refetch}
+          message={getUserErrorMessage(error.message)}
+          onAction={refetch}
+          actionLabel="Try again"
+          retryLabel="Sign Out"
+          onRetry={signOut}
         />
       </div>
     );
@@ -115,10 +110,6 @@ export function UserProvider({ children }: UserProviderProps) {
 
   if (needsOnboarding && !isOnboardingRoute) {
     return <LoadingState variant="page" />;
-  }
-
-  if (isOnboardingRoute) {
-    return <>{children}</>;
   }
 
   return (

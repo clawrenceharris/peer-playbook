@@ -1,4 +1,4 @@
-import { client, type PrismaClient } from "@/lib/db/client";
+import { type PrismaClient } from "@/lib/db/client";
 import { AiStrategyCatalogItem, StrategyCatalogRepository } from "../../domain";
 
 export class PrismaStrategyCatalogRepository implements StrategyCatalogRepository {

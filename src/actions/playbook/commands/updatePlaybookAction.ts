@@ -2,7 +2,6 @@
 import { makeUpdatePlaybookUseCase } from "@/composition/playbook";
 import {
   UpdatePlaybookResult,
-  UpdatePlaybookInput,
 } from "@/features/playbooks/application/dto";
 import { updatePlaybookSchema } from "@/lib/validation";
 import { ActionResult, toActionError } from "@/shared/action";
@@ -12,20 +11,31 @@ import {
   assertPlaybookOwnership,
   requireCurrentUserId,
 } from "../utils/ownership";
+import { z } from "zod";
+
+type UpdatePlaybookActionInput = {
+  id: string;
+} & z.input<typeof updatePlaybookSchema>;
 
 export async function updatePlaybookAction(
-  input: UpdatePlaybookInput,
+  input: UpdatePlaybookActionInput,
 ): Promise<ActionResult<UpdatePlaybookResult>> {
   try {
-    const { error } = updatePlaybookSchema.safeParse(input);
-    if (error) {
-      const appError = ApplicationError.validation(error.message);
+    const parsed = updatePlaybookSchema.safeParse(input);
+    if (!parsed.success) {
+      const appError = ApplicationError.validation(parsed.error.message);
       return fail(toActionError(appError));
     }
     const userId = await requireCurrentUserId();
     await assertPlaybookOwnership(input.id, userId);
     const updatePlaybookUseCase = makeUpdatePlaybookUseCase();
-    const result = await updatePlaybookUseCase.execute(input);
+    const result = await updatePlaybookUseCase.execute({
+      id: input.id,
+      title: parsed.data.title,
+      topic: parsed.data.topic,
+      courseName: parsed.data.courseName,
+      subject: parsed.data.subject,
+    });
     if (!result.success) {
       return fail(toActionError(result.error));
     }

@@ -1,15 +1,14 @@
 import { fail, ok, Result } from "@/shared/application";
-import { PlaybookWriteRepository } from "../../domain";
-import { PlaybookReadRepository } from "../../domain/repositories";
+import { PlaybookReadPort } from "../ports";
 import { PlaybookPageAssembler } from "../assemblers/PlaybookPageAssembler";
 import { GetPlaybookPageOutput } from "../dto/PlaybookPageDTO";
 import { ApplicationError } from "@/shared/utils";
-import { ProfileReadRepository } from "@/features/profile/domain/repositories";
+import { ProfileReadPort } from "@/features/profile/application/ports";
 
 export class GetPlaybookPageUseCase {
   constructor(
-    private readonly playbookReadRepository: PlaybookReadRepository,
-    private readonly profileReadRepository: ProfileReadRepository,
+    private readonly playbookReadRepository: PlaybookReadPort,
+    private readonly profileReadRepository: ProfileReadPort,
   ) {}
 
   async execute(id: string): Promise<Result<GetPlaybookPageOutput>> {

@@ -1,4 +1,5 @@
-import { Session } from "@/features/sessions/domain";
+import { SessionCardDTO } from "../application/dto";
+import { SessionStatus } from "../domain/value-objects";
 
 /**
  * Session selectors for composable data transformations
@@ -13,7 +14,9 @@ import { Session } from "@/features/sessions/domain";
  * Sorts sessions by creation date (newest first)
  * Creates a new array to avoid mutation
  */
-export const selectSortedSessions = (sessions: Session[]): Session[] =>
+export const selectSortedSessions = (
+  sessions: SessionCardDTO[],
+): SessionCardDTO[] =>
   [...sessions].sort((a, b) => {
     const dateA = new Date(a.createdAt).getTime();
     const dateB = new Date(b.createdAt).getTime();
@@ -23,7 +26,9 @@ export const selectSortedSessions = (sessions: Session[]): Session[] =>
 /**
  * Sorts sessions by updated date (most recently updated first)
  */
-export const selectSortedByUpdated = (sessions: Session[]): Session[] =>
+export const selectSortedByUpdated = (
+  sessions: SessionCardDTO[],
+): SessionCardDTO[] =>
   [...sessions].sort((a, b) => {
     const dateA = new Date(a.updatedAt).getTime();
     const dateB = new Date(b.updatedAt).getTime();
@@ -33,7 +38,9 @@ export const selectSortedByUpdated = (sessions: Session[]): Session[] =>
 /**
  * Sorts sessions alphabetically by topic
  */
-export const selectSortedByTopic = (sessions: Session[]): Session[] =>
+export const selectSortedByTopic = (
+  sessions: SessionCardDTO[],
+): SessionCardDTO[] =>
   [...sessions].sort((a, b) =>
     a.topic && b.topic ? a.topic.localeCompare(b.topic) : 0,
   );
@@ -47,15 +54,15 @@ export const selectSortedByTopic = (sessions: Session[]): Session[] =>
  */
 export const selectSessionsByLeader =
   (instructorId: string) =>
-  (sessions: Session[]): Session[] =>
-    sessions.filter((s) => s.instructorId === instructorId);
+  (sessions: SessionCardDTO[]): SessionCardDTO[] =>
+    sessions.filter((s) => s.instructor.id === instructorId);
 
 /**
  * Filters sessions by status
  */
 export const selectSessionsByStatus =
-  (status: Session["status"]) =>
-  (sessions: Session[]): Session[] =>
+  (status: SessionStatus) =>
+  (sessions: SessionCardDTO[]): SessionCardDTO[] =>
     sessions.filter((s) => s.status === status);
 
 /**
@@ -63,43 +70,51 @@ export const selectSessionsByStatus =
  */
 export const selectSessionsByCourse =
   (courseName: string) =>
-  (sessions: Session[]): Session[] =>
+  (sessions: SessionCardDTO[]): SessionCardDTO[] =>
     sessions.filter((s) => s.courseName === courseName);
 
 /**
  * Filters virtual sessions only
  */
-export const selectVirtualSessions = (sessions: Session[]): Session[] =>
-  sessions.filter((s) => s.mode === "virtual");
+export const selectVirtualSessions = (
+  sessions: SessionCardDTO[],
+): SessionCardDTO[] => sessions.filter((s) => s.mode === "virtual");
 
 /**
  * Filters in-person sessions only
  */
-export const selectInPersonSessions = (sessions: Session[]): Session[] =>
-  sessions.filter((s) => s.mode === "in-person");
+export const selectInPersonSessions = (
+  sessions: SessionCardDTO[],
+): SessionCardDTO[] => sessions.filter((s) => s.mode === "in-person");
 
 /**
  * Filters hybrid sessions only
  */
-export const selectHybridSessions = (sessions: Session[]): Session[] =>
-  sessions.filter((s) => s.mode === "hybrid");
+export const selectHybridSessions = (
+  sessions: SessionCardDTO[],
+): SessionCardDTO[] => sessions.filter((s) => s.mode === "hybrid");
 
 /**
  * Filters active sessions (not completed or canceled)
  */
-export const selectActiveSessions = (sessions: Session[]): Session[] =>
+export const selectActiveSessions = (
+  sessions: SessionCardDTO[],
+): SessionCardDTO[] =>
   sessions.filter((s) => s.status !== "completed" && s.status !== "canceled");
 
 /**
  * Filters completed sessions
  */
-export const selectCompletedSessions = (sessions: Session[]): Session[] =>
-  sessions.filter((s) => s.status === "completed");
+export const selectCompletedSessions = (
+  sessions: SessionCardDTO[],
+): SessionCardDTO[] => sessions.filter((s) => s.status === "completed");
 
 /**
  * Filters upcoming sessions (scheduled_start in the future)
  */
-export const selectUpcomingSessions = (sessions: Session[]): Session[] => {
+export const selectUpcomingSessions = (
+  sessions: SessionCardDTO[],
+): SessionCardDTO[] => {
   const now = new Date();
   return sessions.filter((s) => {
     if (!s.scheduledStart) return false;
@@ -110,7 +125,9 @@ export const selectUpcomingSessions = (sessions: Session[]): Session[] => {
 /**
  * Filters past sessions (scheduled_start in the past)
  */
-export const selectPastSessions = (sessions: Session[]): Session[] => {
+export const selectPastSessions = (
+  sessions: SessionCardDTO[],
+): SessionCardDTO[] => {
   const now = new Date();
   return sessions.filter((s) => {
     if (!s.scheduledStart) return false;
@@ -125,21 +142,21 @@ export const selectPastSessions = (sessions: Session[]): Session[] => {
 /**
  * Extracts session IDs
  */
-export const selectSessionIds = (sessions: Session[]): string[] =>
+export const selectSessionIds = (sessions: SessionCardDTO[]): string[] =>
   sessions.map((s) => s.id);
 
 /**
  * Extracts unique course names
  */
-export const selectUniqueCourses = (sessions: Session[]): string[] =>
+export const selectUniqueCourses = (sessions: SessionCardDTO[]): string[] =>
   [...new Set(sessions.map((s) => s.courseName).filter(Boolean))] as string[];
 
 /**
  * Groups sessions by status
  */
 export const selectSessionsByStatusGroup = (
-  sessions: Session[],
-): Record<string, Session[]> =>
+  sessions: SessionCardDTO[],
+): Record<string, SessionCardDTO[]> =>
   sessions.reduce(
     (acc, session) => {
       const status = session.status;
@@ -149,25 +166,25 @@ export const selectSessionsByStatusGroup = (
       acc[status].push(session);
       return acc;
     },
-    {} as Record<string, Session[]>,
+    {} as Record<string, SessionCardDTO[]>,
   );
 
 /**
  * Groups sessions by leader
  */
 export const selectSessionsByLeaderGroup = (
-  sessions: Session[],
-): Record<string, Session[]> =>
+  sessions: SessionCardDTO[],
+): Record<string, SessionCardDTO[]> =>
   sessions.reduce(
     (acc, session) => {
-      const instructorId = session.instructorId || "unknown";
+      const instructorId = session.instructor.id;
       if (!acc[instructorId]) {
         acc[instructorId] = [];
       }
       acc[instructorId].push(session);
       return acc;
     },
-    {} as Record<string, Session[]>,
+    {} as Record<string, SessionCardDTO[]>,
   );
 
 // ============================================
@@ -179,7 +196,7 @@ export const selectSessionsByLeaderGroup = (
  */
 export const selectFirstN =
   (n: number) =>
-  (sessions: Session[]): Session[] =>
+  (sessions: SessionCardDTO[]): SessionCardDTO[] =>
     sessions.slice(0, n);
 
 /**
@@ -187,7 +204,7 @@ export const selectFirstN =
  */
 export const selectRecentSessions =
   (n: number) =>
-  (sessions: Session[]): Session[] =>
+  (sessions: SessionCardDTO[]): SessionCardDTO[] =>
     selectFirstN(n)(selectSortedSessions(sessions));
 
 // ============================================

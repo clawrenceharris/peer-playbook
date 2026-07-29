@@ -1,67 +1,21 @@
-import { PaginatedResult } from "@/types";
-import { Session } from "@/features/sessions/domain";
+import { getSessionsByUserAction } from "@/actions/session/queries/getSessionsByUserAction";
+import { sessionKeys } from "@/lib/queries/keys";
 import { useQuery } from "@tanstack/react-query";
-import { sessionKeys } from "../domain";
-import { useSessionService } from "./";
-import {
-  selectSessionsByLeader,
-  selectSortedSessions,
-  selectUpcomingSessions,
-} from "../selectors";
 
-/**
- * Hook to fetch playbooks by user/owner
- * @param userId - The user/owner ID to filter by
- * @param select - Optional selector function to transform the data
- */
-export const useUserSessions = <TSelected = Session[]>(
-  userId: string,
-  select?: (playbooks: Session[]) => TSelected
-) => {
-  const sessionService = useSessionService();
-  return useQuery({
-    queryKey: sessionKeys.byLeader(userId),
-    queryFn: () => sessionService.getAllByUser(userId),
-    select,
-  });
-};
-
-export const useMyUpcomingSessions = (userId: string) => {
-  return useUserSessions(userId, selectUpcomingSessions);
-};
-
-/**
- * Hook to fetch paginated sessions for a user
- * @param userId - The user ID to fetch sessions for
- * @param page - Current page (0-indexed)
- * @param limit - Items per page
- */
-export const useMySessionsPaginated = (
-  userId: string,
-  page: number = 0,
-  limit: number = 12
-) => {
-  const sessionService = useSessionService();
-  return useQuery<PaginatedResult<Session>>({
-    queryKey: sessionKeys.paginatedList(page, limit, { userId }),
+export function useUserSessions(userId: string | null) {
+  const { data, isLoading, error } = useQuery({
+    queryKey: sessionKeys.byUserId(userId ?? ""),
     queryFn: async () => {
-      // Fetch all sessions and paginate client-side
-      // If your backend supports pagination, use those params instead
-      const allSessions = await sessionService.getAll();
-      const userSessions = selectSessionsByLeader(userId)(allSessions);
-      const sorted = selectSortedSessions(userSessions);
-
-      const start = page * limit;
-      const end = start + limit;
-      const paginated = sorted.slice(start, end);
-
-      return {
-        data: paginated,
-        total: sorted.length,
-        page,
-        limit,
-        totalPages: Math.ceil(sorted.length / limit),
-      };
+      if (!userId) {
+        throw new Error("User ID is required");
+      }
+      const result = await getSessionsByUserAction(userId);
+      if (!result.success) {
+        throw result.error;
+      }
+      return result.data;
     },
+    enabled: !!userId,
   });
-};
+  return { data, isLoading, error };
+}

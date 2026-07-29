@@ -12,7 +12,6 @@ import { subjects } from "@/features/playbooks/application/assemblers/PlaybookCr
 export function UpdateProfileForm({
   profile,
   onCancel,
-  onSuccess,
 }: UpdateProfileModalProps) {
   const { form, isLoading, updateProfile } = useUpdateProfileForm({
     profile,

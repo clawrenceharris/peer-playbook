@@ -6,6 +6,11 @@ export type ActionError = {
   field?: string;
 };
 
+/**
+ * Server actions return this serializable wire format so client hooks can
+ * inspect predictable `success/data/error` fields without relying on thrown
+ * class instances crossing the network boundary.
+ */
 export type ActionResult<TData> =
   | {
       success: true;

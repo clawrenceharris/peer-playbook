@@ -1,8 +1,10 @@
-import { UpdatePlaybookFormValues } from "@/lib/validation";
-
 export type UpdatePlaybookInput = {
   id: string;
-} & UpdatePlaybookFormValues;
+  title?: string;
+  topic?: string;
+  courseName?: string;
+  subject?: string;
+};
 
 export type UpdatePlaybookResult = {
   id: string;

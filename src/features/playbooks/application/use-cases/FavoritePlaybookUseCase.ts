@@ -1,10 +1,10 @@
 import { fail, ok, Result } from "@/shared/application";
 import { ApplicationError } from "@/shared/utils";
-import { PlaybookWriteRepository } from "../../domain";
+import { PlaybookWritePort } from "../ports";
 import { FavoritePlaybookInput, FavoritePlaybookResult } from "../dto";
 
 export class AddFavoritePlaybookUseCase {
-  constructor(private readonly playbookRepository: PlaybookWriteRepository) {}
+  constructor(private readonly playbookRepository: PlaybookWritePort) {}
 
   async execute(
     input: FavoritePlaybookInput,
@@ -22,7 +22,7 @@ export class AddFavoritePlaybookUseCase {
 }
 
 export class RemoveFavoritePlaybookUseCase {
-  constructor(private readonly playbookRepository: PlaybookWriteRepository) {}
+  constructor(private readonly playbookRepository: PlaybookWritePort) {}
 
   async execute(
     input: FavoritePlaybookInput,

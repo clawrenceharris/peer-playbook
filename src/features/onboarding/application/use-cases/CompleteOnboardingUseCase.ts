@@ -1,11 +1,11 @@
-import { ProfileRepository } from "@/features/profile/domain/repositories";
+import { ProfileWritePort } from "@/features/profile/application/ports";
 import { fail, ok, Result } from "@/shared/application";
 import { ApplicationError, normalizeError } from "@/shared/utils/errors";
 import { AppErrorCode } from "@/types/error.types";
 import { CompleteOnboardingInput, CompleteOnboardingResult } from "../dto";
 
 export class CompleteOnboardingUseCase {
-  constructor(private readonly profileRepository: ProfileRepository) {}
+  constructor(private readonly profileRepository: ProfileWritePort) {}
 
   async execute(
     input: CompleteOnboardingInput,

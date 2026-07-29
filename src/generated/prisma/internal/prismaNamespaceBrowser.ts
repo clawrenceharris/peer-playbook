@@ -632,7 +632,9 @@ export const Public_sessionsScalarFieldEnum = {
   call_id: 'call_id',
   mode: 'mode',
   subject: 'subject',
-  title: 'title'
+  title: 'title',
+  actual_start: 'actual_start',
+  ended_at: 'ended_at'
 } as const
 
 export type Public_sessionsScalarFieldEnum = (typeof Public_sessionsScalarFieldEnum)[keyof typeof Public_sessionsScalarFieldEnum]

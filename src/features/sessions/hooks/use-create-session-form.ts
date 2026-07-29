@@ -7,8 +7,7 @@ import { CreateSessionFormValues, createSessionSchema } from "@/lib/validation";
 import { useUser } from "@/components/providers";
 import { useUserPlaybooks } from "@/features/playbooks/presentation/hooks";
 import { useQueryClient } from "@tanstack/react-query";
-import { sessionKeys } from "@/features/sessions/domain";
-import { playbookKeys } from "@/lib/queries/keys";
+import { playbookKeys, sessionKeys } from "@/lib/queries/keys";
 
 function getCurrentLocalDateTime() {
   const now = new Date();

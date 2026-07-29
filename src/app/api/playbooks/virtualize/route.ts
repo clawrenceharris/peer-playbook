@@ -2,7 +2,7 @@ export const runtime = "nodejs";
 
 import { NextRequest, NextResponse } from "next/server";
 import { openai } from "@/lib/openai/client";
-import { createClient, createServerSupabaseClient } from "@/lib/supabase/server";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
   const { playbookId } = await req.json();
@@ -35,7 +35,7 @@ Return JSON: { "cards": [ { "id": string, "steps": string[] } ] } (same ids).`;
       (c) =>
         `(${c.phase}) ${c.title}\n${c.steps
           .map((s: string, i: number) => `${i + 1}. ${s}`)
-          .join("\n")}`
+          .join("\n")}`,
     )
     .join("\n\n")}`;
 

@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,20 +11,13 @@ import {
   CardTitle,
 } from "@/components/ui";
 import { useRouter } from "next/navigation";
-import { Form, InputField } from "@/components/form";
-import {
-  updatePasswordSchema,
-  type UpdatePasswordFormValues,
-} from "@/lib/validation";
+import { Form } from "@/components/form";
+import { type UpdatePasswordFormValues } from "@/lib/validation";
 import { useResetPasswordForm } from "../../hooks";
-import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { PasswordField } from "@/components/form/password-field";
 
-export function UpdatePasswordForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+export function UpdatePasswordForm() {
   const router = useRouter();
   const { form, resetPassword, isLoading, success } = useResetPasswordForm();
 

@@ -1,3 +1,15 @@
+export type PlaybookStrategy = {
+  id: string;
+  title: string;
+  slug: string;
+  phase: "warmup" | "workout" | "closer";
+  playbookPhaseId: string | null;
+  category: string;
+  sourceId: string | null;
+  sourceType: string | null;
+  position: number;
+};
+
 export type UpdatePlaybookStrategyCommand = {
   steps?: string[];
   title?: string;

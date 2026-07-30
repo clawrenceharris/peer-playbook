@@ -1,8 +1,7 @@
-import { SessionCardDTO, SessionDetailDTO } from "../dto";
+import { SessionDetailDTO, SessionListItemDTO } from "../dto";
 
 export interface SessionReadPort {
   findByCode(code: string): Promise<SessionDetailDTO | null>;
-  listByUserId(userId: string): Promise<SessionCardDTO[]>;
+  listByUserId(userId: string): Promise<SessionListItemDTO[]>;
   findDetailById(id: string): Promise<SessionDetailDTO | null>;
-  findCardById(id: string): Promise<SessionCardDTO | null>;
 }

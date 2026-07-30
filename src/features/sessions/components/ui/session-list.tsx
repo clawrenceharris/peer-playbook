@@ -1,11 +1,11 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
 import { EmptyState } from "@/components/states";
-import { SessionCardDTO } from "../../application/dto";
+import { SessionListItemDTO } from "../../application/dto";
 import { SessionListItem } from "./session-list-item";
 
 interface SessionCardListProps {
-  sessions: SessionCardDTO[];
+  sessions: SessionListItemDTO[];
   isLoading?: boolean;
   onSessionClick?: (id: string) => void;
 }

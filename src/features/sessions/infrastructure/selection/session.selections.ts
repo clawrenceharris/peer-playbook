@@ -19,7 +19,7 @@ export const sessionDetailSelection = {
   },
 } satisfies Prisma.public_sessionsDefaultArgs;
 
-export const sessionCardSelection = {
+export const sessionListItemSelection = {
   select: {
     id: true,
     session_code: true,
@@ -48,6 +48,6 @@ export const sessionCardSelection = {
 export type SessionDetailRecord = Prisma.public_sessionsGetPayload<
   typeof sessionDetailSelection
 >;
-export type SessionCardRecord = Prisma.public_sessionsGetPayload<
-  typeof sessionCardSelection
+export type SessionListItemRecord = Prisma.public_sessionsGetPayload<
+  typeof sessionListItemSelection
 >;

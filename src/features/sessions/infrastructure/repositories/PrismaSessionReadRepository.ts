@@ -1,23 +1,23 @@
 import { PrismaClient } from "@/generated/prisma/client";
 import { SessionReadPort } from "../../application/ports";
-import { SessionCardDTO, SessionDetailDTO } from "../../application/dto";
+import { SessionDetailDTO, SessionListItemDTO } from "../../application/dto";
 import { SessionMapper } from "../mappers/SessionMapper";
 import {
-  sessionCardSelection,
   sessionDetailSelection,
+  sessionListItemSelection,
 } from "../selection/session.selections";
 
 export class PrismaSessionReadRepository implements SessionReadPort {
   constructor(private readonly prisma: PrismaClient) {}
-  async listByUserId(userId: string): Promise<SessionCardDTO[]> {
+  async listByUserId(userId: string): Promise<SessionListItemDTO[]> {
     const sessions = await this.prisma.public_sessions.findMany({
       where: {
         instructor_id: userId,
       },
 
-      ...sessionCardSelection,
+      ...sessionListItemSelection,
     });
-    return sessions.map((session) => SessionMapper.toCard(session));
+    return sessions.map((session) => SessionMapper.toListItem(session));
   }
   async findDetailById(id: string): Promise<SessionDetailDTO | null> {
     const record = await this.prisma.public_sessions.findUnique({
@@ -27,15 +27,6 @@ export class PrismaSessionReadRepository implements SessionReadPort {
       ...sessionDetailSelection,
     });
     return record ? SessionMapper.toDetail(record) : null;
-  }
-  async findCardById(id: string): Promise<SessionCardDTO | null> {
-    const record = await this.prisma.public_sessions.findUnique({
-      where: {
-        id,
-      },
-      ...sessionCardSelection,
-    });
-    return record ? SessionMapper.toCard(record) : null;
   }
   async findByCode(code: string): Promise<SessionDetailDTO | null> {
     const record = await this.prisma.public_sessions.findUnique({

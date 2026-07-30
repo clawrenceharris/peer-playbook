@@ -8,7 +8,7 @@ import {
   PlaybookCardDTO,
   UpdatePlaybookResult,
 } from "@/features/playbooks/application/dto";
-import { SessionCardDTO } from "@/features/sessions/application/dto";
+import { SessionListItemDTO } from "@/features/sessions/application/dto";
 
 /**
  * Base interface for all modal props
@@ -53,7 +53,7 @@ export interface CreateSessionModalProps extends ModalProps {
 }
 
 export interface UpdateSessionModalProps extends ModalProps {
-  session: SessionCardDTO;
+  session: SessionListItemDTO;
 }
 
 // ============================================================================

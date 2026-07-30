@@ -19,9 +19,9 @@ there is a rule or behavior that needs a stable home.
 ## DTOs And Read Models
 
 - [ ] Name DTOs by their use case when the shape is screen-specific: `GetSessionPageOutput`, `SessionListItemDTO`, or `PlaybookSummaryDTO`.
-- [ ] Keep `Card` and `Detail` names only when their information hierarchy is clear; revise the session DTO names because the current card contains fields absent from detail.
+- [x] Rename the session list projection to `SessionListItemDTO`; retain `SessionDetailDTO` for single-session reads rather than implying a false card/detail hierarchy.
 - [ ] Extract repeated nested shapes such as creator/instructor summaries instead of duplicating anonymous object types.
-- [ ] Keep page outputs composed from smaller DTOs; page-specific outputs are valid read models and should not become universal domain objects.
+- [x] Keep page outputs composed from smaller DTOs; the current session page uses only `SessionDetailDTO`, so it correctly does not introduce a redundant `SessionPageDTO`.
 - [x] Decouple playbook application inputs from React Hook Form and Zod input types; server actions validate and map into explicit application commands.
 - [ ] Apply the same input-boundary pattern to the remaining session and profile application inputs after their active migrations stabilize.
 

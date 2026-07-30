@@ -4,13 +4,13 @@ import {
 } from "@/lib/validation/session.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { SessionCardDTO } from "../application/dto";
+import { SessionListItemDTO } from "../application/dto";
 import { useUpdateSession } from "./";
 
 export const useUpdateSessionForm = ({
   session,
 }: {
-  session: SessionCardDTO;
+  session: SessionListItemDTO;
 }) => {
   const { mutate: updateSession, isPending } = useUpdateSession();
   const form = useForm<UpdateSessionFormValues>({

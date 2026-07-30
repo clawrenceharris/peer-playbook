@@ -18,7 +18,7 @@ export class UpdateSessionStatusUseCase {
     input: UpdateSessionStatusInput,
   ): Promise<UpdateSessionStatusUseCaseResult> {
     try {
-      const session = await this.sessionReadRepository.findCardById(
+      const session = await this.sessionReadRepository.findDetailById(
         input.sessionId,
       );
       if (!session) {

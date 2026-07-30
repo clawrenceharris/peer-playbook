@@ -25,7 +25,7 @@ import { InputGroupAddon, InputGroupButton } from "@/components/ui/input-group";
 import Image, { StaticImageData } from "next/image";
 import { assets } from "@/lib/constants";
 import { SessionStatus } from "@/features/sessions/domain/value-objects";
-import { SessionCardDTO } from "@/features/sessions/application/dto";
+import { SessionListItemDTO } from "@/features/sessions/application/dto";
 import { useUserSessions } from "@/features/sessions/hooks";
 
 const sessionDateFormatter = new Intl.DateTimeFormat(undefined, {
@@ -344,7 +344,7 @@ function SectionHeader({ title, description, action }: SectionHeaderProps) {
 }
 
 interface UpcomingSessionCardProps {
-  session: SessionCardDTO;
+  session: SessionListItemDTO;
   onOpen: () => void;
 }
 

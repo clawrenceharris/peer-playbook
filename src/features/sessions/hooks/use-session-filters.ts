@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import { SessionCardDTO } from "../application/dto";
+import { SessionListItemDTO } from "../application/dto";
 import { SessionFilterState } from "../components";
 
-export function useSessionFilters(sessions: SessionCardDTO[]) {
+export function useSessionFilters(sessions: SessionListItemDTO[]) {
   const [filters, setFilters] = useState<SessionFilterState>({});
 
   const filteredSessions = useMemo(() => {

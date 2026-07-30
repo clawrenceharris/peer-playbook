@@ -1,34 +1,36 @@
 "use server";
 import { makeCreateSessionUseCase } from "@/composition/session/makeCreateSessionUseCase";
-import {
-  CreateSessionInput,
-  CreateSessionResult,
-} from "@/features/sessions/application/dto";
+import { CreateSessionResult } from "@/features/sessions/application/dto";
 import { createSessionSchema } from "@/lib/validation";
 import { ActionResult, toActionError } from "@/shared/action";
 import { fail } from "@/shared/application";
 import { ApplicationError } from "@/shared/utils";
+import { z } from "zod";
+
+type CreateSessionActionInput = {
+  instructorId: string;
+} & z.input<typeof createSessionSchema>;
 
 export async function createSessionAction(
-  input: CreateSessionInput,
+  input: CreateSessionActionInput,
 ): Promise<ActionResult<CreateSessionResult>> {
   try {
-    const { error } = createSessionSchema.safeParse(input);
-    if (error) {
-      const appError = ApplicationError.validation(error.message);
+    const parsed = createSessionSchema.safeParse(input);
+    if (!parsed.success) {
+      const appError = ApplicationError.validation(parsed.error.message);
       return fail(toActionError(appError));
     }
-    const createPlaybookUseCase = makeCreateSessionUseCase();
-    const result = await createPlaybookUseCase.execute({
+    const createSessionUseCase = makeCreateSessionUseCase();
+    const result = await createSessionUseCase.execute({
       instructorId: input.instructorId,
-      playbookId: input.playbookId,
-      scheduledStart: input.scheduledStart,
-      mode: input.mode,
-      subject: input.subject,
-      topic: input.topic,
-      courseName: input.courseName,
-      description: input.description,
-      title: input.title,
+      playbookId: parsed.data.playbookId,
+      scheduledStart: parsed.data.scheduledStart,
+      mode: parsed.data.mode,
+      subject: parsed.data.subject,
+      topic: parsed.data.topic,
+      courseName: parsed.data.courseName,
+      description: parsed.data.description,
+      title: parsed.data.title,
     });
     if (!result.success) {
       return fail(toActionError(result.error));

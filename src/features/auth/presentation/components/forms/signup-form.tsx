@@ -26,6 +26,7 @@ export function SignupForm() {
       id="signup-form"
       submitText="Create Account"
       handleSubmit={signup}
+      loadingText="Creating your account..."
       title="Get Started"
       description="Let's get the ball rolling! Create an account to start practicing your social skills."
       showsDescription={true}

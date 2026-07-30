@@ -31,7 +31,7 @@ export class UpdateProfileUseCase {
         ...(input.firstName !== undefined && { firstName: input.firstName }),
         ...(input.lastName !== undefined && { lastName: input.lastName }),
         ...(input.courses !== undefined && { courses: input.courses }),
-        ...(uploadedAvatar !== undefined && {
+        ...(uploadedAvatar !== null && {
           avatarUrl: uploadedAvatar?.url ?? null,
         }),
       };

@@ -37,6 +37,9 @@ export const playbookDetailArgs = {
       ...playbookPhaseArgs,
     },
     playbook_strategies: {
+      orderBy: {
+        position: "asc",
+      },
       select: {
         id: true,
         slug: true,

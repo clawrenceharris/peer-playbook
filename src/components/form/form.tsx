@@ -145,12 +145,12 @@ export function Form<T extends FieldValues>({
                 >
                   {isLoading ? (
                     <span className="flex items-center gap-2">
-                      {loadingText}
                       <Spinner
                         data-icon="inline-start"
                         strokeWidth={2.5}
                         className="size-5 animate-spin"
                       />
+                      {loadingText}
                     </span>
                   ) : (
                     submitText

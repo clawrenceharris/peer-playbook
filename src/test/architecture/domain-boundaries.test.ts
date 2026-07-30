@@ -31,19 +31,16 @@ describe("feature domain boundaries", () => {
     expect(violations).toEqual([]);
   });
 
-  it("keeps playbook application inputs independent of validation schemas", () => {
+  it("keeps application inputs independent of validation schemas", () => {
     const inputFiles = [
-      "CreatePlaybookDTO.ts",
-      "GeneratePlaybookDTO.ts",
-      "UpdatePlaybookDTO.ts",
-      "UpdatePlaybookStrategyDTO.ts",
-    ].map((file) =>
-      join(
-        process.cwd(),
-        "src/features/playbooks/application/dto",
-        file,
-      ),
-    );
+      "src/features/playbooks/application/dto/CreatePlaybookDTO.ts",
+      "src/features/playbooks/application/dto/GeneratePlaybookDTO.ts",
+      "src/features/playbooks/application/dto/UpdatePlaybookDTO.ts",
+      "src/features/playbooks/application/dto/UpdatePlaybookStrategyDTO.ts",
+      "src/features/sessions/application/dto/CreateSessionDTO.ts",
+      "src/features/sessions/application/dto/UpdateSessionDTO.ts",
+      "src/features/profile/application/dto/UpdateProfileInput.ts",
+    ].map((file) => join(process.cwd(), file));
 
     const violations = inputFiles
       .filter((file) => /from\s+["'][^"']*lib\/validation/.test(readFileSync(file, "utf8")))

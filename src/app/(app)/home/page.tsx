@@ -15,7 +15,7 @@ import { useRecentPlaybooks } from "@/features/playbooks/presentation/hooks";
 import { cn, timeAgo } from "@/lib/utils";
 import type { PlaybookCardDTO } from "@/features/playbooks/application/dto";
 // import type { Session } from "@/features/sessions/domain";
-import { ArrowRight, Book, Clock, Loader2 } from "lucide-react";
+import { ArrowRight, Book, Clock, Loader2, PieChart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { FormEvent, ReactNode } from "react";
 import { useMemo, useState } from "react";
@@ -27,6 +27,8 @@ import { assets } from "@/lib/constants";
 import { SessionStatus } from "@/features/sessions/domain/value-objects";
 import { SessionListItemDTO } from "@/features/sessions/application/dto";
 import { useUserSessions } from "@/features/sessions/hooks";
+import { selectUpcomingSessions } from "@/features/sessions/selectors";
+import { Playbook } from "@/components/icons";
 
 const sessionDateFormatter = new Intl.DateTimeFormat(undefined, {
   weekday: "short",
@@ -64,7 +66,7 @@ export default function Dashboard() {
 
   // TODO: Add upcoming sessions so we can show the user's upcoming sessions in the home page
   const { data: upcomingSessions = [], isLoading: sessionsLoading } =
-    useUserSessions(user.id);
+    useUserSessions(user.id, selectUpcomingSessions);
 
   const sortedUpcomingSessions = useMemo(
     () =>
@@ -85,6 +87,10 @@ export default function Dashboard() {
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  function handlePlanSessionClick() {
+    router.push("/sessions/create");
+  }
+
   return (
     <ContentLayout contentContainerClassName="p-0" showHeader={false}>
       <header className="header bg-secondary/70 relative z-0 border-b-0 px-3 py-4">
@@ -101,14 +107,14 @@ export default function Dashboard() {
       <section className="from-secondary/70 to-surface relative bg-linear-to-b pb-15">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 px-4 py-8 sm:px-6 xl:grid-cols-[minmax(0,1fr)_minmax(20rem,0.72fr)] xl:px-8 xl:py-10">
           <div className="max-w-3xl space-y-7">
-            <div className="space-y-3">
-              <h1 className="text-secondary-foreground max-w-3xl text-3xl leading-tight font-bold tracking-normal sm:text-4xl lg:text-5xl">
+            <div className="space-y-3 text-[#472939]">
+              <h1 className="max-w-3xl text-3xl leading-tight font-bold tracking-normal sm:text-4xl lg:text-5xl">
                 Welcome, {firstName}.
               </h1>
-              <p className="text-secondary-foreground text-xl font-bold">
+              <p className="text-xl font-bold text-[#47293990]">
                 Ready to build your next session?
               </p>
-              <p className="text-secondary-foreground max-w-2xl text-base sm:text-lg">
+              <p className="max-w-2xl text-base text-[#47293990] sm:text-lg">
                 Start planning study sessions that get students talking,
                 practicing, and learning together.
               </p>
@@ -166,7 +172,7 @@ export default function Dashboard() {
             title="Sessions"
             description="Set the time, gather the group, and keep your next peer-learning session organized."
             actionLabel="Plan session"
-            onClick={() => {}}
+            onClick={handlePlanSessionClick}
             imageSrc={assets.sessionCardHero}
             tone="secondary"
           />
@@ -176,7 +182,7 @@ export default function Dashboard() {
           <section className="space-y-4">
             <SectionHeader
               title="Ready to host"
-              description="Sessions that are closest to becoming live peer practice."
+              description="Your upcoming sessions."
               action={
                 <Button
                   variant="outline"
@@ -205,7 +211,7 @@ export default function Dashboard() {
               </div>
             ) : (
               <HomeEmptyState
-                artwork={<EmptySessionGraphic />}
+                icon={<PieChart className="text-muted-foreground size-7" />}
                 title="No sessions scheduled"
                 message="Pick a playbook or start fresh, then put the next practice on the calendar."
                 actionLabel="Schedule session"
@@ -246,7 +252,9 @@ export default function Dashboard() {
               </div>
             ) : (
               <HomeEmptyState
-                artwork={<EmptyPlaybookGraphic />}
+                icon={
+                  <Playbook className="[&_path]:stroke-muted-foreground size-7" />
+                }
                 title={"No playbooks yet"}
                 message={
                   "Your first playbook can be a game plan for the next topic students need to practice."
@@ -440,24 +448,24 @@ function LoadingPanel({ label }: LoadingPanelProps) {
 }
 
 interface HomeEmptyStateProps {
-  artwork: ReactNode;
   title: string;
   message: string;
   actionLabel: string;
   onAction: () => void;
+  icon: ReactNode;
 }
 
 function HomeEmptyState({
-  artwork,
   title,
   message,
   actionLabel,
   onAction,
+  icon,
 }: HomeEmptyStateProps) {
   return (
     <div className="rounded-lg border border-dashed bg-white p-6 shadow-sm">
       <div className="mx-auto flex max-w-md flex-col items-center gap-4 text-center">
-        {artwork}
+        {icon}
         <div className="space-y-1">
           <h3 className="text-foreground text-xl font-bold">{title}</h3>
           <p className="text-muted-foreground text-sm leading-6">{message}</p>

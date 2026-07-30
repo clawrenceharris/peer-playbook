@@ -1,5 +1,5 @@
-import { ProfileReadRepository } from "@/features/profile/domain/repositories";
-import { PlaybookReadRepository } from "../../domain/repositories/PlaybookReadRepository";
+import { ProfileReadPort } from "@/features/profile/application/ports";
+import { PlaybookReadPort } from "../ports";
 import { PlaybooksPageAssembler } from "../assemblers/PlaybooksPageAssembler";
 import {
   PlaybookPageInput,
@@ -11,8 +11,8 @@ type GetPlaybooksPageUseCaseResult = Result<PlaybooksPageOutput>;
 
 export class GetPlaybooksPageUseCase {
   constructor(
-    private readonly playbookReadRepository: PlaybookReadRepository,
-    private readonly profileReadRepository: ProfileReadRepository,
+    private readonly playbookReadRepository: PlaybookReadPort,
+    private readonly profileReadRepository: ProfileReadPort,
   ) {}
   async execute(userId: string): Promise<GetPlaybooksPageUseCaseResult> {
     const playbooks =

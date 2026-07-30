@@ -8,6 +8,7 @@ import { Dialog } from "../ui";
 import { useProfile } from "@/features/profile/presentation/hooks";
 import { CreateProfileModal } from "@/features/profile/presentation/components/modals";
 import { SidebarLayout } from "../sidebar";
+import { getUserErrorMessage } from "@/shared/utils";
 
 type UserContextType = {
   user: User;
@@ -83,19 +84,17 @@ export function UserProvider({ children }: UserProviderProps) {
   }
   if (error) {
     return (
-      <SidebarLayout>
-        <div className="centered">
-          <ErrorState
-            variant="card"
-            title="Error loading profile"
-            message={error.message}
-            onAction={refetch}
-            actionLabel="Try again"
-            retryLabel="Sign Out"
-            onRetry={signOut}
-          />
-        </div>
-      </SidebarLayout>
+      <div className="centered h-screen w-screen">
+        <ErrorState
+          variant="card"
+          title="Error loading profile"
+          message={getUserErrorMessage(error.message)}
+          onAction={refetch}
+          actionLabel="Try again"
+          retryLabel="Sign Out"
+          onRetry={signOut}
+        />
+      </div>
     );
   }
   if (!profile) {

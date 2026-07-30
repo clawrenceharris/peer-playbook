@@ -18,6 +18,7 @@ export class SessionMapper {
       mode: session.mode as SessionMode,
       subject: session.subject,
       topic: session.topic,
+      createdAt: session.created_at.toISOString(),
       courseName: session.course_name,
       description: session.description,
       status: session.status as SessionStatus,
@@ -27,21 +28,31 @@ export class SessionMapper {
   static toCard(session: SessionCardRecord): SessionCardDTO {
     return {
       id: session.id,
+      sessionCode: session.session_code,
+      updatedAt: session.updated_at.toISOString(),
       playbookId: session.playbook_id ?? null,
       title: session.title,
       scheduledStart: session.scheduled_start.toISOString(),
       mode: session.mode as SessionMode,
+      createdAt: session.created_at.toISOString(),
       subject: session.subject,
       topic: session.topic,
       courseName: session.course_name,
       description: session.description,
       status: session.status as SessionStatus,
+      instructor: {
+        id: session.profiles.id,
+        displayName:
+          session.profiles.first_name + " " + session.profiles.last_name,
+        avatarUrl: session.profiles.avatar_url,
+      },
     };
   }
 
   static toDetail(session: SessionDetailRecord): SessionDetailDTO {
     return {
       id: session.id,
+      sessionCode: session.session_code,
       playbookId: session.playbooks?.id ?? null,
       title: session.title,
       scheduledStart: session.scheduled_start.toISOString(),
@@ -51,6 +62,7 @@ export class SessionMapper {
       courseName: session.course_name,
       description: session.description,
       status: session.status as SessionStatus,
+      createdAt: session.created_at.toISOString(),
     };
   }
 }

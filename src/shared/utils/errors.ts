@@ -108,7 +108,7 @@ export const errorMessages: Record<AppErrorCode, string> = {
 
   // Generic
   [AppErrorCode.UNKNOWN_ERROR]:
-    "Something went wrong on our side. Please stand by while we fix it.",
+    "Something went wrong on our side. Please try again later.",
 
   [AppErrorCode.INTERNAL_SERVER_ERROR]:
     "Something went wrong on our side. Please try again in a moment.",

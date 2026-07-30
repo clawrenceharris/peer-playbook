@@ -1,5 +1,5 @@
 import { ApplicationError } from "@/shared/utils";
-import { PlaybookWriteRepository } from "../../domain";
+import { PlaybookWritePort } from "../ports";
 import { CreatePlaybookResult } from "../dto";
 import { GeneratePlaybookInput } from "../dto/GeneratePlaybookDTO";
 import { fail, ok, Result } from "@/shared/application";
@@ -8,7 +8,7 @@ import { CreatePlaybookPhaseCommand } from "../../domain/types";
 
 export class GeneratePlaybookUseCase {
   constructor(
-    private readonly playbookRepository: PlaybookWriteRepository,
+    private readonly playbookRepository: PlaybookWritePort,
     private readonly playbookGenerationPlanner: PlaybookGenerationPlanner,
   ) {}
 

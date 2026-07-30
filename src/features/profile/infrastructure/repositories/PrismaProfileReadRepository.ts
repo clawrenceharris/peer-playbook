@@ -1,4 +1,4 @@
-import { ProfileReadRepository } from "../../domain/repositories";
+import { ProfileReadPort } from "../../application/ports";
 import { ProfileMapper } from "../mappers";
 import {
   ProfileCardDTO,
@@ -7,7 +7,7 @@ import {
 } from "../../application/dto";
 import { type PrismaClient } from "@/lib/db/client";
 
-export class PrismaProfileReadRepository implements ProfileReadRepository {
+export class PrismaProfileReadRepository implements ProfileReadPort {
   constructor(private readonly client: PrismaClient = client) {}
 
   async findProfileById(userId: string): Promise<ProfileDTO | null> {

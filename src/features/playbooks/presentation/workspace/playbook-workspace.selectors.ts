@@ -1,4 +1,3 @@
-import type { Session } from "@/features/sessions/domain";
 import type { PhaseIntent } from "@/features/reference-data/phase-intents/domain/types/PhaseIntent";
 import { PHASE_INTENT_ICONS } from "@/features/reference-data/phase-intents/domain/constants/phase-intents.constants";
 import { PhaseIntent as PhaseIntentEnum } from "@/features/reference-data/phase-intents/domain/types/PhaseIntent";
@@ -20,6 +19,7 @@ import type {
   PlaybookWorkspaceStrategy,
   PlaybookWorkspaceStrategyDraft,
 } from "./playbook-workspace.types";
+import { SessionCardDTO } from "@/features/sessions/application/dto";
 
 /**
  * Compatibility map between the newer phase-intent vocabulary and the legacy
@@ -245,7 +245,7 @@ export function selectIsFavorite(
 
 export function selectHasSession(
   playbookId: string | undefined,
-  sessions: Session[],
+  sessions: SessionCardDTO[],
 ): boolean {
   return Boolean(
     playbookId && sessions.some((session) => session.id === playbookId),

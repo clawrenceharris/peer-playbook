@@ -6,27 +6,28 @@ import { UpdateSessionFormValues, updateSessionSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UpdateSessionModalProps } from "@/lib/modals/types";
 import { useModal } from "@/components/providers";
-import { useSession } from "../../hooks";
 import { EmptyState } from "@/components/states";
 import { CreateSessionForm } from "..";
 import { usePendingMutations } from "@/hooks";
 import { useForm } from "react-hook-form";
 
-export function UpdateSessionModal({ sessionId }: UpdateSessionModalProps) {
+export function UpdateSessionModal({ session }: UpdateSessionModalProps) {
   const { closeModal } = useModal();
-  const { data: session } = useSession(sessionId);
   const { pending: isLoading } = usePendingMutations({
     mutationKey: ["update-session"],
   });
   const form = useForm<UpdateSessionFormValues>({
     resolver: zodResolver(updateSessionSchema),
     defaultValues: {
+      title: session?.title ?? "",
       topic: session?.topic ?? "",
       courseName: session?.courseName || "",
       scheduledStart: session?.scheduledStart
         ? session.scheduledStart.slice(0, 16)
         : "",
-      mode: session?.mode ?? "virtual",
+      mode:
+        (session?.mode as "in-person" | "virtual" | "hybrid" | undefined) ??
+        "virtual",
     },
   });
 

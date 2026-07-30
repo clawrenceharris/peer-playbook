@@ -50,3 +50,15 @@ export const playbookKeys = {
   byUserId: (userId: string) => [...playbookKeys.all, "user", userId] as const,
   favorite: () => [...playbookKeys.all, "favorite"],
 } as const;
+
+export const sessionKeys = {
+  all: ["sessions"] as const,
+  lists: () => [...sessionKeys.all, "list"] as const,
+  list: (filters?: Record<string, unknown>) =>
+    [...sessionKeys.lists(), { filters }] as const,
+  details: () => [...sessionKeys.all, "detail"] as const,
+  byUserId: (id: string) => [...sessionKeys.all, "user", id] as const,
+
+  detail: (id: string, shape: "base" | "detail" | "card" = "base") =>
+    [...sessionKeys.details(), id, shape] as const,
+} as const;

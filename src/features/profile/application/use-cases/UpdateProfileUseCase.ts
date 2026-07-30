@@ -1,4 +1,4 @@
-import { ProfileRepository } from "../../domain/repositories";
+import { ProfileWritePort } from "../ports";
 import { UserAvatarStorage } from "../../domain/services";
 import { UpdateProfileInput } from "../dto";
 import { fail, ok, Result } from "@/shared/application";
@@ -9,7 +9,7 @@ import { UpdateProfileCommand } from "../../domain/types";
 
 export class UpdateProfileUseCase {
   constructor(
-    private readonly profileRepository: ProfileRepository,
+    private readonly profileRepository: ProfileWritePort,
     private readonly storage: UserAvatarStorage,
   ) {}
 

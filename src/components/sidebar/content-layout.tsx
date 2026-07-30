@@ -73,7 +73,7 @@ export const ContentLayout = React.forwardRef<
 
         <div
           className={cn(
-            "container mx-auto flex flex-1 flex-col px-5 pt-20 pb-5",
+            "flex flex-1 flex-col px-5 pt-20 pb-5",
             scrollable ? "overflow-y-auto" : "overflow-hidden",
             contentContainerClassName,
           )}

@@ -1,10 +1,10 @@
 import { ApplicationError, normalizeError } from "@/shared/utils/errors";
 import { Result, fail, ok } from "@/shared/application";
-import { ProfileReadRepository } from "@/features/profile/domain/repositories";
+import { ProfileReadPort } from "../ports";
 import { ProfileCardDTO, ProfileDetailDTO, ProfileDTO } from "../dto";
 
 export class ProfileReadService {
-  constructor(private readonly profileReadRepository: ProfileReadRepository) {}
+  constructor(private readonly profileReadRepository: ProfileReadPort) {}
   async getProfile(userId: string): Promise<Result<ProfileDTO | null>> {
     try {
       const profile = await this.profileReadRepository.findProfileById(userId);

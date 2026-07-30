@@ -1,9 +1,9 @@
 import { SessionContextDTO } from "../application/dto/SessionContextDTO";
-import { SessionContextRepository } from "../domain/repositories/SessionContextRepository";
+import { SessionContextReadPort } from "../application/ports";
 
 export class SessionContextService {
   constructor(
-    private readonly sessionContextRepository: SessionContextRepository,
+    private readonly sessionContextRepository: SessionContextReadPort,
   ) {}
 
   async getSessionContexts(): Promise<SessionContextDTO[]> {

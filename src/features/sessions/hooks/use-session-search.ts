@@ -1,8 +1,8 @@
-import { Session } from "@/features/sessions/domain";
+import { SessionCardDTO } from "@/features/sessions/application/dto";
 import { useSearch } from "@/hooks/use-search";
 
-export function useSessionSearch(sessions: Session[]) {
-  const search = useSearch<Session>({
+export function useSessionSearch(sessions: SessionCardDTO[]) {
+  const search = useSearch<SessionCardDTO>({
     data: sessions,
     filter: (s, q) =>
       (!!s.topic && s.topic.toLowerCase().includes(q.toLowerCase())) ||

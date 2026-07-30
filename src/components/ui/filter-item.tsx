@@ -30,7 +30,7 @@ export function FilterItem({
       <DropdownMenuTrigger asChild>
         <Button
           className={cn(
-            "bg-surface text-muted-foreground hover:text-muted-foreground hover:[&_path]:stroke-muted-foreground [&_path]:stroke-muted-foreground rounded-full text-sm shadow-xs",
+            "bg-surface text-muted-foreground hover:text-muted-foreground hover:[&_path]:stroke-muted-foreground [&_path]:stroke-muted-foreground rounded-sm text-sm shadow-xs",
             className,
           )}
           variant="outline"
@@ -50,7 +50,7 @@ export function FilterItem({
         {options.map((option) => (
           <DropdownMenuItem
             className={cn(
-              "bg-primary-foreground mb-3 justify-between rounded-full border shadow-md",
+              "bg-primary-foreground mb-3 justify-between rounded-sm border shadow-md",
               value === option.value ? "text-primary-400" : "",
             )}
             key={option.value}

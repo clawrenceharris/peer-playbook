@@ -41,6 +41,8 @@ export type Public_sessionsMinAggregateOutputType = {
   mode: $Enums.session_mode | null
   subject: string | null
   title: string | null
+  actual_start: Date | null
+  ended_at: Date | null
 }
 
 export type Public_sessionsMaxAggregateOutputType = {
@@ -60,6 +62,8 @@ export type Public_sessionsMaxAggregateOutputType = {
   mode: $Enums.session_mode | null
   subject: string | null
   title: string | null
+  actual_start: Date | null
+  ended_at: Date | null
 }
 
 export type Public_sessionsCountAggregateOutputType = {
@@ -79,6 +83,8 @@ export type Public_sessionsCountAggregateOutputType = {
   mode: number
   subject: number
   title: number
+  actual_start: number
+  ended_at: number
   _all: number
 }
 
@@ -100,6 +106,8 @@ export type Public_sessionsMinAggregateInputType = {
   mode?: true
   subject?: true
   title?: true
+  actual_start?: true
+  ended_at?: true
 }
 
 export type Public_sessionsMaxAggregateInputType = {
@@ -119,6 +127,8 @@ export type Public_sessionsMaxAggregateInputType = {
   mode?: true
   subject?: true
   title?: true
+  actual_start?: true
+  ended_at?: true
 }
 
 export type Public_sessionsCountAggregateInputType = {
@@ -138,6 +148,8 @@ export type Public_sessionsCountAggregateInputType = {
   mode?: true
   subject?: true
   title?: true
+  actual_start?: true
+  ended_at?: true
   _all?: true
 }
 
@@ -230,6 +242,8 @@ export type Public_sessionsGroupByOutputType = {
   mode: $Enums.session_mode
   subject: string | null
   title: string
+  actual_start: Date | null
+  ended_at: Date | null
   _count: Public_sessionsCountAggregateOutputType | null
   _min: Public_sessionsMinAggregateOutputType | null
   _max: Public_sessionsMaxAggregateOutputType | null
@@ -270,6 +284,8 @@ export type public_sessionsWhereInput = {
   mode?: Prisma.Enumsession_modeFilter<"public_sessions"> | $Enums.session_mode
   subject?: Prisma.StringNullableFilter<"public_sessions"> | string | null
   title?: Prisma.StringFilter<"public_sessions"> | string
+  actual_start?: Prisma.DateTimeNullableFilter<"public_sessions"> | Date | string | null
+  ended_at?: Prisma.DateTimeNullableFilter<"public_sessions"> | Date | string | null
   activity_executions?: Prisma.Activity_executionsListRelationFilter
   profiles?: Prisma.XOR<Prisma.ProfilesScalarRelationFilter, Prisma.profilesWhereInput>
   playbooks?: Prisma.XOR<Prisma.PlaybooksNullableScalarRelationFilter, Prisma.playbooksWhereInput> | null
@@ -292,6 +308,8 @@ export type public_sessionsOrderByWithRelationInput = {
   mode?: Prisma.SortOrder
   subject?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
+  actual_start?: Prisma.SortOrderInput | Prisma.SortOrder
+  ended_at?: Prisma.SortOrderInput | Prisma.SortOrder
   activity_executions?: Prisma.activity_executionsOrderByRelationAggregateInput
   profiles?: Prisma.profilesOrderByWithRelationInput
   playbooks?: Prisma.playbooksOrderByWithRelationInput
@@ -317,6 +335,8 @@ export type public_sessionsWhereUniqueInput = Prisma.AtLeast<{
   mode?: Prisma.Enumsession_modeFilter<"public_sessions"> | $Enums.session_mode
   subject?: Prisma.StringNullableFilter<"public_sessions"> | string | null
   title?: Prisma.StringFilter<"public_sessions"> | string
+  actual_start?: Prisma.DateTimeNullableFilter<"public_sessions"> | Date | string | null
+  ended_at?: Prisma.DateTimeNullableFilter<"public_sessions"> | Date | string | null
   activity_executions?: Prisma.Activity_executionsListRelationFilter
   profiles?: Prisma.XOR<Prisma.ProfilesScalarRelationFilter, Prisma.profilesWhereInput>
   playbooks?: Prisma.XOR<Prisma.PlaybooksNullableScalarRelationFilter, Prisma.playbooksWhereInput> | null
@@ -339,6 +359,8 @@ export type public_sessionsOrderByWithAggregationInput = {
   mode?: Prisma.SortOrder
   subject?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
+  actual_start?: Prisma.SortOrderInput | Prisma.SortOrder
+  ended_at?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.public_sessionsCountOrderByAggregateInput
   _max?: Prisma.public_sessionsMaxOrderByAggregateInput
   _min?: Prisma.public_sessionsMinOrderByAggregateInput
@@ -364,6 +386,8 @@ export type public_sessionsScalarWhereWithAggregatesInput = {
   mode?: Prisma.Enumsession_modeWithAggregatesFilter<"public_sessions"> | $Enums.session_mode
   subject?: Prisma.StringNullableWithAggregatesFilter<"public_sessions"> | string | null
   title?: Prisma.StringWithAggregatesFilter<"public_sessions"> | string
+  actual_start?: Prisma.DateTimeNullableWithAggregatesFilter<"public_sessions"> | Date | string | null
+  ended_at?: Prisma.DateTimeNullableWithAggregatesFilter<"public_sessions"> | Date | string | null
 }
 
 export type public_sessionsCreateInput = {
@@ -381,6 +405,8 @@ export type public_sessionsCreateInput = {
   mode: $Enums.session_mode
   subject?: string | null
   title: string
+  actual_start?: Date | string | null
+  ended_at?: Date | string | null
   activity_executions?: Prisma.activity_executionsCreateNestedManyWithoutSessionsInput
   profiles?: Prisma.profilesCreateNestedOneWithoutSessionsInput
   playbooks?: Prisma.playbooksCreateNestedOneWithoutSessionsInput
@@ -403,6 +429,8 @@ export type public_sessionsUncheckedCreateInput = {
   mode: $Enums.session_mode
   subject?: string | null
   title: string
+  actual_start?: Date | string | null
+  ended_at?: Date | string | null
   activity_executions?: Prisma.activity_executionsUncheckedCreateNestedManyWithoutSessionsInput
 }
 
@@ -421,6 +449,8 @@ export type public_sessionsUpdateInput = {
   mode?: Prisma.Enumsession_modeFieldUpdateOperationsInput | $Enums.session_mode
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  actual_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ended_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activity_executions?: Prisma.activity_executionsUpdateManyWithoutSessionsNestedInput
   profiles?: Prisma.profilesUpdateOneRequiredWithoutSessionsNestedInput
   playbooks?: Prisma.playbooksUpdateOneWithoutSessionsNestedInput
@@ -443,6 +473,8 @@ export type public_sessionsUncheckedUpdateInput = {
   mode?: Prisma.Enumsession_modeFieldUpdateOperationsInput | $Enums.session_mode
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  actual_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ended_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activity_executions?: Prisma.activity_executionsUncheckedUpdateManyWithoutSessionsNestedInput
 }
 
@@ -463,6 +495,8 @@ export type public_sessionsCreateManyInput = {
   mode: $Enums.session_mode
   subject?: string | null
   title: string
+  actual_start?: Date | string | null
+  ended_at?: Date | string | null
 }
 
 export type public_sessionsUpdateManyMutationInput = {
@@ -480,6 +514,8 @@ export type public_sessionsUpdateManyMutationInput = {
   mode?: Prisma.Enumsession_modeFieldUpdateOperationsInput | $Enums.session_mode
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  actual_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ended_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type public_sessionsUncheckedUpdateManyInput = {
@@ -499,6 +535,8 @@ export type public_sessionsUncheckedUpdateManyInput = {
   mode?: Prisma.Enumsession_modeFieldUpdateOperationsInput | $Enums.session_mode
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  actual_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ended_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type Public_sessionsScalarRelationFilter = {
@@ -533,6 +571,8 @@ export type public_sessionsCountOrderByAggregateInput = {
   mode?: Prisma.SortOrder
   subject?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  actual_start?: Prisma.SortOrder
+  ended_at?: Prisma.SortOrder
 }
 
 export type public_sessionsMaxOrderByAggregateInput = {
@@ -552,6 +592,8 @@ export type public_sessionsMaxOrderByAggregateInput = {
   mode?: Prisma.SortOrder
   subject?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  actual_start?: Prisma.SortOrder
+  ended_at?: Prisma.SortOrder
 }
 
 export type public_sessionsMinOrderByAggregateInput = {
@@ -571,6 +613,8 @@ export type public_sessionsMinOrderByAggregateInput = {
   mode?: Prisma.SortOrder
   subject?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  actual_start?: Prisma.SortOrder
+  ended_at?: Prisma.SortOrder
 }
 
 export type public_sessionsCreateNestedOneWithoutActivity_executionsInput = {
@@ -694,6 +738,8 @@ export type public_sessionsCreateWithoutActivity_executionsInput = {
   mode: $Enums.session_mode
   subject?: string | null
   title: string
+  actual_start?: Date | string | null
+  ended_at?: Date | string | null
   profiles?: Prisma.profilesCreateNestedOneWithoutSessionsInput
   playbooks?: Prisma.playbooksCreateNestedOneWithoutSessionsInput
 }
@@ -715,6 +761,8 @@ export type public_sessionsUncheckedCreateWithoutActivity_executionsInput = {
   mode: $Enums.session_mode
   subject?: string | null
   title: string
+  actual_start?: Date | string | null
+  ended_at?: Date | string | null
 }
 
 export type public_sessionsCreateOrConnectWithoutActivity_executionsInput = {
@@ -748,6 +796,8 @@ export type public_sessionsUpdateWithoutActivity_executionsInput = {
   mode?: Prisma.Enumsession_modeFieldUpdateOperationsInput | $Enums.session_mode
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  actual_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ended_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   profiles?: Prisma.profilesUpdateOneRequiredWithoutSessionsNestedInput
   playbooks?: Prisma.playbooksUpdateOneWithoutSessionsNestedInput
 }
@@ -769,6 +819,8 @@ export type public_sessionsUncheckedUpdateWithoutActivity_executionsInput = {
   mode?: Prisma.Enumsession_modeFieldUpdateOperationsInput | $Enums.session_mode
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  actual_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ended_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type public_sessionsCreateWithoutPlaybooksInput = {
@@ -786,6 +838,8 @@ export type public_sessionsCreateWithoutPlaybooksInput = {
   mode: $Enums.session_mode
   subject?: string | null
   title: string
+  actual_start?: Date | string | null
+  ended_at?: Date | string | null
   activity_executions?: Prisma.activity_executionsCreateNestedManyWithoutSessionsInput
   profiles?: Prisma.profilesCreateNestedOneWithoutSessionsInput
 }
@@ -806,6 +860,8 @@ export type public_sessionsUncheckedCreateWithoutPlaybooksInput = {
   mode: $Enums.session_mode
   subject?: string | null
   title: string
+  actual_start?: Date | string | null
+  ended_at?: Date | string | null
   activity_executions?: Prisma.activity_executionsUncheckedCreateNestedManyWithoutSessionsInput
 }
 
@@ -855,6 +911,8 @@ export type public_sessionsScalarWhereInput = {
   mode?: Prisma.Enumsession_modeFilter<"public_sessions"> | $Enums.session_mode
   subject?: Prisma.StringNullableFilter<"public_sessions"> | string | null
   title?: Prisma.StringFilter<"public_sessions"> | string
+  actual_start?: Prisma.DateTimeNullableFilter<"public_sessions"> | Date | string | null
+  ended_at?: Prisma.DateTimeNullableFilter<"public_sessions"> | Date | string | null
 }
 
 export type public_sessionsCreateWithoutProfilesInput = {
@@ -872,6 +930,8 @@ export type public_sessionsCreateWithoutProfilesInput = {
   mode: $Enums.session_mode
   subject?: string | null
   title: string
+  actual_start?: Date | string | null
+  ended_at?: Date | string | null
   activity_executions?: Prisma.activity_executionsCreateNestedManyWithoutSessionsInput
   playbooks?: Prisma.playbooksCreateNestedOneWithoutSessionsInput
 }
@@ -892,6 +952,8 @@ export type public_sessionsUncheckedCreateWithoutProfilesInput = {
   mode: $Enums.session_mode
   subject?: string | null
   title: string
+  actual_start?: Date | string | null
+  ended_at?: Date | string | null
   activity_executions?: Prisma.activity_executionsUncheckedCreateNestedManyWithoutSessionsInput
 }
 
@@ -937,6 +999,8 @@ export type public_sessionsCreateManyPlaybooksInput = {
   mode: $Enums.session_mode
   subject?: string | null
   title: string
+  actual_start?: Date | string | null
+  ended_at?: Date | string | null
 }
 
 export type public_sessionsUpdateWithoutPlaybooksInput = {
@@ -954,6 +1018,8 @@ export type public_sessionsUpdateWithoutPlaybooksInput = {
   mode?: Prisma.Enumsession_modeFieldUpdateOperationsInput | $Enums.session_mode
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  actual_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ended_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activity_executions?: Prisma.activity_executionsUpdateManyWithoutSessionsNestedInput
   profiles?: Prisma.profilesUpdateOneRequiredWithoutSessionsNestedInput
 }
@@ -974,6 +1040,8 @@ export type public_sessionsUncheckedUpdateWithoutPlaybooksInput = {
   mode?: Prisma.Enumsession_modeFieldUpdateOperationsInput | $Enums.session_mode
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  actual_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ended_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activity_executions?: Prisma.activity_executionsUncheckedUpdateManyWithoutSessionsNestedInput
 }
 
@@ -993,6 +1061,8 @@ export type public_sessionsUncheckedUpdateManyWithoutPlaybooksInput = {
   mode?: Prisma.Enumsession_modeFieldUpdateOperationsInput | $Enums.session_mode
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  actual_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ended_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type public_sessionsCreateManyProfilesInput = {
@@ -1011,6 +1081,8 @@ export type public_sessionsCreateManyProfilesInput = {
   mode: $Enums.session_mode
   subject?: string | null
   title: string
+  actual_start?: Date | string | null
+  ended_at?: Date | string | null
 }
 
 export type public_sessionsUpdateWithoutProfilesInput = {
@@ -1028,6 +1100,8 @@ export type public_sessionsUpdateWithoutProfilesInput = {
   mode?: Prisma.Enumsession_modeFieldUpdateOperationsInput | $Enums.session_mode
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  actual_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ended_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activity_executions?: Prisma.activity_executionsUpdateManyWithoutSessionsNestedInput
   playbooks?: Prisma.playbooksUpdateOneWithoutSessionsNestedInput
 }
@@ -1048,6 +1122,8 @@ export type public_sessionsUncheckedUpdateWithoutProfilesInput = {
   mode?: Prisma.Enumsession_modeFieldUpdateOperationsInput | $Enums.session_mode
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  actual_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ended_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activity_executions?: Prisma.activity_executionsUncheckedUpdateManyWithoutSessionsNestedInput
 }
 
@@ -1067,6 +1143,8 @@ export type public_sessionsUncheckedUpdateManyWithoutProfilesInput = {
   mode?: Prisma.Enumsession_modeFieldUpdateOperationsInput | $Enums.session_mode
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  actual_start?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  ended_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -1117,6 +1195,8 @@ export type public_sessionsSelect<ExtArgs extends runtime.Types.Extensions.Inter
   mode?: boolean
   subject?: boolean
   title?: boolean
+  actual_start?: boolean
+  ended_at?: boolean
   activity_executions?: boolean | Prisma.public_sessions$activity_executionsArgs<ExtArgs>
   profiles?: boolean | Prisma.profilesDefaultArgs<ExtArgs>
   playbooks?: boolean | Prisma.public_sessions$playbooksArgs<ExtArgs>
@@ -1140,6 +1220,8 @@ export type public_sessionsSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   mode?: boolean
   subject?: boolean
   title?: boolean
+  actual_start?: boolean
+  ended_at?: boolean
   profiles?: boolean | Prisma.profilesDefaultArgs<ExtArgs>
   playbooks?: boolean | Prisma.public_sessions$playbooksArgs<ExtArgs>
 }, ExtArgs["result"]["public_sessions"]>
@@ -1161,6 +1243,8 @@ export type public_sessionsSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   mode?: boolean
   subject?: boolean
   title?: boolean
+  actual_start?: boolean
+  ended_at?: boolean
   profiles?: boolean | Prisma.profilesDefaultArgs<ExtArgs>
   playbooks?: boolean | Prisma.public_sessions$playbooksArgs<ExtArgs>
 }, ExtArgs["result"]["public_sessions"]>
@@ -1182,9 +1266,11 @@ export type public_sessionsSelectScalar = {
   mode?: boolean
   subject?: boolean
   title?: boolean
+  actual_start?: boolean
+  ended_at?: boolean
 }
 
-export type public_sessionsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "description" | "course_name" | "topic" | "instructor_id" | "session_code" | "status" | "scheduled_start" | "created_at" | "updated_at" | "playbook_id" | "virtual" | "call_id" | "mode" | "subject" | "title", ExtArgs["result"]["public_sessions"]>
+export type public_sessionsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "description" | "course_name" | "topic" | "instructor_id" | "session_code" | "status" | "scheduled_start" | "created_at" | "updated_at" | "playbook_id" | "virtual" | "call_id" | "mode" | "subject" | "title" | "actual_start" | "ended_at", ExtArgs["result"]["public_sessions"]>
 export type public_sessionsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   activity_executions?: boolean | Prisma.public_sessions$activity_executionsArgs<ExtArgs>
   profiles?: boolean | Prisma.profilesDefaultArgs<ExtArgs>
@@ -1224,6 +1310,8 @@ export type $public_sessionsPayload<ExtArgs extends runtime.Types.Extensions.Int
     mode: $Enums.session_mode
     subject: string | null
     title: string
+    actual_start: Date | null
+    ended_at: Date | null
   }, ExtArgs["result"]["public_sessions"]>
   composites: {}
 }
@@ -1666,6 +1754,8 @@ export interface public_sessionsFieldRefs {
   readonly mode: Prisma.FieldRef<"public_sessions", 'session_mode'>
   readonly subject: Prisma.FieldRef<"public_sessions", 'String'>
   readonly title: Prisma.FieldRef<"public_sessions", 'String'>
+  readonly actual_start: Prisma.FieldRef<"public_sessions", 'DateTime'>
+  readonly ended_at: Prisma.FieldRef<"public_sessions", 'DateTime'>
 }
     
 

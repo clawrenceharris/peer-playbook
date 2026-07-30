@@ -37,7 +37,8 @@ flowchart LR
   ui[ReactComponentOrHook] --> action[ServerAction]
   action --> composition[CompositionFactory]
   composition --> useCase[UseCase]
-  useCase --> repository[RepositoryOrAdapter]
+  useCase --> port[ApplicationPort]
+  port --> repository[RepositoryOrAdapter]
   repository --> dto[DTO]
   dto --> ui
 ```
@@ -64,11 +65,16 @@ src/shared/        Shared result types, action helpers, and error utilities
 Within a feature slice, the target structure is:
 
 ```text
-domain/            Stable business language and repository contracts
-application/       Use cases, DTOs, assemblers, application services
+domain/            Stable business language, entities, value objects, and invariants
+application/       Use cases, DTOs, ports, assemblers, and application services
 infrastructure/    Prisma repositories, adapters, static catalogs, mappers
 presentation/      Hooks, selectors, and feature UI
 ```
+
+Application ports define dependencies used by application use cases. A port that
+returns a DTO or page/read model belongs here, because that is an application
+concern. A domain repository should be introduced only when it persists or
+loads domain aggregates without depending on DTOs or presentation shapes.
 
 ## Prisma And Supabase Split
 

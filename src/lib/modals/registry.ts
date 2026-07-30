@@ -13,9 +13,6 @@ class ModalRegistry {
     type: string,
     component: ComponentType<T>,
   ): void {
-    if (this.registry.has(type)) {
-      console.warn(`Modal type "${type}" is already registered. Overwriting.`);
-    }
     this.registry.set(type, component);
   }
 

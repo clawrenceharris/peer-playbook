@@ -1,4 +1,4 @@
-import { PlaybookWriteRepository } from "../../domain/repositories/PlaybookWriteRepository";
+import { PlaybookWritePort } from "../../application/ports";
 import { client as prismaClient, type PrismaClient } from "@/lib/db/client";
 import {
   PlaybookCardDTO,
@@ -39,7 +39,7 @@ type PrismaTransactionClient = Parameters<
  * coordinating playbooks, phases, and strategy copies inside Prisma-backed
  * transactions so the UI can treat a playbook as a single editing unit.
  */
-export class PrismaPlaybookWriteRepository implements PlaybookWriteRepository {
+export class PrismaPlaybookWriteRepository implements PlaybookWritePort {
   constructor(private readonly client: PrismaClient = prismaClient) {}
   async generatePlaybook(
     data: GeneratePlaybookCommand,

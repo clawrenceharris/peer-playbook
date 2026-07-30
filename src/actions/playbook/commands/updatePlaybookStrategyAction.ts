@@ -3,7 +3,6 @@
 import { makeUpdatePlaybookStrategyUseCase } from "@/composition/playbook";
 import {
   PlaybookStrategyCardDTO,
-  UpdatePlaybookStrategyInput,
 } from "@/features/playbooks/application/dto";
 import { updatePlaybookStrategySchema } from "@/lib/validation";
 import { ActionResult, toActionError } from "@/shared/action";
@@ -21,18 +20,37 @@ const updatePlaybookStrategyActionSchema = updatePlaybookStrategySchema.extend({
 });
 
 export async function updatePlaybookStrategyAction(
-  input: UpdatePlaybookStrategyInput,
+  input: {
+    strategyId: string;
+    playbookId?: string;
+  } & z.input<typeof updatePlaybookStrategySchema>,
 ): Promise<ActionResult<PlaybookStrategyCardDTO>> {
   try {
-    const { error } = updatePlaybookStrategyActionSchema.safeParse(input);
-    if (error) {
-      return fail(toActionError(ApplicationError.validation(error.message)));
+    const parsed = updatePlaybookStrategyActionSchema.safeParse(input);
+    if (!parsed.success) {
+      return fail(
+        toActionError(ApplicationError.validation(parsed.error.message)),
+      );
     }
     const userId = await requireCurrentUserId();
     await assertStrategyOwnership(input.strategyId, userId);
 
     const useCase = makeUpdatePlaybookStrategyUseCase();
-    const result = await useCase.execute(input);
+    const result = await useCase.execute({
+      strategyId: input.strategyId,
+      playbookId: input.playbookId,
+      steps: parsed.data.steps,
+      title: parsed.data.title,
+      slug: parsed.data.slug,
+      category: parsed.data.category,
+      phase: parsed.data.phase,
+      position: parsed.data.position,
+      description: parsed.data.description,
+      sourceId: parsed.data.sourceId,
+      sourceType: parsed.data.sourceType,
+      facilitatorNotes: parsed.data.facilitatorNotes,
+      estimatedMinutes: parsed.data.estimatedMinutes,
+    });
     if (!result.success) {
       return fail(toActionError(result.error));
     }

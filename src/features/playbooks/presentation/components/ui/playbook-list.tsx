@@ -1,6 +1,6 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
-import { PlaybookCard } from "@/features/playbooks/presentation/components";
+import { PlaybookListItem } from "@/features/playbooks/presentation/components";
 import { EmptyState } from "@/components/states";
 
 interface PlaybookListProps {
@@ -56,7 +56,7 @@ export function PlaybookList({
         };
 
         return (
-          <PlaybookCard
+          <PlaybookListItem
             key={playbook.id}
             playbook={cardPlaybook}
             onNavigate={() => onPlaybookClick?.(playbook.id)}

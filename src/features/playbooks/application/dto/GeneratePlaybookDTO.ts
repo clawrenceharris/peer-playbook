@@ -1,5 +1,12 @@
-import { GeneratePlaybookFormValues } from "@/lib/validation";
+import { PlaybookMode } from "./CreatePlaybookDTO";
 
 export type GeneratePlaybookInput = {
   userId: string;
-} & GeneratePlaybookFormValues;
+  title: string;
+  topic: string;
+  subject?: string;
+  courseName?: string;
+  contexts: string[];
+  modes: PlaybookMode[];
+  instructions: string;
+};

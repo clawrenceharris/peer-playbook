@@ -28,7 +28,18 @@ export async function assertPlaybookOwnership(
     throw ApplicationError.permissionDenied();
   }
 }
-
+export async function assertSessionOwnership(
+  sessionId: string,
+  userId: string,
+): Promise<void> {
+  const session = await client.public_sessions.findUnique({
+    where: { id: sessionId },
+    select: { instructor_id: true },
+  });
+  if (!session || session.instructor_id !== userId) {
+    throw ApplicationError.permissionDenied();
+  }
+}
 export async function assertStrategyOwnership(
   strategyId: string,
   userId: string,

@@ -2,12 +2,27 @@ import {
   PlaybookStrategyCardDTO,
   PlaybookStrategyDetailDTO,
 } from "../../application/dto";
+import { PlaybookStrategy } from "../../domain/types";
 import {
   PlaybookStrategyCardRecord,
   PlaybookStrategyDetailRecord,
 } from "../selection/playbook-strategy.seletions";
 
 export class PlaybookStrategyMapper {
+  static toDomain(data: PlaybookStrategyCardRecord): PlaybookStrategy {
+    return {
+      id: data.id,
+      title: data.title,
+      slug: data.slug,
+      phase: data.phase,
+      playbookPhaseId: data.playbook_phase_id,
+      category: data.category,
+      sourceId: data.source_id,
+      sourceType: data.source_type,
+      position: data.position,
+    };
+  }
+
   static toCard(data: PlaybookStrategyCardRecord): PlaybookStrategyCardDTO {
     return {
       id: data.id,

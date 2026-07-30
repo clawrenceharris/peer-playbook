@@ -1,5 +1,5 @@
 import { fail, ok, Result } from "@/shared/application";
-import { PlaybookReadRepository } from "../../domain/repositories/PlaybookReadRepository";
+import { PlaybookReadPort } from "../ports";
 import { GetPlaybookCreationPageOutput } from "../dto";
 import { PlaybookCreationPageAssembler } from "../assemblers";
 import { ApplicationError } from "@/shared/utils";
@@ -7,7 +7,7 @@ import { InstructionalModelService } from "@/features/reference-data/instruction
 
 export class GetPlaybookCreationPageUseCase {
   constructor(
-    private readonly playbookReadRepository: PlaybookReadRepository,
+    private readonly playbookReadRepository: PlaybookReadPort,
     private readonly instructionalModelService: InstructionalModelService,
   ) {}
 

@@ -1,8 +1,8 @@
-import { SessionContextRepository } from "../../domain/repositories/SessionContextRepository";
+import { SessionContextReadPort } from "../../application/ports";
 import { SessionContextDTO } from "../../application/dto/SessionContextDTO";
 import { type PrismaClient } from "@/lib/db/client";
 
-export class PrismaSessionContextRepository implements SessionContextRepository {
+export class PrismaSessionContextRepository implements SessionContextReadPort {
   constructor(private readonly client: PrismaClient = client) {}
   async findByKey(key: string): Promise<SessionContextDTO> {
     const record = await this.client.session_contexts.findFirst({

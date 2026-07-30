@@ -1,5 +1,5 @@
 import { ApplicationError } from "@/shared/utils";
-import { PlaybookWriteRepository } from "../../domain";
+import { PlaybookWritePort } from "../ports";
 import { CreatePlaybookPhaseCommand } from "../../domain/types";
 import { CreatePlaybookInput, CreatePlaybookResult } from "../dto";
 import { fail, ok, Result } from "@/shared/application";
@@ -50,7 +50,7 @@ function buildCreatePhases(
 }
 
 export class CreatePlaybookUseCase {
-  constructor(private readonly playbookRepository: PlaybookWriteRepository) {}
+  constructor(private readonly playbookRepository: PlaybookWritePort) {}
 
   async execute(
     input: CreatePlaybookInput,

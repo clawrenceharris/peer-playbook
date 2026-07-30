@@ -1,10 +1,10 @@
 import { fail, ok, Result } from "@/shared/application";
 import { ApplicationError } from "@/shared/utils";
-import { PlaybookWriteRepository } from "../../domain";
+import { PlaybookWritePort } from "../ports";
 import { RemovePlaybookStrategyInput } from "../dto";
 
 export class RemovePlaybookStrategyUseCase {
-  constructor(private readonly playbookRepository: PlaybookWriteRepository) {}
+  constructor(private readonly playbookRepository: PlaybookWritePort) {}
 
   async execute(
     input: RemovePlaybookStrategyInput,
@@ -22,4 +22,3 @@ export class RemovePlaybookStrategyUseCase {
     }
   }
 }
-

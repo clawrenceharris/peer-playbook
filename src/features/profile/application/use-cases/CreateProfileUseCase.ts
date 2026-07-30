@@ -1,12 +1,12 @@
 import { normalizeError } from "@/shared/utils";
-import { ProfileRepository } from "../../domain/repositories";
+import { ProfileWritePort } from "../ports";
 import { UserAvatarStorage } from "../../domain/services";
 import { CreateProfileInput, CreateProfileResult } from "../dto";
 import { fail, ok, Result } from "@/shared/application";
 
 export class CreateProfileUseCase {
   constructor(
-    private readonly profileRepository: ProfileRepository,
+    private readonly profileRepository: ProfileWritePort,
     private readonly storage: UserAvatarStorage,
   ) {}
 

@@ -1,6 +1,10 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
+import type { PlaybookPageCreatorDTO } from "@/features/playbooks/application/dto/PlaybookPageDTO";
+import type { PlaybooksPagePlaybookCardDTO } from "@/features/playbooks/application/dto/PlaybooksPageDTO";
+import type { SessionListItemDTO } from "@/features/sessions/application/dto";
+import type { UserSummaryDTO } from "@/shared/application";
 
 const featureRoot = join(process.cwd(), "src/features");
 const forbiddenLayerImport =
@@ -46,5 +50,11 @@ describe("feature domain boundaries", () => {
       .map((file) => relative(process.cwd(), file));
 
     expect(violations).toEqual([]);
+  });
+
+  it("uses the shared user summary for creator and instructor projections", () => {
+    expectTypeOf<SessionListItemDTO["instructor"]>().toEqualTypeOf<UserSummaryDTO>();
+    expectTypeOf<PlaybookPageCreatorDTO>().toEqualTypeOf<UserSummaryDTO>();
+    expectTypeOf<PlaybooksPagePlaybookCardDTO["creator"]>().toEqualTypeOf<UserSummaryDTO>();
   });
 });

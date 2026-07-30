@@ -20,7 +20,7 @@ there is a rule or behavior that needs a stable home.
 
 - [ ] Name DTOs by their use case when the shape is screen-specific: `GetSessionPageOutput`, `SessionListItemDTO`, or `PlaybookSummaryDTO`.
 - [x] Rename the session list projection to `SessionListItemDTO`; retain `SessionDetailDTO` for single-session reads rather than implying a false card/detail hierarchy.
-- [ ] Extract repeated nested shapes such as creator/instructor summaries instead of duplicating anonymous object types.
+- [x] Extract `UserSummaryDTO` for repeated creator/instructor display identity across playbooks and sessions.
 - [x] Keep page outputs composed from smaller DTOs; the current session page uses only `SessionDetailDTO`, so it correctly does not introduce a redundant `SessionPageDTO`.
 - [x] Decouple playbook application inputs from React Hook Form and Zod input types; server actions validate and map into explicit application commands.
 - [ ] Apply the same input-boundary pattern to the remaining session and profile application inputs after their active migrations stabilize.

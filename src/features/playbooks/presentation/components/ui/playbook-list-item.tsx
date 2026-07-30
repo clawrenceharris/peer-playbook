@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import { useModals } from "@/hooks";
 import { Icon } from "@/components/shared";
 import { assets } from "@/lib/constants";
+import { UserSummaryDTO } from "@/shared/application";
 
 interface PlaybookCardProps {
   playbook: {
@@ -33,11 +34,7 @@ interface PlaybookCardProps {
     title: string;
     topic: string;
     courseName: string | null;
-    creator: {
-      id: string;
-      displayName: string;
-      avatarUrl: string | null;
-    };
+    creator: UserSummaryDTO;
     createdAt: Date;
   };
   onNavigate?: () => void;

@@ -1,4 +1,5 @@
 import { SessionMode, SessionStatus } from "../../domain/value-objects";
+import { UserSummaryDTO } from "@/shared/application";
 
 export type SessionDetailDTO = {
   id: string;
@@ -29,9 +30,5 @@ export type SessionListItemDTO = {
   status: SessionStatus;
   createdAt: string;
   updatedAt: string;
-  instructor: {
-    id: string;
-    displayName: string;
-    avatarUrl: string | null;
-  };
+  instructor: UserSummaryDTO;
 };

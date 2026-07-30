@@ -1,11 +1,8 @@
 import { PlaybookDetailDTO } from "./PlaybookDTO";
 import { PlaybookStrategyDetailDTO } from "./PlaybookStrategyDTO";
+import { UserSummaryDTO } from "@/shared/application";
 
-export type PlaybookPageCreatorDTO = {
-  id: string;
-  displayName: string;
-  avatarUrl: string | null;
-};
+export type PlaybookPageCreatorDTO = UserSummaryDTO;
 
 export type GetPlaybookPageOutput = {
   playbook: {

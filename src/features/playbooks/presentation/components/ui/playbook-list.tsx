@@ -2,6 +2,7 @@ import React from "react";
 import { Loader2 } from "lucide-react";
 import { PlaybookListItem } from "@/features/playbooks/presentation/components";
 import { EmptyState } from "@/components/states";
+import { UserSummaryDTO } from "@/shared/application";
 
 interface PlaybookListProps {
   playbooks: {
@@ -9,11 +10,7 @@ interface PlaybookListProps {
     title: string;
     topic: string;
     courseName: string | null;
-    creator?: {
-      id: string;
-      displayName: string;
-      avatarUrl: string | null;
-    };
+    creator?: UserSummaryDTO;
     createdAt: Date;
   }[];
   isLoading?: boolean;

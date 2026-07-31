@@ -23,7 +23,7 @@ there is a rule or behavior that needs a stable home.
 - [x] Extract `UserSummaryDTO` for repeated creator/instructor display identity across playbooks and sessions.
 - [x] Keep page outputs composed from smaller DTOs; the current session page uses only `SessionDetailDTO`, so it correctly does not introduce a redundant `SessionPageDTO`.
 - [x] Decouple playbook application inputs from React Hook Form and Zod input types; server actions validate and map into explicit application commands.
-- [ ] Apply the same input-boundary pattern to the remaining session and profile application inputs after their active migrations stabilize.
+- [x] Decouple session create/update and profile update application inputs from form-schema types; actions validate and map boundary input into explicit commands.
 
 ## Domain Modeling
 

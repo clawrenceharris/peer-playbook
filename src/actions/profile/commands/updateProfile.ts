@@ -1,6 +1,5 @@
 "use server";
 import {
-  UpdateProfileInput,
   UpdateProfileResult,
 } from "@/features/profile/application/dto";
 import { ApplicationError } from "@/shared/utils/errors";
@@ -10,9 +9,14 @@ import { toActionError, ActionResult } from "@/shared/action";
 import { AppErrorCode } from "@/types/error.types";
 import { getCurrentUser } from "../../auth";
 import { updateProfileSchema } from "@/lib/validation";
+import { z } from "zod";
+
+type UpdateProfileActionInput = {
+  id: string;
+} & z.input<typeof updateProfileSchema>;
 
 export async function updateProfileAction(
-  input: UpdateProfileInput,
+  input: UpdateProfileActionInput,
 ): Promise<ActionResult<UpdateProfileResult>> {
   try {
     const userResult = await getCurrentUser();
@@ -25,20 +29,26 @@ export async function updateProfileAction(
       );
     }
 
-    const { error } = updateProfileSchema.safeParse(input);
-    if (error) {
+    const parsed = updateProfileSchema.safeParse(input);
+    if (!parsed.success) {
       return fail(
         toActionError(
           new ApplicationError({
             code: AppErrorCode.VALIDATION_FAILED,
-            message: error.message,
+            message: parsed.error.message,
           }),
         ),
       );
     }
     const useCase = await makeUpdateProfileUseCase();
 
-    const result = await useCase.execute(input);
+    const result = await useCase.execute({
+      id: input.id,
+      firstName: parsed.data.firstName,
+      lastName: parsed.data.lastName,
+      courses: parsed.data.courses,
+      avatarFile: parsed.data.avatarFile,
+    });
 
     if (!result.success) {
       return fail(result.error);

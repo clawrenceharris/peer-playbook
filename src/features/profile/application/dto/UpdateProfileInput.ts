@@ -1,5 +1,7 @@
-import { UpdateProfileFormValues } from "@/lib/validation";
-
 export type UpdateProfileInput = {
   id: string;
-} & UpdateProfileFormValues;
+  firstName?: string;
+  lastName?: string;
+  courses?: string[];
+  avatarFile?: File | null;
+};

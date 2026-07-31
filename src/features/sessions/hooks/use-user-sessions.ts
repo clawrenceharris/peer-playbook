@@ -1,8 +1,12 @@
 import { getSessionsByUserAction } from "@/actions/session/queries/getSessionsByUserAction";
 import { sessionKeys } from "@/lib/queries/keys";
 import { useQuery } from "@tanstack/react-query";
+import { SessionListItemDTO } from "../application/dto";
 
-export function useUserSessions(userId: string | null) {
+export function useUserSessions(
+  userId: string | null,
+  select: (sessions: SessionListItemDTO[]) => SessionListItemDTO[],
+) {
   const { data, isLoading, error } = useQuery({
     queryKey: sessionKeys.byUserId(userId ?? ""),
     queryFn: async () => {
@@ -16,6 +20,7 @@ export function useUserSessions(userId: string | null) {
       return result.data;
     },
     enabled: !!userId,
+    select,
   });
   return { data, isLoading, error };
 }

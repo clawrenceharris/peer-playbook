@@ -24,6 +24,7 @@ export function LoginForm() {
       enableBeforeUnloadProtection={false}
       showsCancelButton={false}
       submitText="Log In"
+      loadingText="Logging in..."
       handleSubmit={login}
       titleClassName="text-3xl tracking-wide font-primary-heading"
       title="Welcome back!"

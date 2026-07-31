@@ -44,8 +44,8 @@ there is a rule or behavior that needs a stable home.
 
 - [x] Add a domain import-boundary test.
 - [ ] Add mapper tests for all high-value Prisma-to-DTO/domain transformations.
-- [ ] Add use-case tests for every branch with validation, authorization, transaction coordination, or AI response handling.
-- [ ] Add adapter contract tests for the AI completion and strategy-catalog ports.
+- [ ] Add use-case tests for every branch with validation, authorization, transaction coordination, or AI response handling; generation planner and use-case coverage now exists.
+- [x] Add adapter contract tests for the AI completion port; add equivalent strategy-catalog coverage when its query rules change.
 - [ ] Add CI checks for type checking, unit tests, and the architecture-boundary test.
 
 ## Suggested Order

@@ -142,6 +142,26 @@ function normalizeSupabaseError(error: {
 }): ApplicationError {
   const normalizedMessage = error.message.toLowerCase();
 
+  // PostgREST codes are more reliable than their human-readable messages.
+  switch (
+    error.code?.toUpperCase() ??
+    normalizedMessage.match(/pgrst\d{3}/)?.[0]?.toUpperCase()
+  ) {
+    case "PGRST204":
+      return ApplicationError.notFound();
+    case "PGRST401":
+      return ApplicationError.permissionDenied();
+    case "PGRST429":
+      return new ApplicationError({ code: AppErrorCode.AUTH_RATE_LIMITED });
+  }
+
+  if (normalizedMessage.includes("duplicate key")) {
+    return new ApplicationError({
+      code: AppErrorCode.UNKNOWN_ERROR,
+      message: "That item already exists.",
+    });
+  }
+
   if (normalizedMessage.includes("invalid login credentials")) {
     return new ApplicationError({
       code: AppErrorCode.AUTH_INVALID_CREDENTIALS,

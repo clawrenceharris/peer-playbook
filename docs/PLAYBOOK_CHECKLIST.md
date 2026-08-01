@@ -26,7 +26,7 @@ The playbook feature has moved substantially onto the Prisma/server-action path.
 - [x] AI generation is routed through `GeneratePlaybookUseCase`.
 - [x] AI generation uses a planner plus a JSON completion port/adapter.
 - [x] AI generation writes phase-linked playbook strategies through the normal create path.
-- [x] Generation validates malformed JSON, duplicate strategy slugs, duplicate phases, unknown slugs, and too few matching strategies.
+- [x] Generation validates malformed JSON, duplicate strategy slugs in the initial AI plan, duplicate phases, unknown slugs, and too few matching strategies. After persistence, duplicate source strategies are allowed as independently editable playbook instances.
 - [x] The old editor route now redirects to the main playbook page.
 
 ## Still To Do

@@ -13,8 +13,8 @@ there is a rule or behavior that needs a stable home.
 - [x] Move the session-context DTO read gateway into `application/ports`.
 - [x] Remove application DTO imports from feature domain folders.
 - [x] Add an automated test that blocks domain imports from application, infrastructure, and presentation layers.
-- [ ] Audit the remaining legacy `src/repositories`, `src/lib/services`, and feature `data` paths; remove or migrate each active caller.
-- [ ] Decide case-by-case whether a future persistence contract is an application port (DTO/read-model oriented) or a domain repository (aggregate oriented).
+- [x] Audit the remaining legacy `src/repositories`, `src/lib/services`, and feature `data` paths; the unused Supabase base service/repository and session data repository were removed, with no active callers remaining.
+- [x] Decide case-by-case whether a future persistence contract is an application port (DTO/read-model oriented) or a domain repository (aggregate oriented): use an application port for page/query DTOs and writes coordinated by use cases; introduce a domain repository only when an aggregate must be loaded and enforce a domain invariant before persistence.
 
 ## DTOs And Read Models
 
@@ -28,10 +28,10 @@ there is a rule or behavior that needs a stable home.
 ## Domain Modeling
 
 - [x] Replace the playbook entity's strategy DTO dependency with a domain `PlaybookStrategy` type.
-- [ ] Add `PlaybookTitle` and `PlaybookTopic` value objects only after agreeing their shared rules: trimming, requiredness, length, and normalization.
-- [ ] Make `Session` state transitions explicit and reject invalid transitions when the product rules require it.
-- [ ] Use domain entities for behavior and invariants, not merely as duplicate database record shapes.
-- [ ] Add aggregate methods only for rules that must be true across all entry points, such as phase ordering or duplicate strategy rules.
+- [x] Add `PlaybookTitle` and `PlaybookTopic` value objects for the agreed shared rules: trim whitespace and require non-empty values; length and other normalization remain UI/schema policy until product rules require them.
+- [x] Make `Session` state transitions explicit and reject invalid transitions: scheduled may become active/canceled, active may become completed/canceled, and completed/canceled are terminal.
+- [x] Use domain entities for behavior and invariants, not merely as duplicate database record shapes; playbook metadata and session lifecycle rules now live in domain types.
+- [x] Add aggregate methods only for rules that must be true across all entry points: `PlaybookPhaseCollection` validates phase titles and normalizes persisted order. Duplicate source strategies are explicitly allowed because every playbook strategy is an independently editable instance.
 
 ## Application And Infrastructure
 
@@ -43,10 +43,10 @@ there is a rule or behavior that needs a stable home.
 ## Tests And Guardrails
 
 - [x] Add a domain import-boundary test.
-- [ ] Add mapper tests for all high-value Prisma-to-DTO/domain transformations; playbook, session, and profile mapper coverage is now in place.
-- [ ] Add use-case tests for every branch with validation, authorization, transaction coordination, or AI response handling; generation planner and use-case coverage now exists.
+- [x] Add mapper tests for all high-value Prisma-to-DTO/domain transformations; playbook, session, profile, instructional-model, and phase-intent mapping coverage is now in place.
+- [x] Add use-case tests for high-risk branches with validation, authorization, transaction coordination, or AI response handling; this now covers playbook metadata/phase writes, strategy/favorite/delete errors, session transitions, profile avatar cleanup, and AI generation planning/use cases.
 - [x] Add adapter contract tests for the AI completion port; add equivalent strategy-catalog coverage when its query rules change.
-- [ ] Add CI checks for type checking, unit tests, and the architecture-boundary test.
+- [x] Add CI checks for type checking, zero-warning lint, unit tests, and the architecture-boundary test.
 
 ## Suggested Order
 

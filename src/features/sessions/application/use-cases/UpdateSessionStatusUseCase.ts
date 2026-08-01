@@ -1,4 +1,8 @@
 import { ApplicationError } from "@/shared/utils";
+import {
+  InvalidSessionTransitionError,
+  Session,
+} from "../../domain/entities/Session";
 import { SessionStatus } from "../../domain/value-objects";
 import { UpdateSessionStatusInput, UpdateSessionStatusResult } from "../dto";
 import { fail, ok, Result } from "@/shared/application";
@@ -24,13 +28,33 @@ export class UpdateSessionStatusUseCase {
       if (!session) {
         return fail(ApplicationError.notFound("Session not found"));
       }
+      const sessionEntity = new Session({
+        id: session.id,
+        instructorId: session.instructorId,
+        playbookId: session.playbookId,
+        title: session.title,
+        scheduledStart: session.scheduledStart,
+        mode: session.mode,
+        subject: session.subject,
+        topic: session.topic,
+        courseName: session.courseName,
+        description: session.description,
+        status: session.status,
+        createdAt: session.createdAt,
+      });
+      const transitionedSession = sessionEntity.transitionTo(
+        input.status as SessionStatus,
+      );
       const updatedSession =
         await this.sessionWriteRepository.updateSessionStatus({
           sessionId: input.sessionId,
-          status: input.status as SessionStatus,
+          status: transitionedSession.status,
         });
       return ok(updatedSession);
     } catch (error) {
+      if (error instanceof InvalidSessionTransitionError) {
+        return fail(ApplicationError.validation(error.message));
+      }
       return fail(
         ApplicationError.unexpected(
           error,

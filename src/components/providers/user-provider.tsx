@@ -7,7 +7,6 @@ import { ErrorState, LoadingState } from "@/components/states";
 import { Dialog } from "../ui";
 import { useProfile } from "@/features/profile/presentation/hooks";
 import { CreateProfileModal } from "@/features/profile/presentation/components/modals";
-import { SidebarLayout } from "../sidebar";
 import { getUserErrorMessage } from "@/shared/utils";
 
 type UserContextType = {

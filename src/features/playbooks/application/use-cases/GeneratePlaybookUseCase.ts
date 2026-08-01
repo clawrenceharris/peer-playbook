@@ -5,6 +5,11 @@ import { GeneratePlaybookInput } from "../dto/GeneratePlaybookDTO";
 import { fail, ok, Result } from "@/shared/application";
 import { PlaybookGenerationPlanner } from "@/features/ai";
 import { CreatePlaybookPhaseCommand } from "../../domain/types";
+import {
+  PlaybookMetadataValidationError,
+  PlaybookTitle,
+  PlaybookTopic,
+} from "../../domain/value-objects";
 
 export class GeneratePlaybookUseCase {
   constructor(
@@ -18,9 +23,11 @@ export class GeneratePlaybookUseCase {
     try {
       const { topic, courseName, subject, contexts, instructions, modes } =
         input;
+      const playbookTitle = PlaybookTitle.create(input.title);
+      const playbookTopic = PlaybookTopic.create(topic);
       const { plan, catalog } = await this.playbookGenerationPlanner.plan({
-        title: input.title,
-        topic,
+        title: playbookTitle.value,
+        topic: playbookTopic.value,
         courseName,
         subject: subject ?? "",
         contexts,
@@ -33,8 +40,8 @@ export class GeneratePlaybookUseCase {
       const phases = buildGeneratedPhases(plan.strategies, catalogBySlug);
 
       const result = await this.playbookRepository.createPlaybook({
-        title: input.title,
-        topic,
+        title: playbookTitle.value,
+        topic: playbookTopic.value,
         courseName: courseName ?? null,
         subject: subject ?? "",
         createdBy: input.userId,
@@ -45,6 +52,9 @@ export class GeneratePlaybookUseCase {
       });
       return ok(result);
     } catch (error) {
+      if (error instanceof PlaybookMetadataValidationError) {
+        return fail(ApplicationError.validation(error.message));
+      }
       if (error instanceof ApplicationError) {
         return fail(error);
       }

@@ -14,8 +14,8 @@ vi.mock("@/lib/supabase/server", () => ({
   })),
 }));
 
-vi.mock("@/db/client", () => ({
-  db: {
+vi.mock("@/lib/db/client", () => ({
+  client: {
     playbooks: {
       findUnique: mocks.playbookFindUnique,
     },
@@ -41,7 +41,7 @@ describe("playbook ownership helpers", () => {
   });
 
   it("rejects when a playbook is not owned by the current user", async () => {
-    mocks.playbookFindUnique.mockResolvedValueOnce({ createdBy: "user-2" });
+    mocks.playbookFindUnique.mockResolvedValueOnce({ created_by: "user-2" });
 
     await expect(assertPlaybookOwnership("playbook-1", "user-1")).rejects.toMatchObject(
       {
@@ -52,7 +52,7 @@ describe("playbook ownership helpers", () => {
 
   it("rejects when a strategy is not owned by the current user", async () => {
     mocks.strategyFindUnique.mockResolvedValueOnce({
-      playbooks: { createdBy: "user-2" },
+      playbooks: { created_by: "user-2" },
     });
 
     await expect(assertStrategyOwnership("strategy-1", "user-1")).rejects.toMatchObject(

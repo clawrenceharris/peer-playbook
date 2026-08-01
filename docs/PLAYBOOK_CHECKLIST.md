@@ -88,7 +88,7 @@ The playbook feature has moved substantially onto the Prisma/server-action path.
 - [ ] Add a structured way to inject new instructional guidance into AI planning, such as Bloom’s taxonomy, lesson level, or app-specific constraints.
 - [ ] Add a real AI context catalog instead of keeping guidance only in code constants.
 - [ ] Expand AI error handling for provider outages, rate limits, and empty completions with user-facing retry guidance.
-- [ ] Add tests around the planner and the OpenAI adapter boundary.
+- [x] Add tests around the planner and the OpenAI adapter boundary.
 - [ ] Consider whether generation should return and store a rationale per chosen strategy for review/debugging.
 
 ### Error And Edge Cases
@@ -101,14 +101,14 @@ The playbook feature has moved substantially onto the Prisma/server-action path.
 ### Tests
 
 - [ ] Unit test `CreatePlaybookUseCase` phase creation and missing-strategy validation.
-- [ ] Unit test `GeneratePlaybookUseCase` with the AI planner mocked.
+- [x] Unit test `GeneratePlaybookUseCase` with the AI planner mocked.
 - [x] Add repository or integration tests for saved playbooks, delete cascade, phase updates, and strategy updates.
 - [x] Add ownership/security tests for update, delete, favorite add/remove, and strategy update actions.
   - [x] Verify the ownership helper rejects a user who does not own the target playbook or strategy.
   - [x] Verify the happy path still succeeds for the owning user.
   - [x] Keep the action guard behavior consistent with DB/RLS failures by surfacing permission-denied errors directly.
 - [x] Add interaction coverage for create, generate, update, delete, and favorite flows.
-- [ ] Add regression coverage for AI prompt/context expansion.
+- [x] Add regression coverage for AI prompt/context expansion.
 - [x] Add unit coverage for add/remove/replacement strategy use cases.
 
 ## Priority Order

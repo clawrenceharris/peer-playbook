@@ -5,7 +5,7 @@ import { SessionListItemDTO } from "../application/dto";
 
 export function useUserSessions(
   userId: string | null,
-  select: (sessions: SessionListItemDTO[]) => SessionListItemDTO[],
+  select?: (sessions: SessionListItemDTO[]) => SessionListItemDTO[],
 ) {
   const { data, isLoading, error } = useQuery({
     queryKey: sessionKeys.byUserId(userId ?? ""),

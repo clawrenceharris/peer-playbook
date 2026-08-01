@@ -111,10 +111,10 @@ export default function Dashboard() {
               <h1 className="max-w-3xl text-3xl leading-tight font-bold tracking-normal sm:text-4xl lg:text-5xl">
                 Welcome, {firstName}.
               </h1>
-              <p className="text-xl font-bold text-[#47293990]">
+              <p className="text-xl font-bold">
                 Ready to build your next session?
               </p>
-              <p className="max-w-2xl text-base text-[#47293990] sm:text-lg">
+              <p className="max-w-2xl text-base sm:text-lg">
                 Start planning study sessions that get students talking,
                 practicing, and learning together.
               </p>

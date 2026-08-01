@@ -37,13 +37,13 @@ there is a rule or behavior that needs a stable home.
 
 - [ ] Replace leftover broad read services with focused query use cases where they describe a real user task.
 - [ ] Keep Prisma selection, mapping, and transaction details inside infrastructure adapters.
-- [ ] Standardize error normalization and structured logging at action/application boundaries; remove ad hoc `console.log` calls from use cases.
+- [x] Standardize error normalization and structured logging at action/application boundaries; PostgREST and duplicate-key normalization are covered, with no ad hoc `console.log` calls in use cases.
 - [ ] Keep composition factories as the only place where concrete infrastructure adapters are selected.
 
 ## Tests And Guardrails
 
 - [x] Add a domain import-boundary test.
-- [ ] Add mapper tests for all high-value Prisma-to-DTO/domain transformations.
+- [ ] Add mapper tests for all high-value Prisma-to-DTO/domain transformations; playbook, session, and profile mapper coverage is now in place.
 - [ ] Add use-case tests for every branch with validation, authorization, transaction coordination, or AI response handling; generation planner and use-case coverage now exists.
 - [x] Add adapter contract tests for the AI completion port; add equivalent strategy-catalog coverage when its query rules change.
 - [ ] Add CI checks for type checking, unit tests, and the architecture-boundary test.

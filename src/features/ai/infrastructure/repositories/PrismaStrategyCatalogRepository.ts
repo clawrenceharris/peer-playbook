@@ -7,28 +7,20 @@ export class PrismaStrategyCatalogRepository implements StrategyCatalogRepositor
   async listForPlaybookGeneration(
     contextKeys: string[],
   ): Promise<AiStrategyCatalogItem[]> {
-    const contextRecords =
-      contextKeys.length > 0
-        ? await this.client.session_contexts.findMany({
-            where: { key: { in: contextKeys } },
-            select: { context: true },
-          })
-        : [];
-    const contextValues = contextRecords.map((record) => record.context);
-    if (contextKeys.length > 0 && contextValues.length === 0) {
+    console.log("contextKeys", contextKeys);
+    if (!contextKeys.length) {
       return [];
     }
 
+    // direct join with strategy_contexts based on context
     const records = await this.client.strategies.findMany({
       where: {
         published: true,
-        ...(contextValues.length > 0 && {
-          strategy_contexts: {
-            some: {
-              context: { in: contextValues },
-            },
+        strategy_contexts: {
+          some: {
+            context: { in: contextKeys },
           },
-        }),
+        },
       },
       orderBy: { title: "asc" },
       select: {
@@ -38,6 +30,8 @@ export class PrismaStrategyCatalogRepository implements StrategyCatalogRepositor
         category: true,
         description: true,
         good_for: true,
+        virtual_friendly: true,
+        session_size: true,
       },
     });
 

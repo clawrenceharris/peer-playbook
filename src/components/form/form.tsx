@@ -75,16 +75,13 @@ export function Form<T extends FieldValues>({
   } = form;
   const isDisabled = props.disabled || disabled || isLoading || isSubmitting;
   const handleSubmit = async (data: T) => {
-    console.log(data);
     try {
       clearErrors();
       return await handleSubmitProp?.(data);
     } catch (error) {
-      console.log(error);
       setError("root", { message: getUserErrorMessage(error) });
     }
   };
-  console.log(errors);
   return (
     <BeforeUnload disabled={!isDirty || !enableBeforeUnloadProtection}>
       <FormProvider {...form}>
@@ -107,21 +104,21 @@ export function Form<T extends FieldValues>({
                   {title}
                 </FieldTitle>
               )}
-              {description && showsDescription && (
+
+              {description && showsDescription && !errors.root && (
                 <FieldDescription className={descriptionClassName}>
                   {description}
                 </FieldDescription>
+              )}
+              {errors.root && (
+                <FieldError className="text-destructive">
+                  {errors.root.message}
+                </FieldError>
               )}
             </FieldContent>
             {typeof children === "function" ? children(form) : children}
 
             {/* General Error */}
-
-            {errors.root && (
-              <FieldError className="text-destructive">
-                {errors.root.message}
-              </FieldError>
-            )}
 
             <Field orientation="horizontal" className="w-full justify-end">
               {showsCancelButton && (

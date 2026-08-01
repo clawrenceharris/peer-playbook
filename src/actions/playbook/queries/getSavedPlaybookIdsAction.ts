@@ -1,9 +1,8 @@
 "use server";
 
-import { client } from "@/lib/db/client";
-import { PrismaPlaybookReadRepository } from "@/features/playbooks/infrastructure/repositories";
+import { makeListSavedPlaybookIdsUseCase } from "@/composition/playbook";
 import { ActionResult, toActionError } from "@/shared/action";
-import { fail, ok } from "@/shared/application";
+import { fail } from "@/shared/application";
 import { ApplicationError } from "@/shared/utils";
 import { z } from "zod";
 
@@ -20,9 +19,11 @@ export async function getSavedPlaybookIdsAction(
       return fail(toActionError(ApplicationError.validation(error.message)));
     }
 
-    const repository = new PrismaPlaybookReadRepository(client);
-    const ids = await repository.listSavedPlaybookIdsByUserId(userId);
-    return ok(ids);
+    const result = await makeListSavedPlaybookIdsUseCase().execute(userId);
+    if (!result.success) {
+      return fail(toActionError(result.error));
+    }
+    return result;
   } catch (error) {
     return fail(
       toActionError(

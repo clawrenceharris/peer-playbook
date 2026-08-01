@@ -1,4 +1,4 @@
-export * from "./makePlaybookReadService";
+export * from "./makePlaybookReadQueryUseCases";
 export * from "./makeGetPlaybookPageUseCase";
 export * from "./makeCreatePlaybookUseCase";
 export * from "./makeUpdatePlaybookUseCase";
@@ -11,3 +11,4 @@ export * from "./makeFavoritePlaybookUseCases";
 export * from "./makeGetPlaybookCreationPageUseCase";
 export * from "./makeGetPlaybooksPageUseCase";
 export * from "./makeAddPlaybookPhaseUseCase";
+export * from "./makeGeneratePlaybookUseCase";

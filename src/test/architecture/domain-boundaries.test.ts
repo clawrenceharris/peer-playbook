@@ -1,8 +1,8 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { describe, expect, expectTypeOf, it } from "vitest";
-import type { PlaybookPageCreatorDTO } from "@/features/playbooks/application/dto/PlaybookPageDTO";
-import type { PlaybooksPagePlaybookCardDTO } from "@/features/playbooks/application/dto/PlaybooksPageDTO";
+import type { GetPlaybookPageOutput } from "@/features/playbooks/application/dto/PlaybookPageDTO";
+import type { PlaybookSummaryDTO } from "@/features/playbooks/application/dto/PlaybooksPageDTO";
 import type { SessionListItemDTO } from "@/features/sessions/application/dto";
 import type { UserSummaryDTO } from "@/shared/application";
 
@@ -51,7 +51,7 @@ describe("feature domain boundaries", () => {
 
   it("uses the shared user summary for creator and instructor projections", () => {
     expectTypeOf<SessionListItemDTO["instructor"]>().toEqualTypeOf<UserSummaryDTO>();
-    expectTypeOf<PlaybookPageCreatorDTO>().toEqualTypeOf<UserSummaryDTO>();
-    expectTypeOf<PlaybooksPagePlaybookCardDTO["creator"]>().toEqualTypeOf<UserSummaryDTO>();
+    expectTypeOf<GetPlaybookPageOutput["playbook"]["creator"]>().toEqualTypeOf<UserSummaryDTO>();
+    expectTypeOf<PlaybookSummaryDTO["creator"]>().toEqualTypeOf<UserSummaryDTO>();
   });
 });

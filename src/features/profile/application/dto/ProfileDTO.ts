@@ -16,7 +16,7 @@ export type ProfileDetailDTO = {
   onboardingCompletedAt: Date | null;
 };
 
-export type ProfileDTO = {
+export type ProfileSummaryDTO = {
   id: string;
   firstName: string;
   lastName: string | null;

@@ -1,14 +1,13 @@
 "use server";
 import { ActionResult, toActionError } from "@/shared/action";
 import { fail } from "@/shared/application";
-import { makeSessionReadService } from "@/composition/session";
+import { makeGetSessionByCodeUseCase } from "@/composition/session";
 import { SessionDetailDTO } from "@/features/sessions/application/dto";
 
 export async function getSessionByCodeAction(
   code: string,
 ): Promise<ActionResult<SessionDetailDTO | null>> {
-  const sessionService = makeSessionReadService();
-  const result = await sessionService.getByCode(code);
+  const result = await makeGetSessionByCodeUseCase().execute(code);
   if (!result.success) {
     return fail(toActionError(result.error));
   }

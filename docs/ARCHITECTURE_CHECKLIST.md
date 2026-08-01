@@ -18,7 +18,7 @@ there is a rule or behavior that needs a stable home.
 
 ## DTOs And Read Models
 
-- [ ] Name DTOs by their use case when the shape is screen-specific: `GetSessionPageOutput`, `SessionListItemDTO`, or `PlaybookSummaryDTO`.
+- [x] Name DTOs by their use case when the shape is screen-specific: `GetPlaybookPageOutput`, `GetPlaybooksPageInput`, `SessionListItemDTO`, `PlaybookSummaryDTO`, and `ProfileSummaryDTO` now distinguish page outputs, inputs, lists, and reusable summaries.
 - [x] Rename the session list projection to `SessionListItemDTO`; retain `SessionDetailDTO` for single-session reads rather than implying a false card/detail hierarchy.
 - [x] Extract `UserSummaryDTO` for repeated creator/instructor display identity across playbooks and sessions.
 - [x] Keep page outputs composed from smaller DTOs; the current session page uses only `SessionDetailDTO`, so it correctly does not introduce a redundant `SessionPageDTO`.
@@ -35,10 +35,10 @@ there is a rule or behavior that needs a stable home.
 
 ## Application And Infrastructure
 
-- [ ] Replace leftover broad read services with focused query use cases where they describe a real user task.
-- [ ] Keep Prisma selection, mapping, and transaction details inside infrastructure adapters.
+- [x] Replace leftover broad read services with focused query use cases where they describe a real user task; profile, session, and playbook reads now use named query use cases.
+- [x] Keep Prisma selection, mapping, and transaction details inside infrastructure adapters; application code depends on ports and actions do not directly construct Prisma repositories.
 - [x] Standardize error normalization and structured logging at action/application boundaries; PostgREST and duplicate-key normalization are covered, with no ad hoc `console.log` calls in use cases.
-- [ ] Keep composition factories as the only place where concrete infrastructure adapters are selected.
+- [x] Keep composition factories as the only place where concrete infrastructure adapters are selected; actions and app routes use composition factories.
 
 ## Tests And Guardrails
 

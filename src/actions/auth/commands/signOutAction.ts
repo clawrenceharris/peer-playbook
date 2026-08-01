@@ -1,5 +1,5 @@
 "use server";
-import { ApplicationError } from "@/shared/utils/errors";
+import { ApplicationError, logError } from "@/shared/utils/errors";
 import { makeSignOutUserUseCase } from "@/composition/auth";
 import { ActionResult, toActionError } from "@/shared/action";
 import { fail } from "@/shared/application";
@@ -13,8 +13,8 @@ export async function signOutAction(): Promise<ActionResult<void>> {
     }
     return result;
   } catch (error) {
-    console.error("Unexpected sign out action error:", error);
     const appError = ApplicationError.unexpected(error);
+    logError(appError, { action: "signOutAction" });
     return fail(toActionError(appError));
   }
 }

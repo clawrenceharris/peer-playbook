@@ -3,7 +3,7 @@ import { makeSignupUserUseCase } from "@/composition/auth";
 import { signUpSchema , type SignUpFormValues } from "@/lib/validation";
 import { AppErrorCode } from "@/types/error.types";
 import { User } from "@supabase/supabase-js";
-import { ApplicationError } from "@/shared/utils/errors";
+import { ApplicationError, logError } from "@/shared/utils/errors";
 import { fail, ok } from "@/shared/application";
 import { ActionResult, toActionError } from "@/shared/action";
 
@@ -24,8 +24,8 @@ export async function signupAction(input: SignUpFormValues): Promise<ActionResul
       }
       return ok(result.data);
     } catch (error) {
-      console.error("Unexpected sign up action error:", error);
       const appError = ApplicationError.unexpected(error);
+      logError(appError, { action: "signupAction" });
       return fail(toActionError(appError));
     }
   }

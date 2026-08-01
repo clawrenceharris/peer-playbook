@@ -9,6 +9,7 @@ import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { prefetchAuthenticatedAppData } from "@/lib/queries/prefetchAuthenticatedAppData";
 import { User } from "@supabase/supabase-js";
 import { Toaster } from "sonner";
+import { logError, normalizeError } from "@/shared/utils";
 
 export const metadata: Metadata = {
   title: "PeerPlaybook",
@@ -42,7 +43,7 @@ export default async function RootLayout({
   try {
     initialUser = await prefetchAuthenticatedAppData(queryClient);
   } catch (error) {
-    console.error("[RootLayout] prefetchAuthenticatedAppData failed:", error);
+    logError(normalizeError(error), { operation: "prefetchAuthenticatedAppData" });
   }
 
   const dehydratedState = dehydrate(queryClient);

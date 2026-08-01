@@ -2,8 +2,6 @@ import { PlaybookDetailDTO } from "./PlaybookDTO";
 import { PlaybookStrategyDetailDTO } from "./PlaybookStrategyDTO";
 import { UserSummaryDTO } from "@/shared/application";
 
-export type PlaybookPageCreatorDTO = UserSummaryDTO;
-
 export type GetPlaybookPageOutput = {
   playbook: {
     id: string;
@@ -19,7 +17,7 @@ export type GetPlaybookPageOutput = {
     sessions: {
       id: string;
     }[];
-    creator: PlaybookPageCreatorDTO;
+    creator: UserSummaryDTO;
   };
   strategies: PlaybookStrategyDetailDTO[];
 };
@@ -38,16 +36,10 @@ export type PlaybookPagePhaseDTO = {
   objective: string | null;
 };
 
-export type PlaybookPagePlaybookDTO = {
-  phases: PlaybookPagePhaseDTO[];
-  strategies: PlaybookStrategyDetailDTO[];
-  creator: PlaybookPageCreatorDTO;
-} & PlaybookDetailDTO;
-
 export type GetPlaybookPageInput = {
   playbook: PlaybookDetailDTO;
   strategies: PlaybookStrategyDetailDTO[];
-  creator: PlaybookPageCreatorDTO;
+  creator: UserSummaryDTO;
   phases?: PlaybookPagePhaseDTO[];
   sessions?: { id: string }[];
 };

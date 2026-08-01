@@ -1,6 +1,6 @@
 import { ProfileWritePort } from "@/features/profile/application/ports";
 import { fail, ok, Result } from "@/shared/application";
-import { ApplicationError, normalizeError } from "@/shared/utils/errors";
+import { ApplicationError, logError, normalizeError } from "@/shared/utils/errors";
 import { AppErrorCode } from "@/types/error.types";
 import { CompleteOnboardingInput, CompleteOnboardingResult } from "../dto";
 
@@ -36,8 +36,9 @@ export class CompleteOnboardingUseCase {
         onboardingCompletedAt: now,
       });
     } catch (error) {
-      console.error("Error completing onboarding", error);
-      return fail(normalizeError(error));
+      const appError = normalizeError(error);
+      logError(appError, { useCase: "CompleteOnboardingUseCase" });
+      return fail(appError);
     }
   }
 }

@@ -60,7 +60,7 @@ export function ComboboxField<T extends FieldValues, U extends Path<T>>({
               <span className="text-destructive">*</span>
             )}
             {!required && showsOptional && (
-              <span className="text-muted-foreground text-sm"> (Optional)</span>
+              <span className="text-muted-foreground"> (Optional)</span>
             )}
           </span>
         </FieldLabel>

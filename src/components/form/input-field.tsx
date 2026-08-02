@@ -44,7 +44,7 @@ function InputFieldInner<T extends FieldValues, U extends Path<T>>(
     <Field ref={ref} orientation={orientation}>
       <FieldContent>
         <FieldLabel
-          className={cn("gap-0", !showsLabel && "sr-only", "")}
+          className={cn("gap-0", !showsLabel && "sr-only")}
           htmlFor={inputId}
         >
           <span>
@@ -53,7 +53,7 @@ function InputFieldInner<T extends FieldValues, U extends Path<T>>(
               <span className="text-destructive">*</span>
             )}
             {!required && showsOptional && (
-              <span className="text-muted-foreground text-sm"> (Optional)</span>
+              <span className="text-muted-foreground"> (Optional)</span>
             )}
           </span>
         </FieldLabel>

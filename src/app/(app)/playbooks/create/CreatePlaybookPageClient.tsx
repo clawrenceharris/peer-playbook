@@ -47,6 +47,7 @@ import { ContentLayout } from "@/components/sidebar";
 import { useIsMobile, useModals } from "@/hooks";
 import { useUser } from "@/components/providers";
 import { cn } from "@/lib/utils";
+import { AiInstructionsSection } from "@/features/playbooks/presentation/components/forms/sections/ai-instructions-section";
 
 type CreatePlaybookPageProps = {
   page: GetPlaybookCreationPageOutput;
@@ -425,12 +426,8 @@ export default function CreatePlaybookPageClient({
                 showsCancelButton={false}
               >
                 <LessonDetailsSection />
-                <TextareaField
-                  name="instructions"
-                  placeholder="Add instructions or more details here: Describe the lesson topic, expected group size, or specific requirements."
-                  label="Instructions"
-                  required={false}
-                />
+                <AiInstructionsSection />
+
                 <ContextsSection contexts={contexts} />
                 <ModesSection />
               </Form>

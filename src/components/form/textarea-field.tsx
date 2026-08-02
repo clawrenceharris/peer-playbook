@@ -29,9 +29,7 @@ export function TextareaField<T extends FieldValues, U extends Path<T>>({
       <FieldLabel className={!showsLabel ? "sr-only" : ""} htmlFor={field.name}>
         {label}
         {required && (
-          <span className="text-muted-foreground text-sm font-normal">
-            (Optional)
-          </span>
+          <span className="text-muted-foreground font-normal">(Optional)</span>
         )}
       </FieldLabel>
       <Textarea

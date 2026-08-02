@@ -8,6 +8,7 @@ export * from "./dropdown-menu";
 export * from "./textarea";
 export * from "./tabs";
 export * from "./sidebar";
+export * from "./toggle-group";
 export * from "./navigation-menu";
 export * from "./switch";
 export * from "./spinner";

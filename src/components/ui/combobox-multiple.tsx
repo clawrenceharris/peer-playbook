@@ -14,11 +14,13 @@ import {
   ComboboxValue,
   useComboboxAnchor,
 } from "@/components/ui/combobox";
+import { cn } from "@/lib/utils";
 
 type ComboboxMultipleProps = {
   items: string[];
   emptyMessage?: string;
   placeholder?: string;
+  className?: string;
   onValueChange: (value: string[]) => void;
 };
 export function ComboboxMultiple({
@@ -26,6 +28,7 @@ export function ComboboxMultiple({
   placeholder,
   emptyMessage,
   onValueChange,
+  className,
 }: ComboboxMultipleProps) {
   const anchor = useComboboxAnchor();
   return (
@@ -35,7 +38,7 @@ export function ComboboxMultiple({
       autoHighlight
       items={items}
     >
-      <ComboboxChips ref={anchor} className="w-full max-w-xs">
+      <ComboboxChips ref={anchor} className={cn("w-full max-w-xs", className)}>
         <ComboboxValue>
           {(values) => (
             <React.Fragment>

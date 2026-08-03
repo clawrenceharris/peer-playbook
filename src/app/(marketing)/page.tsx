@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   CardAction,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,

@@ -2,12 +2,12 @@ import { PlaybookCardDTO } from "./PlaybookDTO";
 import { UserSummaryDTO } from "@/shared/application";
 
 export type PlaybooksPageOutput = {
-  playbooks: PlaybooksPagePlaybookCardDTO[];
+  playbooks: PlaybookSummaryDTO[];
 };
-export type PlaybooksPagePlaybookCardDTO = {
+export type PlaybookSummaryDTO = {
   creator: UserSummaryDTO;
 } & PlaybookCardDTO;
-export type PlaybookPageInput = {
+export type GetPlaybooksPageInput = {
   userId: string;
-  playbooks: PlaybooksPagePlaybookCardDTO[];
+  playbooks: PlaybookSummaryDTO[];
 };

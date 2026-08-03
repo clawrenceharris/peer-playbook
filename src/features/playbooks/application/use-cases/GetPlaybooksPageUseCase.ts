@@ -2,7 +2,7 @@ import { ProfileReadPort } from "@/features/profile/application/ports";
 import { PlaybookReadPort } from "../ports";
 import { PlaybooksPageAssembler } from "../assemblers/PlaybooksPageAssembler";
 import {
-  PlaybookPageInput,
+  GetPlaybooksPageInput,
   PlaybooksPageOutput,
 } from "../dto/PlaybooksPageDTO";
 import { fail, ok, Result } from "@/shared/application";
@@ -22,7 +22,7 @@ export class GetPlaybooksPageUseCase {
     if (!profile) {
       return fail(ApplicationError.notFound("User not found"));
     }
-    const playbooksPageInput: PlaybookPageInput = {
+    const playbooksPageInput: GetPlaybooksPageInput = {
       userId,
       playbooks: playbooks.map((playbook) => ({
         ...playbook,

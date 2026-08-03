@@ -3,7 +3,7 @@ import { UserAvatarStorage } from "../../domain/services";
 import { UpdateProfileInput } from "../dto";
 import { fail, ok, Result } from "@/shared/application";
 import { UpdateProfileResult } from "../dto";
-import { ApplicationError, normalizeError } from "@/shared/utils";
+import { ApplicationError, logError, normalizeError } from "@/shared/utils";
 import { ActionError } from "@/shared/action";
 import { UpdateProfileCommand } from "../../domain/types";
 
@@ -38,15 +38,19 @@ export class UpdateProfileUseCase {
       const profile = await this.profileRepository.updateProfile(id, command);
       return ok(profile);
     } catch (error) {
-      console.error("Error creating or updating profile", error);
+      const appError = normalizeError(error);
+      logError(appError, { useCase: "UpdateProfileUseCase" });
       if (uploadedAvatar?.path) {
         try {
           await this.storage.remove(uploadedAvatar.path);
-        } catch (error) {
-          console.error("Error removing avatar", error);
+        } catch (cleanupError) {
+          logError(normalizeError(cleanupError), {
+            useCase: "UpdateProfileUseCase",
+            operation: "removeUploadedAvatar",
+          });
         }
       }
-      return fail(normalizeError(error));
+      return fail(appError);
     }
   }
 }

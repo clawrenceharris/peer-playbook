@@ -38,7 +38,6 @@ export async function POST(req: NextRequest) {
     ],
     response_format: { type: "json_object" },
   });
-  console.log(resp.choices[0].message);
   const out = JSON.parse(resp.choices[0].message?.content ?? "{}") as {
     steps: string[];
   };

@@ -1,6 +1,6 @@
 import { User } from "@supabase/supabase-js";
 import { AuthProvider } from "../../domain/services/AuthProvider";
-import { ApplicationError, normalizeError } from "@/shared/utils/errors";
+import { ApplicationError, logError, normalizeError } from "@/shared/utils/errors";
 import { fail, ok, Result } from "@/shared/application";
 import { AppErrorCode } from "@/types/error.types";
 
@@ -18,8 +18,9 @@ export class SignupUserUseCase {
       }
       return ok(user);
     } catch (error) {
-      console.error("Error signing up user", error);
-      return fail(normalizeError(error));
+      const appError = normalizeError(error);
+      logError(appError, { useCase: "SignupUserUseCase" });
+      return fail(appError);
     }
   }
 }

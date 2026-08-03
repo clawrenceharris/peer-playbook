@@ -2,7 +2,7 @@ import { fail, ok, Result } from "@/shared/application";
 import { PlaybookReadPort } from "../ports";
 import { GetPlaybookCreationPageOutput } from "../dto";
 import { PlaybookCreationPageAssembler } from "../assemblers";
-import { ApplicationError } from "@/shared/utils";
+import { ApplicationError, logError } from "@/shared/utils";
 import { InstructionalModelService } from "@/features/reference-data/instructional-models/services/InstructionalModelService";
 
 export class GetPlaybookCreationPageUseCase {
@@ -22,13 +22,12 @@ export class GetPlaybookCreationPageUseCase {
       const output = PlaybookCreationPageAssembler.toPageOutput(input);
       return ok(output);
     } catch (error) {
-      console.error("Error loading playbook creation page", error);
-      return fail(
-        ApplicationError.unexpected(
-          error,
-          "An unexpected error occurred while loading this page",
-        ),
+      const appError = ApplicationError.unexpected(
+        error,
+        "An unexpected error occurred while loading this page",
       );
+      logError(appError, { useCase: "GetPlaybookCreationPageUseCase" });
+      return fail(appError);
     }
   }
 }

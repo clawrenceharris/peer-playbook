@@ -1,10 +1,10 @@
 import {
-  PlaybookPageInput,
+  GetPlaybooksPageInput,
   PlaybooksPageOutput,
 } from "../dto/PlaybooksPageDTO";
 
 export class PlaybooksPageAssembler {
-  static toOutput(input: PlaybookPageInput): PlaybooksPageOutput {
+  static toOutput(input: GetPlaybooksPageInput): PlaybooksPageOutput {
     return {
       playbooks: input.playbooks.map((playbook) => ({
         ...playbook,

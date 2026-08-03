@@ -51,4 +51,26 @@ describe("UpdateProfileUseCase", () => {
       avatarUrl: "https://example.com/avatar.png",
     });
   });
+
+  it("removes a newly uploaded avatar when the profile write fails", async () => {
+    const storage = {
+      upload: vi.fn().mockResolvedValue({
+        url: "https://example.com/avatar.png",
+        path: "avatars/profile-1.png",
+      }),
+      remove: vi.fn().mockResolvedValue(undefined),
+    };
+    const useCase = new UpdateProfileUseCase(
+      { updateProfile: vi.fn().mockRejectedValue(new Error("write failed")) } as never,
+      storage as never,
+    );
+
+    const result = await useCase.execute({
+      id: "profile-1",
+      avatarFile: {} as File,
+    });
+
+    expect(result.success).toBe(false);
+    expect(storage.remove).toHaveBeenCalledWith("avatars/profile-1.png");
+  });
 });

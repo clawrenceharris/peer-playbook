@@ -9,7 +9,6 @@ type SessionPageClientProps = {
 };
 export default function SessionPageClient({ id }: SessionPageClientProps) {
   const { data: session } = useSessionDetail(id);
-  console.log(session);
 
   if (!session) {
     return <div>Session not found</div>;

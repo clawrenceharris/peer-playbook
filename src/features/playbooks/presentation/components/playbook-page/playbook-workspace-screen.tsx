@@ -157,11 +157,6 @@ export function PlaybookWorkspaceScreen({
               title: strategy.title,
             }),
           )}
-          disabledKeys={workspace.activeStrategies.flatMap((strategy) =>
-            strategy.sourceType && strategy.sourceId
-              ? [`${strategy.sourceType}:${strategy.sourceId}`]
-              : [],
-          )}
           onPick={workspace.commands.addStrategy}
         />
       </ContentLayout>

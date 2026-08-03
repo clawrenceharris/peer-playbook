@@ -52,6 +52,7 @@ export class SessionMapper {
   static toDetail(session: SessionDetailRecord): SessionDetailDTO {
     return {
       id: session.id,
+      instructorId: session.profiles.id,
       sessionCode: session.session_code,
       playbookId: session.playbooks?.id ?? null,
       title: session.title,

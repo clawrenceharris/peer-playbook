@@ -215,10 +215,15 @@ Current flow:
 2. build a structured prompt
 3. ask the model for JSON only
 4. validate the result with Zod
-5. reject duplicate, missing, or unknown strategies
+5. reject malformed, missing, or unknown strategy selections; duplicate source selections are rejected only while forming the initial AI plan so it remains varied
 6. persist the accepted plan through the normal playbook create path
 
 The planner still works with the legacy `warmup/workout/closer` shape, so this area remains an important migration boundary.
+
+After generation or manual selection, a playbook strategy is an independently
+editable instance. The workspace deliberately allows the same source strategy
+to be added more than once to a phase, because its title, steps, notes, timing,
+and placement may diverge.
 
 ## Sessions And Stream Video
 

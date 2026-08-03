@@ -3,6 +3,7 @@ import { UserSummaryDTO } from "@/shared/application";
 
 export type SessionDetailDTO = {
   id: string;
+  instructorId: string;
   sessionCode: string | null;
   playbookId: string | null;
   title: string;

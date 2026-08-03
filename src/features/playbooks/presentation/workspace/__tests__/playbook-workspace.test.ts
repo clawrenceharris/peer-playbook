@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import { createPlaybookWorkspaceCommands } from "../playbook-workspace.commands";
 import {
   createInitialPlaybookWorkspaceState,
   playbookWorkspaceReducer,
@@ -165,5 +166,70 @@ describe("playbook workspace selectors", () => {
     expect(phases[0].position).toBe(0);
     expect(phases[1].title).toBe("Warm start");
     expect(phases[1].estimatedMinutes).toBe(8);
+  });
+});
+
+describe("playbook workspace commands", () => {
+  it("allows the same source strategy to create separate playbook instances", async () => {
+    const addPlaybookStrategy = vi.fn().mockResolvedValue(undefined);
+    const activePhase = {
+      id: "phase-1",
+      title: "Practice",
+      intent: PhaseIntent.APPLY,
+    };
+    const commands = createPlaybookWorkspaceCommands({
+      playbook: { id: "playbook-1" } as never,
+      userId: "user-1",
+      state: createInitialPlaybookWorkspaceState(),
+      dispatch: vi.fn(),
+      phases: [],
+      activePhase: activePhase as never,
+      activeStrategyId: null,
+      activeStrategies: [],
+      strategySourceByKey: new Map([
+        [
+          "system:strategy-1",
+          {
+            id: "strategy-1",
+            slug: "think-pair-share",
+            title: "Think-Pair-Share",
+            description: "Discuss with a partner.",
+            steps: ["Think", "Pair", "Share"],
+            phase: PhaseIntent.APPLY,
+            category: "discussion",
+          },
+        ],
+      ]),
+      addPlaybookStrategy,
+      addPlaybookPhase: vi.fn(),
+      reorderStrategies: vi.fn(),
+      removePlaybookStrategy: vi.fn(),
+      updatePlaybookStrategy: vi.fn(),
+      updatePlaybookPhases: vi.fn(),
+      favoritePlaybook: vi.fn(),
+      unfavoritePlaybook: vi.fn(),
+      deletePlaybook: vi.fn(),
+      openCreateSession: vi.fn(),
+      openDeleteConfirmation: vi.fn(),
+    });
+
+    await commands.addStrategy({ sourceType: "system", sourceId: "strategy-1" });
+    await commands.addStrategy({ sourceType: "system", sourceId: "strategy-1" });
+
+    expect(addPlaybookStrategy).toHaveBeenCalledTimes(2);
+    expect(addPlaybookStrategy).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        playbookPhaseId: "phase-1",
+        sourceId: "strategy-1",
+      }),
+    );
+    expect(addPlaybookStrategy).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        playbookPhaseId: "phase-1",
+        sourceId: "strategy-1",
+      }),
+    );
   });
 });

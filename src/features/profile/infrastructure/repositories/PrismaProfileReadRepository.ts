@@ -3,14 +3,14 @@ import { ProfileMapper } from "../mappers";
 import {
   ProfileCardDTO,
   ProfileDetailDTO,
-  ProfileDTO,
+  ProfileSummaryDTO,
 } from "../../application/dto";
 import { type PrismaClient } from "@/lib/db/client";
 
 export class PrismaProfileReadRepository implements ProfileReadPort {
   constructor(private readonly client: PrismaClient = client) {}
 
-  async findProfileById(userId: string): Promise<ProfileDTO | null> {
+  async findProfileById(userId: string): Promise<ProfileSummaryDTO | null> {
     const record = await this.client.profiles.findUnique({
       where: { id: userId },
     });

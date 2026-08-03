@@ -1,5 +1,19 @@
 import { SessionStatus, SessionMode } from "../value-objects";
 
+export class InvalidSessionTransitionError extends Error {
+  constructor(current: SessionStatus, next: SessionStatus) {
+    super(`Cannot transition a ${current} session to ${next}`);
+    this.name = "InvalidSessionTransitionError";
+  }
+}
+
+const allowedTransitions: Record<SessionStatus, readonly SessionStatus[]> = {
+  [SessionStatus.SCHEDULED]: [SessionStatus.ACTIVE, SessionStatus.CANCELED],
+  [SessionStatus.ACTIVE]: [SessionStatus.COMPLETED, SessionStatus.CANCELED],
+  [SessionStatus.COMPLETED]: [],
+  [SessionStatus.CANCELED]: [],
+};
+
 type SessionProps = {
   id: string;
   playbookId: string | null;
@@ -65,15 +79,13 @@ export class Session {
     return this.props.createdAt;
   }
 
-  markAsCompleted(): void {
-    this.props.status = SessionStatus.COMPLETED;
-  }
-
-  markAsCanceled(): void {
-    this.props.status = SessionStatus.CANCELED;
-  }
-
-  markAsScheduled(): void {
-    this.props.status = SessionStatus.SCHEDULED;
+  transitionTo(next: SessionStatus): Session {
+    if (next === this.status) {
+      return this;
+    }
+    if (!allowedTransitions[this.status].includes(next)) {
+      throw new InvalidSessionTransitionError(this.status, next);
+    }
+    return new Session({ ...this.props, status: next });
   }
 }

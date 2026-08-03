@@ -10,7 +10,6 @@ async function fetchPlaybookTitle(id: string): Promise<string | null> {
     .select("title")
     .eq("id", id)
     .single();
-  console.log("playbook", playbook);
   return playbook?.title ?? null;
 }
 

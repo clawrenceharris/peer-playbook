@@ -14,7 +14,6 @@ export function mapSupabaseAuthError(error: unknown): ApplicationError {
           cause: error,
         });
       case "invalid_credentials":
-        console.log("invalid_credentials", error);
         return new ApplicationError({
           code: AppErrorCode.AUTH_INVALID_CREDENTIALS,
           cause: error,

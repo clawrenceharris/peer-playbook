@@ -13,16 +13,11 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Library, Bookmark, UserRound, Plus } from "lucide-react";
 import { StrategyRef } from "@/lib/validation";
 import { StrategyPickerItem, StrategyPickerSource } from "./";
-
-function keyOf(ref: StrategyRef) {
-  return `${ref.sourceType}:${ref.sourceId}`;
-}
 type StrategyPanelProps = {
   phaseTitle: string;
   systemItems: StrategyPickerItem[];
   savedItems: StrategyPickerItem[];
   userItems: StrategyPickerItem[];
-  disabledKeys: string[];
   onPick: (ref: StrategyRef) => void;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -32,7 +27,6 @@ export function StrategyPanel({
   savedItems,
   userItems,
   systemItems,
-  disabledKeys,
   onPick,
   open,
   onOpenChange,
@@ -49,8 +43,6 @@ export function StrategyPanel({
         ? savedItems
         : userItems;
   function addItem(item: StrategyPickerItem) {
-    const key = keyOf(item);
-    if (disabledKeys.includes(key)) return;
     onPick({ sourceType: item.sourceType, sourceId: item.sourceId });
   }
 
@@ -109,14 +101,11 @@ export function StrategyPanel({
               <div className="grid gap-2">
                 {sourceItems.length > 0 ? (
                   sourceItems.map((item) => {
-                    const key = keyOf(item);
-                    const isAdded = disabledKeys.includes(key);
                     return (
                       <button
-                        key={key}
+                        key={`${item.sourceType}:${item.sourceId}`}
                         type="button"
-                        className="border-border bg-background hover:bg-muted focus-visible:border-ring focus-visible:ring-ring/30 flex min-h-14 items-center justify-between gap-3 rounded-lg border px-3 py-2 text-left transition-colors outline-none focus-visible:ring-3 disabled:cursor-not-allowed disabled:opacity-50"
-                        disabled={isAdded}
+                        className="border-border bg-background hover:bg-muted focus-visible:border-ring focus-visible:ring-ring/30 flex min-h-14 items-center justify-between gap-3 rounded-lg border px-3 py-2 text-left transition-colors outline-none focus-visible:ring-3"
                         onClick={() => addItem(item)}
                       >
                         <span className="min-w-0">
@@ -124,7 +113,7 @@ export function StrategyPanel({
                             {item.title}
                           </span>
                           <span className="text-muted-foreground block text-xs">
-                            {isAdded ? "Already added" : "Add to this phase"}
+                            Add to this phase
                           </span>
                         </span>
                         <Plus aria-hidden="true" />

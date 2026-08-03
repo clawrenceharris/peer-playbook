@@ -2,7 +2,7 @@ import { fail, ok, Result } from "@/shared/application";
 import { PlaybookReadPort } from "../ports";
 import { PlaybookPageAssembler } from "../assemblers/PlaybookPageAssembler";
 import { GetPlaybookPageOutput } from "../dto/PlaybookPageDTO";
-import { ApplicationError } from "@/shared/utils";
+import { ApplicationError, logError } from "@/shared/utils";
 import { ProfileReadPort } from "@/features/profile/application/ports";
 
 export class GetPlaybookPageUseCase {
@@ -38,13 +38,12 @@ export class GetPlaybookPageUseCase {
         }),
       );
     } catch (error) {
-      console.error("Error loading playbook page:", error);
-      return fail(
-        ApplicationError.unexpected(
-          error,
-          "An error occurred while loading this page. Please try again later.",
-        ),
+      const appError = ApplicationError.unexpected(
+        error,
+        "An error occurred while loading this page. Please try again later.",
       );
+      logError(appError, { useCase: "GetPlaybookPageUseCase" });
+      return fail(appError);
     }
   }
 }

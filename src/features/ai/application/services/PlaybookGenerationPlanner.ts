@@ -35,8 +35,7 @@ export class PlaybookGenerationPlanner {
     private readonly catalogRepository: StrategyCatalogRepository,
     private readonly jsonCompletion: JsonCompletionPort,
     private readonly promptBuilder = new PlaybookGenerationPromptBuilder(),
-    private readonly instructionalContext: AiInstructionalContext[] =
-      playbookGenerationContext,
+    private readonly instructionalContext: AiInstructionalContext[] = playbookGenerationContext,
   ) {}
 
   async plan(request: PlaybookGenerationRequest): Promise<{
@@ -66,7 +65,7 @@ export class PlaybookGenerationPlanner {
     } catch (error) {
       if (error instanceof SyntaxError) {
         throw ApplicationError.validation(
-          "The AI returned malformed JSON. Please try generating again.",
+          "We had trouble understanding the AI's response. Please try generating your playbook again.",
         );
       }
       throw ApplicationError.unexpected(

@@ -1,4 +1,4 @@
-import { normalizeError } from "@/shared/utils";
+import { logError, normalizeError } from "@/shared/utils";
 import { ProfileWritePort } from "../ports";
 import { UserAvatarStorage } from "../../domain/services";
 import { CreateProfileInput, CreateProfileResult } from "../dto";
@@ -42,12 +42,16 @@ export class CreateProfileUseCase {
       if (uploadedAvatar?.path) {
         try {
           await this.storage.remove(uploadedAvatar.path);
-        } catch (error) {
-          console.error("Error removing avatar", error);
+        } catch (cleanupError) {
+          logError(normalizeError(cleanupError), {
+            useCase: "CreateProfileUseCase",
+            operation: "removeUploadedAvatar",
+          });
         }
       }
-      console.error("Error creating or updating profile", error);
-      return fail(normalizeError(error));
+      const appError = normalizeError(error);
+      logError(appError, { useCase: "CreateProfileUseCase" });
+      return fail(appError);
     }
   }
 }

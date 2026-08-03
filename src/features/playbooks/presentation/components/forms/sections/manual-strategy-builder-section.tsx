@@ -172,7 +172,6 @@ function PhaseRow({
     name: `phases.${index}`,
   }) as PlaybookPhaseFormValues | undefined;
   const refs = (strategies.fields ?? []) as unknown as StrategyRef[];
-  const disabledKeys = refs.map((ref) => keyOf(ref));
   const activeIntent = phase?.intentKey ?? "activate";
   const phaseTitle = phase?.title?.trim() || `Phase ${index + 1}`;
   const [isStrategyPanelOpen, setIsStrategyPanelOpen] = useState(false);
@@ -353,7 +352,6 @@ function PhaseRow({
                 systemItems={systemItems}
                 savedItems={savedItems}
                 userItems={userItems}
-                disabledKeys={disabledKeys}
                 onPick={(ref) => strategies.append(ref as StrategyRef)}
                 open={isStrategyPanelOpen}
                 onOpenChange={setIsStrategyPanelOpen}

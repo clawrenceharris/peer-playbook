@@ -6,9 +6,7 @@ import {
   Card,
   CardAction,
   CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
 } from "@/components/ui";
 import { useRecentPlaybooks } from "@/features/playbooks/presentation/hooks";
 // import { useMyUpcomingSessions } from "@/features/sessions/hooks/use-user-sessions";
@@ -708,73 +706,6 @@ function MiniPlaybookMark() {
         strokeLinecap="round"
       />
       <path d="M31 9v14l-5-4-5 4V9h10z" fill="#F59E0B" />
-    </svg>
-  );
-}
-
-function MiniSessionMark() {
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 52 52"
-      className="bg-secondary-50 size-12 shrink-0 rounded-md"
-    >
-      <circle cx="18" cy="21" r="7" fill="#1FC8F2" />
-      <circle cx="34" cy="21" r="7" fill="#A855F7" />
-      <path
-        d="M9 39c5-12 14-12 19 0M24 39c5-12 14-12 19 0"
-        fill="none"
-        stroke="#1E1B4B"
-        strokeWidth="4"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function EmptySessionGraphic() {
-  return (
-    <svg aria-hidden viewBox="0 0 120 86" className="h-auto w-32">
-      <rect x="18" y="18" width="84" height="54" rx="14" fill="#FFFFFF" />
-      <rect
-        x="18"
-        y="18"
-        width="84"
-        height="54"
-        rx="14"
-        fill="none"
-        stroke="#D8B4FE"
-        strokeWidth="5"
-      />
-      <path d="M18 38h84" stroke="#D8B4FE" strokeWidth="5" />
-      <circle cx="44" cy="55" r="7" fill="#1FC8F2" />
-      <circle cx="61" cy="55" r="7" fill="#A855F7" />
-      <circle cx="78" cy="55" r="7" fill="#F59E0B" />
-    </svg>
-  );
-}
-
-function EmptyPlaybookGraphic() {
-  return (
-    <svg aria-hidden viewBox="0 0 120 86" className="h-auto w-32">
-      <rect x="31" y="14" width="58" height="62" rx="14" fill="#FFFFFF" />
-      <rect
-        x="31"
-        y="14"
-        width="58"
-        height="62"
-        rx="14"
-        fill="none"
-        stroke="#94EAFF"
-        strokeWidth="5"
-      />
-      <path
-        d="M47 32h27M47 45h20M47 58h25"
-        stroke="#008FC3"
-        strokeWidth="5"
-        strokeLinecap="round"
-      />
-      <circle cx="88" cy="22" r="12" fill="#F59E0B" />
     </svg>
   );
 }

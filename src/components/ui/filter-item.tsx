@@ -43,14 +43,11 @@ export function FilterItem({
           </span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="start"
-        className="border-none bg-transparent shadow-none"
-      >
+      <DropdownMenuContent align="start">
         {options.map((option) => (
           <DropdownMenuItem
             className={cn(
-              "bg-primary-foreground mb-3 justify-between rounded-sm border shadow-md",
+              "bg-primary-foreground justify-between",
               value === option.value ? "text-primary-400" : "",
             )}
             key={option.value}

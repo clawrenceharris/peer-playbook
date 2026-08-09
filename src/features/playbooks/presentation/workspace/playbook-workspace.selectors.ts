@@ -199,17 +199,12 @@ export function selectHeaderMetadata(
           value: playbook.creator.displayName,
         }
       : null,
-    playbook.updatedAt &&
-    playbook.updatedAt.toISOString() !== playbook.createdAt.toISOString()
+    playbook.updatedAt
       ? {
           label: "Updated",
           value: timeAgo(playbook.updatedAt.toISOString()),
         }
       : null,
-    {
-      label: "",
-      value: timeAgo(playbook.createdAt.toISOString()),
-    },
   ].filter(Boolean) as PlaybookWorkspaceMetadataItem[];
 }
 
@@ -241,6 +236,13 @@ export function selectIsFavorite(
   favoritePlaybooks: string[],
 ): boolean {
   return Boolean(playbookId && favoritePlaybooks.includes(playbookId));
+}
+
+export function selectCanEditPlaybook(
+  playbook: GetPlaybookPageOutput["playbook"] | undefined,
+  userId: string | undefined,
+): boolean {
+  return Boolean(playbook && userId && playbook.creator.id === userId);
 }
 
 export function selectHasSession(

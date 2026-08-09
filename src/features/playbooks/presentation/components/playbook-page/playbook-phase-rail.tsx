@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   closestCenter,
   DndContext,
@@ -16,7 +16,14 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Check, GripVertical, Plus, Trash2 } from "lucide-react";
+import {
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  GripVertical,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import {
   Button,
   ContextMenu,
@@ -42,6 +49,8 @@ import {
   Popover,
   PopoverAnchor,
   PopoverContent,
+  ScrollArea,
+  ScrollBar,
   Select,
   SelectContent,
   SelectItem,
@@ -76,20 +85,23 @@ type PlaybookPhaseRailProps = {
     phaseId: string,
     estimatedMinutes: number | null,
   ) => void;
+  readOnly?: boolean;
 };
 
-function SortablePhaseChip({
+function SortablePhaseItem({
   phase,
   isActive,
   onSelect,
   onEdit,
   onDelete,
+  readOnly = false,
 }: {
   phase: PlaybookWorkspacePhase;
   isActive: boolean;
   onSelect: () => void;
   onEdit: () => void;
   onDelete: () => void;
+  readOnly?: boolean;
 }) {
   const {
     attributes,
@@ -98,77 +110,85 @@ function SortablePhaseChip({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: phase.id });
+  } = useSortable({ id: phase.id, disabled: readOnly });
+
+  const item = (
+    <Item
+      ref={setNodeRef}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+      }}
+      onClick={onSelect}
+      tabIndex={0}
+      aria-label={`Select ${phase.title} phase`}
+      aria-current={isActive ? "true" : undefined}
+      className={cn(
+        "hover:bg-surface/60 bg-surface relative flex h-full w-full min-w-75 flex-1 cursor-pointer flex-nowrap items-center justify-center overflow-hidden rounded-none",
+        isDragging && "z-10 opacity-80",
+      )}
+    >
+      <ItemMedia
+        className={cn(
+          "flex-cc size-10 rounded-full",
+          PHASE_STYLES[phase.intent].icon,
+        )}
+      >
+        <phase.Icon strokeWidth={2.5} />
+      </ItemMedia>
+      {isActive ? (
+        <span
+          aria-hidden
+          className={cn("absolute bottom-0 h-1 w-full", {
+            "bg-intent-activate": phase.intent === PhaseIntent.ACTIVATE,
+            "bg-intent-explore": phase.intent === PhaseIntent.EXPLORE,
+            "bg-intent-apply": phase.intent === PhaseIntent.APPLY,
+            "bg-intent-reflect": phase.intent === PhaseIntent.REFLECT,
+            "bg-intent-transition": phase.intent === PhaseIntent.TRANSITION,
+          })}
+        />
+      ) : null}
+      <ItemContent>
+        <div className="flex w-full items-center gap-2">
+          <ItemTitle
+            title={phase.title}
+            className="line-clamp-1 max-w-25 truncate text-sm font-medium whitespace-nowrap"
+          >
+            {phase.title}
+          </ItemTitle>
+          <span className="text-muted-foreground text-xs">
+            ({phase.estimatedMinutes ?? 0} min)
+          </span>
+        </div>
+      </ItemContent>
+      {readOnly ? null : (
+        <ItemActions>
+          <button
+            type="button"
+            onClick={onSelect}
+            // Drag from the item itself; click still selects the phase.
+            {...attributes}
+            {...listeners}
+            className={cn(
+              "group/phase relative flex w-full cursor-grab items-center justify-center overflow-hidden p-0 transition-all duration-200 hover:scale-107 active:cursor-grabbing",
+            )}
+            aria-label={`${phase.title} phase`}
+            aria-current={isActive ? "true" : undefined}
+          >
+            <GripVertical className="size-4" />
+          </button>
+        </ItemActions>
+      )}
+    </Item>
+  );
+
+  if (readOnly) {
+    return item;
+  }
 
   return (
     <ContextMenu>
-      <ContextMenuTrigger asChild>
-        <Item
-          ref={setNodeRef}
-          style={{
-            transform: CSS.Transform.toString(transform),
-            transition,
-          }}
-          onClick={onSelect}
-          tabIndex={0}
-          aria-label={`Select ${phase.title} phase`}
-          aria-current={isActive ? "true" : undefined}
-          className={cn(
-            "hover:bg-muted/80 bg-surface relative flex h-full w-full min-w-75 flex-1 cursor-pointer flex-nowrap items-center justify-center overflow-hidden rounded-none",
-            isDragging && "z-10 opacity-80",
-          )}
-        >
-          <ItemMedia
-            className={cn(
-              "flex-cc size-10 rounded-full",
-              PHASE_STYLES[phase.intent].icon,
-            )}
-          >
-            <phase.Icon strokeWidth={2.5} />
-          </ItemMedia>
-          {isActive ? (
-            <span
-              aria-hidden
-              className={cn("absolute bottom-0 h-1 w-full", {
-                "bg-intent-activate": phase.intent === PhaseIntent.ACTIVATE,
-                "bg-intent-explore": phase.intent === PhaseIntent.EXPLORE,
-                "bg-intent-apply": phase.intent === PhaseIntent.APPLY,
-                "bg-intent-reflect": phase.intent === PhaseIntent.REFLECT,
-                "bg-intent-transition": phase.intent === PhaseIntent.TRANSITION,
-              })}
-            />
-          ) : null}
-          <ItemContent>
-            <div className="flex w-full items-center gap-2">
-              <ItemTitle
-                title={phase.title}
-                className="line-clamp-1 max-w-25 truncate text-sm font-medium whitespace-nowrap"
-              >
-                {phase.title}
-              </ItemTitle>
-              <span className="text-muted-foreground text-xs">
-                ({phase.estimatedMinutes ?? 0} min)
-              </span>
-            </div>
-          </ItemContent>
-          <ItemActions>
-            <button
-              type="button"
-              onClick={onSelect}
-              // Drag from the chip itself; click still selects the phase.
-              {...attributes}
-              {...listeners}
-              className={cn(
-                "group/phase relative flex w-full cursor-grab items-center justify-center overflow-hidden p-0 transition-all duration-200 hover:scale-107 active:cursor-grabbing",
-              )}
-              aria-label={`${phase.title} phase`}
-              aria-current={isActive ? "true" : undefined}
-            >
-              <GripVertical className="size-4" />
-            </button>
-          </ItemActions>
-        </Item>
-      </ContextMenuTrigger>
+      <ContextMenuTrigger asChild>{item}</ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem onClick={onEdit}>
           <Icon src={assets.pencilEdit} alt="Edit" />
@@ -193,9 +213,11 @@ export function PlaybookPhaseRail({
   onTitleChange,
   onEstimatedMinutesChange,
   activePhaseId,
+  readOnly = false,
 }: PlaybookPhaseRailProps) {
   const [displayPhases, setDisplayPhases] = useState(phases);
   const [editingPhaseId, setEditingPhaseId] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   // Remount the select after each pick so choosing the same intent twice still fires.
   const [addIntentSelectKey, setAddIntentSelectKey] = useState(0);
   const sensors = useSensors(
@@ -204,8 +226,33 @@ export function PlaybookPhaseRail({
   useEffect(() => {
     setDisplayPhases(phases);
   }, [phases]);
+  function scrollToRight() {
+    if (containerRef.current) {
+      // Radix wraps content inside a data-radix-scroll-area-viewport element
+      const viewport = containerRef.current.querySelector(
+        "[data-radix-scroll-area-viewport]",
+      ) as HTMLDivElement;
 
+      if (viewport) {
+        viewport.scrollTo({
+          left: viewport.scrollWidth,
+          behavior: "smooth",
+        });
+      }
+    }
+  }
+  function scrollToLeft() {
+    if (containerRef.current) {
+      const viewport = containerRef.current.querySelector(
+        "[data-radix-scroll-area-viewport]",
+      ) as HTMLDivElement;
+      if (viewport) {
+        viewport.scrollTo({ left: 0, behavior: "smooth" });
+      }
+    }
+  }
   function handleDragEnd(event: DragEndEvent) {
+    if (readOnly) return;
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
@@ -218,6 +265,7 @@ export function PlaybookPhaseRail({
     onReorderPhases(next.map((phase) => phase.id));
   }
   function handleEditClick(phaseId: string) {
+    if (readOnly) return;
     onSelectPhase(phaseId);
     setEditingPhaseId(phaseId);
   }
@@ -227,212 +275,246 @@ export function PlaybookPhaseRail({
   }
   return (
     <>
-      <div className="bg-muted relative flex w-full flex-row items-center overflow-hidden rounded-lg border shadow-xs">
-        <div className="flex w-full flex-1 flex-row items-center divide-x overflow-hidden overflow-x-auto">
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={displayPhases.map((phase) => phase.id)}
-              strategy={horizontalListSortingStrategy}
+      <div
+        ref={containerRef}
+        className="group bg-muted relative flex w-full flex-row items-center overflow-hidden rounded-lg border shadow-xs"
+      >
+        <ScrollArea className="h-full w-full">
+          <ScrollBar hidden orientation="horizontal" />
+          <div className="flex w-full flex-1 flex-row items-center divide-x">
+            <DndContext
+              sensors={readOnly ? [] : sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
             >
-              {displayPhases.map((phase) => (
-                <Popover key={phase.id} open={editingPhaseId === phase.id}>
-                  <div className="relative flex">
-                    {activePhaseId === phase.id ? (
-                      <PopoverAnchor>
-                        <SortablePhaseChip
+              <SortableContext
+                items={displayPhases.map((phase) => phase.id)}
+                strategy={horizontalListSortingStrategy}
+              >
+                {displayPhases.map((phase) => (
+                  <Popover key={phase.id} open={editingPhaseId === phase.id}>
+                    <div className="relative flex">
+                      {activePhaseId === phase.id ? (
+                        <PopoverAnchor>
+                          <SortablePhaseItem
+                            key={phase.id}
+                            phase={phase}
+                            isActive={activePhaseId === phase.id}
+                            onSelect={() => onSelectPhase(phase.id)}
+                            onEdit={() => handleEditClick(phase.id)}
+                            onDelete={() => onDeletePhase(phase.id)}
+                            readOnly={readOnly}
+                          />
+                        </PopoverAnchor>
+                      ) : (
+                        <SortablePhaseItem
                           key={phase.id}
                           phase={phase}
                           isActive={activePhaseId === phase.id}
                           onSelect={() => onSelectPhase(phase.id)}
                           onEdit={() => handleEditClick(phase.id)}
                           onDelete={() => onDeletePhase(phase.id)}
+                          readOnly={readOnly}
                         />
-                      </PopoverAnchor>
-                    ) : (
-                      <SortablePhaseChip
-                        key={phase.id}
-                        phase={phase}
-                        isActive={activePhaseId === phase.id}
-                        onSelect={() => onSelectPhase(phase.id)}
-                        onEdit={() => handleEditClick(phase.id)}
-                        onDelete={() => onDeletePhase(phase.id)}
-                      />
-                    )}
-                    <div className="bg-border h-full w-px" />
-                  </div>
-                  <PopoverContent hidden={activePhaseId !== phase.id}>
-                    <form
-                      className="flex flex-wrap items-center gap-3"
-                      onSubmit={handleSubmit}
+                      )}
+                      <div className="bg-border h-full w-px" />
+                    </div>
+                    <PopoverContent
+                      hidden={readOnly || activePhaseId !== phase.id}
                     >
-                      <FieldGroup>
-                        <div className="flex flex-row flex-wrap items-center gap-2">
-                          <div className="flex items-center gap-2">
-                            <Field className="w-fit">
-                              <FieldLabel className="sr-only">
-                                Instructional phase intent
-                              </FieldLabel>
+                      <form
+                        className="flex flex-wrap items-center gap-3"
+                        onSubmit={handleSubmit}
+                      >
+                        <FieldGroup>
+                          <div className="flex flex-row flex-wrap items-center gap-2">
+                            <div className="flex items-center gap-2">
+                              <Field className="w-fit">
+                                <FieldLabel className="sr-only">
+                                  Instructional phase intent
+                                </FieldLabel>
 
-                              <Select
-                                value={phase.intent}
-                                onValueChange={(value) => {
-                                  onPhaseIntentChange(
-                                    phase.id,
-                                    value as
-                                      | "activate"
-                                      | "explore"
-                                      | "apply"
-                                      | "reflect",
-                                  );
-                                }}
-                              >
-                                <SelectTrigger
-                                  triggerClassName={cn(
-                                    PHASE_STYLES[phase.intent].icon,
-                                    "bg-transparent",
-                                  )}
-                                  className={cn(
-                                    "flex max-w-fit items-center justify-center border-0 border-none bg-transparent shadow-none",
-                                    PHASE_STYLES[phase.intent].icon,
-                                  )}
+                                <Select
+                                  value={phase.intent}
+                                  onValueChange={(value) => {
+                                    onPhaseIntentChange(
+                                      phase.id,
+                                      value as
+                                        | "activate"
+                                        | "explore"
+                                        | "apply"
+                                        | "reflect",
+                                    );
+                                  }}
                                 >
-                                  <SelectValue>
-                                    <phase.Icon
-                                      strokeWidth={2.5}
-                                      className={cn(
-                                        "size-4.5",
-                                        PHASE_STYLES[phase.intent].icon,
-                                        "bg-transparent",
-                                      )}
-                                    />
-                                  </SelectValue>
-                                </SelectTrigger>
-                                <SelectContent side="bottom" align="end">
-                                  {phaseIntentCatalog.map((intent) => (
-                                    <SelectItem
-                                      key={intent.key}
-                                      value={intent.key}
-                                    >
-                                      <intent.Icon className="size-4" />
-                                      <span>{intent.label}</span>
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </Field>
-                            <Field className="w-full flex-1">
+                                  <SelectTrigger
+                                    triggerClassName={cn(
+                                      PHASE_STYLES[phase.intent].icon,
+                                      "bg-transparent",
+                                    )}
+                                    className={cn(
+                                      "flex max-w-fit items-center justify-center border-0 border-none bg-transparent shadow-none",
+                                      PHASE_STYLES[phase.intent].icon,
+                                    )}
+                                  >
+                                    <SelectValue>
+                                      <phase.Icon
+                                        strokeWidth={2.5}
+                                        className={cn(
+                                          "size-4.5",
+                                          PHASE_STYLES[phase.intent].icon,
+                                          "bg-transparent",
+                                        )}
+                                      />
+                                    </SelectValue>
+                                  </SelectTrigger>
+                                  <SelectContent side="bottom" align="end">
+                                    {phaseIntentCatalog.map((intent) => (
+                                      <SelectItem
+                                        key={intent.key}
+                                        value={intent.key}
+                                      >
+                                        <intent.Icon className="size-4" />
+                                        <span>{intent.label}</span>
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </Field>
+                              <Field className="w-full flex-1">
+                                <FieldLabel
+                                  htmlFor={`${phase.id}-phase-title`}
+                                  className="sr-only"
+                                >
+                                  Phase title
+                                </FieldLabel>
+                                <Input
+                                  id={`${phase.id}-phase-title`}
+                                  className="w-full rounded-md focus-visible:ring-0"
+                                  aria-label={`${phase.title} phase title`}
+                                  value={phase.title}
+                                  onClick={(event) => event.stopPropagation()}
+                                  onChange={(event) =>
+                                    onTitleChange(phase.id, event.target.value)
+                                  }
+                                />
+                              </Field>
+                            </div>
+
+                            <Field>
                               <FieldLabel
-                                htmlFor={`${phase.id}-phase-title`}
+                                htmlFor={`${phase.id}-phase-duration`}
                                 className="sr-only"
                               >
-                                Phase title
+                                Estimated duration in minutes
                               </FieldLabel>
-                              <Input
-                                id={`${phase.id}-phase-title`}
-                                className="w-full rounded-md focus-visible:ring-0"
-                                aria-label={`${phase.title} phase title`}
-                                value={phase.title}
-                                onClick={(event) => event.stopPropagation()}
-                                onChange={(event) =>
-                                  onTitleChange(phase.id, event.target.value)
-                                }
-                              />
+
+                              <InputGroup className="w-32 rounded-md">
+                                <InputGroupInput
+                                  id={`${phase.id}-phase-duration`}
+                                  aria-label={`${phase.title} phase duration in minutes`}
+                                  type="number"
+                                  min={0}
+                                  value={phase.estimatedMinutes ?? ""}
+                                  onChange={(event) => {
+                                    const value = event.target.value;
+                                    // Keep empty string as null; reject NaN so the controlled input stays usable.
+                                    if (value === "") {
+                                      onEstimatedMinutesChange(phase.id, null);
+                                      return;
+                                    }
+                                    const next = Number(value);
+                                    onEstimatedMinutesChange(
+                                      phase.id,
+                                      Number.isFinite(next) ? next : null,
+                                    );
+                                  }}
+                                />
+                                <InputGroupAddon
+                                  align="inline-end"
+                                  className="text-muted-foreground text-sm"
+                                >
+                                  min
+                                </InputGroupAddon>
+                              </InputGroup>
                             </Field>
                           </div>
+                        </FieldGroup>
+                        <Field>
+                          <Button
+                            type="submit"
+                            onClick={() => setEditingPhaseId(null)}
+                            variant="primary"
+                          >
+                            <Check strokeWidth={3} />
+                            Save
+                          </Button>
+                        </Field>
+                      </form>
+                    </PopoverContent>
+                  </Popover>
+                ))}
+              </SortableContext>
+            </DndContext>
+          </div>
+        </ScrollArea>
+        {phases.length > 3 && (
+          <>
+            <Button
+              onClick={() => {
+                scrollToRight();
+              }}
+              size="icon-sm"
+              className="bg-surface hover:bg-muted hover:text-foreground absolute top-1/2 right-2 -translate-y-1/2 border opacity-0 group-hover:opacity-100"
+            >
+              <ChevronRight strokeWidth={2} />
+            </Button>
 
-                          <Field>
-                            <FieldLabel
-                              htmlFor={`${phase.id}-phase-duration`}
-                              className="sr-only"
-                            >
-                              Estimated duration in minutes
-                            </FieldLabel>
-
-                            <InputGroup className="w-32 rounded-md">
-                              <InputGroupInput
-                                id={`${phase.id}-phase-duration`}
-                                aria-label={`${phase.title} phase duration in minutes`}
-                                type="number"
-                                min={0}
-                                value={phase.estimatedMinutes ?? ""}
-                                onChange={(event) => {
-                                  const value = event.target.value;
-                                  // Keep empty string as null; reject NaN so the controlled input stays usable.
-                                  if (value === "") {
-                                    onEstimatedMinutesChange(phase.id, null);
-                                    return;
-                                  }
-                                  const next = Number(value);
-                                  onEstimatedMinutesChange(
-                                    phase.id,
-                                    Number.isFinite(next) ? next : null,
-                                  );
-                                }}
-                              />
-                              <InputGroupAddon
-                                align="inline-end"
-                                className="text-muted-foreground text-sm"
-                              >
-                                min
-                              </InputGroupAddon>
-                            </InputGroup>
-                          </Field>
-                        </div>
-                      </FieldGroup>
-                      <Field>
-                        <Button
-                          type="submit"
-                          onClick={() => setEditingPhaseId(null)}
-                          variant="primary"
-                        >
-                          <Check strokeWidth={3} />
-                          Save
-                        </Button>
-                      </Field>
-                    </form>
-                  </PopoverContent>
-                </Popover>
-              ))}
-            </SortableContext>
-          </DndContext>
-        </div>
-
-        <TooltipProvider>
-          <DropdownMenu key={addIntentSelectKey}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <DropdownMenuTrigger
-                  className="bg-surface border-border absolute top-1/2 right-2 flex aspect-square min-w-13 -translate-y-1/2 items-center justify-center rounded-md border shadow-xs"
-                  aria-label="Add phase"
-                >
-                  <Plus
-                    className="text-accent-foreground size-5"
-                    strokeWidth={2.5}
-                  />
-                </DropdownMenuTrigger>
-              </TooltipTrigger>
-              <TooltipContent>Add a phase</TooltipContent>
-            </Tooltip>
-            <DropdownMenuContent side="right" align="end">
-              {phaseIntentCatalog.map((intent) => (
-                <DropdownMenuItem
-                  key={intent.key}
-                  onClick={() => {
-                    onAddPhase(intent.key);
-                    setAddIntentSelectKey((current) => current + 1);
-                  }}
-                >
-                  <intent.Icon className="size-4" />
-                  <span>{intent.label}</span>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </TooltipProvider>
+            <Button
+              onClick={() => {
+                scrollToLeft();
+              }}
+              size="icon-sm"
+              className="bg-surface hover:bg-muted hover:text-foreground absolute top-1/2 left-2 -translate-y-1/2 border opacity-0 group-hover:opacity-100"
+            >
+              <ChevronLeft strokeWidth={2} />
+            </Button>
+          </>
+        )}
+        {readOnly ? null : (
+          <TooltipProvider>
+            <DropdownMenu key={addIntentSelectKey}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DropdownMenuTrigger
+                    className="bg-surface border-border absolute top-1/2 right-2 flex aspect-square min-w-13 -translate-y-1/2 items-center justify-center rounded-md border shadow-xs"
+                    aria-label="Add phase"
+                  >
+                    <Plus
+                      className="text-accent-foreground size-5"
+                      strokeWidth={2.5}
+                    />
+                  </DropdownMenuTrigger>
+                </TooltipTrigger>
+                <TooltipContent>Add a phase</TooltipContent>
+              </Tooltip>
+              <DropdownMenuContent side="right" align="end">
+                {phaseIntentCatalog.map((intent) => (
+                  <DropdownMenuItem
+                    key={intent.key}
+                    onClick={() => {
+                      onAddPhase(intent.key);
+                      setAddIntentSelectKey((current) => current + 1);
+                    }}
+                  >
+                    <intent.Icon className="size-4" />
+                    <span>{intent.label}</span>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </TooltipProvider>
+        )}
       </div>
     </>
   );

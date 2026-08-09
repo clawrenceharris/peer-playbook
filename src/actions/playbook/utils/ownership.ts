@@ -14,7 +14,18 @@ export async function requireCurrentUserId(): Promise<string> {
 
   return user.id;
 }
-
+export async function assertProfileOwnership(
+  profileId: string,
+  userId: string,
+): Promise<void> {
+  const profile = await client.profiles.findUnique({
+    where: { id: profileId },
+    select: { users: { select: { id: true } } },
+  });
+  if (!profile || profile.users.id !== userId) {
+    throw ApplicationError.permissionDenied();
+  }
+}
 export async function assertPlaybookOwnership(
   playbookId: string,
   userId: string,

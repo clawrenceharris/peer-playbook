@@ -37,6 +37,7 @@ type PlaybookWorkspaceHeaderProps = {
   isFavoriting: boolean;
   isUnfavoriting: boolean;
   canSaveWorkspace: boolean;
+  canEdit: boolean;
   isSavingWorkspace: boolean;
   onCreateSession: () => void;
   onSaveWorkspace: () => void;
@@ -52,6 +53,7 @@ export function PlaybookWorkspaceHeader({
   isFavoriting,
   isUnfavoriting,
   canSaveWorkspace,
+  canEdit,
   isSavingWorkspace,
   onCreateSession,
   onSaveWorkspace,
@@ -122,18 +124,20 @@ export function PlaybookWorkspaceHeader({
         >
           <Plus strokeWidth={3} /> Create Session
         </Button>
-        <Button
-          variant="primary"
-          disabled={!canSaveWorkspace || isSavingWorkspace}
-          onClick={onSaveWorkspace}
-        >
-          {isSavingWorkspace ? (
-            <Loader2 className="animate-spin" />
-          ) : (
-            <CheckCircle />
-          )}
-          {isSavingWorkspace ? "Saving..." : "Save"}
-        </Button>
+        {canEdit ? (
+          <Button
+            variant="primary"
+            disabled={!canSaveWorkspace || isSavingWorkspace}
+            onClick={onSaveWorkspace}
+          >
+            {isSavingWorkspace ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <CheckCircle />
+            )}
+            {isSavingWorkspace ? "Saving..." : "Save"}
+          </Button>
+        ) : null}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
@@ -152,17 +156,24 @@ export function PlaybookWorkspaceHeader({
               />
               {isFavorite ? "Unfavorite" : "Favorite"}
             </DropdownMenuItem>
-            <DropdownMenuItem disabled>
-              <Share />
-              Publish
-            </DropdownMenuItem>
+            {canEdit ? (
+              <DropdownMenuItem disabled>
+                <Share />
+                Publish
+              </DropdownMenuItem>
+            ) : null}
             <DropdownMenuItem disabled>
               <Printer />
               Print
             </DropdownMenuItem>
-            <DropdownMenuItem variant="destructive" onClick={onDeletePlaybook}>
-              <Trash2 /> Delete
-            </DropdownMenuItem>
+            {canEdit ? (
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={onDeletePlaybook}
+              >
+                <Trash2 /> Delete
+              </DropdownMenuItem>
+            ) : null}
           </DropdownMenuContent>
         </DropdownMenu>
       </ItemActions>

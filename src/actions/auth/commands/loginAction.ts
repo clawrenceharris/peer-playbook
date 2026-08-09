@@ -3,11 +3,10 @@
 import { makeLoginUserUseCase } from "@/composition/auth";
 import { loginSchema, type LoginFormValues } from "@/lib/validation";
 import { AppErrorCode } from "@/types/error.types";
-import { User } from "@supabase/supabase-js";
 import { ApplicationError } from "@/shared/utils/errors";
 import { ActionResult, toActionError } from "@/shared/action";
 import { fail } from "@/shared/application";
-
+import { User } from "@supabase/supabase-js";
 export async function loginAction(
   input: LoginFormValues,
 ): Promise<ActionResult<User>> {
@@ -30,7 +29,6 @@ export async function loginAction(
     }
     return result;
   } catch (error) {
-    console.error("Unexpected login action error:", error);
     const appError = ApplicationError.unexpected(error);
     return fail(toActionError(appError));
   }

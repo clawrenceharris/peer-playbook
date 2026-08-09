@@ -63,19 +63,19 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "Find more",
       menus: [
         {
-          href: `/discover`,
+          href: `#`,
           label: "Discover",
           icon: Search,
           active: pathname.startsWith(`/discover`),
         },
         {
-          href: `/discover/playbooks`,
+          href: `#`,
           label: "Playbooks",
           icon: Playbook,
           active: pathname.startsWith(`/discover/playbooks`),
         },
         {
-          href: `/discover/strategies`,
+          href: `#`,
           label: "Strategies",
           icon: Brain,
           active: pathname.startsWith(`/discover/strategies`),

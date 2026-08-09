@@ -1,15 +1,16 @@
 "use server";
-import {
-  UpdateProfileResult,
-} from "@/features/profile/application/dto";
+import { UpdateProfileResult } from "@/features/profile/application/dto";
 import { ApplicationError } from "@/shared/utils/errors";
 import { makeUpdateProfileUseCase } from "@/composition/profile";
 import { fail, ok } from "@/shared/application";
 import { toActionError, ActionResult } from "@/shared/action";
 import { AppErrorCode } from "@/types/error.types";
-import { getCurrentUser } from "../../auth";
 import { updateProfileSchema } from "@/lib/validation";
 import { z } from "zod";
+import {
+  assertProfileOwnership,
+  requireCurrentUserId,
+} from "@/actions/playbook/utils/ownership";
 
 type UpdateProfileActionInput = {
   id: string;
@@ -19,15 +20,8 @@ export async function updateProfileAction(
   input: UpdateProfileActionInput,
 ): Promise<ActionResult<UpdateProfileResult>> {
   try {
-    const userResult = await getCurrentUser();
-    if (!userResult.success) {
-      return fail(userResult.error);
-    }
-    if (userResult.data?.id !== input.id) {
-      return fail(
-        new ApplicationError({ code: AppErrorCode.PERMISSION_DENIED }),
-      );
-    }
+    const userId = await requireCurrentUserId();
+    await assertProfileOwnership(input.id, userId);
 
     const parsed = updateProfileSchema.safeParse(input);
     if (!parsed.success) {

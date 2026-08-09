@@ -21,7 +21,7 @@ import {
   RotateCcw,
   Trash2,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Draft fields are the source of truth while editing.
@@ -62,6 +62,7 @@ type StrategyDetailsProps = {
   onEstimatedMinutesChange: (value: string) => void;
   onReset: () => void;
   onSave: () => void;
+  readOnly?: boolean;
 };
 
 export function StrategyDetails({
@@ -78,12 +79,19 @@ export function StrategyDetails({
   onEstimatedMinutesChange,
   onReset,
   onSave,
+  readOnly = false,
 }: StrategyDetailsProps) {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
 
+  useEffect(() => {
+    if (readOnly) {
+      setIsEditingTitle(false);
+    }
+  }, [readOnly]);
+
   if (!strategy)
     return (
-      <div className="text-muted-foreground flex h-full flex-1 items-center justify-center rounded-lg border border-dashed text-sm">
+      <div className="text-muted-foreground bg-surface flex h-full flex-1 items-center justify-center rounded-lg border border-dashed text-sm">
         No strategies yet for this phase.
       </div>
     );
@@ -106,7 +114,7 @@ export function StrategyDetails({
             </p>
             <div>
               <div className="flex items-center gap-3">
-                {isEditingTitle ? (
+                {isEditingTitle && !readOnly ? (
                   <Input
                     className="w-fit rounded-md focus-visible:ring-0"
                     aria-label={`${displayTitle} strategy title`}
@@ -124,22 +132,24 @@ export function StrategyDetails({
                         </span>
                       </h2>
                     </CardTitle>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      onClick={() => setIsEditingTitle(true)}
-                    >
-                      <Icon
-                        src={assets.pencilEdit}
-                        className="opacity-50"
-                        alt="Edit"
-                      />
-                      <span className="sr-only">Edit strategy title</span>
-                    </Button>
+                    {readOnly ? null : (
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => setIsEditingTitle(true)}
+                      >
+                        <Icon
+                          src={assets.pencilEdit}
+                          className="opacity-50"
+                          alt="Edit"
+                        />
+                        <span className="sr-only">Edit strategy title</span>
+                      </Button>
+                    )}
                   </div>
                 )}
 
-                {isEditingTitle ? (
+                {isEditingTitle && !readOnly ? (
                   <InputGroup className="w-32 rounded-md">
                     <InputGroupInput
                       aria-label={`${displayTitle} strategy duration in minutes`}
@@ -159,7 +169,7 @@ export function StrategyDetails({
                     </InputGroupAddon>
                   </InputGroup>
                 ) : null}
-                {isEditingTitle ? (
+                {isEditingTitle && !readOnly ? (
                   <Button
                     onClick={() => setIsEditingTitle(false)}
                     variant="ghost"
@@ -174,82 +184,88 @@ export function StrategyDetails({
             </div>
           </div>
         </ItemContent>
-        <ItemActions className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            onClick={onReset}
-            disabled={!isDirty || isSaving}
-          >
-            <RotateCcw className="size-4" />
-            Reset
-          </Button>
-          <Button
-            variant="primary"
-            onClick={onSave}
-
-            disabled={!isDirty || isSaving}
-          >
-            {isSaving ? <Loader2 className="size-4 animate-spin" /> : null}
-            {isSaving ? "Saving..." : "Save"}
-          </Button>
-        </ItemActions>
+        {readOnly ? null : (
+          <ItemActions className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              onClick={onReset}
+              disabled={!isDirty || isSaving}
+            >
+              <RotateCcw className="size-4" />
+              Reset
+            </Button>
+            <Button
+              variant="primary"
+              onClick={onSave}
+              disabled={!isDirty || isSaving}
+            >
+              {isSaving ? <Loader2 className="size-4 animate-spin" /> : null}
+              {isSaving ? "Saving..." : "Save"}
+            </Button>
+          </ItemActions>
+        )}
       </Item>
       <Card className="bg-surface min-h-0 rounded-lg border shadow-xs">
         <CardContent className="flex h-full w-full flex-col gap-4 overflow-y-auto px-5 py-6">
           <section className="w-full flex-1 space-y-4">
-            <h3 className="text-foreground text-lg font-semibold">Steps</h3>
+            <h3 className="text-foreground text-lg font-semibold">
+              Instructions
+            </h3>
             <ol className="text-foreground/80 space-y-4">
               {(draft?.steps ?? []).map((step, i) => (
                 <li className="flex items-center gap-1" key={i}>
-                  <div
-                    className={`flex size-7 items-center justify-center rounded-full ${clsx(
-                      {
-                        "text-intent-activate bg-intent-activate/10":
-                          strategy.phase.intent === PhaseIntent.ACTIVATE,
-                        "text-intent-apply bg-intent-apply/10":
-                          strategy.phase.intent === PhaseIntent.APPLY,
-                        "text-intent-reflect bg-intent-reflect/10":
-                          strategy.phase.intent === PhaseIntent.REFLECT,
-                        "text-intent-explore bg-intent-explore/10":
-                          strategy.phase.intent === PhaseIntent.EXPLORE,
-                        "text-intent-transition bg-intent-transition/10":
-                          strategy.phase.intent === PhaseIntent.TRANSITION,
-                      },
-                    )}`}
-                  >
-                    <span>{i + 1}</span>
-                  </div>
-                  <Textarea
-                    className="min-h-14 flex-1 rounded-md"
-                    value={step}
-                    onChange={(event) => onStepChange(i, event.target.value)}
-                  />
-                  <Button
-                    size="icon-sm"
-                    variant="destructive"
-                    onClick={() => onStepRemove(i)}
-                    aria-label={`Remove step ${i + 1}`}
-                  >
-                    <Trash2 className="size-4" />
-                  </Button>
+                  {readOnly ? (
+                    <p className="text-foreground/80 py-2 text-sm">
+                      <span>{i + 1}.</span> {step}
+                    </p>
+                  ) : (
+                    <>
+                      <span>{i + 1}.</span>
+                      <Textarea
+                        className="min-h-14 flex-1 rounded-md"
+                        value={step}
+                        onChange={(event) =>
+                          onStepChange(i, event.target.value)
+                        }
+                      />
+                      <Button
+                        size="icon-sm"
+                        variant="destructive"
+                        onClick={() => onStepRemove(i)}
+                        aria-label={`Remove step ${i + 1}`}
+                      >
+                        <Trash2 className="size-4" />
+                      </Button>
+                    </>
+                  )}
                 </li>
               ))}
             </ol>
-            <Button variant="outline" onClick={onAddStep}>
-              <Plus className="size-4" /> Add Step
-            </Button>
+            {readOnly ? null : (
+              <Button variant="outline" onClick={onAddStep}>
+                <Plus className="size-4" /> Add Step
+              </Button>
+            )}
           </section>
           <Separator />
           <section className="flex-1 space-y-4">
             <h3 className="text-foreground text-lg font-semibold">
               Facilitator Notes
             </h3>
-            <Textarea
-              className="min-h-32"
-              placeholder="Add guidance, reminders, or facilitation cues for this strategy."
-              value={draft?.facilitatorNotes ?? ""}
-              onChange={(event) => onFacilitatorNotesChange(event.target.value)}
-            />
+            {readOnly ? (
+              <p className="text-foreground/80 min-h-32 text-sm whitespace-pre-wrap">
+                {draft?.facilitatorNotes?.trim() || "No facilitator notes."}
+              </p>
+            ) : (
+              <Textarea
+                className="min-h-32"
+                placeholder="Add guidance, reminders, or facilitation cues for this strategy."
+                value={draft?.facilitatorNotes ?? ""}
+                onChange={(event) =>
+                  onFacilitatorNotesChange(event.target.value)
+                }
+              />
+            )}
           </section>
         </CardContent>
         {errorMessage ? (

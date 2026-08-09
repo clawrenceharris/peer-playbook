@@ -42,12 +42,14 @@ type StrategyItemProps = {
   onClick?: () => void;
   onRemoveClick?: () => void;
   isSelected?: boolean;
+  readOnly?: boolean;
 } & HTMLAttributes<HTMLDivElement>;
 export function SortablePlaybookStrategyItem({
   strategy,
   onClick,
   onRemoveClick,
   isSelected,
+  readOnly = false,
   ...props
 }: StrategyItemProps) {
   const {
@@ -60,40 +62,40 @@ export function SortablePlaybookStrategyItem({
     isDragging,
   } = useSortable({
     id: strategy.id,
+    disabled: readOnly,
   });
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
   };
-  return (
-    <ContextMenu>
-      <ContextMenuTrigger>
-        <Item
-          ref={setNodeRef}
-          style={style}
-          key={strategy.id}
-          tabIndex={0}
-          onClick={onClick}
-          className={cn(
-            "group border-b-border relative flex-1 cursor-default overflow-hidden rounded-none border-b px-4 py-4",
-            isDragging && "ring-primary ring-2",
-          )}
-          {...props}
-        >
-          <span
-            aria-hidden
-            className={cn(
-              "absolute bottom-0 left-0 h-full w-[3.6px] bg-transparent",
-              {
-                "bg-intent-activate": strategy.phase === PhaseIntent.ACTIVATE,
-                "bg-intent-explore": strategy.phase === PhaseIntent.EXPLORE,
-                "bg-intent-apply": strategy.phase === PhaseIntent.APPLY,
-                "bg-intent-reflect": strategy.phase === PhaseIntent.REFLECT,
-              },
-              !isSelected && "bg-transparent",
-            )}
-          />
-          <ItemMedia className="border-0 bg-transparent" variant="icon">
+  const item = (
+    <Item
+      ref={setNodeRef}
+      style={style}
+      key={strategy.id}
+      tabIndex={0}
+      onClick={onClick}
+      className={cn(
+        "group border-b-border relative flex-1 cursor-default overflow-hidden rounded-none border-b px-4 py-4",
+        isDragging && "ring-primary ring-2",
+      )}
+      {...props}
+    >
+      <span
+        aria-hidden
+        className={cn(
+          "absolute bottom-0 left-0 h-full w-[3.6px] bg-transparent",
+          {
+            "bg-intent-activate": strategy.phase === PhaseIntent.ACTIVATE,
+            "bg-intent-explore": strategy.phase === PhaseIntent.EXPLORE,
+            "bg-intent-apply": strategy.phase === PhaseIntent.APPLY,
+            "bg-intent-reflect": strategy.phase === PhaseIntent.REFLECT,
+          },
+          !isSelected && "bg-transparent",
+        )}
+      />
+      {readOnly ? null : (
+        <ItemMedia className="border-0 bg-transparent" variant="icon">
             <Button
               ref={setActivatorNodeRef}
               variant="ghost"
@@ -106,23 +108,25 @@ export function SortablePlaybookStrategyItem({
             >
               <GripVertical className="size-4" />
             </Button>
-          </ItemMedia>
-          <ItemContent className="min-w-0 gap-1">
-            <div className="flex items-center gap-1">
-              <ItemTitle className="line-clamp-1 max-w-50 truncate text-sm font-semibold select-none">
-                {strategy.title}
-              </ItemTitle>
-              {strategy.duration ? (
-                <span className="text-muted-foreground text-xs">
-                  {strategy.duration}
-                </span>
-              ) : null}
-            </div>
-            <ItemDescription className="line-clamp-1 text-xs">
-              {strategy.steps?.[0]}
-            </ItemDescription>
-          </ItemContent>
-          <ItemActions>
+        </ItemMedia>
+      )}
+      <ItemContent className="min-w-0 gap-1">
+        <div className="flex items-center gap-1">
+          <ItemTitle className="line-clamp-1 max-w-50 truncate text-sm font-semibold select-none">
+            {strategy.title}
+          </ItemTitle>
+          {strategy.duration ? (
+            <span className="text-muted-foreground text-xs">
+              {strategy.duration}
+            </span>
+          ) : null}
+        </div>
+        <ItemDescription className="line-clamp-1 text-xs">
+          {strategy.steps?.[0]}
+        </ItemDescription>
+      </ItemContent>
+      {readOnly ? null : (
+        <ItemActions>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -141,9 +145,18 @@ export function SortablePlaybookStrategyItem({
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </ItemActions>
-        </Item>
-      </ContextMenuTrigger>
+        </ItemActions>
+      )}
+    </Item>
+  );
+
+  if (readOnly) {
+    return item;
+  }
+
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger>{item}</ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem variant="destructive" onClick={onRemoveClick}>
           <Trash2 />

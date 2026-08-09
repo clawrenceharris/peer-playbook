@@ -52,6 +52,7 @@ type StrategyListPanelProps = {
     >,
   ) => void;
   onRemoveStrategyClick?: (strategyId: string) => void;
+  readOnly?: boolean;
 };
 export function StrategyListPanel({
   phaseId,
@@ -61,6 +62,7 @@ export function StrategyListPanel({
   selectedStrategyId,
   onReorder,
   onRemoveStrategyClick,
+  readOnly = false,
 }: StrategyListPanelProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [displayStrategies, setDisplayStrategies] =
@@ -78,21 +80,24 @@ export function StrategyListPanel({
       <header className="flex items-center justify-between border-b px-5 py-4">
         <h2 className="text-foreground text-lg font-semibold">Strategies</h2>
 
-        <Button
-          size="sm"
-          variant="outline"
-          className="gap-1.5 rounded-xl"
-          onClick={onAddStrategyClick}
-        >
-          <Plus className="size-4" />
-          Add
-        </Button>
+        {readOnly ? null : (
+          <Button
+            size="sm"
+            variant="outline"
+            className="gap-1.5 rounded-xl"
+            onClick={onAddStrategyClick}
+          >
+            <Plus className="size-4" />
+            Add
+          </Button>
+        )}
       </header>
       <DndContext
-        sensors={sensors}
+        sensors={readOnly ? [] : sensors}
         collisionDetection={closestCenter}
         modifiers={[restrictToFirstScrollableAncestor, restrictToWindowEdges]}
         onDragStart={({ active }) => {
+          if (readOnly) return;
           setActiveId(String(active.id));
           document.body.style.overscrollBehavior = "contain";
           document.body.style.cursor = "grabbing";
@@ -101,6 +106,7 @@ export function StrategyListPanel({
           document.body.style.overscrollBehavior = "";
           document.body.style.cursor = "";
           setActiveId(null);
+          if (readOnly) return;
 
           if (!over || active.id === over.id) return;
           const oldIndex = displayStrategies.findIndex(
@@ -121,7 +127,7 @@ export function StrategyListPanel({
           items={displayStrategies}
           strategy={verticalListSortingStrategy}
         >
-          <ItemGroup className="flex-1">
+          <ItemGroup>
             {displayStrategies.map((strategy) => (
               <SortablePlaybookStrategyItem
                 key={strategy.id}
@@ -129,6 +135,7 @@ export function StrategyListPanel({
                 strategy={strategy}
                 onClick={() => onStrategyClick(strategy.id)}
                 onRemoveClick={() => onRemoveStrategyClick?.(strategy.id)}
+                readOnly={readOnly}
               />
             ))}
           </ItemGroup>

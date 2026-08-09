@@ -89,18 +89,18 @@ export function StrategyPanel({
             onValueChange={(value) => setSource(value as StrategyPickerSource)}
           >
             <TabsList
-              className="grid h-auto w-full grid-cols-3"
+              className="grid h-auto w-full grid-cols-3 gap-2 bg-transparent"
               aria-label="Strategy source"
             >
-              <TabsTrigger value="system">
+              <TabsTrigger className="bg-muted-foreground/10" value="system">
                 <Library aria-hidden="true" />
                 PeerPlaybook
               </TabsTrigger>
-              <TabsTrigger value="saved">
+              <TabsTrigger className="bg-muted-foreground/10" value="saved">
                 <Bookmark aria-hidden="true" />
                 Saved by you
               </TabsTrigger>
-              <TabsTrigger value="user">
+              <TabsTrigger className="bg-muted-foreground/10" value="user">
                 <UserRound aria-hidden="true" />
                 Created by you
               </TabsTrigger>

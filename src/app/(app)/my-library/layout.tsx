@@ -3,35 +3,38 @@ import React from "react";
 
 import { LibraryPageClient } from "./LibraryPageClient";
 import { getPlaybooksPageAction } from "@/actions/playbook/queries/getPlaybooksPageAction";
-import { getCurrentUser } from "@/actions/auth";
 import { ErrorState } from "@/components/states";
+import { requireCurrentUserId } from "@/actions/playbook/utils/ownership";
+import { ApplicationError } from "@/shared/utils/errors";
 
 export default async function PlaybookLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const userResult = await getCurrentUser();
-  if (!userResult.success) {
+  let userId: string | null = null;
+  try {
+    userId = await requireCurrentUserId();
+  } catch (error) {
+    if (error instanceof ApplicationError) {
+      return (
+        <ErrorState
+          variant="card"
+          title="Error loading this page"
+          message={error.message}
+        />
+      );
+    }
     return (
       <ErrorState
         variant="card"
-        title="Error loading your account"
-        message={userResult.error.message}
+        title="Error loading this page"
+        message="An unexpected error occurred. Please try again later."
       />
     );
   }
-  const user = userResult.data;
-  if (!user) {
-    return (
-      <ErrorState
-        variant="card"
-        title="Access denied"
-        message="You are not authorized to access this page. Pleas log in to continue."
-      />
-    );
-  }
-  const playbooksPageResult = await getPlaybooksPageAction(user.id);
+
+  const playbooksPageResult = await getPlaybooksPageAction(userId);
   if (!playbooksPageResult.success) {
     return (
       <ErrorState

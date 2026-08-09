@@ -44,7 +44,7 @@ export default function Landing() {
 
           <CardFooter>
             <CardAction>
-              <Button variant="primary" onClick={() => router.push("/sign-in")}>
+              <Button variant="primary" onClick={() => router.push("/login")}>
                 Get Started
               </Button>
             </CardAction>

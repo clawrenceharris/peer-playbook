@@ -51,6 +51,7 @@ export function PlaybookWorkspaceScreen({
             isFavoriting={workspace.isFavoriting}
             isUnfavoriting={workspace.isUnfavoriting}
             canSaveWorkspace={workspace.isPhaseDirty && !workspace.isUpdating}
+            canEdit={workspace.canEdit}
             isSavingWorkspace={workspace.state.isSavingWorkspace}
             onCreateSession={workspace.commands.createSession}
             onSaveWorkspace={workspace.commands.saveWorkspace}
@@ -75,6 +76,7 @@ export function PlaybookWorkspaceScreen({
               onEstimatedMinutesChange={
                 workspace.commands.updatePhaseEstimatedMinutes
               }
+              readOnly={workspace.isReadOnly}
             />
           }
           strategySidebar={
@@ -110,6 +112,7 @@ export function PlaybookWorkspaceScreen({
               }
               onStrategyClick={workspace.commands.selectStrategy}
               onRemoveStrategyClick={workspace.commands.removeStrategy}
+              readOnly={workspace.isReadOnly}
             />
           }
           strategyEditor={
@@ -129,41 +132,44 @@ export function PlaybookWorkspaceScreen({
               }
               onReset={workspace.commands.resetStrategyDraft}
               onSave={workspace.commands.saveStrategyDraft}
+              readOnly={workspace.isReadOnly}
             />
           }
         />
-        <StrategyPanel
-          open={workspace.state.isStrategyPanelOpen}
-          onOpenChange={workspace.commands.setStrategyPanelOpen}
-          phaseTitle={workspace.activePhase.title}
-          systemItems={workspace.systemStrategies.map(
-            (strategy: { id: string; title: string }) => ({
-              sourceType: "system",
-              sourceId: strategy.id,
-              title: strategy.title,
-            }),
-          )}
-          savedItems={workspace.savedStrategies.map(
-            (strategy: { id: string; title: string }) => ({
-              sourceType: "system",
-              sourceId: strategy.id,
-              title: strategy.title,
-            }),
-          )}
-          userItems={workspace.userStrategies.map(
-            (strategy: { id: string; title: string }) => ({
-              sourceType: "user",
-              sourceId: strategy.id,
-              title: strategy.title,
-            }),
-          )}
-          disabledKeys={workspace.activeStrategies.flatMap((strategy) =>
-            strategy.sourceType && strategy.sourceId
-              ? [`${strategy.sourceType}:${strategy.sourceId}`]
-              : [],
-          )}
-          onPick={workspace.commands.addStrategy}
-        />
+        {workspace.canEdit ? (
+          <StrategyPanel
+            open={workspace.state.isStrategyPanelOpen}
+            onOpenChange={workspace.commands.setStrategyPanelOpen}
+            phaseTitle={workspace.activePhase.title}
+            systemItems={workspace.systemStrategies.map(
+              (strategy: { id: string; title: string }) => ({
+                sourceType: "system",
+                sourceId: strategy.id,
+                title: strategy.title,
+              }),
+            )}
+            savedItems={workspace.savedStrategies.map(
+              (strategy: { id: string; title: string }) => ({
+                sourceType: "system",
+                sourceId: strategy.id,
+                title: strategy.title,
+              }),
+            )}
+            userItems={workspace.userStrategies.map(
+              (strategy: { id: string; title: string }) => ({
+                sourceType: "user",
+                sourceId: strategy.id,
+                title: strategy.title,
+              }),
+            )}
+            disabledKeys={workspace.activeStrategies.flatMap((strategy) =>
+              strategy.sourceType && strategy.sourceId
+                ? [`${strategy.sourceType}:${strategy.sourceId}`]
+                : [],
+            )}
+            onPick={workspace.commands.addStrategy}
+          />
+        ) : null}
       </ContentLayout>
     </BeforeUnload>
   );

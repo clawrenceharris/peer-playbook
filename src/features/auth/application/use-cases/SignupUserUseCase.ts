@@ -1,9 +1,8 @@
-import { User } from "@supabase/supabase-js";
 import { AuthProvider } from "../../domain/services/AuthProvider";
 import { ApplicationError, normalizeError } from "@/shared/utils/errors";
 import { fail, ok, Result } from "@/shared/application";
 import { AppErrorCode } from "@/types/error.types";
-
+import { User } from "@supabase/supabase-js";
 export type SignUpUseCaseResult = Result<User, ApplicationError>;
 export class SignupUserUseCase {
   constructor(private readonly authProvider: AuthProvider) {}
@@ -18,7 +17,6 @@ export class SignupUserUseCase {
       }
       return ok(user);
     } catch (error) {
-      console.error("Error signing up user", error);
       return fail(normalizeError(error));
     }
   }

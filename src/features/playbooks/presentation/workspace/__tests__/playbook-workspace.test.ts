@@ -6,6 +6,7 @@ import {
 import {
   buildPlaybookWorkspaceModel,
   buildStrategyDraft,
+  selectCanEditPlaybook,
   strategyDraftsEqual,
 } from "../playbook-workspace.selectors";
 import { PhaseIntent } from "@/features/reference-data/phase-intents/domain/types/PhaseIntent";
@@ -165,5 +166,10 @@ describe("playbook workspace selectors", () => {
     expect(phases[0].position).toBe(0);
     expect(phases[1].title).toBe("Warm start");
     expect(phases[1].estimatedMinutes).toBe(8);
+  });
+
+  it("allows editing only for the playbook owner", () => {
+    expect(selectCanEditPlaybook(page.playbook, "user-1")).toBe(true);
+    expect(selectCanEditPlaybook(page.playbook, "user-2")).toBe(false);
   });
 });

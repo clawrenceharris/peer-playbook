@@ -8,4 +8,5 @@ export interface AuthProvider {
   signOut(): Promise<void>;
   requestPasswordReset(email: string): Promise<void>;
   resetPassword(newPassword: string): Promise<void>;
+  updateUserMetadata(metadata: Record<string, any>): Promise<void>;
 }

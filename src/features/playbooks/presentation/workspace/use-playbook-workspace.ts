@@ -27,6 +27,7 @@ import {
   buildStrategyDraft,
   selectActivePhase,
   selectActiveStrategy,
+  selectCanEditPlaybook,
   selectHeaderMetadata,
   selectIsFavorite,
   selectStrategySourceMap,
@@ -121,6 +122,10 @@ export function usePlaybookWorkspace({
     () => selectIsFavorite(playbook?.id, favoritePlaybooks),
     [favoritePlaybooks, playbook?.id],
   );
+  const canEdit = useMemo(
+    () => selectCanEditPlaybook(playbook, user.id),
+    [playbook, user.id],
+  );
   // Phase reorder is local until Save, so treat phaseOrder as dirty too.
   const isPhaseDirty =
     Object.keys(state.phaseDrafts).length > 0 || state.phaseOrder !== null;
@@ -185,6 +190,7 @@ export function usePlaybookWorkspace({
   const commands = createPlaybookWorkspaceCommands({
     playbook,
     userId: user.id,
+    canEdit,
     state,
     dispatch,
     phases,
@@ -228,11 +234,13 @@ export function usePlaybookWorkspace({
     commands,
     hasSession: false,
     isFavorite: state.isFavorite,
+    canEdit,
+    isReadOnly: !canEdit,
     isFavoriting,
     isUnfavoriting,
     isUpdating,
     isPhaseDirty,
     isStrategyDirty,
-    beforeUnloadDisabled: !isPhaseDirty && !isStrategyDirty,
+    beforeUnloadDisabled: !canEdit || (!isPhaseDirty && !isStrategyDirty),
   };
 }

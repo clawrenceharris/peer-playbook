@@ -48,6 +48,11 @@ export class SupabaseAuthProvider implements AuthProvider {
     } = await this.client.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          needs_onboarding: true,
+        },
+      },
     });
     if (error) throw mapSupabaseAuthError(error);
     return user;
@@ -68,6 +73,12 @@ export class SupabaseAuthProvider implements AuthProvider {
   async resetPassword(newPassword: string): Promise<void> {
     const { error } = await this.client.auth.updateUser({
       password: newPassword,
+    });
+    if (error) throw mapSupabaseAuthError(error);
+  }
+  async updateUserMetadata(metadata: Record<string, any>): Promise<void> {
+    const { error } = await this.client.auth.updateUser({
+      data: metadata,
     });
     if (error) throw mapSupabaseAuthError(error);
   }

@@ -46,6 +46,7 @@ type FavoriteInput = {
 type CreateCommandsArgs = {
   playbook: GetPlaybookPageOutput["playbook"] | undefined;
   userId: string;
+  canEdit: boolean;
   state: PlaybookWorkspaceState;
   dispatch: PlaybookWorkspaceDispatch;
   phases: PlaybookWorkspacePhase[];
@@ -142,6 +143,7 @@ function intentFromKey(
 export function createPlaybookWorkspaceCommands({
   playbook,
   userId,
+  canEdit,
   state,
   dispatch,
   phases,
@@ -161,6 +163,20 @@ export function createPlaybookWorkspaceCommands({
   openCreateSession,
   openDeleteConfirmation,
 }: CreateCommandsArgs) {
+  function requireEditAccess(): boolean {
+    if (canEdit) {
+      return true;
+    }
+
+    const message = playbook?.published
+      ? "Published playbooks are view-only unless you own them."
+      : "Only the playbook owner can edit this playbook.";
+
+    dispatch({ type: "setWorkspaceError", value: message });
+    toast.error(message);
+    return false;
+  }
+
   return {
     selectPhase(phaseId: string) {
       dispatch({ type: "selectPhase", phaseId });
@@ -169,12 +185,15 @@ export function createPlaybookWorkspaceCommands({
       dispatch({ type: "selectStrategy", strategyId });
     },
     setEditingPhase(value: boolean) {
+      if (value && !requireEditAccess()) return;
       dispatch({ type: "setEditingPhase", value });
     },
     setStrategyPanelOpen(value: boolean) {
+      if (value && !requireEditAccess()) return;
       dispatch({ type: "setStrategyPanelOpen", value });
     },
     updatePhaseTitle(phaseId: string, title: string) {
+      if (!requireEditAccess()) return;
       const currentPhase = phases.find((phase) => phase.id === phaseId);
       if (!currentPhase) return;
 
@@ -196,6 +215,7 @@ export function createPlaybookWorkspaceCommands({
       phaseId: string,
       intentKey: "activate" | "explore" | "apply" | "reflect",
     ) {
+      if (!requireEditAccess()) return;
       const currentPhase = phases.find((phase) => phase.id === phaseId);
       if (!currentPhase) return;
       dispatch({
@@ -216,6 +236,7 @@ export function createPlaybookWorkspaceCommands({
       phaseId: string,
       estimatedMinutes: number | null,
     ) {
+      if (!requireEditAccess()) return;
       const currentPhase = phases.find((phase) => phase.id === phaseId);
       if (!currentPhase) return;
 
@@ -238,6 +259,7 @@ export function createPlaybookWorkspaceCommands({
       });
     },
     clearPhaseDraft() {
+      if (!requireEditAccess()) return;
       dispatch({ type: "clearPhaseDrafts" });
     },
     /**
@@ -247,6 +269,7 @@ export function createPlaybookWorkspaceCommands({
     async addPlaybookPhase(
       intentKey: "activate" | "explore" | "apply" | "reflect",
     ) {
+      if (!requireEditAccess()) return;
       if (!playbook) return;
 
       const catalogEntry = phaseIntentCatalog.find(
@@ -278,30 +301,39 @@ export function createPlaybookWorkspaceCommands({
      * Local-only reorder. Positions are written on saveWorkspace.
      */
     reorderPhases(phaseIds: string[]) {
+      if (!requireEditAccess()) return;
       dispatch({ type: "reorderPhases", phaseIds });
     },
     updateStrategyTitle(value: string) {
+      if (!requireEditAccess()) return;
       dispatch({ type: "setStrategyTitle", value });
     },
     updateStrategyStep(stepIndex: number, value: string) {
+      if (!requireEditAccess()) return;
       dispatch({ type: "updateStrategyStep", stepIndex, value });
     },
     removeStrategyStep(stepIndex: number) {
+      if (!requireEditAccess()) return;
       dispatch({ type: "removeStrategyStep", stepIndex });
     },
     addStrategyStep() {
+      if (!requireEditAccess()) return;
       dispatch({ type: "addStrategyStep" });
     },
     updateStrategyNotes(value: string) {
+      if (!requireEditAccess()) return;
       dispatch({ type: "setStrategyNotes", value });
     },
     updateStrategyEstimatedMinutes(value: string) {
+      if (!requireEditAccess()) return;
       dispatch({ type: "setStrategyEstimatedMinutes", value });
     },
     resetStrategyDraft() {
+      if (!requireEditAccess()) return;
       dispatch({ type: "resetStrategyDraft" });
     },
     async saveWorkspace() {
+      if (!requireEditAccess()) return;
       if (!playbook) return;
 
       const validationMessage = validateWorkspacePhases(phases);
@@ -345,6 +377,7 @@ export function createPlaybookWorkspaceCommands({
       }
     },
     async addStrategy(ref: StrategyRef) {
+      if (!requireEditAccess()) return;
       if (!playbook || !activePhase) return;
 
       const source = strategySourceByKey.get(
@@ -378,6 +411,7 @@ export function createPlaybookWorkspaceCommands({
     async reorderPhaseStrategies(
       strategies: ReorderStrategyInput["strategies"],
     ) {
+      if (!requireEditAccess()) return;
       if (!playbook || !activePhase) return;
 
       await reorderStrategies({
@@ -387,6 +421,7 @@ export function createPlaybookWorkspaceCommands({
       });
     },
     async removeStrategy(strategyId: string) {
+      if (!requireEditAccess()) return;
       if (!playbook || !activePhase) return;
 
       await removePlaybookStrategy({
@@ -417,6 +452,7 @@ export function createPlaybookWorkspaceCommands({
       }
     },
     async saveStrategyDraft() {
+      if (!requireEditAccess()) return;
       if (!playbook || !activeStrategyId || !state.strategyDraft) return;
 
       const titleError = validateStrategyTitle(state.strategyDraft.title);
@@ -494,6 +530,7 @@ export function createPlaybookWorkspaceCommands({
       openCreateSession(playbook);
     },
     confirmDeletePlaybook() {
+      if (!requireEditAccess()) return;
       if (!playbook) return;
 
       openDeleteConfirmation({
